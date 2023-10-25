@@ -20,6 +20,7 @@
 }
 
 .greetings h4 {
+    font-weight: 900;
     color: var(--blueB);
     font-size: 22px;
 }
@@ -185,33 +186,36 @@ ul li p {
 }
 
 /* DASHBOARD */
-.doctors-icon img {
-    width: 630px;
-    top: 135px;
+.add-icon img {
+    width: 345px;
+    top: 140px;
     left: 260px;
+    border-radius: 20px;
 } 
 
-.medtech-icon img {
-    width: 580px;
-    top: 90px;
-    left: 770px;
+.reschedule-icon img {
+    width: 345px;
+    top: 140px;
+    left: 635px;
+    border-radius: 20px;
 }
 
-.receptionist-icon img {
-    width: 580px;
-    top: 365px;
-    left: 770px;
+.cancel-icon img {
+    width: 345px;
+    top: 140px;
+    left: 1010px;
+    border-radius: 20px;
 }
 
-.doctors-icon img,
-.medtech-icon img,
-.receptionist-icon img {
+.add-icon img,
+.reschedule-icon img,
+.cancel-icon img {
     position: fixed;
     transition: box-shadow 0.3s; 
 }
 
-.doctors-icon img:hover,
-.medtech-icon img:hover,
-.receptionist-icon img:hover {
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
+.add-icon img:hover,
+.reschedule-icon img:hover,
+.cancel-icon img:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1); 
 }

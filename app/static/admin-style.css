@@ -185,3 +185,38 @@ ul li p {
 .sidenav-bg:hover .sidenav-user-bg div {
     display: block;
 }
+
+/* DASHBOARD */
+.doctors-icon img {
+    width: 450px;
+    top: 180px;
+    left: 350px;
+    border-radius: 20px;
+} 
+
+.medtech-icon img {
+    width: 450px;
+    top: 90px;
+    left: 830px;
+    border-radius: 20px;
+}
+
+.receptionist-icon img {
+    width: 450px;
+    top: 365px;
+    left: 830px;
+    border-radius: 20px;
+}
+
+.doctors-icon img,
+.medtech-icon img,
+.receptionist-icon img {
+    position: fixed;
+    transition: box-shadow 0.3s; 
+}
+
+.doctors-icon img:hover,
+.medtech-icon img:hover,
+.receptionist-icon img:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1); 
+}
