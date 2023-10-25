@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DocCare | Patient{% endblock title %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='/images/DocCare favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='medtech-style.css') }}">
+</head>
+<body>
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+            <p class="doc">Doc</p>
+            <h4 class="care">Care</h4>
+        </div>
+        <ul>
+            <a href="{{ url_for('medtech.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('medtech.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Medtech</p>
+            </div>
+        </div>
+        <ul>
+            <a href="{{ url_for('medtech.logout') }}">
+                <li>
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </a>
+        </ul>
+    </div>
+</body>
+</html>
