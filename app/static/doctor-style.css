@@ -11,6 +11,24 @@
     padding: 0;
 }
 
+/* WELCOME MESSAGE */
+.greetings {
+    display: flex;
+}
+
+.greetings h4 {
+    font-weight: 900;
+    color: var(--blueB);
+    font-size: 22px;
+}
+
+.greetings p {
+    font-weight: 900;
+    color: var(--blueA);
+    margin-left: 10px;
+    font-size: 24px;
+}
+
 /* SIDEBAR DOCCARE LOGO */
 .cms-logo {
     display: flex;
@@ -163,3 +181,30 @@ ul li p {
 .sidenav-bg:hover .sidenav-user-bg div {
     display: block;
 }
+
+/* DASHBOARD */
+.main-bg {
+    width: 1350px; 
+    height: 600px; 
+    background-color: white;
+    box-shadow: 10px 10px 20px 10px var(--blueC);
+    border-radius: 12px;
+    top: 50%; 
+    left: 53%; 
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.date-time {
+    font-weight: 900;
+}
+
+.dashboard-header {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 100px;
+    left: 215px;
+    gap: 645px;
+}   
