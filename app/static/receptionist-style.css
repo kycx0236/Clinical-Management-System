@@ -14,9 +14,6 @@
 /* WELCOME MESSAGE */
 .greetings {
     display: flex;
-    position: absolute;
-    top: 70px;
-    left: 150px;
 }
 
 .greetings h4 {
@@ -178,7 +175,7 @@ ul li p {
 }
 
 .sidenav-bg:hover .sidenav-user-bg {
-    background: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .sidenav-bg:hover .sidenav-user-bg div {
@@ -186,23 +183,37 @@ ul li p {
 }
 
 /* DASHBOARD */
+.date-time {
+    font-weight: 900;
+}
+
+.dashboard-header {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 55px;
+    left: 215px;
+    gap: 645px;
+}   
+
 .add-icon img {
     width: 345px;
-    top: 140px;
+    top: 150px;
     left: 260px;
     border-radius: 20px;
 } 
 
 .reschedule-icon img {
     width: 345px;
-    top: 140px;
+    top: 150px;
     left: 635px;
     border-radius: 20px;
 }
 
 .cancel-icon img {
     width: 345px;
-    top: 140px;
+    top: 150px;
     left: 1010px;
     border-radius: 20px;
 }
@@ -217,5 +228,5 @@ ul li p {
 .add-icon img:hover,
 .reschedule-icon img:hover,
 .cancel-icon img:hover {
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(0, 0, 0, 0.1);
 }
