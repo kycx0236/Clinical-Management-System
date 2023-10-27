@@ -18,7 +18,7 @@ def create_app():
 
     @app.route("/")
     def index():
-        return render_template('base.html')
+        return render_template('login.html')
 
     from app.routes.admin import admin_bp
     from app.routes.doctor import doctor_bp
