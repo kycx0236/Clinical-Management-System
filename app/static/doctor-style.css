@@ -1,10 +1,5 @@
 @import "base_style.css";
 
-/* WELCOME MESSAGE */
-.greetings {
-    display: flex;
-}
-
 /* SIDEBAR USER */
 .sidenav-user-bg {
     font-size: 12px;
@@ -13,8 +8,8 @@
     height: 65px; 
     background-color: white;
     border-radius: 350px; 
-    margin-top: 71px;
-    margin-bottom: 10px;
+    margin-top: 70px;
+    margin-bottom: 25px;
     overflow: hidden;
 }
 
@@ -30,17 +25,3 @@
     transform: translate(-50%, -50%);
     position: absolute;
 }
-
-.date-time {
-    font-weight: 900;
-}
-
-.dashboard-header {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 105px;
-    left: 215px;
-    gap: 645px;
-}   

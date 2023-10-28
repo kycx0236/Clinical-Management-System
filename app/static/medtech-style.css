@@ -1,10 +1,5 @@
 @import "base_style.css";
 
-/* WELCOME MESSAGE */
-.greetings {
-    display: flex;
-}
-
 /* SIDEBAR USER */
 .sidenav-user-bg {
     font-size: 12px;
@@ -30,17 +25,3 @@
     transform: translate(-50%, -50%);
     position: absolute;
 }
-
-.date-time {
-    font-weight: 900;
-}
-
-.dashboard-header {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 105px;
-    left: 210px;
-    gap: 710px;
-}   

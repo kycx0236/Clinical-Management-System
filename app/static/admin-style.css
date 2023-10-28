@@ -1,13 +1,5 @@
 @import "base_style.css";
 
-/* WELCOME MESSAGE */
-.greetings {
-    display: flex;
-    position: absolute;
-    top: 70px;
-    left: 150px;
-}
-
 /* SIDEBAR USER */
 .sidenav-user-bg {
     font-size: 12px;

@@ -11,25 +11,11 @@
     padding: 0;
 }
 
-/* WELCOME MESSAGE */
-.greetings h4 {
-    font-weight: 900;
-    color: var(--blueB);
-    font-size: 22px;
-}
-
-.greetings p {
-    font-weight: 900;
-    color: var(--blueA);
-    margin-left: 10px;
-    font-size: 24px;
-}
-
 /* SIDEBAR DOCCARE LOGO */
 .cms-logo {
     display: flex;
-    margin-top: 40px;
-    margin-bottom: 35px;
+    margin-top: 35px;
+    margin-bottom: 25px;
     align-items: center;
     font-size: 32px;
     width: 100%;  
@@ -38,37 +24,20 @@
     transition: width 0.2s;
 }
 
-.cms-logo:hover {
-    width: 255px;   
-    transition: width 0.2s, background-image 0.2s;
-    background-image: linear-gradient(to right, var(--blueC), white); 
-}
-
 .cms-logo img {
     width: 55px;
     margin-left: 5px;
+    margin-right: 55px;
 }
 
 .cms-logo h4 {
     font-weight: 900;
     color: var(--blueA);
-    display: none; 
-}
-
-.cms-logo:hover h4 {
-    display: flex;
-    transition: width 1s;
 }
 
 .cms-logo p {
     font-weight: 400;
-    display: none;
     margin-left: 15px;
-}
-
-.cms-logo:hover p {
-    display: flex;
-    transition: width 1s;
 }
 
 /* SIDEBAR */
@@ -81,7 +50,6 @@
     margin-top: 6px;
     margin-left: 10px;
     padding: 8px;
-    /* transition: width 0ms; */
     z-index: 1;
 }
 
@@ -182,4 +150,13 @@ ul li p {
     width: 55px;
     border-radius: 100%;
     margin-left: 5px;
+}
+
+/* DASHBOARD */
+.date-time {
+    font-weight: 900;
+    position: absolute;
+    display: flex;
+    top: 60px;
+    left: 1120px;
 }
