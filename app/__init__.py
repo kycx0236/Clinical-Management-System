@@ -20,10 +20,10 @@ def create_app():
     def index():
         return render_template('login.html')
 
-    from app.routes.admin import admin_bp
-    from app.routes.doctor import doctor_bp
-    from app.routes.medtech import medtech_bp
-    from app.routes.receptionist import receptionist_bp
+    from app.routes.admin_bp import admin_bp
+    from app.routes.doctor_bp import doctor_bp
+    from app.routes.medtech_bp import medtech_bp
+    from app.routes.receptionist_bp import receptionist_bp
     
     app.register_blueprint(admin_bp, url_prefix='/admin/')
     app.register_blueprint(doctor_bp, url_prefix='/doctor/')

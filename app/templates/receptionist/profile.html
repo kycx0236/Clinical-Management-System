@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Profile{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist-style.css') }}"> {% endblock %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
 {% block content %}
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <a href="{{ url_for('receptionist.dashboard') }}">
@@ -41,7 +39,7 @@
         </div>
         <ul>
             <a href="{{ url_for('receptionist.logout') }}">
-                <li>
+                <li class="logout">
                     <img src="{{ url_for('static', filename='images/Logout.png') }}">
                     <p>Logout</p>
                 </li>

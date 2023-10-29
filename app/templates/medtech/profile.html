@@ -1,12 +1,10 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Patient{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='medtech-style.css') }}"> {% endblock %}
+{% block title %}DocCare | Profile{% endblock title %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='medtech_style.css') }}"> {% endblock %}
 {% block content %}
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <a href="{{ url_for('medtech.dashboard') }}">
@@ -15,16 +13,16 @@
                     <p>Dashboard</p>
                 </li>
             </a>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
-                <p>Patient</p>
-            </li>
-            <a href="{{ url_for('medtech.profile') }}">
+            <a href="{{ url_for('medtech.patient') }}">
                 <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
-                    <p>Profile</p>
+                    <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                    <p>Patient</p>
                 </li>
             </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                <p>Profile</p>
+            </li>
         </ul>
         <div class="sidenav-user-bg">
             <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
@@ -35,7 +33,7 @@
         </div>
         <ul>
             <a href="{{ url_for('medtech.logout') }}">
-                <li>
+                <li class="logout">
                     <img src="{{ url_for('static', filename='images/Logout.png') }}">
                     <p>Logout</p>
                 </li>

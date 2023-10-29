@@ -4,7 +4,9 @@
     --blueC: #DFF1FF;
 }
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     font-family: 'Inter';
     margin: 0;

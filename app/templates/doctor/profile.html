@@ -1,25 +1,34 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Profile{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='admin-style.css') }}"> {% endblock %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}"> {% endblock %}
 {% block content %}
-    <!-- SIDE NAV -->
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
-            <a href="{{ url_for('admin.dashboard') }}">
+            <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                     <p>Dashboard</p>
                 </li>
             </a>
-            <a href="{{ url_for('admin.user_management') }}">
+            <a href="{{ url_for('doctor.calendar') }}">
                 <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/User Management.png') }}"> 
-                    <p>User Management</p>
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.patient') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                    <p>Patient</p>
                 </li>
             </a>
             <li class="selected-icon-bg">
@@ -31,19 +40,16 @@
             <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
-                <p>Admin</p>
+                <p>Family Medicine</p>
             </div>
         </div>
         <ul>
-            <a href="{{ url_for('admin.logout') }}">
-                <li>
+            <a href="{{ url_for('doctor.logout') }}">
+                <li class="logout">
                     <img src="{{ url_for('static', filename='images/Logout.png') }}">
                     <p>Logout</p>
                 </li>
             </a>
         </ul>
     </div>
-
-</body>
-</html>
-{% endblock %}  
+{% endblock %}

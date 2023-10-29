@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Appointment{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='doctor-style.css') }}"> {% endblock %}
+{% block title %}DocCare | Dashboard{% endblock title %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}"> {% endblock %}
 {% block content %}
+    <!-- NAVIGATION -->
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -9,22 +10,22 @@
             <h4 class="care">Care</h4>
         </div>
         <ul>
-            <a href="{{ url_for('doctor.dashboard') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
-                    <p>Dashboard</p>
-                </li>
-            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                <p>Dashboard</p>
+            </li>
             <a href="{{ url_for('doctor.calendar') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
                     <p>Calendar</p>
                 </li>
             </a>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
-                <p>Appointment</p>
-            </li>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
             <a href="{{ url_for('doctor.patient') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
@@ -47,13 +48,36 @@
         </div>
         <ul>
             <a href="{{ url_for('doctor.logout') }}">
-                <li>
+                <li class="logout">
                     <img src="{{ url_for('static', filename='images/Logout.png') }}">
                     <p>Logout</p>
                 </li>
             </a>
         </ul>
     </div>
-</body>
-</html>
+
+    <!-- DASHBOARD -->
+    <main>
+        <p class="date-time" id="demo"></p>
+    </main>
+
+    <script>
+        function displayDateAndTime() {
+        const demoElement = document.getElementById('demo');
+
+            function updateDateAndTime() {
+                const currentDateAndTime = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
+                const currentTime = currentDateAndTime.toLocaleTimeString();
+
+                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}<br>${currentTime}`;
+            }
+            updateDateAndTime();
+            setInterval(updateDateAndTime, 1000);
+        }
+
+        displayDateAndTime();   
+    </script>
+
 {% endblock %}
