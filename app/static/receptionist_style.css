@@ -11,6 +11,20 @@
     margin-top: 138px;
     margin-bottom: 25px;
     overflow: hidden;
+    justify-content: left;
+}
+
+/* SIDEBAR */
+.sidenav-bg {
+    width: 80px;
+    height: 100%; /* Set the height to 100% to make it full height */
+    background-color: var(--blueC);
+    border-radius: 50px;
+    position: fixed;
+    top: 0; /* Stick it to the top of the viewport */
+    left: 0; /* Stick it to the left of the viewport */
+    padding: 8px;
+    z-index: 1;
 }
 
 /* DASHBOARD */
@@ -49,8 +63,120 @@
 }
 
 /* APPOINTMENT */
-/* style here */
+* {
+    margin: 0;
+    padding: 0;
 
+    box-sizing: border-box;
+    font-family:  'Montserrat';
+}
+.appointment_body {
+    min-height: 100vh;
+    background-color:rgb(255, 255, 255);
+    display: flex;
+    justify-content:center;
+    align-items: center;
+
+}
+.table__header__appointment{
+    width: 100%;
+    height: 10%;
+    background-color: #fff4;
+    padding: .8rem 1rem;
+    border-radius: .6rem;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.doccare-table-appointment-content{
+    width: 95%;
+    max-height: calc(90% - 1.6rem);
+    background-color: #fffb;
+    
+    margin: .8rem auto;
+    border-radius: .6rem;
+    overflow: auto;
+
+}
+.doccare-table-appointment-content::-webkit-scrollbar{
+    width: 0.5rem;
+    height: 0.5rem;
+}
+.doccare-table-appointment-content::-webkit-scrollbar-thumb{
+    border-radius: 0.5rem;
+    background-color: #0004;
+    visibility: hidden;
+}
+
+.doccare-table-appointment-content:hover::-webkit-scrollbar-thumb{
+    visibility: visible;
+}
+
+table, th, td {
+    padding: 1rem;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table {
+    width:100%;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: aliceblue;
+}
+main.doccare-appointment-table {
+    width: 82vw;
+    height: 90vh;
+    background-color: #fff5;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 .4rem .8rem #0005;
+    border-radius: 0.8rem;
+    overflow: hidden;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ecf6ff;
+}
+
+tbody tr:hover {
+    background-color:rgb(240, 254, 255);
+}
+
+.status {
+    padding: 0.4rem 0;
+    border-radius: 2rem;
+}
+
+.status.done {
+    background-color: #86E49D;
+    color: #006b21;
+    text-align: center;
+}
+
+.status.pending {
+    background-color: #fbedd0;
+    color: #ebc474;
+    text-align: center;
+}
+
+.status.cancelled {
+    background-color: #d893a3;
+    color: #b30021;
+}
+
+.status.scheduled {
+    background-color: #DFF1FF;
+    color: #0277BD;
+}
+
+@media (max-width: 768px) {
+    td:not(:first-of-type){
+        min-width: 12.1rem;
+    }
+}
 
 /* CALENDAR */
 /* style here */
