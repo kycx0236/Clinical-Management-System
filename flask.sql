@@ -25,9 +25,9 @@ DROP TABLE IF EXISTS 'appointment';
 CREATE TABLE IF NOT EXISTS 'appointment'(
 	  'reference_number' varchar(50) NOT NULL PRIMARY KEY,
     'date_appointment' DATE,
-    'time_appointment' TIME,
+    'time_appointment' varchar(255) DEFAULT NOT NULL,
     'status_' varchar(20) DEFAULT NOT NULL,
-    'book_date' TIMESTAMP,
+    'book_date' varchar(255) DEFAULT NOT NULL,
     'first_name' varchar(255) DEFAULT NOT NULL,
     'middle_name' varchar(50) DEFAULT NOT NULL,
     'last_name' varchar(50) DEFAULT NOT NULL,
