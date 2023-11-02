@@ -31,7 +31,8 @@
                                 <tr>
                                     {% for header in headings %}
                                         <th>
-                                            {{   header }}
+                                            {{  header }}
+                                            <span class="icon-arrow">&UpArrow;</span>
                                         </th>
                                     {% endfor %}
                                 </tr>
@@ -52,11 +53,14 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                    </section>
+                    <div class="doccare-add-appointment-icon">
+                        <span class="material-symbols-outlined add-icon">&#xe147;</span>
+                    </div>
                 </main>
             </div>
-            <script src="{{ url_for('static', filename='search_script.js') }}"></script>
+            <script src="{{ url_for('static', filename='receptionist_script.js') }}"></script>
         </body>
     </div>
     
-
 {% endblock %}
