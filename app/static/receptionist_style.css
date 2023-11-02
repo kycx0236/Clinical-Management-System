@@ -161,16 +161,58 @@ table {
 thead th {
     position: sticky;
     top: 0;
+    left: 0;
     background-color: aliceblue;
+    cursor: pointer;
+}
+
+thead th span.icon-arrow{
+    display: inline-block;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    border: 1.4px solid aliceblue; 
+    text-align: center;
+    font-size: 1rem;
+    
+    margin-left: .5rem;
+    transition: .2s ease-in-out;
+}
+
+thead th:hover span.icon-arrow {
+    border: 1.4px solid #0277BD;
+}
+
+thead th.active span.icon-arrow {
+    background-color: #0277BD;
+    color: white;
+}
+
+thead th.asc span.icon-arrow {
+    transform: rotate(180deg);
+}
+
+thead th.active, tbody td.active {
+    color: #0277BD;
 }
 
 .material-symbols-outlined {
+    color: #0277BD;
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
     'GRAD' 0,
     'opsz' 24
-  }
+}
+
+.doccare-add-appointment-icon{
+    text-align: center;
+}
+
+.material-symbols-outlined.add-icon {
+    position: fixed;
+
+}
   
 main.doccare-appointment-table {
     width: 82vw;
