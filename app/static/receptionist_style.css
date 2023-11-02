@@ -85,7 +85,40 @@
     padding: .8rem 1rem;
     border-radius: .6rem;
     text-align: center;
+    font-family: 'Inter';
     font-weight: bolder;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table__header__appointment .doccare-input-group{
+    width: 20%;
+    height: 100%;
+    padding: 0 0.8rem;
+    border-radius: 2rem;
+    background-color: rgba(223, 222, 222, 0.333);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s
+}
+
+.table__header__appointment .doccare-input-group input{
+    width: 100%;
+    padding: 0 0.5rem 0 0.3rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    
+}
+
+.table__header__appointment .doccare-input-group:hover{
+    width: 35%;
+    background-color: rgba(227, 225, 225, 0.333);
+    box-shadow: 0 0.1rem 0.3rem rgba(77, 77, 77, 0.133);
+    
 }
 
 .doccare-table-appointment-content{
@@ -96,6 +129,9 @@
     margin: .8rem auto;
     border-radius: .6rem;
     overflow: auto;
+    overflow-y: overlay; /* Keep vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    transition: max-height 0.5s ease-in-out;
 
 }
 .doccare-table-appointment-content::-webkit-scrollbar{
@@ -127,10 +163,19 @@ thead th {
     top: 0;
     background-color: aliceblue;
 }
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+  }
+  
 main.doccare-appointment-table {
     width: 82vw;
     height: 90vh;
-    background-color: #fff5;
+    background-color: #fff5 !important;
     backdrop-filter: blur(10px);
     box-shadow: 0 .4rem .8rem #0005;
     border-radius: 0.8rem;
@@ -138,11 +183,35 @@ main.doccare-appointment-table {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #ecf6ff;
+    background-color: #ecf6ff !important;
+}
+
+tbody tr{
+    --delay: .1s;
+    transition: .5s ease-in-out var(--delay), background-color 0s;
 }
 
 tbody tr:hover {
-    background-color:rgb(240, 254, 255);
+    background-color:rgb(240, 254, 255) !important;
+}
+
+tbody tr td, 
+tbody tr td p, 
+tbody tr td button {
+    transition: .2s ease-in-out .5s;
+}
+
+tbody tr.hide td,
+tbody tr.hide td p, 
+tbody tr.hide td button {
+    padding: 0;
+    font: 0 / 0 'Montserrat';
+    transition: .2s ease-in-out .5s;
+}
+
+tbody tr.hide {
+    opacity: 0;
+    transform: translateX(100%);
 }
 
 .status {
@@ -177,6 +246,7 @@ tbody tr:hover {
         min-width: 12.1rem;
     }
 }
+
 
 /* CALENDAR */
 /* style here */
