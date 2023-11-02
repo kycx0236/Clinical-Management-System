@@ -19,7 +19,12 @@
                         <h1> 
                             <strong> APPOINTMENT </strong> 
                         </h1>
+                        <div class="doccare-input-group">
+                            <input type="search" placeholder="Search">
+                            <span class="material-symbols-outlined">&#xe8b6;</span>
+                        </div>
                     </section>
+                    
                     <section class="doccare-table-appointment-content">
                         <table>
                             <thead>
@@ -49,6 +54,7 @@
                         </table>
                 </main>
             </div>
+            <script src="{{ url_for('static', filename='search_script.js') }}"></script>
         </body>
     </div>
     
