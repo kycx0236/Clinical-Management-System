@@ -199,20 +199,107 @@ thead th.active, tbody td.active {
 .material-symbols-outlined {
     color: #0277BD;
     font-variation-settings:
-    'FILL' 0,
+    'FILL' 10,
     'wght' 400,
     'GRAD' 0,
     'opsz' 24
 }
 
-.doccare-add-appointment-icon{
+/* Center the icon horizontally */
+.doccare-add-appointment-icon {
     text-align: center;
-}
-
-.material-symbols-outlined.add-icon {
     position: fixed;
-
+    right: 20px; /* Adjust the distance from the right side of the screen */
+    bottom: 20px; /* Adjust the distance from the bottom of the screen */
 }
+
+/* Style the icon */
+.material-symbols-outlined.add-icon {
+    font-size: 72px; /* Initial size */
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+/* Enlarge the icon on hover */
+.material-symbols-outlined.add-icon:hover {
+    font-size: 96px; /* Larger size on hover */
+    transform: rotate(90deg); 
+    cursor: pointer;
+}
+
+.material-symbols-outlined.delete-icon {
+    font-size: 24px; 
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+    cursor: pointer;
+}
+
+/* Enlarge the icon on hover */
+.material-symbols-outlined.delete-icon:hover {
+    transform: scale(1.2);
+}
+
+.delete-appoinment-button {
+    background-color: transparent;
+    border: 1px solid rgb(16, 121, 137);
+    border-radius: 20%;
+    outline: none;
+    padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
+    margin-left: 0.2rem;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.delete-appoinment-button:hover {
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.doccare-view-appoinment-icon{
+    background-color: transparent;
+    border: 1px solid rgb(16, 121, 137);
+    border-radius: 20%;
+    outline: none;
+    padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
+    margin-left: 0.2rem;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.doccare-view-appoinment-icon:hover{
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.doccare-edit-appoinment-icon{
+    background-color: transparent;
+    border: 1px solid rgb(16, 121, 137);
+    border-radius: 20%;
+    outline: none;
+    padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
+    margin-left: 0.2rem;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.doccare-edit-appoinment-icon:hover{
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+
+.table__cell {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.table__cell .material-symbols-outlined {
+    display: inline-block;
+    vertical-align: middle; 
+}
+
+
+.table__cell .material-symbols-outlined + .material-symbols-outlined {
+    margin-left: 0.2rem; 
+    margin: 0.2 rem; 
+}
+
   
 main.doccare-appointment-table {
     width: 82vw;
@@ -222,6 +309,7 @@ main.doccare-appointment-table {
     box-shadow: 0 .4rem .8rem #0005;
     border-radius: 0.8rem;
     overflow: hidden;
+    margin-left: 2%;
 }
 
 tbody tr:nth-child(even) {
