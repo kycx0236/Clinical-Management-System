@@ -44,19 +44,29 @@
                                         <td> {{ row[1] }} </td>
                                         <td> {{ row[2] }} </td>
                                         <td> 
-                                            <p class="status done"> {{ row[3] }} </p>
+                                            <p class="status done">
+                                                <strong> {{ row[3] }} </strong>
+                                            </p>
                                         </td>
                                         <td class="table__cell">
-                                            <button type="button" class="btn btn-danger delete-button" data-id="{{ row[0] }}">Delete</button>
+                                            <a href="{{ url_for('receptionist.logout') }}" class="doccare-view-appoinment-icon">
+                                                <span class="material-symbols-outlined">info</span>
+                                            </a>
+                                            <a href="{{ url_for('receptionist.logout') }}" class="doccare-edit-appoinment-icon">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </a>
+                                            <button type="button" class="delete-appoinment-button" data-id="{{ row[0] }}">
+                                                <span class="material-symbols-outlined delete-icon">delete</span>
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </section>
-                    <div class="doccare-add-appointment-icon">
+                    <a href="{{ url_for('receptionist.logout') }}" class="doccare-add-appointment-icon">
                         <span class="material-symbols-outlined add-icon">&#xe147;</span>
-                    </div>
+                    </a>
                 </main>
             </div>
             <script src="{{ url_for('static', filename='receptionist_script.js') }}"></script>
