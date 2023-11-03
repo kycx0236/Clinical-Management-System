@@ -26,6 +26,13 @@
                     </section>
                     
                     <section class="doccare-table-appointment-content">
+                        <label for="entriesPerPage">Show entries:</label>
+                        <select id="entriesPerPage" name="entriesPerPage" class="styled-dropdown">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                         <table>
                             <thead>
                                 <tr>
@@ -64,7 +71,24 @@
                             </tbody>
                         </table>
                     </section>
-                    <a href="{{ url_for('receptionist.logout') }}" class="doccare-add-appointment-icon">
+                    <div class="pagination">
+                        {% if page > 1 %}
+                            <a href="{{ url_for('receptionist.appointment', page=page-1) }}">Previous</a>
+                        {% endif %}
+                        
+                        {% for p in range(1, total_pages + 1) %}
+                            {% if p == page %}
+                                <span class="current">{{ p }}</span>
+                            {% else %}
+                                <a href="{{ url_for('receptionist.appointment', page=p) }}">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page < total_pages %}
+                            <a href="{{ url_for('receptionist.appointment', page=page+1) }}">Next</a>
+                        {% endif %}
+                    </div>
+                    <a href="{{ url_for('receptionist.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
                         <span class="material-symbols-outlined add-icon">&#xe147;</span>
                     </a>
                 </main>
