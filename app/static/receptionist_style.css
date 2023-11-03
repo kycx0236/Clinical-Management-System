@@ -371,6 +371,44 @@ tbody tr.hide {
     color: #0277BD;
 }
 
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    position: fixed; 
+    bottom: 0; 
+    left: 0;
+    right: 0; 
+    padding: 10px 0; /* Add padding for better spacing */
+    z-index: 999; /* Ensure it appears above other content */
+    /*box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.1); Optional shadow for separation */
+}
+
+.pagination a, .pagination span {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #333;
+    background-color: #fff;
+    border-radius: 15%;
+    outline: none;
+    transition: transform 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+    transform: scale(1.2);
+}
+
+.pagination .current {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 15%;
+    outline: none;
+}
+
+
 @media (max-width: 768px) {
     td:not(:first-of-type){
         min-width: 12.1rem;
