@@ -20,6 +20,9 @@ def create_app():
     mysql.init_app(app)
     bootstrap.init_app(app)
     
+    # Initialize CSRF protection before registering blueprints
+    CSRFProtect(app)
+    
     @app.route("/")
     def index():
         return render_template("login.html")
