@@ -1,9 +1,9 @@
 from flask import Flask, render_template
-# from flask_mysql_connector import MySQL
+from flask_mysql_connector import MySQL
 from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY
-# from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect
 
-# mysql = MySQL()
+mysql = MySQL()
 
 def create_app():
     app = Flask(__name__)
@@ -14,7 +14,7 @@ def create_app():
     app.config['MYSQL_PASSWORD'] = DB_PASSWORD
     app.config['MYSQL_DATABASE'] = DB_NAME
 
-    # mysql.init_app(app)
+    mysql.init_app(app)
 
     @app.route("/")
     def index():

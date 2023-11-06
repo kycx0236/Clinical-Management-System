@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, request
 from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
@@ -8,24 +8,540 @@ doctor_bp = Blueprint('doctor', __name__)
 
 @doctor_bp.route('/')
 def dashboard():
-    return render_template("doctor/dashboard.html")
+    return render_template("doctor/dashboard/dashboard.html")
 
 @doctor_bp.route('/calendar/')
 def calendar():
-    return render_template("doctor/calendar.html")
+    return render_template("doctor/calendar/calendar.html")
 
 @doctor_bp.route('/appointment/')
 def appointment():
-    return render_template("doctor/appointment.html")
+    return render_template("doctor/appointment/appointment.html")
 
-@doctor_bp.route('/patient/')
-def patient():
-    return render_template("doctor/patient.html")
+@doctor_bp.route('/add/', methods=["GET", "POST"])
+def add_patient():
+    form = PatientForm()
+
+    if request.method == 'POST':
+        fName = request.form.get("first_name").upper()
+        mName = request.form.get("middle_name").upper()
+        lname = request.form.get("last_name").upper()
+        age = int(request.form.get("age"))
+        status = request.form.get("civil_status")
+        sex = request.form.get("gender")
+        blood = request.form.get("bloodType")
+        religion = request.form.get("religion")
+        bPlace = request.form.get("birth_place").upper()
+        bDate = request.form.get("birth_date")
+        job = request.form.get("occupation").upper()
+        emailAdd = request.form.get("email")
+        p_num = ''.join(filter(str.isdigit, request.form.get("contact_num")))
+        cAddress = request.form.get("p_address").upper()
+        p_nationality = request.form.get("nationality")
+        e_person = request.form.get("e_person").upper()
+        relationship = request.form.get("relationship")
+        e_number = ''.join(filter(str.isdigit, request.form.get("e_number")))
+        
+        new_patient = doctor()
+        new_patient.firstName = fName
+        new_patient.midName = mName
+        new_patient.lastName = lname
+        new_patient.age = age
+        new_patient.civilStatus = status
+        new_patient.gender = sex
+        new_patient.bloodType = blood
+        new_patient.religion = religion
+        new_patient.birthPlace = bPlace
+        new_patient.birthDate = bDate
+        new_patient.occupation = job
+        new_patient.p_email = emailAdd
+        new_patient.p_contactNum = p_num
+        new_patient.p_address = cAddress
+        new_patient.nationality = p_nationality
+        new_patient.eContactName = e_person
+        new_patient.relationship = relationship
+        new_patient.eContactNum = e_number
+
+        result = new_patient.add()
+
+        if result:
+            return render_template("doctor/patient/add_patient.html", success=True, PatientForm=form)
+        else:
+            return render_template("doctor/patient/add_patient.html", error=True, PatientForm=form)
+
+    return render_template("doctor/patient/add_patient.html", PatientForm=form)
 
 @doctor_bp.route('/profile/')
 def profile():
-    return render_template("doctor/profile.html")
+    return render_template("doctor/profile/profile.html")
 
 @doctor_bp.route('/login/')
 def logout():
     return render_template("login.html")
+
+
+# -------------------------------------------- PATIENT -------------------------------------------- #
+
+# PATIENT TABLE
+@doctor_bp.route('/patient/')
+def patient():
+    patients_data = doctor.get_patients()
+    return render_template("doctor/patient/patient.html", patients=patients_data)
+
+# MEDICAL HISTORY
+@doctor_bp.route('/medical_history/', methods=['GET', 'POST'])
+def medical_history():
+    form = PatientForm()
+    patient_id = None
+
+    # RETRIEVE RECORD FROM DATABASE ESPECIALLY PATIENT ID
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        patient_info = doctor.get_patient_history (patient_id)
+        print('THIS IS THE PATIENT ID:', patient_id)
+        print('THIS IS THE PATIENT INFORMATION:', patient_info)
+        return render_template('doctor/patient/medical_history.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+
+    elif request.method == 'POST':
+        new_history_id = request.form.get('history_id')
+        new_patient_id = request.form.get('patient_id')
+        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
+    # IMMUNIZATION
+        bcg_checkbox_value = 1 if request.form.get('bcgCheckbox') == 'checked' else 0
+        dtp_checkbox_value = 1 if request.form.get('dtpCheckbox') == 'checked' else 0
+        pcv_checkbox_value = 1 if request.form.get('pcvCheckbox') == 'checked' else 0
+        influenza_checkbox_value = 1 if request.form.get('influenzaCheckbox') == 'checked' else 0
+        hepa_checkbox_value = 1 if request.form.get('hepaCheckbox') == 'checked' else 0
+        ipv_checkbox_value = 1 if request.form.get('ipvCheckbox') == 'checked' else 0
+        mmr_checkbox_value = 1 if request.form.get('mmrCheckbox') == 'checked' else 0
+        hpv_checkbox_value = 1 if request.form.get('hpvCheckbox') == 'checked' else 0
+    # FAMILY HISTORY
+        asthma_checkbox_value = 1 if request.form.get('asthmaCheckbox') == 'checked' else 0
+        diabetes_checkbox_value = 1 if request.form.get('diabetesCheckbox') == 'checked' else 0
+        heart_checkbox_value = 1 if request.form.get('heartCheckbox') == 'checked' else 0
+        birth_checkbox_value = 1 if request.form.get('birthCheckbox') == 'checked' else 0
+        bone_checkbox_value = 1 if request.form.get('boneCheckbox') == 'checked' else 0
+        alzheimer_checkbox_value = 1 if request.form.get('alzheimerCheckbox') == 'checked' else 0
+        cancer_checkbox_value = 1 if request.form.get('cancerCheckbox') == 'checked' else 0
+        thyroid_checkbox_value = 1 if request.form.get('thyroidCheckbox') == 'checked' else 0
+        tuberculosis_checkbox_value = 1 if request.form.get('tuberculosisCheckbox') == 'checked' else 0
+        eye_checkbox_value = 1 if request.form.get('eyeCheckbox') == 'checked' else 0
+        clots_checkbox_value = 1 if request.form.get('clotsCheckbox') == 'checked' else 0
+        mental_checkbox_value = 1 if request.form.get('mentalCheckbox') == 'checked' else 0
+        kidney_checkbox_value = 1 if request.form.get('kidneyCheckbox') == 'checked' else 0
+        anemia_checkbox_value = 1 if request.form.get('anemiaCheckbox') == 'checked' else 0
+        muscle_checkbox_value = 1 if request.form.get('muscleCheckbox') == 'checked' else 0
+        highblood_checkbox_value = 1 if request.form.get('highbloodCheckbox') == 'checked' else 0
+        epilepsy_checkbox_value = 1 if request.form.get('epilepsyCheckbox') == 'checked' else 0
+        skin_checkbox_value = 1 if request.form.get('skinCheckbox') == 'checked' else 0
+        hiv_checkbox_value = 1 if request.form.get('hivCheckbox') == 'checked' else 0
+        pulmonary_checkbox_value = 1 if request.form.get('pulmonaryCheckbox') == 'checked' else 0
+        new_specifications = request.form.get('specifications').upper()
+        new_others = request.form.get('others').upper()
+    # PAST HISTORY
+        new_past1 = request.form.get('past_c1').upper()
+        new_medication1 = request.form.get('medication1').upper()
+        new_dosage1 = request.form.get('dosage1').upper()
+        new_hdate1 = request.form.get('h_date1')
+        if not new_hdate1:
+            new_hdate1 = None 
+        new_past2 = request.form.get('past_c2').upper()
+        new_medication2 = request.form.get('medication2').upper()
+        new_dosage2 = request.form.get('dosage2').upper()
+        new_hdate2 = request.form.get('h_date2')
+        if not new_hdate2:
+            new_hdate2 = None
+        new_past3 = request.form.get('past_c3').upper()
+        new_medication3 = request.form.get('medication3').upper()
+        new_dosage3 = request.form.get('dosage3').upper()
+        new_hdate3 = request.form.get('h_date3')
+        if not new_hdate3:
+            new_hdate3 = None
+    # SOCIAL HISTORY 
+        habit = request.form.get('habitually')
+        yDrunk = request.form.get('yearsDrunk')
+        if yDrunk and yDrunk.isdigit():
+            yDrunk = int(yDrunk)
+        else:
+            yDrunk = None
+        fDrink = request.form.get('frequencyDrink').upper()
+        qDrink = request.form.get('quitDrinking')
+        if qDrink and qDrink.isdigit():
+            qDrink = int(qDrink)
+        else:
+            qDrink = None
+        frequent = request.form.get('frequently')
+        ySmoked = request.form.get('yearsSmoked')
+        if ySmoked and ySmoked.isdigit():
+            ySmoked = int(ySmoked)
+        else:
+            ySmoked = None
+        fSmoke = request.form.get('frequencySmoke').upper()
+        qSmoke = request.form.get('quitSmoking')
+        if qSmoke and qSmoke.isdigit():
+            qSmoke = int(qSmoke)
+        else:
+            qSmoke = None
+        often = request.form.get('often')
+        eType = request.form.get('exerciseType').upper()
+        fExercise = request.form.get('frequencyExercise').upper()
+        dActivity = request.form.get('durationActivity').upper()
+        sActive = request.form.get('sexActive')
+        sPartner = request.form.get('sexPartner')
+        nSPartner = request.form.get('numSexPartner')
+        if nSPartner and nSPartner.isdigit():
+            nSPartner = int(nSPartner)
+        else:
+            nSPartner = None
+        contraceptions = request.form.get('contraception').upper()
+        use = request.form.get('useDrugs')
+        sDrugs = request.form.get('specifyDrugs').upper()
+        fDrugs = request.form.get('frequencyDrugs').upper()
+    # SURGICAL HISTORY  
+        sDate1 = request.form.get('surgeryDate1')
+        if not sDate1:
+            sDate1 = None
+        sProcedure1 = request.form.get('surgeryProcedure1').upper()
+        shospital1 = request.form.get('hospital1').upper()
+        sDate2 = request.form.get('surgeryDate2')
+        if not sDate2:
+            sDate2 = None
+        sProcedure2 = request.form.get('surgeryProcedure2').upper()
+        shospital2 = request.form.get('hospital2').upper()
+        sDate3 = request.form.get('surgeryDate3')
+        if not sDate3:
+            sDate3 = None
+        sProcedure3 = request.form.get('surgeryProcedure3').upper()
+        shospital3 = request.form.get('hospital3').upper()
+    # MEDICATIONS
+        meds = request.form.get('medications').upper()
+    # ALLERGIES
+        allergy = request.form.get('allergies').upper()
+
+        existing_history = doctor.get_patient_history(new_patient_id)
+        print('EXISTING HISTORY:', existing_history)
+        
+        if existing_history:
+            updated = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+                                                dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
+                                                hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
+                                                hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
+                                                heartCheckbox = heart_checkbox_value, birthCheckbox = birth_checkbox_value, boneCheckbox = bone_checkbox_value,
+                                                alzheimerCheckbox = alzheimer_checkbox_value, cancerCheckbox = cancer_checkbox_value, thyroidCheckbox = thyroid_checkbox_value,
+                                                tuberculosisCheckbox = tuberculosis_checkbox_value, eyeCheckbox = eye_checkbox_value, clotsCheckbox = clots_checkbox_value,
+                                                mentalCheckbox = mental_checkbox_value, kidneyCheckbox = kidney_checkbox_value,anemiaCheckbox = anemia_checkbox_value,
+                                                muscleCheckbox = muscle_checkbox_value, highbloodCheckbox = highblood_checkbox_value, epilepsyCheckbox = epilepsy_checkbox_value,
+                                                skinCheckbox = skin_checkbox_value, hivCheckbox = hiv_checkbox_value, pulmonaryCheckbox = pulmonary_checkbox_value,
+                                                specifications = new_specifications, others = new_others, past_c1 = new_past1, medication1 = new_medication1,
+                                                dosage1 = new_dosage1, h_date1 = new_hdate1, past_c2 = new_past2, medication2 = new_medication2, dosage2 = new_dosage2,
+                                                h_date2 = new_hdate2, past_c3 = new_past3, medication3 = new_medication3, dosage3 = new_dosage3, h_date3 = new_hdate3,
+                                                habitually = habit, yearsDrunk = yDrunk, frequencyDrink = fDrink, quitDrinking = qDrink, frequently = frequent,
+                                                yearsSmoked = ySmoked, frequencySmoke = fSmoke, quitSmoking = qSmoke, often = often, exerciseType = eType,
+                                                frequencyExercise = fExercise, durationActivity = dActivity, sexActive = sActive, sexPartner = sPartner,
+                                                numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
+                                                surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
+                                                surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
+                                                hospital3 = shospital3, medications = meds, allergies = allergy)  
+            
+            updated_info = doctor.get_patient_history(new_patient_id)
+            print('UPDATED INFO:', updated_info)
+            
+            if updated:
+                return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form)
+            else:
+                return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form)
+
+        else:
+            result = doctor.add_medical_history(patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+                                                dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
+                                                hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
+                                                hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
+                                                heartCheckbox = heart_checkbox_value, birthCheckbox = birth_checkbox_value, boneCheckbox = bone_checkbox_value,
+                                                alzheimerCheckbox = alzheimer_checkbox_value, cancerCheckbox = cancer_checkbox_value, thyroidCheckbox = thyroid_checkbox_value,
+                                                tuberculosisCheckbox = tuberculosis_checkbox_value, eyeCheckbox = eye_checkbox_value, clotsCheckbox = clots_checkbox_value,
+                                                mentalCheckbox = mental_checkbox_value, kidneyCheckbox = kidney_checkbox_value,anemiaCheckbox = anemia_checkbox_value,
+                                                muscleCheckbox = muscle_checkbox_value, highbloodCheckbox = highblood_checkbox_value, epilepsyCheckbox = epilepsy_checkbox_value,
+                                                skinCheckbox = skin_checkbox_value, hivCheckbox = hiv_checkbox_value, pulmonaryCheckbox = pulmonary_checkbox_value,
+                                                specifications = new_specifications, others = new_others, past_c1 = new_past1, medication1 = new_medication1,
+                                                dosage1 = new_dosage1, h_date1 = new_hdate1, past_c2 = new_past2, medication2 = new_medication2, dosage2 = new_dosage2,
+                                                h_date2 = new_hdate2, past_c3 = new_past3, medication3 = new_medication3, dosage3 = new_dosage3, h_date3 = new_hdate3,
+                                                habitually = habit, yearsDrunk = yDrunk, frequencyDrink = fDrink, quitDrinking = qDrink, frequently = frequent,
+                                                yearsSmoked = ySmoked, frequencySmoke = fSmoke, quitSmoking = qSmoke, often = often, exerciseType = eType,
+                                                frequencyExercise = fExercise, durationActivity = dActivity, sexActive = sActive, sexPartner = sPartner,
+                                                numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
+                                                surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
+                                                surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
+                                                hospital3 = shospital3, medications = meds, allergies = allergy)
+            
+            updated_info = doctor.get_patient_history(new_patient_id)
+            print('NEW PATIENT HISTORY:', updated_info)
+
+            if result:
+                return render_template("doctor/patient/medical_history.html", patient_id=patient_id, success=True, patient=updated_info, PatientForm=form)
+            else:
+                return render_template("doctor/patient/medical_history.html", patient_id=patient_id, error=True, patient=updated_info, PatientForm=form)
+
+    return render_template("doctor/patient/medical_history.html", patient_id=patient_id, PatientForm=form)
+
+# CONSULTATION TABLE
+@doctor_bp.route('/consultation/')
+def consultation():
+    patient_id = request.args.get('patient_id')
+    patient_info = doctor.get_patient_info(patient_id)
+    consultation_data = doctor.get_consultations(patient_id)
+    return render_template("doctor/patient/consultation.html", consultations=consultation_data,patient=patient_info)
+
+# ASSESSMENT 
+@doctor_bp.route('/assessment/', methods=['GET', 'POST'])
+def assessment():
+    form=PatientForm()
+    patient_id = None
+
+    if request.method == 'GET':
+        assessment_id = request.args.get('assessment_id')
+        patient_id = request.args.get('patient_id')
+        patient_info = doctor.get_consultation_info(assessment_id, patient_id)
+        print('THIS IS THE ASSESSMENT ID:', assessment_id)
+        print('THIS IS THE PATIENT ID:', patient_id)
+        print('THIS IS THE PATIENT INFORMATION:', patient_info)
+        return render_template('doctor/patient/assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+    
+    elif request.method == 'POST':
+        new_assessment_id = request.form.get('assessment_id')
+        new_patient_id = request.form.get('patient_id')
+        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
+    # COMPLAINT
+        sub = request.form.get('subject').upper()
+        complain = request.form.get('complaints').upper()
+
+    # HISTORY OF PRESENT ILLNESS
+        p_illness = request.form.get('h_illness').upper()
+
+    # VITAL SIGNS
+        blood_p = request.form.get('blood_p').upper()
+        pulse_r = request.form.get('pulse_r').upper()
+        temp = request.form.get('temp').upper()
+        respiratory_r = request.form.get('respiratory_r').upper()
+        height = request.form.get('height').upper()
+        weight = request.form.get('weight').upper()
+        body_mass = request.form.get('body_mass').upper()
+
+    # PHYSICAL EXAMINATIONS
+        normal_head = request.form.get('normal_head').upper()
+        abnormalities_head = request.form.get('abnormalities_head').upper()
+        normal_ears = request.form.get('normal_ears').upper()
+        abnormalities_ears = request.form.get('abnormalities_ears').upper()
+        normal_eyes = request.form.get('normal_eyes').upper()
+        abnormalities_eyes = request.form.get('abnormalities_eyes').upper()
+        normal_nose = request.form.get('normal_nose').upper()
+        abnormalities_nose = request.form.get('abnormalities_nose').upper()
+        normal_skin = request.form.get('normal_skin').upper()
+        abnormalities_skin = request.form.get('abnormalities_skin').upper()
+        normal_back = request.form.get('normal_back').upper()
+        abnormalities_back = request.form.get('abnormalities_back').upper()
+        normal_neck = request.form.get('normal_neck').upper()
+        abnormalities_neck = request.form.get('abnormalities_neck').upper()
+        normal_throat = request.form.get('normal_throat').upper()
+        abnormalities_throat = request.form.get('abnormalities_throat').upper()
+        normal_chest = request.form.get('normal_chest').upper()
+        abnormalities_chest = request.form.get('abnormalities_chest').upper()
+        normal_abdomen = request.form.get('normal_abdomen').upper()
+        abnormalities_abdomen = request.form.get('abnormalities_abdomen').upper()
+        normal_upper = request.form.get('normal_upper').upper()
+        abnormalities_upper = request.form.get('abnormalities_upper').upper()
+        normal_lower = request.form.get('normal_lower').upper()
+        abnormalities_lower = request.form.get('abnormalities_lower').upper()
+        normal_tract = request.form.get('normal_tract').upper()
+        abnormalities_tract = request.form.get('abnormalities_tract').upper()
+        comments = request.form.get('comments').upper()
+
+    # DIAGNOSIS
+        diagnosis = request.form.get('diagnosis')
+
+        update = doctor.update_medical_assessment(assessmentID=new_assessment_id, patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
+                                               pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
+                                               abnormalities_head=abnormalities_head, normal_ears=normal_ears, abnormalities_ears=abnormalities_ears, normal_eyes=normal_eyes
+                                               , abnormalities_eyes=abnormalities_eyes, normal_nose=normal_nose, abnormalities_nose=abnormalities_nose, normal_skin=normal_skin
+                                               , abnormalities_skin=abnormalities_skin, normal_back=normal_back, abnormalities_back=abnormalities_back, normal_neck=normal_neck
+                                               , abnormalities_neck=abnormalities_neck, normal_throat=normal_throat, abnormalities_throat=abnormalities_throat, normal_chest=normal_chest
+                                               , abnormalities_chest=abnormalities_chest, normal_abdomen=normal_abdomen, abnormalities_abdomen=abnormalities_abdomen, normal_upper=normal_upper
+                                               , abnormalities_upper=abnormalities_upper, normal_lower=normal_lower, abnormalities_lower=abnormalities_lower, normal_tract=normal_tract
+                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis)
+            
+        new_consultation = doctor.get_consultation_info(new_assessment_id, new_patient_id)
+        print('NEW ASSESSMENT:', new_consultation)
+
+        if update:
+            return render_template("doctor/patient/assessment.html", patient_id=patient_id, success=True, patient=new_consultation, PatientForm=form)
+        else:
+            return render_template("doctor/patient/assessment.html", patient_id=patient_id, error=True, patient=new_consultation, PatientForm=form)
+
+    return render_template("doctor/patient/assessment.html", patient_id=patient_id, PatientForm=form)
+  
+# LAB RESULTS TABLE
+@doctor_bp.route('/lab_results/')
+def lab_results():
+    patient_id = request.args.get('patient_id')
+    patient_info = doctor.get_patient_info(patient_id)
+    return render_template("doctor/patient/lab_results.html", patient=patient_info)
+
+# LABORATORY RESULT
+@doctor_bp.route('/results/')
+def results():
+    patient_id = request.args.get('patient_id')
+    patient_info = doctor.get_patient_info(patient_id)
+    return render_template("doctor/patient/results.html", patient=patient_info)
+
+# REQUEST TO RUN LABORATORY TESTS
+@doctor_bp.route('/labtest_request/')
+def labtest_request():
+    patient_id = request.args.get('patient_id')
+    patient_info = doctor.get_patient_info(patient_id)
+    return render_template("doctor/patient/labtest_request.html", patient=patient_info)
+
+# PRESCRIPTION
+@doctor_bp.route('/prescription/', methods=['GET', 'POST'])
+def prescription():
+    form = PatientForm()
+    patient_id = None
+
+    if request.method == 'GET':
+        prescription_id = request.args.get('prescription_id')
+        assessment_id = request.args.get('assessment_id')
+        patient_info = doctor.get_prescription_info(prescription_id, assessment_id)
+        print('THIS IS THE PRESCRIPTION ID:', prescription_id)
+        print('THIS IS THE ASSESSMENT ID:', assessment_id)
+        print('THIS IS THE PATIENT INFORMATION:', patient_info)
+        return render_template('doctor/patient/prescription.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+    
+# MEDICAL ASSESSMENT FOR EACH APPOINTMENT
+@doctor_bp.route('/add_assessment/', methods=['GET', 'POST'])
+def add_assessment():
+    form = PatientForm()
+    patient_id = None
+
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        patient_info = doctor.get_consultation_info(patient_id)
+        print('THIS IS THE PATIENT ID:', patient_id)
+        print('THIS IS THE PATIENT INFORMATION:', patient_info)
+        return render_template('doctor/patient/add_assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+    
+    elif request.method == 'POST':
+        new_patient_id = request.form.get('patient_id')
+        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
+    # COMPLAINT
+        sub = request.form.get('subject').upper()
+        complain = request.form.get('complaints').upper()
+
+    # HISTORY OF PRESENT ILLNESS
+        p_illness = request.form.get('h_illness').upper()
+
+    # VITAL SIGNS
+        blood_p = request.form.get('blood_p').upper()
+        pulse_r = request.form.get('pulse_r').upper()
+        temp = request.form.get('temp').upper()
+        respiratory_r = request.form.get('respiratory_r').upper()
+        height = request.form.get('height').upper()
+        weight = request.form.get('weight').upper()
+        body_mass = request.form.get('body_mass').upper()
+
+    # PHYSICAL EXAMINATIONS
+        normal_head = request.form.get('normal_head').upper()
+        abnormalities_head = request.form.get('abnormalities_head').upper()
+        normal_ears = request.form.get('normal_ears').upper()
+        abnormalities_ears = request.form.get('abnormalities_ears').upper()
+        normal_eyes = request.form.get('normal_eyes').upper()
+        abnormalities_eyes = request.form.get('abnormalities_eyes').upper()
+        normal_nose = request.form.get('normal_nose').upper()
+        abnormalities_nose = request.form.get('abnormalities_nose').upper()
+        normal_skin = request.form.get('normal_skin').upper()
+        abnormalities_skin = request.form.get('abnormalities_skin').upper()
+        normal_back = request.form.get('normal_back').upper()
+        abnormalities_back = request.form.get('abnormalities_back').upper()
+        normal_neck = request.form.get('normal_neck').upper()
+        abnormalities_neck = request.form.get('abnormalities_neck').upper()
+        normal_throat = request.form.get('normal_throat').upper()
+        abnormalities_throat = request.form.get('abnormalities_throat').upper()
+        normal_chest = request.form.get('normal_chest').upper()
+        abnormalities_chest = request.form.get('abnormalities_chest').upper()
+        normal_abdomen = request.form.get('normal_abdomen').upper()
+        abnormalities_abdomen = request.form.get('abnormalities_abdomen').upper()
+        normal_upper = request.form.get('normal_upper').upper()
+        abnormalities_upper = request.form.get('abnormalities_upper').upper()
+        normal_lower = request.form.get('normal_lower').upper()
+        abnormalities_lower = request.form.get('abnormalities_lower').upper()
+        normal_tract = request.form.get('normal_tract').upper()
+        abnormalities_tract = request.form.get('abnormalities_tract').upper()
+        comments = request.form.get('comments').upper()
+
+    # DIAGNOSIS
+        diagnosis = request.form.get('diagnosis')
+
+        result = doctor.add_medical_assessment(patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
+                                               pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
+                                               abnormalities_head=abnormalities_head, normal_ears=normal_ears, abnormalities_ears=abnormalities_ears, normal_eyes=normal_eyes
+                                               , abnormalities_eyes=abnormalities_eyes, normal_nose=normal_nose, abnormalities_nose=abnormalities_nose, normal_skin=normal_skin
+                                               , abnormalities_skin=abnormalities_skin, normal_back=normal_back, abnormalities_back=abnormalities_back, normal_neck=normal_neck
+                                               , abnormalities_neck=abnormalities_neck, normal_throat=normal_throat, abnormalities_throat=abnormalities_throat, normal_chest=normal_chest
+                                               , abnormalities_chest=abnormalities_chest, normal_abdomen=normal_abdomen, abnormalities_abdomen=abnormalities_abdomen, normal_upper=normal_upper
+                                               , abnormalities_upper=abnormalities_upper, normal_lower=normal_lower, abnormalities_lower=abnormalities_lower, normal_tract=normal_tract
+                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis)
+            
+        new_consultation = doctor.get_consultation_info(new_patient_id)
+        print('NEW ASSESSMENT:', new_consultation)
+
+        if result:
+            return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, success=True, patient=new_consultation, PatientForm=form)
+        else:
+            return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, error=True, patient=new_consultation, PatientForm=form)
+
+    return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, PatientForm=form)
+
+@doctor_bp.route('/patient_record/', methods=['GET', 'POST'])
+def patient_record():
+    form = PatientForm()
+
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        patient_info = doctor.get_patient_info(patient_id)
+
+        return render_template('doctor/patient/patient_record.html', patient=patient_info, patient_id=patient_id, PatientForm=form)
+
+    elif request.method == 'POST':
+        new_patient_id = request.form.get('patient_id')
+        new_first_name = request.form.get('first_name').upper()
+        new_middle_name = request.form.get('middle_name').upper()
+        new_last_name = request.form.get('last_name').upper()
+        new_age = int(request.form.get("age"))    
+        new_civil_status = request.form.get('civil_status')   
+        new_gender = request.form.get('gender')
+        new_bloodType = request.form.get('bloodType')    
+        new_religion = request.form.get('religion')
+        new_birth_place = request.form.get('birth_place').upper()    
+        new_birth_date = request.form.get('birth_date')
+        new_occupation = request.form.get('occupation').upper()    
+        new_email = request.form.get('email')
+        new_contact_num = ''.join(filter(str.isdigit, request.form.get("contact_num"))) 
+        new_p_address = request.form.get('p_address')
+        new_nationality = request.form.get('nationality')    
+        new_e_person = request.form.get('e_person').upper()
+        new_relationship = request.form.get('relationship')    
+        new_e_number = ''.join(filter(str.isdigit, request.form.get("e_number")))
+
+        updated = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+                                             civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
+                                             occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
+                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)  
+        
+        print('New Patient ID:', new_patient_id)
+
+        updated_info = doctor.get_patient_info(new_patient_id)
+        print('Updated information:', updated_info)
+
+        if updated:
+            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form)
+        else:
+            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form)
+
+    return render_template("doctor/patient/patient_record.html", PatientForm=form)
