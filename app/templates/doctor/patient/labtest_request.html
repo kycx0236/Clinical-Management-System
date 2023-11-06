@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Patient{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAVIGATION -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('doctor.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Family Medicine</p>
+            </div>
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.logout') }}">
+                <li class="logout">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </a>
+        </ul>
+    </div>
+
+    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <a class="back-icon" href="{{ url_for('doctor.lab_results', patient_id=patient[0]) }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="page">REQUEST LABORATORY TESTS</a>
+        </li>
+    </ul>
+
+    <!-- REQUEST FOR LABORATORY TEST -->
+    <div class="patient-bg request">
+
+        <!-- PATIENT INFORMATION -->
+        <div class="med-header A">PATIENT INFORMATION</div>
+        
+        <div class="p_row rowOne">
+            <div class="inputBox fName">
+                <input type="text" required="required" name="first_name">
+                <span>FIRST NAME</span>
+            </div>
+            <div class="inputBox mName">
+                <input type="text" required="required" name="middle_name">
+                <span>MIDDLE NAME</span>
+            </div>
+            <div class="inputBox lName">
+                <input type="text" required="required" name="last_name">
+                <span>LAST NAME</span>
+            </div>
+        </div>
+
+        <div class="p_row rowTwo">
+            <div class="inputBox age">
+                <input type="number" required="required" name="age">
+                <span>AGE</span>
+            </div>
+            <div class="inputBox status">
+                <span>CIVIL STATUS</span>
+                <select class="status" name="civil_status">
+                    <option value="" disabled selected></option>
+                    <option value="SINGLE">SINGLE</option>
+                    <option value="MARRIED">MARRIED</option>
+                    <option value="DIVORCED">DIVORCED</option>
+                    <option value="WIDOWED">WIDOWED</option>
+                </select>
+            </div>
+            <div class="inputBox gender">
+                <span>GENDER</span>
+                <select class="gender" name="gender">
+                    <option value="" disabled selected></option>
+                    <option value="FEMALE">FEMALE</option>
+                    <option value="MALE">MALE</option>
+                </select>
+            </div>
+            <div class="inputBox bloodType">
+                <span>BLOOD TYPE</span>
+                <select class="bloodType" name="bloodType">
+                    <option value="" disabled selected></option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+            <div class="inputBox religion">
+                <span>RELIGION</span>
+                <select class="religion" name="religion">
+                    <option value="" disabled selected></option>
+                    <option value="BAPTIST">BAPTIST</option>
+                    <option value="BORN AGAIN">BORN AGAIN</option>
+                    <option value="IGLESIA NI KRISTO">IGLESIA NI KRISTO</option>
+                    <option value="ISLAM">ISLAM</option>
+                    <option value="JEHOVAH'S WITNESS">JEHOVAH'S WITNESS</option>
+                    <option value="METHODIST">METHODIST</option>
+                    <option value="PENTECOSTAL">PENTECOSTAL</option>
+                    <option value="PROTESTANT">PROTESTANT</option>
+                    <option value="ROMAN CATHOLIC">ROMAN CATHOLIC</option>
+                    <option value="ADVENTIST">SEVENTH-DAY ADVENTIST</option>
+                    <option value="OTHER">OTHER</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- VITAL SIGNS -->
+        <div class="med-header L">VITAL SIGNS</div>
+        <div class="p_row rowThree">
+            <div class="inputBox vitalsA">
+                <input type="text" name="past_c1">
+                <span>BLOOD PRESSURE</span>
+            </div>
+            <div class="inputBox vitalsB">
+                <input type="text" name="past_c1">
+                <span>PULSE RATE</span>
+            </div>
+            <div class="inputBox vitalsB">
+                <input type="text" name="past_c1">
+                <span>TEMPERATURE</span>
+            </div>
+            <div class="inputBox vitalsA">
+                <input type="text" name="past_c1">
+                <span>RESPIRATORY RATE</span>
+            </div>
+        </div>
+
+        <div class="p_row rowFour">
+            <div class="inputBox vitalsA">
+                <input type="text" name="past_c1">
+                <span>HEIGHT</span>
+            </div>
+            <div class="inputBox vitalsA">
+                <input type="text" name="past_c1">
+                <span>WEIGHT</span>
+            </div>
+            <div class="inputBox vitalsA">
+                <input type="text" name="past_c1">
+                <span>BODY MASS INDEX</span>
+            </div>
+        </div>
+
+        <!-- REQUESTING PHYSICIAN -->
+        <div class="med-header M">PHYSICIAN</div>
+        <div class="p_row rowOne">
+            <div class="inputBox fName">
+                <input type="text" required="required" name="first_name">
+                <span>FIRST NAME</span>
+            </div>
+            <div class="inputBox mName">
+                <input type="text" required="required" name="middle_name">
+                <span>MIDDLE NAME</span>
+            </div>
+            <div class="inputBox lName">
+                <input type="text" required="required" name="last_name">
+                <span>LAST NAME</span>
+            </div>
+        </div>
+
+        <!-- REQUESTED LAB TESTS -->
+        <div class="med-header N">REQUESTED LABORATORY TESTS</div>
+        <div class="p_row nine">
+            <div class="inputBox labTest">
+                <textarea class="labTest" rows="2"></textarea>
+            </div>
+        </div>
+
+        <!-- REQUESTED LAB TESTS -->
+        <div class="med-header O">CLINICAL INFORMATION</div>
+        <div class="p_row nine">
+            <div class="inputBox medications">
+                <textarea class="medications" rows="2" placeholder="Reason for the test(s)"></textarea>
+            </div>
+        </div>
+
+        <!-- REQUESTED LAB TESTS -->
+        <div class="med-header P">SPECIMEN COLLECTION INSTRUCTIONS</div>
+        <div class="p_row nine">
+            <div class="inputBox medications">
+                <textarea class="medications" rows="2"></textarea>
+            </div>
+        </div>
+
+
+
+    </div>
+
+        
+    
+
+   
+    <!-- <div class="btn-container">
+        <button class="btn-submit" id="modalButton" type="submit">SUBMIT</button>
+    </div> -->
+
+    
+    <!-- {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient information added successfully!
+                    </div>
+                    <a href="{{ url_for('doctor.patient') }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div> -->
+    <!-- {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in adding patient information! A patient with the same record already exists.
+                    </div>
+                    <a href="{{ url_for('doctor.patient') }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %} -->
+
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Assessment{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAVIGATION -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('doctor.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Family Medicine</p>
+            </div>
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.logout') }}">
+                <li class="logout">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </a>
+        </ul>
+    </div>
+
+    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="page">PRESCRIPTION</a>
+        </li>
+    </ul>
+
+    <form action="{{ url_for('doctor.prescription') }}" method="POST">
+        {{ PatientForm.csrf_token }}
+
+        <!-- PRESCRIPTION -->
+        <div class="patient-bg prescription">
+            <div class="cms-logo prescription">
+                <p class="doc">Doc</p>
+                <h4 class="care">Care</h4>
+            </div>
+
+            <div class="rx">
+                <img src="{{ url_for('static', filename='/images/Rx.png') }}">
+            </div>
+
+            <h4 class="doctor">PHYSICIAN: DR.</h4>
+            <h4 class="doctor name">EDA GRACE J. PARAGOSO</h4>
+            <h4 class="doctor">PHYSICIAN: DR.</h4>
+            <h4 class="p_date">DATE:</h4>
+            <p class="p_date current">{{ patient[2] }}</p>
+
+            <div class="line-border"></div>
+
+            <h4 class="columnA">NAME:</h4>
+            <p class="columnB">ELIZABETH CARMEL A. WILLIAMS</p>
+
+            <h4 class="columnC">CONTACT NUMBER:</h4>
+            <p class="columnD">09351454490</p>
+
+            <h4 class="columnA address">ADDRESS:</h4>
+            <p class="columnB p_adress">PUROK 4 TAMBO, HINAPLANON, ILIGAN CITY</p>
+
+            <h4 class="columnC gender">GENDER:</h4>
+            <p class="columnD p_gender">FEMALE</p>
+
+            <!-- PRESCRIPTION -->
+            <div class="med-header prescription">PRESCRIPTION</div>
+
+            <div class="p_row row3">
+                <div class="inputBox prescription">
+                    <input type="text" name="specifications" disabled>
+                    <span>MEDIFICATION NAME</span>
+                </div>
+            </div>
+            <div class="p_row row4">
+                <div class="inputBox dosage">
+                    <input type="text" name="first_name" disabled>
+                    <span>DOSAGE</span>
+                </div>
+                <div class="inputBox route">
+                    <input type="text" name="middle_name" disabled>
+                    <span>ROUTE</span>
+                </div>
+            </div>
+            <div class="p_row row5">
+                <div class="inputBox prescription">
+                    <input type="text" name="specifications" disabled>
+                    <span>DURATION</span>
+                </div>
+            </div>
+            <div class="p_row row">
+                <div class="inputBox prescription">
+                    <input type="text" name="specifications" disabled>
+                    <span>INSTRUCTIONS</span>
+                </div>
+            </div>
+            <div class="prescription-container">
+                <!-- Newly created prescriptions will be appended here -->
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-prescription" id="addButton" style="display: none;">+ ADD PRESCRIPTION</button>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-submit" id="updateButton" type="submit" style="display: none;">DONE</button>
+            </div>
+
+            <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
+
+            <button class="print-icon" onclick="window.print()">
+                <img id="editIcon" src="{{ url_for('static', filename='images/Print.png') }}">
+            </button>
+        </div>
+
+    </form>
+
+    <script>
+        // EDIT BUTTON
+        function enableEdit() {
+            const inputFields = document.querySelectorAll('.prescription input');
+
+            inputFields.forEach((input) => {
+                input.disabled = false;
+            });
+
+            const submitButton = document.querySelector('#updateButton');
+            submitButton.style.display = 'block';
+
+            const addPrescription = document.querySelector('#addButton');
+            addPrescription.style.display = 'block';
+
+            const editIcon = document.getElementById('editIcon');
+            editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
+            editIcon.setAttribute('onclick', 'disableEdit()'); 
+        }
+
+        function disableEdit() {
+            const inputFields = document.querySelectorAll('.prescription input');
+
+            inputFields.forEach((input) => {
+                input.disabled = true;
+            });
+
+            const submitButton = document.querySelector('#updateButton');
+            submitButton.style.display = 'none';
+
+            const addPrescription = document.querySelector('#addButton');
+            addPrescription.style.display = 'none';
+
+            const editIcon = document.getElementById('editIcon');
+            editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
+            editIcon.setAttribute('onclick', 'enableEdit()');
+        }
+
+        // ADD PRESCRIPTION
+        // Get the button and the container where new prescriptions will be added
+        const addPrescriptionBtn = document.querySelector('.btn-prescription');
+        const prescriptionContainer = document.querySelector('.prescription-container');
+
+        // Function to create a new prescription section
+        function createPrescription() {
+            const newPrescription = document.createElement('div');
+            newPrescription.classList.add('prescription-section');
+            newPrescription.innerHTML = `
+                <div class="p_row row6">
+                    <div class="inputBox prescription">
+                        <input type="text" name="specifications" disabled>
+                        <span>MEDIFICATION NAME</span>
+                    </div>
+                </div>
+                <div class="p_row row4">
+                    <div class="inputBox dosage">
+                        <input type="text" name="first_name" disabled>
+                        <span>DOSAGE</span>
+                    </div>
+                    <div class="inputBox route">
+                        <input type="text" name="middle_name" disabled>
+                        <span>ROUTE</span>
+                    </div>
+                </div>
+                <div class="p_row row5">
+                    <div class="inputBox prescription">
+                        <input type="text" name="specifications" disabled>
+                        <span>DURATION</span>
+                    </div>
+                </div>
+                <div class="p_row row">
+                    <div class="inputBox prescription">
+                        <input type="text" name="specifications" disabled>
+                        <span>INSTRUCTIONS</span>
+                    </div>
+                </div>
+            `;
+            prescriptionContainer.appendChild(newPrescription);
+        }
+
+        // Event listener for the "Add Prescription" button
+        addPrescriptionBtn.addEventListener('click', createPrescription);
+    </script>
+
+    
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Assessment{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAVIGATION -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('doctor.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Family Medicine</p>
+            </div>
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.logout') }}">
+                <li class="logout">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </a>
+        </ul>
+    </div>
+
+    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <a class="back-icon" href="{{ url_for('doctor.patient') }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient[0]) }}">PATIENT INFORMATION</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient[0]) }}">MEDICAL HISTORY</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">MEDICAL ASSESSMENT</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">LABORATORY RESULTS</a>
+            </li>
+    </ul>
+
+    <!-- LABORATORY RESULTS -->
+    <div class="patient-bg">
+
+        <div class="assessment-table">
+            <table id="example" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>RESULTS</th>
+                        <th>DATE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BLOOD SAMPLE</td>
+                        <td>2023-11-02</td>
+                        <td>
+                            <!-- RESULTS -->
+                            <form method="GET" action="/doctor/results/">
+                                <div class="delete-icon">
+                                    <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                    <button type="submit" style="background: none; border: none;">
+                                        <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                    </button>
+                                </div>
+                            </form> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{{ url_for('doctor.labtest_request', patient_id=patient[0]) }}">
+        <div class="add-icon">
+            <img src="{{ url_for('static', filename='images/Request.png') }}">
+        </div>
+    </a>
+
+{% endblock %}  

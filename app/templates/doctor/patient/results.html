@@ -1,7 +1,12 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Appointment{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}"> {% endblock %}
+{% block title %}DocCare | Laboratory Result{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
 {% block content %}
+
+    <!-- SIDE NAVIGATION -->
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -19,16 +24,16 @@
                     <p>Calendar</p>
                 </li>
             </a>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
-                <p>Appointment</p>
-            </li>
-            <a href="{{ url_for('doctor.patient') }}">
+            <a href="{{ url_for('doctor.appointment') }}">
                 <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
-                    <p>Patient</p>
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
                 </li>
             </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
             <a href="{{ url_for('doctor.profile') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
@@ -52,6 +57,32 @@
             </a>
         </ul>
     </div>
-</body>
-</html>
+
+    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <a class="back-icon" href="{{ url_for('doctor.lab_results', patient_id=patient[0]) }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient[0]) }}">PATIENT INFORMATION</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient[0]) }}">MEDICAL HISTORY</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">MEDICAL ASSESSMENT</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">LABORATORY RESULTS</a>
+            </li>
+    </ul>
+
+    <!-- MEDICAL ASSESSMENT -->
+    <div class="patient-bg history">
+
+    </div>
+    
+
+
 {% endblock %}
