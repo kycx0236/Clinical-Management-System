@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Login{% endblock title %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}"> {% endblock %}
+
+{% block content %}
+
+    <a href="{{url_for('admin.dashboard')}}">Login Admin</a>
+    <a href="{{url_for('doctor.dashboard')}}">Login Doctor</a>
+    <a href="{{url_for('medtech.dashboard')}}">Login Medtech</a>
+    <a href="{{url_for('receptionist.dashboard')}}">Login Receptionist</a>
+
+{% endblock %}
