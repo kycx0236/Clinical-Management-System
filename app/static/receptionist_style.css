@@ -1,6 +1,6 @@
 @import "base_style.css";
 
-/* SIDEBAR USER */
+/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
     font-size: 12px;
     display: flex;
@@ -13,7 +13,7 @@
     overflow: hidden;
 }
 
-/* DASHBOARD */
+/* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .add-icon img {
     width: 345px;
     top: 150px;
@@ -35,26 +35,29 @@
     border-radius: 20px;
 }
 
-.add-icon img,
-.reschedule-icon img,
-.cancel-icon img {
+.add-icon img, .reschedule-icon img, .cancel-icon img {
     position: fixed;
 }
 
-.add-icon img:hover,
-.reschedule-icon img:hover,
-.cancel-icon img:hover {
+.add-icon img:hover, .reschedule-icon img:hover, .cancel-icon img:hover {
     transform: scale(101%);
     z-index: 1;
 }
 
-/* APPOINTMENT */
+.add-icon img:active, .reschedule-icon img:active, .cancel-icon img:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
+}
+
+/* -------------------------------------------- APPOINTMENT -------------------------------------------- */
 /* style here */
 
 
-/* CALENDAR */
+
+/* -------------------------------------------- CALENDAR -------------------------------------------- */
 /* style here */
 
 
-/* PROFILE */
+
+/* -------------------------------------------- PROFILE -------------------------------------------- */
 /* style here */

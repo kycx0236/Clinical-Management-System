@@ -1,7 +1,10 @@
 :root {
-    --blueA: #0277BD;
+    --blueA: #0277BD; 
     --blueB: #A3D5FF;
     --blueC: #DFF1FF;
+    --blueD: #007bff; /* Active (button, text, background) */
+    --grayA: #6c757d;  /* Disabled Text */
+    --grayB: #e9ecef; /* Disabled Background */
 }
 
 *,
@@ -13,7 +16,7 @@
     padding: 0;
 }
 
-/* SIDEBAR DOCCARE LOGO */
+/* -------------------------------------------- SIDEBAR DOCCARE LOGO -------------------------------------------- */
 .cms-logo {
     display: flex;
     margin-top: 35px;
@@ -42,7 +45,7 @@
     margin-left: 15px;
 }
 
-/* SIDEBAR */
+/* -------------------------------------------- SIDEBAR -------------------------------------------- */
 .sidenav-bg {
     width: 80px;  
     height: 700px; 
@@ -133,7 +136,7 @@ ul li p {
     display: none;
 }
 
-/* SIDEBAR USER */
+/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg:hover {
     display: flex;
     width: 249px;
@@ -154,11 +157,209 @@ ul li p {
     margin-left: 5px;
 }
 
-/* DASHBOARD */
+/* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .date-time {
     font-weight: 900;
     position: absolute;
     display: flex;
     top: 60px;
     left: 1120px;
+}
+
+.date-time.medtech {
+    left: 1160px;
+}
+
+/* -------------------------------------------- PATIENT TABLE -------------------------------------------- */
+.patient-table {
+    position: relative; 
+    width: 1330px; 
+    top: 85px; 
+    left: 150px;
+    line-height: 1.5;
+    color: black;
+    background-color: white;
+    font-size: 16px;
+}
+
+.patient-table.request {
+    top: 190px; 
+}
+
+.patient-table.test {
+    top: 100px; 
+}
+
+.table {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.table th,
+.table td {
+    padding: 0.30rem;
+}
+
+.table thead {
+    background-color: var(--blueB);
+    color: black;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: var(--blueC)
+}
+
+.view-btn {
+    background-color: var(--blueA); 
+    color: white; 
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 15px;
+}
+
+.view-btn:hover {
+    background-color: #0881c7;
+}
+  
+.view-btn:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
+}
+
+.delete-icon img {
+    width: 40px;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.delete-icon img:active {
+    transform: translateY(1px);
+}
+
+/* -------------------------------------------- SHOW ENTRIES INFO -------------------------------------------- */
+.dataTables_info {
+    margin-bottom: 0px;
+    position: absolute;
+}
+
+/* -------------------------------------------- PAGINATION -------------------------------------------- */
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    left: 560px;
+    position: absolute;
+}
+  
+.page-link {
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: var(--blueD); 
+    background-color: #fff; 
+}
+
+.page-item.active .page-link {
+    z-index: 2;
+    color: #fff; 
+    background-color: var(--blueD); 
+    border-radius: 5px;
+}
+  
+.page-item.disabled .page-link {
+    pointer-events: none;
+    color: var(--grayA); 
+}
+  
+.page-link:hover {
+    color: var(--grayA); 
+    text-decoration: none;
+    background-color: var(--grayB); 
+    border-radius: 5px;
+}
+
+/* -------------------------------------------- SEARCH -------------------------------------------- */
+.dataTables_wrapper .dataTables_filter input {
+    padding: 0.375rem 0.5rem;
+    margin-bottom: 1rem; 
+    color: black; 
+    background-color: white; 
+    border: 1px solid var(--blueB); 
+    border-radius: 0.25rem; 
+    margin-left: 10px;
+    width: 196px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    margin-left: 1065px;
+    margin-top: 0px;
+}
+  
+.dataTables_wrapper .dataTables_filter input:focus {
+    color: black; 
+    background-color: white; 
+    border-color:  var(--blueB); 
+    outline: 0;
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
+}
+
+/* -------------------------------------------- SHOW [NUMBER] ENTRIES -------------------------------------------- */
+.dataTables_wrapper .dataTables_length {
+    margin-bottom: 0px;
+    position: absolute;
+}
+
+.dataTables_wrapper .dataTables_length label {
+    font-weight: normal;
+    text-align: left;
+    white-space: nowrap;
+}
+  
+.dataTables_wrapper .dataTables_length select {
+    width: auto;
+    display: inline-block;
+    padding: 0.375rem 0.25rem;
+    color: var(--grayA); 
+    background-color: #fff; 
+    border: 1px solid var(--blueB); 
+    border-radius: 0.25rem; 
+}
+  
+.dataTables_wrapper .dataTables_length select:focus {
+    color: var(--grayA); 
+    background-color: #fff; 
+    border-color: var(--blueB); 
+    outline: 0;
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1); 
+}
+
+/* BUTTONS */
+.btn-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 35px;
+}
+
+.btn-submit {
+    color: white;
+    background-color: var(--blueD);
+    border: none;
+    border-radius: 5px;
+    width: 100px;
+    height: 35px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    transform: scale(101%);
+    background-color: #0f83ff;
+}
+
+.btn-submit:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
 }

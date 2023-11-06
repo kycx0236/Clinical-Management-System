@@ -1,6 +1,6 @@
 @import "base_style.css";
 
-/* SIDEBAR USER */
+/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
     font-size: 12px;
     display: flex;
@@ -11,23 +11,29 @@
     margin-top: 205px;
     margin-bottom: 25px;
     overflow: hidden;
-}
+} 
 
-/* DASHBOARD */
-.main-bg {
-    width: 1350px; 
-    height: 600px; 
-    background-color: white;
-    box-shadow: 10px 10px 20px 10px var(--blueC);
-    border-radius: 12px;
-    top: 50%; 
-    left: 53%; 
-    transform: translate(-50%, -50%);
+/* -------------------------------------------- DASHBOARD -------------------------------------------- */
+.patient-header p {
     position: absolute;
+    top: 50px;
+    left: 150px;
+    font-weight: 900;
+    font-size: 22px;
 }
 
-/* PATIENT */
+.request-header p {
+    position: absolute;
+    top: 140px;
+    left: 150px;
+    font-weight: 900;
+    font-size: 22px;
+}
+
+
+/* -------------------------------------------- PATIENT -------------------------------------------- */
 /* style here */
 
-/* PROFILE */
+
+/* -------------------------------------------- PROFILE -------------------------------------------- */
 /* style here */
