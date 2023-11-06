@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Profile{% endblock title %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}"> {% endblock %}
+{% block content %}
+    <!-- SIDE NAV -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('admin.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <a href="{{ url_for('admin.user_management') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/User Management.png') }}"> 
+                    <p>User Management</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                <p>Profile</p>
+            </li>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Admin</p>
+            </div>
+        </div>
+        <ul>
+            <a href="{{ url_for('admin.logout') }}">
+                <li class="logout">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </a>
+        </ul>
+    </div>
+
+</body>
+</html>
+{% endblock %}  
