@@ -11,11 +11,11 @@ headings = ("Reference Number", "Date", "Time", "Status", "Actions")
 # Main routes
 @receptionist_bp.route('/')
 def dashboard():
-    return render_template("receptionist/dashboard.html")
+    return render_template("receptionist/dashboard/dashboard.html")
 
 @receptionist_bp.route('/calendar/')
 def calendar():
-    return render_template("receptionist/calendar.html")
+    return render_template("receptionist/calendar/calendar.html")
 
 @receptionist_bp.route('/appointment/')
 def appointment():
@@ -38,12 +38,12 @@ def appointment():
     # Get the data for the current page
     data = all_appointments[start_index:end_index]
 
-    return render_template("receptionist/appointment.html", headings=headings, data=data, page=page, total_pages=total_pages)
+    return render_template("receptionist/appointment/appointment.html", headings=headings, data=data, page=page, total_pages=total_pages)
 
 
 @receptionist_bp.route('/profile/')
 def profile():
-    return render_template("receptionist/profile.html")
+    return render_template("receptionist/profile/profile.html")
 
 @receptionist_bp.route('/login/')
 def logout():
@@ -82,6 +82,6 @@ def add_appointment():
             flash('New appointment added!', 'success')
             return redirect(url_for('receptionist.appointment'))
     
-    return render_template("receptionist/appointment_add.html", form=form)
+    return render_template("receptionist/appointment/appointment_add.html", form=form)
 
 
