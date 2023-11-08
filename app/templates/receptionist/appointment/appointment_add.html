@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Add Appointment{% endblock title %}
 {% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_add_style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 {% endblock link %}
 
@@ -13,112 +15,128 @@
         </div>
     {% endfor %}
 
-    <div class="shadow p-3 mb-4 bg-body-tertiary rounded">
-        <h1>ADD APPOINTMENT INFO</h1>
-        <a href="{{ url_for('receptionist.appointment') }}" class="btn btn-secondary mb-3" style="background-color: rgba(255, 255, 255, 0); border-color: rgba(255, 255, 255, 0);">
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-arrow-left btn-outline-dark" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                </svg>
-            </div>
-        </a>        
-        <br/><br/>
-        <form class="row g-3 needs-validation" method="POST" action="/add-appointment/" novalidate>
-            <!-- ID Number -->
-            <div class="col-md-4">
-                <label for="validationCustom01" class="form-label">ID Number</label>
-                <input type="text" placeholder="YYYY-NNNN" class="form-control" id="validationCustom01" name="id_number" required>
-                <div class="valid-feedback">
-                    Looks good!
+    <div class="doccare-add-forms-background">
+        <section class="doccare-add-header-appoinment">
+            <a href="{{ url_for('receptionist.appointment') }}" class="btn btn-secondary mb-3" style="background-color: rgba(255, 255, 255, 0); border-color: rgba(255, 255, 255, 0);">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-arrow-left btn-outline-dark" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
                 </div>
-                <div class="invalid-feedback">
-                    Please enter your ID Number.
-                </div>
-            </div>
-            <!-- First Name -->
-            <div class="col-md-4">
-                <label for="validationCustom02" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="validationCustom02" name="first_name" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please enter your First Name.
-                </div>
-            </div>
-            <!-- Last Name -->
-            <div class="col-md-4">
-                <label for="validationCustomUsername" class="form-label">Last Name</label>
-                <div class="input-group has-validation">
-                    <input type="text" class="form-control" id="validationCustomUsername" name="last_name" required>
-                    <div class="invalid-feedback">
-                        Please enter your Last Name.
-                    </div>
-                </div>
-            </div>
-            <!-- Course Code -->
-            <div class="col-md-4">
-                <label for="validationCustom3" class="form-label">Course Code</label>
-                <select class="form-select" id="validationCustom03" name="course_code" required>
-                    <option value="" selected>Select a course</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Others</option>
-                </select>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please select a course.
-                </div>
-            </div>                        
-            <!-- Year -->
-            <div class="col-md-4">
-                <label for="validationCustom04" class="form-label">Year</label>
-                <select class="form-select" id="validationCustom04" name="year_" required>
-                    <option selected disabled value="">Choose...</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-                <div class="invalid-feedback">
-                    Please select your year.
-                </div>
-            </div>
-            <!-- Gender -->
-            <div class="col-md-4">
-                <label for="validationCustom05" class="form-label">Gender</label>
-                <select class="form-select" id="validationCustom05" name="gender" required>
-                    <option selected disabled value="">Choose...</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Others</option>
-                </select>
-                <div class="invalid-feedback">
-                    Please select your Gender.
-                </div>
-            </div>
+            </a>        
             <br/><br/>
-            <!-- Checkbox for input validation -->
-            <div class="col-12">
-                <div class="form-check">
-                    <br/>
-                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" name="input_correct" required>
-                    <label class="form-check-label" for="invalidCheck">
-                        Please check if your input is correct.
-                    </label>
-                    <div class="invalid-feedback">
-                        You must agree before submitting.
+        </section>
+        <section class="round-circle">
+            <label></label>
+        </section>
+        <div class="appointment-add-forms">
+            <div>
+            </br>
+            </br>
+                <section class="doccare-add-appointment-paragraph">
+                    <p>
+                        Patient details are required for the medical record. Please fill in all the details below
+                    </p>
+                </section>
+                <form class="row g-3 needs-validation" method="POST" action="/add-appointment/" novalidate>
+                    <!-- FIRST NAME -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom03" class="form-label">FIRST NAME</label>
+                        <label class="asterisk"> * </label> 
+                        <input type="text" class="form-control" id="validationCustom03" name="last_name" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your First Name.
+                        </div>
                     </div>
-                </div>
+                    <!-- MIDDLE NAME -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom03" class="form-label">MIDDLE NAME</label>
+                        <label class="asterisk"> * </label> 
+                        <input type="text" class="form-control" id="validationCustom03" name="last_name" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your First Name.
+                        </div>
+                    </div>
+                    <!-- LAST NAME -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom03" class="form-label">LAST NAME</label>
+                        <label class="asterisk"> * </label> 
+                        <input type="text" class="form-control" id="validationCustom03" name="last_name" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your First Name.
+                        </div>
+                    </div>
+                    <!-- DATE OF BIRTH -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom06" class="form-label">DATE OF BIRTH</label>
+                        <label class="asterisk"> * </label> 
+                        <label class="date-format"> (MM/DD/YYYY) </label>
+                        <select class="form-select" id="validationCustom06" name="gender" required>
+                            <option selected disabled value="">Choose...</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select your Gender.
+                        </div>
+                    </div>
+                    <!-- SEX -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom06" class="form-label">SEX</label> 
+                        <label class="asterisk"> * </label> 
+                        <select class="form-select" id="validationCustom06" name="gender" required>
+                            <option selected disabled value="">Choose...</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select your Gender.
+                        </div>
+                    </div>
+                    <!-- ADDRESS -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom03" class="form-label">ADDRESS</label>
+                        <label class="asterisk"> * </label> 
+                        <input type="text" class="form-control" id="validationCustom03" name="last_name" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your First Name.
+                        </div>
+                    </div>
+                    <!-- CONTACT NUMBER -->
+                    <div class="doccare-forms-appointment">
+                        <label for="validationCustom03" class="form-label">CONTACT NUMBER</label>
+                        <label class="asterisk"> * </label> 
+                        <input type="text" class="form-control" id="validationCustom03" name="last_name" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter your First Name.
+                        </div>
+                    </div>
+
+                    <br/><br/>
+                
+                    <div class="col-12">
+                        <!-- Add the CSRF token input here -->
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-primary doccare-appointment-continue-button" type="button">CONTINUE</button>
+                    </div>
+                </form>
             </div>
-            <div class="col-12">
-                <!-- Add the CSRF token input here -->
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button class="btn btn-outline-dark" type="submit">Submit</button>
-            </div>
-        </form>
+        </div>
     </div>
 
     <!-- Include these script tags -->
