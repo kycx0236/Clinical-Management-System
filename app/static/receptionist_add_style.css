@@ -1,0 +1,80 @@
+.doccare-add-forms-background{
+    background: #F7FCFF;
+}
+.appointment-add-forms{
+    width: 520px;
+    height: 1000px;
+    flex-shrink: 0;
+    border-radius: 50px;
+    background: #FFF;
+    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.80);
+    box-sizing: border-box;
+    margin-left: 10%;
+    text-align: center;
+}
+
+.doccare-add-appointment-paragraph p{
+    width: 438px;
+    color: #000;
+    text-align: justify;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    line-height: normal;
+    margin-left: 6.5%;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-bottom: 5%;
+}
+
+
+.doccare-forms-appointment{
+  text-align: left;
+  justify-content: left;  
+  align-items: center;
+  margin-left: 6.5%;
+}
+
+.doccare-forms-appointment input{
+    width: 450px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    border: 3px solid #A3D5FF;
+    background: #FFF;
+}
+
+.doccare-forms-appointment label{
+    color: #363636;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.doccare-forms-appointment select{
+    width: 450px;
+    height: 45px;
+}
+.asterisk{
+    color:red !important; 
+}
+
+.date-format{
+    font-weight: normal !important;
+}
+.doccare-appointment-continue-button{
+    width: 112px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #0277BD !important;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 10%;
+}
