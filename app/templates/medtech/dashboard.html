@@ -44,9 +44,60 @@
     </div>
 
     <!-- DASHBOARD -->
-    <main>
-        <p class="date-time" id="demo"></p>
-    </main>
+    <p class="date-time medtech" id="demo"></p>
+
+    <!-- LABORATORY TEST REQUEST -->
+    <div class="request-header">
+        <p>LABORATORY TEST REQUEST</p>
+    </div>
+
+    <div class="patient-table request">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>FIRST NAME</th>
+                    <th>LAST NAME</th>
+                    <th>GENDER</th>
+                    <th>AGE</th>
+                    <th>PHYSICIAN</th>
+                    <th>REQUEST</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>SAFIYA</td>
+                    <td>PARAGOSO</td>
+                    <td>FEMALE</td>
+                    <td>13</td>
+                    <td>EDA GRACE PARAGOSO</td>
+                    <td>
+                        <!-- RECORD LAB TEST RESULTS -->
+                        <a href="#">
+                            <div class="delete-icon">
+                                <img src="{{ url_for('static', filename='images/Lab Request.png') }}">
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <!-- DELETE RECORD -->
+                        <a href="#">
+                            <div class="delete-icon">
+                                <img src="{{ url_for('static', filename='images/Delete.png') }}">
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div> 
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
 
     <script>
         function displayDateAndTime() {

@@ -1,6 +1,6 @@
 @import "base_style.css";
 
-/* SIDEBAR USER */
+/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
     font-size: 12px;
     display: flex;
@@ -13,7 +13,7 @@
     overflow: hidden;
 }
 
-/* DASHBOARD */
+/* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .doctors-icon img {
     width: 450px;
     top: 180px;
@@ -35,21 +35,22 @@
     border-radius: 20px;
 }
 
-.doctors-icon img,
-.medtech-icon img,
-.receptionist-icon img {
+.doctors-icon img, .medtech-icon img, .receptionist-icon img {
     position: fixed;
 }
 
-.doctors-icon img:hover,
-.medtech-icon img:hover,
-.receptionist-icon img:hover {
+.doctors-icon img:hover, .medtech-icon img:hover, .receptionist-icon img:hover {
     transform: scale(101%);
     z-index: 1;
 }
 
-/* PROFILE */
+.doctors-icon img:active, .medtech-icon img:active, .receptionist-icon img:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
+}
+
+/* -------------------------------------------- PROFILE -------------------------------------------- */
 /* style here */
 
-/* USER MANAGEMENT */
+/* -------------------------------------------- USER MANAGEMENT -------------------------------------------- */
 /* style here */
