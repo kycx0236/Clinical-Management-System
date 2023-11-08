@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Appointment{% endblock title %}
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}">
+{% endblock link %}
+
+
+{% block content %}
+    <!-- Sidebar -->
+    {% include "receptionist/appointment/appointment_sidebar.html" %}
+
+    <!--Content start!-->
+    <div class="content">
+        <body class="appointment_body">
+            <div class="container"> 
+                <main class="doccare-appointment-table">
+                    <section class="table__header__appointment">
+                        <h1> 
+                            <strong> APPOINTMENT </strong> 
+                        </h1>
+                        <div class="doccare-input-group">
+                            <input type="search" placeholder="Search">
+                            <span class="material-symbols-outlined">&#xe8b6;</span>
+                        </div>
+                    </section>
+                    
+                    <section class="doccare-table-appointment-content">
+                        <label for="entriesPerPage">Show entries:</label>
+                        <select id="entriesPerPage" name="entriesPerPage" class="styled-dropdown">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <table>
+                            <thead>
+                                <tr>
+                                    {% for header in headings %}
+                                        <th>
+                                            {{  header }}
+                                            <span class="icon-arrow">&UpArrow;</span>
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data %}
+                                    <tr>
+                                        <td> <strong> {{ row[0] }} </strong> </td>
+                                        <td> {{ row[1] }} </td>
+                                        <td> {{ row[2] }} </td>
+                                        <td> 
+                                            <p class="status done">
+                                                <strong> {{ row[3] }} </strong>
+                                            </p>
+                                        </td>
+                                        <td class="table__cell">
+                                            <a href="{{ url_for('receptionist.logout') }}" class="doccare-view-appoinment-icon">
+                                                <span class="material-symbols-outlined">info</span>
+                                            </a>
+                                            <a href="{{ url_for('receptionist.logout') }}" class="doccare-edit-appoinment-icon">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </a>
+                                            <button type="button" class="delete-appoinment-button" data-id="{{ row[0] }}">
+                                                <span class="material-symbols-outlined delete-icon">delete</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </section>
+                    <div class="pagination">
+                        {% if page > 1 %}
+                            <a href="{{ url_for('receptionist.appointment', page=page-1) }}">Previous</a>
+                        {% endif %}
+                        
+                        {% for p in range(1, total_pages + 1) %}
+                            {% if p == page %}
+                                <span class="current">{{ p }}</span>
+                            {% else %}
+                                <a href="{{ url_for('receptionist.appointment', page=p) }}">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page < total_pages %}
+                            <a href="{{ url_for('receptionist.appointment', page=page+1) }}">Next</a>
+                        {% endif %}
+                    </div>
+                    <a href="{{ url_for('receptionist.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
+                        <span class="material-symbols-outlined add-icon">&#xe147;</span>
+                    </a>
+                </main>
+            </div>
+            <script src="{{ url_for('static', filename='receptionist_script.js') }}"></script>
+        </body>
+    </div>
+    
+{% endblock %}
