@@ -163,7 +163,7 @@
 }
 
 table, th, td {
-    padding: 1rem;
+    padding: 0.8rem;
     border-collapse: collapse;
     text-align: left;
 }
@@ -351,9 +351,14 @@ tbody tr.hide td button {
     padding: 0;
     font: 0 / 0 'Montserrat';
     transition: .2s ease-in-out .5s;
+    opacity: 0% !important;
+    transform: translateX(100%) !important;
 }
 
 tbody tr.hide {
+    visibility: hidden;
+    position: absolute;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
     opacity: 0;
     transform: translateX(100%);
 }
