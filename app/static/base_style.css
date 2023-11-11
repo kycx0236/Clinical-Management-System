@@ -162,3 +162,125 @@ ul li p {
     top: 60px;
     left: 1120px;
 }
+
+
+/*LOGIN*/
+
+.body-login{  
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #DFF1FF ;
+    font-family: 'Inter', sans-serif;
+
+}
+
+.login-form{
+    
+    width: 483px;
+    height: 390px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    text-align: center;
+    background: #ffffff;
+    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.60);
+    margin: 5% 25% 5% 25%;
+    
+}
+
+.login-button {
+    width: 111px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    text-align: center;
+    background: #0277BD;
+    border: none; 
+    color: #fff; 
+    font-size: 16px; 
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-button:hover {
+    background: #01579B; /* Change the background color on hover */
+}
+
+.container{
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.container-2{
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-bottom: 9.5%;
+
+}
+
+.margin-tb {
+    display: inline-block;
+    margin-top: 30px ;
+    margin-bottom: 40px;
+}
+
+.margin-t{
+    display: inline-block;
+    margin-top: 10px ;
+}
+.doc {
+    color: #000;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.care {
+    color: #0277BD;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.title{
+    color: #363636;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    display: block;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.form-input{
+    width: 338px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    border: 3px solid #DFF1FF;
+    background: #FFF;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.app-info {
+    display: block;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color:#000;
+}
