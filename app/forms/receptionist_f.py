@@ -3,7 +3,7 @@ from wtforms import StringField, validators, SubmitField, DateField
 
 
 class AppointmentForm(FlaskForm):
-    reference_number = StringField('reference_number', [validators.DataRequired(), validators.Length(min=5, max=20)])
+    reference_number = StringField('reference_number', [validators.DataRequired(), validators.Length(max=6)])
     date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=(validators.DataRequired(),))
     time_appointment = StringField('time_appointment', [validators.Length(min=4, max=50)])
     status_ = StringField('status_', [validators.Length(min=4, max=50)])
