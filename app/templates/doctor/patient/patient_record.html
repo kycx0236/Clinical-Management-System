@@ -63,18 +63,20 @@
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
 
+    <!-- before patient_id=patient[0] -->
+
     <ul class="nav nav-underline">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page">PATIENT INFORMATION</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient[0]) }}">MEDICAL HISTORY</a>
+            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">MEDICAL ASSESSMENT</a>
+            <a class="nav-link" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient[0]) }}">LABORATORY RESULTS</a>
+        <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY RESULTS</a>
         </li>
     </ul>
 

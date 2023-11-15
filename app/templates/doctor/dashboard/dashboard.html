@@ -56,28 +56,4 @@
         </ul>
     </div>
 
-    <!-- DASHBOARD -->
-    <main>
-        <p class="date-time" id="demo"></p>
-    </main>
-
-    <script>
-        function displayDateAndTime() {
-        const demoElement = document.getElementById('demo');
-
-            function updateDateAndTime() {
-                const currentDateAndTime = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
-                const currentTime = currentDateAndTime.toLocaleTimeString();
-
-                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}<br>${currentTime}`;
-            }
-            updateDateAndTime();
-            setInterval(updateDateAndTime, 1000);
-        }
-
-        displayDateAndTime();   
-    </script>
-
 {% endblock %}

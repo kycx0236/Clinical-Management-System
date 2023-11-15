@@ -63,18 +63,20 @@
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
 
+    <!-- before patient_id=patient[0] -->
+
     <ul class="nav nav-underline">
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient[0]) }}">PATIENT INFORMATION</a>
+        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient[0]) }}">MEDICAL HISTORY</a>
+        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" aria-current="page">MEDICAL ASSESSMENT</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient[0]) }}">LABORATORY RESULTS</a>
+            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY RESULTS</a>
             </li>
     </ul>
 
@@ -87,7 +89,7 @@
                     <tr>
                         <th>COMPLAINT</th>
                         <th>DATE</th>
-                        <th colspan="2">ACTION</th>
+                        <th colspan="3">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,12 +121,67 @@
                                 </div>
                             </form> 
                         </td>
+                        <td>
+                            <!-- DELETE RECORD -->
+                            <form method="POST" action="/doctor/delete_assessment/">
+                                <div class="delete-icon">
+                                    <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                    <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                    <button type="submit" style="background: none; border: none;">
+                                        <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                    </button>
+                                </div>
+                            </form> 
+                            <!-- <a href="#">
+                                <div class="delete-icon">
+                                    <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                </div>
+                            </a> -->
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient's medical assessment has been deleted successfully!
+                    </div>
+                    <a href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in deleting patient medical assessment. Please try again.
+                    </div>
+                    <a href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <a href="{{ url_for('doctor.add_assessment', patient_id=patient[0]) }}">
         <div class="add-icon">

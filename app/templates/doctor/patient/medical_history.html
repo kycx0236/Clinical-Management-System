@@ -65,16 +65,16 @@
 
     <ul class="nav nav-underline">
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient[1]) }}">PATIENT INFORMATION</a>
+        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
         </li>
         <li class="nav-item">
         <a class="nav-link active" aria-current="page">MEDICAL HISTORY</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.consultation', patient_id=patient[1]) }}">MEDICAL ASSESSMENT</a>
+            <a class="nav-link" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient[1]) }}">LABORATORY RESULTS</a>
+        <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY RESULTS</a>
         </li>
     </ul>
 
@@ -484,6 +484,7 @@
                     <textarea class="medications" rows="2" id="allergies" name="allergies" disabled>{{ patient[73] }}</textarea>
                 </div>
             </div>
+            
             <div class="btn-container">
                 <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
             </div>
