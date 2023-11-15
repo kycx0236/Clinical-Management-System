@@ -97,17 +97,58 @@
                     </td>
                     <td>
                         <!-- DELETE RECORD -->
-                        <a href="#">
+                        <form method="POST" action="/doctor/delete_patient/">
                             <div class="delete-icon">
-                                <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                <button type="submit" style="background: none; border: none;">
+                                    <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                </button>
                             </div>
-                        </a>
+                        </form> 
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient's medical record has been deleted successfully!
+                    </div>
+                    <a href="{{ url_for('doctor.patient') }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in deleting patient record. Please try again.
+                    </div>
+                    <a href="{{ url_for('doctor.patient') }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <a href="{{ url_for('doctor.add_patient') }}">
         <div class="add-icon">

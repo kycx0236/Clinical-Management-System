@@ -58,23 +58,25 @@
         </ul>
     </div>
 
+    <!-- before patient_id=patient[1] -->
+
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient[1]) }}">
+    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
 
     <ul class="nav nav-underline">
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient[1]) }}">PATIENT INFORMATION</a>
+        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient[1]) }}">MEDICAL HISTORY</a>
+        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" aria-current="page">MEDICAL ASSESSMENT</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient[1]) }}">LABORATORY RESULTS</a>
+            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY RESULTS</a>
         </li>
     </ul>
 

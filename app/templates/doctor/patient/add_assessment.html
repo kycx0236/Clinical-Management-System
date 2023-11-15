@@ -315,7 +315,7 @@
                     <div class="modal-body">
                         Patient medical assessment added successfully!
                     </div>
-                    <a href="{{ url_for('doctor.consultation', patient_id=patient[1]) }}"> 
+                    <a href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}"> 
                         <div class="modal-footer">
                             <button id="successSave" type="button" class="btn-done">DONE</button>
                         </div>
@@ -333,7 +333,7 @@
                     <div class="modal-body">
                         Error in adding patient medical information.
                     </div>
-                    <a href="{{ url_for('doctor.consultation', patient_id=patient[1]) }}">
+                    <a href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">
                         <div class="modal-footer">
                             <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
                         </div>
