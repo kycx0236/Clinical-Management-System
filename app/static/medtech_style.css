@@ -8,27 +8,133 @@
     height: 65px; 
     background-color: white;
     border-radius: 350px; 
-    margin-top: 205px;
-    margin-bottom: 25px;
+    margin-top: 205px !important; 
+    margin-bottom: 25px !important;
     overflow: hidden;
 } 
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
-.patient-header p {
-    position: absolute;
+.notification-container {
+    width: 1340px;  
+    height: 1000px; 
+    position: absolute;  
     top: 50px;
-    left: 150px;
-    font-weight: 900;
-    font-size: 22px;
+    left: 140px;
 }
 
-.request-header p {
-    position: absolute;
-    top: 140px;
-    left: 150px;
+.request-header {
     font-weight: 900;
-    font-size: 22px;
+    font-size: 18px;
 }
+
+.notif-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 925px;
+    margin-bottom: 25px;
+}
+
+.notif-box {
+    display: flex;
+    align-items: center;
+}
+
+#notifs {
+    background-color: var(--blueD);
+    margin-left: 0.5rem;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    color: white;
+    font-weight: 800;
+    border-radius: 100%;
+}
+
+#mark-all {
+    cursor: pointer;
+}
+
+#mark-all:hover {
+    color: var(--blueD);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.notif_card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    width: 1340px;
+    margin-left: 0px;
+    height: 60px;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+strong {
+    color: var(--blueA);
+    cursor: pointer;
+}
+
+strong:hover {
+    color: var(--blueD);
+}
+
+.unread {
+    border-left: 3px solid var(--blueB) !important;
+    box-shadow: 0 0 5px var(--blueC);
+    width: 1340px;
+    margin-left: 0px;
+    height: 60px;
+}
+
+.notif_card:hover {
+    background-color: #f2f8fd !important;
+    cursor: pointer;
+}
+
+.unread p:first-of-type::after {
+    content: " ";
+    background-color: var(--blueD);
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+@media screen and (max-width:550px) {
+    .container {
+        margin: 0;
+    }
+}
+
+.patient-bg.test {
+    width: 1230px;  
+    height: 3000px; 
+}
+
+/* -------------------------------------------- LABORATORY REPORT -------------------------------------------- */
+.lab-result {
+    margin-top: 150px;
+    width: 1000px;
+    margin-right: 30px;
+}
+
+.med-header.labReport {
+    top: 1510px
+}
+
 
 
 /* -------------------------------------------- PATIENT -------------------------------------------- */
