@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Login{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}"> {% endblock %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}"> {% endblock %}
 
 {% block content %}
-<div class="body-login">
-    <form class="login-form" id="login-form">
+    <form class="login-form" id="login-form" method="POST" action="{{ url_for('login') }}">
         <div class="container margin-tb">
             <span class="doc">Doc</span><span class="care">Care</span>
         </div>
 
         <div class="container padding">
             <div class="form-group">
-                <label class="title" for="username">EMAIL</label>
+                <label class="title" for="username">USERNAME</label>
                 <input type="text" name="username" id="username" class="form-input" placeholder="username@gmail.com" autocomplete="off" required>
             </div>
         
@@ -20,9 +19,19 @@
                 <input type="password" name="password" id="password" class="form-input" autocomplete="off" required>
             </div>
         </div>
+
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
             
         <div class="container margin-t">
-            <button class="login-button" name="login-button" id="login-button">Log In</button>
+            <button type="submit" class="login-button" name="login-button" id="login-button">Log In</button>
         </div>
 
     </form>
@@ -32,6 +41,5 @@
         <span class="app-info" >Copyright © 2023 by DocCare All rights reserved.</span>
     </div>
     
-</div>
 
 {% endblock %}
