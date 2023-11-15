@@ -101,7 +101,7 @@
 --     `allergies` TEXT,
 --     PRIMARY KEY (`historyID`),
 --     UNIQUE KEY `history_id_UNIQUE` (`historyID`),
---     FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`)
+--     FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
 -- );
 
 -- MEDICAL ASSESSMENT
@@ -149,17 +149,16 @@
 --   `consultationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --   PRIMARY KEY (`assessmentID`),
 --   UNIQUE KEY `assessment_id_UNIQUE` (`assessmentID`),
---   FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`)
+--   FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
 -- ) 
 
 -- PRESCRIPTION 
 -- CREATE TABLE IF NOT EXISTS `prescription` (
 --   `prescriptionID` int NOT NULL AUTO_INCREMENT,
 --   `assessmentID` int NOT NULL,
---   `prescriptionDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --   PRIMARY KEY (`prescriptionID`),
 --   UNIQUE KEY `prescription_id_UNIQUE` (`prescriptionID`),
---   FOREIGN KEY (`assessmentID`) REFERENCES assessment(`assessmentID`)
+--   FOREIGN KEY (`assessmentID`) REFERENCES assessment(`assessmentID`) ON DELETE CASCADE
 -- );
 
 -- PRESCRIPTION DETAILS 
@@ -168,11 +167,206 @@
 --   `prescriptionID` int NOT NULL,
 --   `medication_name` varchar(255),
 --   `dosage` varchar(255),
---   `route` varchar(255),
+--   `p_quantity` varchar(255),
 --   `duration` varchar(255),
 --   `instructions` varchar(255),
 --   PRIMARY KEY (`detail_id`),
 --   UNIQUE KEY `detail_id_UNIQUE` (`detail_id`),
---   FOREIGN KEY (`prescriptionID`) REFERENCES prescription(`prescriptionID`)
+--   FOREIGN KEY (`prescriptionID`) REFERENCES prescription(`prescriptionID`) ON DELETE CASCADE
 -- ) 
 
+-- LABORATORY JOB ORDER
+-- CREATE TABLE IF NOT EXISTS `labrequest` (
+--   `orderID` int NOT NULL AUTO_INCREMENT,
+--   `patientID` int NOT NULL,
+--   `patientName` varchar(255) NOT NULL,
+--   `labSubject` varchar(255) NOT NULL,
+--   `gender` varchar(10) NOT NULL,
+--   `age` varchar(10) NOT NULL,
+--   `physician` varchar(255) NOT NULL,
+--   `orderDate` varchar(20) NOT NULL,
+--   `otherTest` varchar(255),
+--   PRIMARY KEY (`orderID`),
+--   UNIQUE KEY `order_id_UNIQUE` (`orderID`),
+--   FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+-- ) 
+
+-- HEMATOLOGY
+-- CREATE TABLE IF NOT EXISTS `hematology` (
+--   `hematologyID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `cbcplateCheckbox` BOOLEAN,
+--   `hgbhctCheckbox` BOOLEAN,
+--   `protimeCheckbox` BOOLEAN,
+--   `APTTCheckbox` BOOLEAN,
+--   `bloodtypingCheckbox` BOOLEAN,
+--   `ESRCheckbox` BOOLEAN,
+--   `plateCheckbox` BOOLEAN,
+--   `hgbCheckbox` BOOLEAN,
+--   `hctCheckbox` BOOLEAN,
+--   `cbcCheckbox` BOOLEAN,
+--   `reticsCheckbox` BOOLEAN,
+--   `CTBTCheckbox` BOOLEAN,
+--   PRIMARY KEY (`hematologyID`),
+--   UNIQUE KEY `hematology_id_UNIQUE` (`hematologyID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- BACTERIOLOGY
+-- CREATE TABLE IF NOT EXISTS `bacteriology` (
+--   `bacteriologyID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `culsenCheckbox` BOOLEAN,
+--   `cultureCheckbox` BOOLEAN,
+--   `gramCheckbox` BOOLEAN,
+--   `KOHCheckbox` BOOLEAN,
+--   PRIMARY KEY (`bacteriologyID`),
+--   UNIQUE KEY `bacteriology_id_UNIQUE` (`bacteriologyID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+
+-- HISTOPATHOLOGY
+-- CREATE TABLE IF NOT EXISTS `histopathology` (
+--   `histopathologyID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `biopsyCheckbox` BOOLEAN,
+--   `papsCheckbox` BOOLEAN,
+--   `FNABCheckbox` BOOLEAN,
+--   `cellCheckbox` BOOLEAN,
+--   `cytolCheckbox` BOOLEAN,
+--   PRIMARY KEY (`histopathologyID`),
+--   UNIQUE KEY `histopathology_id_UNIQUE` (`histopathologyID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- CLINICAL MIRCROSCOPY & PARASITOLOGY
+-- CREATE TABLE IF NOT EXISTS `microscopy` (
+--   `microscopyID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `urinCheckbox` BOOLEAN,
+--   `stoolCheckbox` BOOLEAN,
+--   `occultCheckbox` BOOLEAN,
+--   `semenCheckbox` BOOLEAN,
+--   `ELISACheckbox` BOOLEAN,
+--   PRIMARY KEY (`microscopyID`),
+--   UNIQUE KEY `microscopy_id_UNIQUE` (`microscopyID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- SEROLOGY
+-- CREATE TABLE IF NOT EXISTS `serology` (
+--   `serologyID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `ASOCheckbox` BOOLEAN,
+--   `AntiHBSCheckbox` BOOLEAN,
+--   `HCVCheckbox` BOOLEAN,
+--   `C3Checkbox` BOOLEAN,
+--   `HIVICheckbox` BOOLEAN,
+--   `HIVIICheckbox` BOOLEAN,
+--   `NS1Checkbox` BOOLEAN,
+--   `VDRLCheckbox` BOOLEAN,
+--   `PregCheckbox` BOOLEAN,
+--   `RFCheckbox` BOOLEAN,
+--   `QuantiCheckbox` BOOLEAN,
+--   `QualiCheckbox` BOOLEAN,
+--   `TyphidotCheckbox` BOOLEAN,
+--   `TubexCheckbox` BOOLEAN,
+--   `HAVIgMCheckbox` BOOLEAN,
+--   `DengueCheckbox` BOOLEAN,
+--   PRIMARY KEY (`serologyID`),
+--   UNIQUE KEY `serology_id_UNIQUE` (`serologyID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- IMMUNOCHEMISTRY
+-- CREATE TABLE IF NOT EXISTS `immunochem` (
+--   `immunochemID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `AFPCheckbox` BOOLEAN,
+--   `ferritinCheckbox` BOOLEAN,
+--   `HBcIgMCheckbox` BOOLEAN,
+--   `AntiHBECheckbox` BOOLEAN,
+--   `CA125Checkbox` BOOLEAN,
+--   `PROBNPCheckbox` BOOLEAN,
+--   `CA153Checkbox` BOOLEAN,
+--   `CA199Checkbox` BOOLEAN,
+--   `PSACheckbox` BOOLEAN,
+--   `CEACheckbox` BOOLEAN,
+--   `FreeT3Checkbox` BOOLEAN,
+--   `ANA2Checkbox` BOOLEAN,
+--   `FreeT4Checkbox` BOOLEAN,
+--   `HBsAGCheckbox` BOOLEAN,
+--   `TroponiniCheckbox` BOOLEAN,
+--   `HbACheckbox` BOOLEAN,
+--   `HBAeAgCheckbox` BOOLEAN,
+--   `BetaCheckbox` BOOLEAN,
+--   `T3Checkbox` BOOLEAN,
+--   `T4Checkbox` BOOLEAN,
+--   `TSHCheckbox` BOOLEAN,
+--   PRIMARY KEY (`immunochemID`),
+--   UNIQUE KEY `immunochem_id_UNIQUE` (`immunochemID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- CLINICAL CHEMISTRY
+-- CREATE TABLE IF NOT EXISTS `clinicalchem` (
+--   `clinicalchemID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `ALPCheckbox` BOOLEAN,
+--   `AmylaseCheckbox` BOOLEAN,
+--   `BUACheckbox` BOOLEAN,
+--   `BUNCheckbox` BOOLEAN,
+--   `CreatinineCheckbox` BOOLEAN,
+--   `SGPTCheckbox` BOOLEAN,
+--   `SGOTCheckbox` BOOLEAN,
+--   `FBSCheckbox` BOOLEAN,
+--   `RBSCheckbox` BOOLEAN,
+--   `HPPCheckbox` BOOLEAN,
+--   `OGCTCheckbox` BOOLEAN,
+--   `HGTCheckbox` BOOLEAN,
+--   `OGTTCheckbox` BOOLEAN,
+--   `NaCheckbox` BOOLEAN,
+--   `MgCheckbox` BOOLEAN,
+--   `LipidCheckbox` BOOLEAN,
+--   `TriglyCheckbox` BOOLEAN,
+--   `CholCheckbox` BOOLEAN,
+--   `ClCheckbox` BOOLEAN,
+--   `TPAGCheckbox` BOOLEAN,
+--   `TotalCheckbox` BOOLEAN,
+--   `GlobCheckbox` BOOLEAN,
+--   `AlbCheckbox` BOOLEAN,
+--   `CKMBCheckbox` BOOLEAN,
+--   `CKTotalCheckbox` BOOLEAN,
+--   `LDHCheckbox` BOOLEAN,
+--   `KCheckbox` BOOLEAN,
+--   `CaCheckbox` BOOLEAN,
+--   `IonizedCheckbox` BOOLEAN,
+--   `PhosCheckbox` BOOLEAN,
+--   PRIMARY KEY (`clinicalchemID`),
+--   UNIQUE KEY `clinicalchem_id_UNIQUE` (`clinicalchemID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- LABORATORY REPORT
+-- CREATE TABLE IF NOT EXISTS `labreport` (
+--   `reportID` int NOT NULL AUTO_INCREMENT,
+--   `orderID` int NOT NULL,
+--   `reportDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`reportID`),
+--   UNIQUE KEY `report_id_UNIQUE` (`reportID`),
+--   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
+-- ) 
+
+-- LABORATORY TEST RESULTS
+-- CREATE TABLE IF NOT EXISTS `labtest` (
+--   `testID` int NOT NULL AUTO_INCREMENT,
+--   `reportID` int NOT NULL,
+--   `processName` varchar(255) NOT NULL,
+--   `testResult` varchar(255) NOT NULL,
+--   `refValue` varchar(255) NOT NULL,
+--   `diagnosisReport` varchar(255) NOT NULL,
+--   PRIMARY KEY (`testID`),
+--   UNIQUE KEY `test_id_UNIQUE` (`testID`),
+--   FOREIGN KEY (`reportID`) REFERENCES labreport(`reportID`) ON DELETE CASCADE
+-- ) 
