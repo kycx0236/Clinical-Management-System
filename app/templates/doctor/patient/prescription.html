@@ -100,19 +100,13 @@
                 <img src="{{ url_for('static', filename='/images/Rx.png') }}">
             </div>
 
-            <h4 class="doctor">PHYSICIAN: DR.</h4>
-            <h4 class="doctor name">EDA GRACE J. PARAGOSO</h4>
-            <h4 class="doctor">PHYSICIAN: DR.</h4>
-            <h4 class="p_date">DATE:</h4>
-            <p class="p_date current" id="prescriptionDate"></p>
-
             <div class="line-border"></div>
 
             <h4 class="columnA">NAME:</h4>
             <p class="columnB">{{ patient[1] }} {{ patient[3] }}</p>
 
-            <h4 class="columnC">CONTACT NUMBER:</h4>
-            <p class="columnD">{{ patient[18] }}</p>
+            <h4 class="columnC">DATE:</h4>
+            <p class="columnD" id="prescriptionDate"></p>
 
             <h4 class="columnA address">ADDRESS:</h4>
             <p class="columnB p_adress">{{ patient[10] }}</p>
@@ -157,8 +151,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="page-break"></div>
+            <h4 class="doctor">EDA GRACE J. PARAGOSO, MD, FPPS</h4>
+            <h4 class="license">License No. <p style="text-decoration:underline;"> 84303</p> </h4>
         
-
             <div class="btn-container">
                 <button type="button" class="btn-prescription" id="addButton" style="display: none;">+ ADD PRESCRIPTION</button>
             </div>

@@ -63,8 +63,6 @@
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
 
-    <!-- before patient_id=patient[0] -->
-
     <ul class="nav nav-underline">
         <li class="nav-item">
         <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
@@ -132,11 +130,6 @@
                                     </button>
                                 </div>
                             </form> 
-                            <!-- <a href="#">
-                                <div class="delete-icon">
-                                    <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
-                                </div>
-                            </a> -->
                         </td>
                     </tr>
                     {% endfor %}

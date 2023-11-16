@@ -174,7 +174,7 @@ input, select {
 
 .patient-bg.assessment {
     width: 1230px;  
-    height: 3300px; 
+    height: 3000px; 
 }
 
 .patient-bg.request {
@@ -184,7 +184,7 @@ input, select {
 
 .patient-bg.prescription {
     width: 1230px;  
-    height: 5000px; 
+    height: 1570px; 
 }
 
 .patient-bg.report {
@@ -541,27 +541,23 @@ input, select {
 .rx img {
     width: 100px;
     position: relative;
+    margin-top: 25px;
     margin-left: 100px;
 }
 
 .doctor {
     position: absolute;
-    top: 190px;
-    left: 230px;
-}
-
-.doctor.name {
-    left: 360px;
-}
-
-.p_date {
-    position: absolute;
-    top: 190px;
+    top: 1430px;
     left: 830px;
+    text-decoration: underline;
 }
 
-.p_date.current {
-    left: 890px;
+.license {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    top: 1460px;
+    left: 830px;
 }
 
 .line-border {
@@ -575,30 +571,30 @@ input, select {
 /* Prescription rows */
 .columnA {
     position: absolute;
-    top: 300px;
-    left: 115px;
+    top: 190px;
+    left: 230px;
 }
 
 .columnB {
     position: absolute;
-    top: 300px;
-    left: 215px;
+    top: 190px;
+    left: 330px;
 }
 
 .columnC {
     position: absolute;
-    top: 300px;
-    left: 830px;
+    top: 190px;
+    left: 940px;
 }
 
 .columnD {
     position: absolute;
-    top: 300px;
-    left: 1010px;
+    top: 190px;
+    left: 1035px;
 }
 
 .columnA.address, .columnB.p_adress, .columnC.gender, .columnD.p_gender  {
-    top: 340px;
+    top: 220px;
 }
 
 .p_row.row1 {
@@ -664,6 +660,14 @@ input, select {
     left: 115px;
 }
 
+.page-break {
+    position: absolute; 
+    top:1400px;
+    border: 1px solid black;
+    width: 1000px;
+    left: 110px;
+}
+
 @media print {
     @page {
         size: 8.5in 11in;
@@ -707,7 +711,7 @@ input, select {
 .prescription-table {
     left:105px; 
     position: absolute; 
-    top: 450px; 
+    top: 350px; 
     width: 1020px; 
     font-size: 20px;
 }
