@@ -110,7 +110,7 @@
 --   `patientID` int NOT NULL,
 --   `subject` varchar(255) NOT NULL,
 --   `complaints` TEXT,
---   `illnessHistory` varchar(100),
+--   `illnessHistory` varchar(255),
 --   `bloodPressure` varchar(100),
 --   `pulseRate` varchar(100),
 --   `temperature` varchar(100),
