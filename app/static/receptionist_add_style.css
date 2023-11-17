@@ -35,6 +35,7 @@
   justify-content: left;  
   align-items: center;
   margin-left: 6.5%;
+  padding-top: 15px;
 }
 
 .doccare-forms-appointment input {
@@ -66,7 +67,7 @@
 .date-format{
     font-weight: normal !important;
 }
-.doccare-appointment-continue-button {
+.doccare-appointment-continue-button, .doccare-appointment-back-button, .doccare-appointment-submit-button {
     width: 112px;
     height: 45px;
     flex-shrink: 0;
@@ -79,8 +80,29 @@
     font-weight: 700;
     line-height: normal;
     margin-top: 10%;
+    transition: transform 0.2s;
+    outline: none;
+    border: none;
 }
 
+.doccare-appointment-continue-button:hover{
+    transform:scale(1.25);
+    background: #004f7a !important;
+}
+
+.doccare-appointment-back-button:hover{
+    transform:scale(1.25);
+    background: #004f7a !important;
+}
+
+.doccare-appointment-submit-button:hover{
+    transform:scale(1.25);
+    background: #004f7a !important;
+}
+
+.doccare-appointment-back-button{
+    margin-right: 25%;
+}
 .doccare-title label {
     font-family: Inter;
     font-size: 32px;
@@ -144,6 +166,16 @@
     z-index: 2; 
 }
 
+.doccare-form-2-title p{
+    color: #000;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
 .overlay-container {
     position: relative;
     margin-top: 300px;
@@ -180,19 +212,33 @@
 }
 
 .number-one {
-    transform: scale(1.20);
+    transform: scale(1.25);
     border-radius: 100px;
     background: #0277BD;
 }
 
 .number-two {
-    transform: scale(1.00);
     border-radius: 100px;
-    background: rgba(2, 119, 189, 0.50);;
+    background: rgba(2, 119, 189, 0.50);
 }
 
 .number-three {
-    transform: scale(1.00);
     border-radius: 100px;
-    background: rgba(2, 119, 189, 0.50);;
+    background: rgba(2, 119, 189, 0.50);
+}
+
+.appointment-first-forms {
+    display: block; /* Initially visible */
+}
+
+.appointment-second-forms {
+    display: none; /* Initially hidden */
+}
+
+.numbers-on-top .number-two .number-three {
+    transform: scale(1); /* Initial scale */
+}
+
+.doccare-success-modal {
+    display: none; /* Initial display */
 }
