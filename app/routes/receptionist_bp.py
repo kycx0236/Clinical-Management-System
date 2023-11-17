@@ -1,8 +1,11 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, jsonify
 import math
 from app.forms.receptionist_f import AppointmentForm
 import app.models.receptionist_m as models_receptionist
 from flask import Blueprint
+from datetime import datetime
+import secrets
+import string
 
 receptionist_bp = Blueprint('receptionist', __name__)
 
@@ -23,7 +26,7 @@ def appointment():
     page = int(request.args.get('page', 1))
 
     # Set the number of items to display per page
-    items_per_page = 5  # You can adjust this to your preferred value
+    items_per_page = 8  # You can adjust this to your preferred value
 
     # Retrieve all appointment data from your model
     all_appointments = models_receptionist.Appointment.all()
@@ -49,39 +52,77 @@ def profile():
 def logout():
     return render_template("login.html")
 
-# Function routes
+# Function and function routes
 
-@receptionist_bp.route('/add-appointment/', methods=['POST', 'GET'])
+def generate_reference_number():
+    characters = string.ascii_uppercase + string.digits
+    reference_number = ''.join(secrets.choice(characters) for _ in range(6))
+    return reference_number
+
+def generate_status():
+    return 'PENDING'
+
+def generate_bookdate():
+    current_datetime = datetime.now()
+    return current_datetime
+
+@receptionist_bp.route('/add-appointment/', methods=['GET', 'POST'])
 def add_appointment():
     form = AppointmentForm(request.form)
-    
-    if request.method == 'POST' and form.validate():
-        check_reference = form.reference_number.data
+
+    if request.method == 'POST':
+        check_reference = generate_reference_number()
+        form.reference_number.data = check_reference 
+        initial_status = generate_status()
+        form.status_.data = initial_status 
+        generated_bookdate = generate_bookdate().strftime("%Y-%m-%d %I:%M:%S %p")
+        form.book_date.data = generated_bookdate
+        
+        input_time = request.form['time_appointment']
+        time_object = datetime.strptime(input_time, "%H:%M")
+        form.time_appointment.data = time_object.strftime("%I:%M %p")
+
+    if form.validate_on_submit():
         reference_exists = models_receptionist.Appointment.unique_code(check_reference)
 
         if reference_exists:
             flash("Appointment already exists. Please enter a new appointment.")
-        
         else:
             new_appointment = models_receptionist.Appointment(
-                reference_number=check_reference,
-                date_appointment= form.date_appointment.data,
+                reference_number=form.reference_number.data,
+                date_appointment=form.date_appointment.data,
                 time_appointment=form.time_appointment.data,
-                status_ = form.status_.data,
-                book_date = form.book_date.data,
-                first_name = form.first_name.data,
-                middle_name = form.middle_name.data,
-                last_name = form.last_name.data,
-                sex = form.sex.data,
-                birth_date = form.birth_date.data,
-                contact_number = form.contact_number.data,
-                email = form.email.data,
-                address = form.address.data
+                status_=form.status_.data,
+                book_date=form.book_date.data,
+                first_name=form.first_name.data,
+                middle_name=form.middle_name.data,
+                last_name=form.last_name.data,
+                sex=form.sex.data,
+                birth_date=form.birth_date.data,
+                contact_number=form.contact_number.data,
+                email=form.email.data,
+                address=form.address.data
             )
             new_appointment.add()
             flash('New appointment added!', 'success')
             return redirect(url_for('receptionist.appointment'))
-    
+    else:
+        print(form.errors)  # Add this line to print form errors for debugging
+        flash('Failed to add appointment. Please check the form for errors.', 'danger')
+
     return render_template("receptionist/appointment/appointment_add.html", form=form)
 
+
+@receptionist_bp.route('/delete-appointment/', methods=['POST'])
+def delete_appointment():
+    try:
+        reference_number = request.form.get('reference_number')
+        if models_receptionist.Appointment.delete(reference_number):
+            return jsonify(success=True, message="Successfully deleted")
+        else:
+            return jsonify(success=False, message="Failed to delete appointment")
+    except Exception as e:
+        # Log the error for debugging purposes
+        receptionist_bp.logger.error("An error occurred: %s" % str(e))
+        return jsonify(success=False, message="Internal Server Error"), 500
 
