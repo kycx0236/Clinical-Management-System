@@ -52,6 +52,7 @@
                         </p>
                     </section>
                     <form class="row g-3 needs-validation" method="POST" action="/receptionist/add-appointment/" novalidate>
+                        {{ form.csrf_token }}
                         <div class="appointment-first-forms" id="appointment-first-forms">
                             <!-- FIRST NAME -->
                             <div class="doccare-forms-appointment">
@@ -96,6 +97,9 @@
                                 <label class="date-format"> (MM/DD/YYYY) </label>
                                 <input type="date" class="form-control" id="validationCustom04" name="birth_date" required aria-describedby="validationCustom04Feedback"> 
                                 <div id="validationCustom04Feedback" class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
                                     Please select your <strong>date of birth</strong>.
                                 </div>
                             </div>
@@ -109,6 +113,9 @@
                                     <option>Female</option>
                                 </select>
                                 <div id="validationCustom05Feedback" class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
                                     Please select your <strong>sex</strong>.
                                 </div>
                             </div>
@@ -155,8 +162,11 @@
                                 <label for="validationCustom08" class="form-label">DATE </label>
                                 <label class="asterisk"> * </label> 
                                 <input type="date" class="form-control" id="validationCustom08" name="date_appointment" required aria-describedby="validationCustom08Feedback"> 
-                                <div id="validationCustom01Feedback" class="valid-feedback">
-                                    Please select your <strong>date of appoinment</strong>.
+                                <div id="validationCustom08Feedback" class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please select the <strong>date of appoinment</strong>.
                                 </div>
                             </div>
                 
@@ -164,8 +174,11 @@
                             <div class="doccare-forms-appointment">
                                 <label for="validationCustom09" class="form-label">TIME</label>
                                 <label class="asterisk"> * </label> 
-                                <input type="time" class="form-control" id="validationCustom09" name="time_appoinment" min="09:00" max="18:00" required aria-describedby="validationCustom09Feedback"> 
+                                <input type="time" class="form-control" id="validationCustom09" name="time_appointment" min="09:00" max="18:00" required aria-describedby="validationCustom09Feedback"> 
                                 <div id="validationCustom09Feedback" class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
                                     Please select the <strong>time of appoinment</strong>.
                                 </div>
                             </div>
@@ -186,8 +199,6 @@
                             <br/>
                         
                             <div class="doccare-final-buttons">
-                                <!-- Add the CSRF token input here -->
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button class="btn btn-primary doccare-appointment-back-button" type="button" id="add-appoinment-back-button">BACK</button>
                                 <button class="btn btn-primary doccare-appointment-submit-button" type="submit" id="add-appoinment-submit-button">SUBMIT</button>
                             </div>
