@@ -121,11 +121,11 @@
                         </td>
                         <td>
                             <!-- DELETE RECORD -->
-                            <form method="POST" action="/doctor/delete_assessment/">
+                            <form id="deleteForm_{{ consultation[0] }}" method="POST" action="/doctor/delete_assessment/">
                                 <div class="delete-icon">
                                     <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
                                     <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                    <button type="submit" style="background: none; border: none;">
+                                    <button type="button" onclick="confirmation('{{ consultation[0] }}')" style="background: none; border: none;">
                                         <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
                                     </button>
                                 </div>
@@ -135,6 +135,24 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Delete Record</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to permanently delete this assessment record?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
+                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -181,5 +199,24 @@
             <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
         </div>
     </a>
+
+    <script>
+        // CONFIRMATION BEFORE DELETION
+        function confirmation(assessmentId){
+            const confirmationModal = document.getElementById("confirmationModal");
+            confirmationModal.style.display = "block";
+
+            const confirmDelete = document.getElementById("confirmDelete");
+            const cancelDelete = document.getElementById("cancelDelete");
+            
+            confirmDelete.addEventListener("click", function() {
+                document.getElementById("deleteForm_" + assessmentId).submit();
+            });
+    
+            cancelDelete.addEventListener("click", function() {
+                confirmationModal.style.display = "none";
+            });
+        }
+    </script>
 
 {% endblock %}

@@ -118,27 +118,10 @@
             
             <!-- PRESCRIPTION -->
             <div class="prescription-container" id="prescriptionContainer" style="display: none;">
-               
+                
             </div>
 
-            <!-- {% for prescription in prescriptions %}
-                <input hidden name="medName_val" value="{{ prescription[0] }}" >
-                <input hidden name="dosage_val" value="{{ prescription[1] }}" >
-                <input hidden name="quantity_val" value="{{ prescription[2] }}" >
-                <input hidden name="duration_val" value="{{ prescription[3] }}" >
-                <input hidden name="instruction_val" value="{{ prescription[4] }}" >
-            {% endfor %} -->
-
             <table class="prescription-table" id="prescriptionTable">
-                <!-- <thead>
-                    <tr>
-                        <th>Medication Name</th>
-                        <th>Dosage</th>
-                        <th>Quantity</th>
-                        <th>Duration</th>
-                        <th>Instructions</th>
-                    </tr>
-                </thead> -->
                 <tbody>
                     {% for prescription in prescriptions %}
                         <tr>
@@ -289,55 +272,52 @@
         // ADD PRESCRIPTION
         const addPrescriptionBtn = document.querySelector('.btn-prescription');
         const prescriptionContainer = document.querySelector('.prescription-container');
-        
-        //document.addEventListener('DOMContentLoaded', function() {
-            //createPrescription();
-        //});
+        let prescriptionCount = 0;
 
         function createPrescription() {
-            //const medicationNameValue = document.querySelector('input[name="medName_val"][hidden]').value;
-            //const dosageValue = document.querySelector('input[name="dosage_val"][hidden]').value;
-            //const quantityValue = document.querySelector('input[name="quantity_val"][hidden]').value;
-            //const durationValue = document.querySelector('input[name="duration_val"][hidden]').value;
-            //const instructionsValue = document.querySelector('input[name="instruction_val"][hidden]').value;
+            if (prescriptionCount < 3) { 
+                const newPrescription = document.createElement('div');
+                newPrescription.classList.add('prescription-section');
+                newPrescription.innerHTML = `
+                    <div class="p_row row1">
+                        <div class="inputBox prescription">
+                            <input type="text" name="medication_name" required>
+                            <span>MEDICINE</span>
+                        </div>
+                        <div class="inputBox dosage">
+                            <input type="text" name="dosage" required>
+                            <span>DOSAGE</span>
+                        </div>
+                    </div>
+                    <div class="p_row row2">
+                        <div class="inputBox quantity">
+                            <input type="text" name="quantity" required>
+                            <span>QUANTITY</span>
+                        </div>
+                        <div class="inputBox prescription">
+                            <input type="text" name="duration" required>
+                            <span>DURATION</span>
+                        </div>
+                    </div>
+                    <div class="p_row row3">
+                        <div class="inputBox p_instructions">
+                            <input type="text" name="instructions" required>
+                            <span>INSTRUCTIONS</span>
+                        </div>
+                        <button class="btn-submit remove" type="button">REMOVE</button>
+                    </div>
+                `;
+                prescriptionContainer.appendChild(newPrescription);
 
-            const newPrescription = document.createElement('div');
-            newPrescription.classList.add('prescription-section');
-            newPrescription.innerHTML = `
-                <div class="p_row row1">
-                    <div class="inputBox prescription">
-                        <input type="text" name="medication_name" required>
-                        <span>MEDICINE</span>
-                    </div>
-                    <div class="inputBox dosage">
-                        <input type="text" name="dosage" required>
-                        <span>DOSAGE</span>
-                    </div>
-                </div>
-                <div class="p_row row2">
-                    <div class="inputBox quantity">
-                        <input type="text" name="quantity" required>
-                        <span>QUANTITY</span>
-                    </div>
-                    <div class="inputBox prescription">
-                        <input type="text" name="duration" required>
-                        <span>DURATION</span>
-                    </div>
-                </div>
-                <div class="p_row row3">
-                    <div class="inputBox p_instructions">
-                        <input type="text" name="instructions" required>
-                        <span>INSTRUCTIONS</span>
-                    </div>
-                    <button class="btn-submit remove" type="button">REMOVE</button>
-                </div>
-            `;
-            prescriptionContainer.appendChild(newPrescription);
-
-            const removeButton = newPrescription.querySelector('.remove');
-            removeButton.addEventListener('click', function () {
-                newPrescription.remove(); 
-            });
+                const removeButton = newPrescription.querySelector('.remove');
+                removeButton.addEventListener('click', function () {
+                    newPrescription.remove(); 
+                });
+                prescriptionCount++;
+            } else {
+                console.log('Maximum limit of prescriptions reached (3 allowed).');
+                alert('Maximum limit of prescriptions reached (3 allowed). Please add any additional prescriptions later after submission.');
+            }
         }
 
         addPrescriptionBtn.addEventListener('click', createPrescription);
