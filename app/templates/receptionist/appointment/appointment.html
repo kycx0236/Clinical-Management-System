@@ -50,11 +50,11 @@
                             <tbody>
                                 {% for row in data %}
                                     <tr>
-                                        <td> <strong> {{ row[0] }} </strong> </td>
+                                        <td class="doccare-reference-number"> {{ row[0] }} </td>
                                         <td> {{ row[1] }} </td>
                                         <td> {{ row[2] }} </td>
                                         <td> 
-                                            <p class="status done">
+                                            <p class="status pending">
                                                 <strong> {{ row[3] }} </strong>
                                             </p>
                                         </td>
@@ -65,9 +65,9 @@
                                             <a href="{{ url_for('receptionist.logout') }}" class="doccare-edit-appoinment-icon">
                                                 <span class="material-symbols-outlined">edit</span>
                                             </a>
-                                            <button type="button" class="delete-appoinment-button" data-id="{{ row[0] }}">
+                                            <button type="button" class="delete-appoinment-button" data-id="{{ row[0] }}" onclick="openDeleteModal('{{ row[0] }}')">
                                                 <span class="material-symbols-outlined delete-icon">delete</span>
-                                            </button>
+                                            </button>                                            
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -91,13 +91,28 @@
                             <a href="{{ url_for('receptionist.appointment', page=page+1) }}">Next</a>
                         {% endif %}
                     </div>
+                    <div class="overlay-background-container" id="overlayBackgroundContainer">
+                        <label class="overlay-background"> </label>
+                    </div>    
+                    <!-- Modal for Delete Confirmation -->
+                    <div id="deleteModal" class="modal">
+                        <div class="modal-content">
+                            <p>Are you sure you want to delete this appointment?</p>
+                            <div class="modal-buttons">
+                                <button class="delete-modal-button" onclick="deleteAppointment()">Yes, delete it!</button>
+                                <button class="cancel-modal-button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                     <a href="{{ url_for('receptionist.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
                         <span class="material-symbols-outlined add-icon">&#xe147;</span>
                     </a>
+                     <!-- Include these script tags at the end of the body content -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                    <script src="{{ url_for('static', filename='receptionist_script.js') }}"></script>
                 </main>
             </div>
-            <script src="{{ url_for('static', filename='receptionist_script.js') }}"></script>
         </body>
     </div>
-    
 {% endblock %}
