@@ -3,11 +3,16 @@ const form = document.querySelector('.needs-validation');
 const firstNameInput = document.getElementById('validationCustom01');
 const middleNameInput = document.getElementById('validationCustom02');
 const lastNameInput = document.getElementById('validationCustom03');
-const dateofBirthInput = document.getElementById('validationCustom04');
+const dateOfBirthInput = document.getElementById('validationCustom04');
 const sexInput = document.getElementById('validationCustom05');
 const addressInput = document.getElementById('validationCustom06');
 const contactNumberInput = document.getElementById('validationCustom07');
 const backButton = document.getElementById('add-appoinment-back-button');
+const submitButton = document.getElementById('add-appoinment-submit-button');
+const dateAppointmentInput = document.getElementById('validationCustom08');
+const timeAppointmentInput = document.getElementById('validationCustom09');
+const emailInput = document.getElementById('validationCustom10');
+const csrfTokenInput = document.querySelector('input[name="csrf_token"]').value;
 
 // Function to handle form transition and validation
 function handleFormTransition() {
@@ -15,7 +20,7 @@ function handleFormTransition() {
     const isFirstNameValid = firstNameInput.checkValidity();
     const isMiddleNameValid = middleNameInput.checkValidity();
     const isLastNameValid = lastNameInput.checkValidity();
-    const isDateOfBirthValid = dateofBirthInput.checkValidity();
+    const isDateOfBirthValid = dateOfBirthInput.checkValidity();
     const isSexValid = sexInput.checkValidity();
     const isAddressValid = addressInput.checkValidity();
     const isContactNumberValid = contactNumberInput.checkValidity();
@@ -77,7 +82,65 @@ function handleFormBackTransition() {
     numberTwo.style.background = 'rgba(2, 119, 189, 0.50)'; 
 }
 
-
-
 // Add an event listener to the BACK button
 backButton.addEventListener('click', handleFormBackTransition);
+
+
+// Add the function to handle the form submission
+function handleFormSubmission() {
+    // Check individual field validity
+    const isDateAppointmentValid = dateAppointmentInput.checkValidity();
+    const isTimeAppointmentValid = timeAppointmentInput.checkValidity();
+    const isEmailValid = emailInput.checkValidity();
+
+    // Check if all individual fields are valid
+    if (isDateAppointmentValid && isTimeAppointmentValid && isEmailValid) {
+        // Create a FormData object to handle the form data
+        const formData = new FormData();
+
+        // Append each form field to the FormData object
+        formData.append('first_name', firstNameInput.value);
+        formData.append('middle_name', middleNameInput.value);
+        formData.append('last_name', lastNameInput.value);
+        formData.append('birth_date', dateOfBirthInput.value);
+        formData.append('sex', sexInput.value);
+        formData.append('address', addressInput.value);
+        formData.append('contact_number', contactNumberInput.value);
+        formData.append('date_appointment', dateAppointmentInput.value);
+        formData.append('time_appointment', timeAppointmentInput.value);
+        formData.append('email', emailInput.value);
+        formData.append('csrf_token', formData.get('csrf_token'));  // Include CSRF token
+
+        // Perform AJAX request to submit form data
+        fetch('/receptionist/add-appointment/', {
+            method: 'POST',
+            body: formData,  // Use FormData instead of JSON.stringify
+            headers: {
+                'X-CSRFToken': formData.get('csrf_token')  // Include CSRF token in headers
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Server response:', data);
+                // Successful submission, redirect to success modal or do something else
+                console.log('Form submitted successfully');
+                // Redirect to success modal or perform any other action
+            } else {
+                // Handle submission failure
+                console.error('Form submission failed:', data.message);
+                // Display an error message or handle the failure appropriately
+            }
+        })
+        .catch(error => {
+            console.error('Error during form submission:', error);
+            // Handle the error appropriately
+        });
+    } else {
+        // If any field is invalid, prevent form submission and display validation styles
+        console.log('Some fields contain validation errors');
+        form.classList.add('was-validated');
+    }
+}
+// Add an event listener to the SUBMIT button
+submitButton.addEventListener('click', handleFormSubmission);
