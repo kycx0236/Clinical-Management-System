@@ -64,7 +64,7 @@
     </div>
 
     <div class="patient-table">
-        <table id="example" class="table table-striped" style="width:100%">
+        <table id="patientTable" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
                     <th>FIRST NAME</th>
@@ -97,19 +97,37 @@
                     </td>
                     <td>
                         <!-- DELETE RECORD -->
-                        <form method="POST" action="/doctor/delete_patient/">
+                        <form id="deleteForm_{{ patient[0] }}" method="POST" action="/doctor/delete_patient/">
                             <div class="delete-icon">
                                 <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
-                                <button type="submit" style="background: none; border: none;">
+                                <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">
                                     <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
                                 </button>
                             </div>
                         </form> 
                     </td>
-                </tr>
+                </tr>   
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Delete Record</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this record?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
+                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     {% if success %}
@@ -160,7 +178,24 @@
     <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
-        new DataTable('#example');
+        new DataTable('#patientTable');
+
+        // CONFIRMATION BEFORE DELETION
+        function confirmation(patientId){
+            const confirmationModal = document.getElementById("confirmationModal");
+            confirmationModal.style.display = "block";
+
+            const confirmDelete = document.getElementById("confirmDelete");
+            const cancelDelete = document.getElementById("cancelDelete");
+            
+            confirmDelete.addEventListener("click", function() {
+                document.getElementById("deleteForm_" + patientId).submit();
+            });
+    
+            cancelDelete.addEventListener("click", function() {
+                confirmationModal.style.display = "none";
+            });
+        }
     </script>
 
 {% endblock %}

@@ -548,7 +548,7 @@ def results():
     lab_report = doctor.get_lab_report(report_id)
     print('lab report:', lab_report)
 
-    return render_template("medtech/laboratory_report.html", labreq=labreq_info, PatientForm=form, 
+    return render_template("doctor/patient/results.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report)
