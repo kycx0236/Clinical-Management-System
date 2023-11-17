@@ -67,17 +67,17 @@
     
     <ul class="nav nav-underline">
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
+            <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
+            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
         </li>
         <li class="nav-item">
             <a class="nav-link"  href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" aria-current="page">LABORATORY REPORTS</a>
-            </li>
+        </li>
     </ul>
 
     <!-- LABORATORY RESULTS -->
@@ -89,7 +89,7 @@
                     <tr>
                         <th>SUBJECT</th>
                         <th>DATE</th>
-                        <th colspan="2">ACTION</th>
+                        <th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,19 +106,6 @@
                                     <input id="report_id" name="report_id" value="{{ labreport[4] }}" hidden>
                                     <button type="submit" style="background: none; border: none;">
                                         <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
-                                    </button>
-                                </div>
-                            </form> 
-                        </td>
-                        <td>
-                            <!-- DELETE RECORD -->
-                            <form method="GET" action="/doctor/results/">
-                                <div class="delete-icon">
-                                    <input id="order_id" name="order_id" value="{{ labreport[2] }}" hidden>
-                                    <input id="patient_id" name="patient_id" value="{{ labreport[3] }}" hidden>
-                                    <input id="report_id" name="report_id" value="{{ labreport[4] }}" hidden>
-                                    <button type="submit" style="background: none; border: none;">
-                                        <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Patient Record">
                                     </button>
                                 </div>
                             </form> 

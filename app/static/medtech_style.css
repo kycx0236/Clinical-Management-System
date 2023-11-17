@@ -2,15 +2,7 @@
 
 /* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    height: 65px; 
-    background-color: white;
-    border-radius: 350px; 
     margin-top: 205px !important; 
-    margin-bottom: 25px !important;
-    overflow: hidden;
 } 
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
