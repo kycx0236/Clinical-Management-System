@@ -34,7 +34,6 @@ def profile():
 
 @receptionist_bp.route('/logout')
 @login_required
-@role_required('receptionist')
 def logout():
     logout_user()
     return redirect(url_for('login'))

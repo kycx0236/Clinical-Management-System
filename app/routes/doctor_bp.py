@@ -40,7 +40,6 @@ def profile():
 
 @doctor_bp.route('/logout')
 @login_required
-@role_required('doctor')
 def logout():
     logout_user()
     return redirect(url_for('login'))

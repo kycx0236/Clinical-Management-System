@@ -28,7 +28,6 @@ def profile():
 
 @medtech_bp.route('/logout')
 @login_required
-@role_required('medtech')
 def logout():
     logout_user()
     return redirect(url_for('login'))

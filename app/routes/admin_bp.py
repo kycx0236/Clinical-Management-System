@@ -28,7 +28,7 @@ def profile():
 
 @admin_bp.route("/logout")
 @login_required
-@role_required('admin')
 def logout():
+    print("Logout route accessed")  
     logout_user()
     return redirect(url_for('login'))
