@@ -47,12 +47,10 @@
             </div>
         </div>
         <ul>
-            <a href="{{ url_for('doctor.logout') }}">
-                <li class="logout">
-                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                    <p>Logout</p>
-                </li>
-            </a>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
         </ul>
     </div>
 
