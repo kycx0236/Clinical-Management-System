@@ -3,28 +3,46 @@ from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
 from flask import Blueprint
+from flask_login import login_required, logout_user
+from app.routes.utils import role_required
 
 doctor_bp = Blueprint('doctor', __name__)
 
 @doctor_bp.route('/')
+@login_required
+@role_required('doctor')
 def dashboard():
     return render_template("doctor/dashboard/dashboard.html")
 
-@doctor_bp.route('/calendar/')
+@doctor_bp.route('/calendar')
+@login_required
+@role_required('doctor')
 def calendar():
     return render_template("doctor/calendar/calendar.html")
 
-@doctor_bp.route('/appointment/')
+@doctor_bp.route('/appointment')
+@login_required
+@role_required('doctor')
 def appointment():
-    return render_template("doctor/appointment/appointment.html")
+    return render_template("doctor/appointment.html")
 
-@doctor_bp.route('/profile/')
+@doctor_bp.route('/patient')
+@login_required
+@role_required('doctor')
+def patient():
+    return render_template("doctor/patient.html")
+
+@doctor_bp.route('/profile')
+@login_required
+@role_required('doctor')
 def profile():
     return render_template("doctor/profile/profile.html")
 
-@doctor_bp.route('/login/')
+@doctor_bp.route('/logout')
+@login_required
 def logout():
-    return render_template("login.html")
+    logout_user()
+    return redirect(url_for('login'))
 
 # -------------------------------------------- PATIENT -------------------------------------------- #
 # ADD PATIENT INFORMATION

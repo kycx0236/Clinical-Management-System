@@ -9,11 +9,32 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap" rel="stylesheet">
+
     {% block link %} {% endblock %}
+
 </head>
 <body>
 
     {% block content %} {% endblock %}
 
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Logout Confirmation</h2>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmLogout" class="btn-done">Logout</button> 
+                <button id="cancelLogout" class="btn-done cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script> var logoutUrl = "{{ url_for('admin.logout') }}";</script>
+    <script src="{{ url_for('static', filename='/logout.js') }}"></script>
+    
 </body>
 </html>

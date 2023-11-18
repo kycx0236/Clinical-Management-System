@@ -3,11 +3,15 @@ from app.forms.medtech_f import *
 import app.models as models
 from app.models.medtech_m import *
 from flask import Blueprint
+from flask_login import login_required, logout_user
+from app.routes.utils import role_required
 
 medtech_bp = Blueprint('medtech', __name__)
 
 # LAB REQUEST TABLE
 @medtech_bp.route('/')
+@login_required
+@role_required('medtech')
 def dashboard():
     labrequest_data = medtech.get_lab_requests()
     return render_template("medtech/dashboard.html", labrequests=labrequest_data)
@@ -65,7 +69,9 @@ def laboratory_test():
         
     return render_template("medtech/laboratory_test.html", patient_id=patient_id)
 
-@medtech_bp.route('/patient/')
+@medtech_bp.route('/patient')
+@login_required
+@role_required('medtech')
 def patient():
     labrequest_data = medtech.get_lab_reports()
     return render_template("medtech/patient.html", labrequests=labrequest_data)
@@ -95,10 +101,14 @@ def laboratory_report():
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report)
 
-@medtech_bp.route('/profile/')
+@medtech_bp.route('/profile')
+@login_required
+@role_required('medtech')
 def profile():
     return render_template("medtech/profile.html")
 
-@medtech_bp.route('/login/')
+@medtech_bp.route('/logout')
+@login_required
 def logout():
-    return render_template("login.html")
+    logout_user()
+    return redirect(url_for('login'))
