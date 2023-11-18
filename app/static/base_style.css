@@ -3,6 +3,7 @@
     --blueB: #A3D5FF;
     --blueC: #DFF1FF;
     --blueD: #007BFF; /* Active (button, text, background) */
+    --darkBlue: #2B394C;
     --grayA: #6C757D;  /* Disabled Text */
     --grayB: #E9ECEF; /* Disabled Background */
 }
@@ -43,6 +44,7 @@
 .cms-logo p {
     font-weight: 400;
     margin-left: 15px;
+    color: var(--darkBlue);
 }
 
 /* -------------------------------------------- SIDEBAR -------------------------------------------- */
@@ -50,6 +52,7 @@
     width: 80px;  
     height: 700px; 
     background-color: var(--blueC);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
     position: fixed;  
     padding: 8px;
     z-index: 1;
@@ -75,19 +78,16 @@
 
 /* selected icon */
 .selected-icon-bg {
-    width: 95px;  
+    width: 100%;  
     height: 62px; 
     background-color: white; 
-    border-radius: 30px; 
+    border-radius: 20px; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
     padding: 4px;
 }
 
-.selected-icon-bg:hover {
-    transition: 0.3s;
-}
-
 /* icon text styles */
-.icon-bg p, .logout p {
+.icon-bg p, .logout p, .selected-icon-bg p {
     display: flex;
     position: relative;
     transition: all 0.3s ease-out; 
@@ -98,28 +98,28 @@
     left: 35px;
     padding: 10px;
     border-radius: 10px;
-    background-color: black;
+    background-color: var(--darkBlue);
     color: white;
     font-weight: 100;
 }
 
-.icon-bg p::after, .logout p::after {
+.icon-bg p::after, .logout p::after, .selected-icon-bg p::after {
     content: "";
     position: absolute;
     width: 26px;
     height: 26px;
     border-radius: 2px;
-    background-color: black;
+    background-color: var(--darkBlue);
     transform: rotate(45deg);
     z-index: -1;
 }
 
-.icon-bg p::after, .logout p::after {
+.icon-bg p::after, .logout p::after, .selected-icon-bg p::after {
     left: -6px;
     top: 5px;
 }
 
-.icon-bg:hover p, .logout:hover p {
+.icon-bg:hover p, .logout:hover p, .selected-icon-bg:hover p {
     left: 25px;
     opacity: 1;
     visibility: visible;
@@ -143,7 +143,7 @@ ul li {
 
 a {
     text-decoration: none;
-    color: black;
+    color: var(--darkBlue);
 }
 
 ul li img {
@@ -201,8 +201,8 @@ ul li p {
 /* -------------------------------------------- PATIENT TABLE -------------------------------------------- */
 .patient-header p {
     position: absolute;
-    top: 50px;
-    left: 145px;
+    top: 45px;
+    left: 110px;
     font-weight: 900;
     font-size: 18px;
 }
@@ -210,11 +210,11 @@ ul li p {
 
 .patient-table {
     position: relative; 
-    width: 1330px; 
+    width: 1400px; 
     top: 85px; 
-    left: 145px;
+    left: 110px;
     line-height: 1.5;
-    color: black;
+    color: var(--darkBlue);
     background-color: white;
     font-size: 16px;
 }
@@ -235,7 +235,7 @@ ul li p {
 
 .table thead {
     background-color: var(--blueB);
-    color: black;
+    color: var(--darkBlue);
 }
 
 .table-striped tbody tr:nth-of-type(even) {
@@ -317,7 +317,7 @@ ul li p {
 .dataTables_wrapper .dataTables_filter input {
     padding: 0.375rem 0.5rem;
     margin-bottom: 1rem; 
-    color: black; 
+    color: var(--darkBlue); 
     background-color: white; 
     border: 1px solid var(--blueB); 
     border-radius: 0.25rem; 
@@ -326,12 +326,12 @@ ul li p {
 }
 
 .dataTables_wrapper .dataTables_filter {
-    margin-left: 1065px;
+    margin-left: 1135px;
     margin-top: 0px;
 }
   
 .dataTables_wrapper .dataTables_filter input:focus {
-    color: black; 
+    color: var(--darkBlue); 
     background-color: white; 
     border-color:  var(--blueB); 
     outline: 0;
@@ -430,7 +430,7 @@ ul li p {
     border: 2px solid var(--blueB);
     border-radius: 5px;
     outline-color: var(--blueB);
-    color: black;
+    color: var(--darkBlue);
     font-size: 1em;
 }
 
@@ -447,7 +447,7 @@ ul li p {
 }
 
 .inputBox input:focus {
-    color: black; 
+    color: var(--darkBlue); 
     background-color: white; 
     outline: 0;
     box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 

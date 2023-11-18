@@ -114,7 +114,7 @@ input, select {
     border: 2px solid var(--blueB);
     border-radius: 5px;
     outline-color: var(--blueB);
-    color: black;
+    color: var(--darkBlue);
     font-size: 1em;
 }
 
@@ -151,27 +151,22 @@ input, select {
 
 /* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.history {
-    width: 1230px;  
     height: 2650px; 
 }
 
 .patient-bg.assessment {
-    width: 1230px;  
     height: 3000px; 
 }
 
 .patient-bg.request {
-    width: 1230px;  
     height: 1650px; 
 }
 
 .patient-bg.prescription {
-    width: 1230px;  
     height: 1570px; 
 }
 
 .patient-bg.report {
-    width: 1230px;  
     height: 2000px; 
 }
 
@@ -387,7 +382,7 @@ input, select {
     top: 50px; 
     left: 65px;
     line-height: 1.5;
-    color: black;
+    color: var(--darkBlue);
     background-color: white;
     font-size: 16px;
 }
@@ -544,7 +539,7 @@ input, select {
 }
 
 .line-border {
-    border: 1px solid black;
+    border: 1px solid var(--darkBlue);
     width: 895px;
     left: 230px;
     top: -25px;
@@ -646,7 +641,7 @@ input, select {
 .page-break {
     position: absolute; 
     top:1400px;
-    border: 1px solid black;
+    border: 1px solid var(--darkBlue);
     width: 1000px;
     left: 110px;
 }

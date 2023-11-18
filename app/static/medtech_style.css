@@ -7,11 +7,11 @@
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .notification-container {
-    width: 1340px;  
+    width: 1400px;  
     height: 1000px; 
     position: absolute;  
     top: 50px;
-    left: 140px;
+    left: 110px;
 }
 
 .request-header {
@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 925px;
+    gap: 985px;
     margin-bottom: 25px;
 }
 
@@ -63,7 +63,7 @@ main {
     display: flex;
     align-items: center;
     padding: 1rem;
-    width: 1340px;
+    width: 1400px;  
     margin-left: 0px;
     height: 60px;
 }
@@ -86,7 +86,7 @@ strong:hover {
 .unread {
     border-left: 3px solid var(--blueB) !important;
     box-shadow: 0 0 5px var(--blueC);
-    width: 1340px;
+    width: 1400px;  
     margin-left: 0px;
     height: 60px;
 }
