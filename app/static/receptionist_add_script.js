@@ -108,8 +108,12 @@ function successModal(booking_details) {
     // Display booking details in the modal
     const bookingDetailsContainer = document.getElementById('doccare-success-modal-content-2');
     if (booking_details && booking_details.last_name) {
+        // Format the date with Philippine timezone and full month name
+        const options = { timeZone: 'Asia/Manila', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const formattedDate = new Date(booking_details.date_appointment).toLocaleDateString('en-PH', options);
+        
         bookingDetailsContainer.innerHTML = `<p>Last Name: ${booking_details.last_name}</p>
-                                            <p>Appointment Schedule: ${booking_details.time_appointment}</p>
+                                            <p>Appointment Schedule: ${formattedDate} ${booking_details.time_appointment}</p>
                                             <p>Booking Reference No.: ${booking_details.reference_number}</p>`;
         console.log('Booking details fetch!');
     } else {
