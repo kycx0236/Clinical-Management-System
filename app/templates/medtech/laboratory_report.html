@@ -12,16 +12,16 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
-                <p>Dashboard</p>
-            </li>
-            <a href="{{ url_for('medtech.patient') }}">
+            <a href="{{ url_for('medtech.dashboard') }}">
                 <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
-                    <p>Patient</p>
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
                 </li>
             </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
             <a href="{{ url_for('medtech.profile') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
@@ -37,12 +37,10 @@
             </div>
         </div>
         <ul>
-            <a href="{{ url_for('medtech.logout') }}">
-                <li class="logout">
-                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                    <p>Logout</p>
-                </li>
-            </a>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
         </ul>
     </div>
 
@@ -53,7 +51,7 @@
 
     <ul class="nav nav-underline">
         <li class="nav-item">
-        <a class="nav-link active" aria-current="page">LABORATORY REPORT</a>
+            <a class="nav-link active" aria-current="page">LABORATORY REPORT</a>
         </li>
     </ul>
 
@@ -590,7 +588,6 @@
                     </table> 
                 </div>
             </center>
-
         </div>
     </form>
 
