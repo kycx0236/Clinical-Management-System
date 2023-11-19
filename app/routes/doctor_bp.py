@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect, url_for
 from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
@@ -14,31 +14,25 @@ doctor_bp = Blueprint('doctor', __name__)
 def dashboard():
     return render_template("doctor/dashboard/dashboard.html")
 
-@doctor_bp.route('/calendar')
+@doctor_bp.route('/calendar/')
 @login_required
 @role_required('doctor')
 def calendar():
     return render_template("doctor/calendar/calendar.html")
 
-@doctor_bp.route('/appointment')
+@doctor_bp.route('/appointment/')
 @login_required
 @role_required('doctor')
 def appointment():
-    return render_template("doctor/appointment.html")
+    return render_template("doctor/appointment/appointment.html")
 
-@doctor_bp.route('/patient')
-@login_required
-@role_required('doctor')
-def patient():
-    return render_template("doctor/patient.html")
-
-@doctor_bp.route('/profile')
+@doctor_bp.route('/profile/')
 @login_required
 @role_required('doctor')
 def profile():
     return render_template("doctor/profile/profile.html")
 
-@doctor_bp.route('/logout')
+@doctor_bp.route('/logout/')
 @login_required
 def logout():
     logout_user()
@@ -47,6 +41,8 @@ def logout():
 # -------------------------------------------- PATIENT -------------------------------------------- #
 # ADD PATIENT INFORMATION
 @doctor_bp.route('/add/', methods=["GET", "POST"])
+@login_required
+@role_required('doctor')
 def add_patient():
     form = PatientForm()
 
@@ -101,6 +97,8 @@ def add_patient():
 
 # ADD AND UPDATE MEDICAL HISTORY
 @doctor_bp.route('/medical_history/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def medical_history():
     form = PatientForm()
     patient_id = None
@@ -302,6 +300,8 @@ def medical_history():
 
 # ADD MEDICAL ASSESSMENT FOR EACH APPOINTMENT
 @doctor_bp.route('/add_assessment/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def add_assessment():
     form = PatientForm()
     patient_id = None
@@ -384,13 +384,17 @@ def add_assessment():
     return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, PatientForm=form)
 
 # PATIENT TABLE
-@doctor_bp.route('/patient/')
+@doctor_bp.route('/patient')
+@login_required
+@role_required('doctor')
 def patient():
     patients_data = doctor.get_patients()
     return render_template("doctor/patient/patient.html", patients=patients_data)
 
 # CONSULTATION TABLE
 @doctor_bp.route('/consultation/')
+@login_required
+@role_required('doctor')
 def consultation():
     patient_id = request.args.get('patient_id')
     patient_info = doctor.get_patient_info(patient_id)
@@ -400,6 +404,8 @@ def consultation():
 
 # LAB RESULTS TABLE
 @doctor_bp.route('/lab_results/')
+@login_required
+@role_required('doctor')
 def lab_results():
     patient_id = request.args.get('patient_id')
     report_info = doctor.get_lab_reports(patient_id)
@@ -409,6 +415,8 @@ def lab_results():
 
 # UPDATE PATIENT INFORMATION
 @doctor_bp.route('/patient_record/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def patient_record():
     form = PatientForm()
 
@@ -459,6 +467,8 @@ def patient_record():
 
 # UPDATE MEDICAL ASSESSMENT
 @doctor_bp.route('/assessment/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def assessment():
     form=PatientForm()
     patient_id = None
@@ -547,6 +557,8 @@ def assessment():
   
 # LABORATORY RESULT
 @doctor_bp.route('/results/')
+@login_required
+@role_required('doctor')
 def results():
     form=PatientForm()
     patient_id = None
@@ -573,6 +585,8 @@ def results():
 
 # REQUEST TO RUN LABORATORY TESTS
 @doctor_bp.route('/labtest_request/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def labtest_request():
     form=PatientForm()
     patient_id = None
@@ -740,6 +754,8 @@ def labtest_request():
 
 # PRESCRIPTION
 @doctor_bp.route('/prescription/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def prescription():
     form = PatientForm()
     patient_id = None
@@ -785,6 +801,8 @@ def prescription():
 
 # DELETE PATIENT RECORD
 @doctor_bp.route('/delete_patient/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def delete_patient():
     form = PatientForm()
 
@@ -802,6 +820,8 @@ def delete_patient():
 
 # DELETE ASSESSMENT RECORD
 @doctor_bp.route('/delete_assessment/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
 def delete_assessment():
     form = PatientForm()
 

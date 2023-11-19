@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect, url_for
 from app.forms.medtech_f import *
 import app.models as models
 from app.models.medtech_m import *
@@ -17,6 +17,8 @@ def dashboard():
     return render_template("medtech/dashboard.html", labrequests=labrequest_data)
 
 @medtech_bp.route('/laboratory_test/', methods=['GET', 'POST'])
+@login_required
+@role_required('medtech')
 def laboratory_test():
     form=PatientForm()
     patient_id = None
@@ -69,7 +71,7 @@ def laboratory_test():
         
     return render_template("medtech/laboratory_test.html", patient_id=patient_id)
 
-@medtech_bp.route('/patient')
+@medtech_bp.route('/patient/')
 @login_required
 @role_required('medtech')
 def patient():
@@ -77,6 +79,8 @@ def patient():
     return render_template("medtech/patient.html", labrequests=labrequest_data)
 
 @medtech_bp.route('/laboratory_report/')
+@login_required
+@role_required('medtech')
 def laboratory_report():
     form=PatientForm()
     patient_id = None
@@ -101,14 +105,15 @@ def laboratory_report():
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report)
 
-@medtech_bp.route('/profile')
+@medtech_bp.route('/profile/')
 @login_required
 @role_required('medtech')
 def profile():
     return render_template("medtech/profile.html")
 
-@medtech_bp.route('/logout')
+@medtech_bp.route('/logout/')
 @login_required
 def logout():
+    print("Logout route accessed")  
     logout_user()
     return redirect(url_for('login'))

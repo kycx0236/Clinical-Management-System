@@ -17,6 +17,11 @@ def create_app():
     app.config['MYSQL_DATABASE'] = DB_NAME
 
     mysql.init_app(app)
+    login_manager = LoginManager(app)
+ 
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.get(user_id)
 
     @app.route("/", methods=['GET', 'POST'])
     def login():
@@ -48,9 +53,9 @@ def create_app():
     from app.routes.receptionist_bp import receptionist_bp
     from app.models.login_m import User
     
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(doctor_bp, url_prefix='/doctor')
-    app.register_blueprint(medtech_bp, url_prefix='/medtech')
-    app.register_blueprint(receptionist_bp, url_prefix='/receptionist')
+    app.register_blueprint(admin_bp, url_prefix='/admin/')
+    app.register_blueprint(doctor_bp, url_prefix='/doctor/')
+    app.register_blueprint(medtech_bp, url_prefix='/medtech/')
+    app.register_blueprint(receptionist_bp, url_prefix='/receptionist/')
 
     return app
