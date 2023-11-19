@@ -1,7 +1,9 @@
 .doccare-add-forms-background {
     background: #F7FCFF;
-    height: 1440px;
+    min-height: 150vh; /* Set minimum height to 100% of the viewport height */
+    padding: 20px; /* Add padding to the content inside the background */
 }
+
 .appointment-add-forms {
     width: 520px;
     height: 1200px;
@@ -67,7 +69,7 @@
 .date-format{
     font-weight: normal !important;
 }
-.doccare-appointment-continue-button, .doccare-appointment-back-button, .doccare-appointment-submit-button {
+.doccare-appointment-continue-button, .doccare-appointment-back-button, .doccare-appointment-submit-button, .doccare-done-modal-button {
     width: 112px;
     height: 45px;
     flex-shrink: 0;
@@ -96,6 +98,11 @@
 }
 
 .doccare-appointment-submit-button:hover{
+    transform:scale(1.25);
+    background: #004f7a !important;
+}
+
+.doccare-done-modal-button:hover{
     transform:scale(1.25);
     background: #004f7a !important;
 }
@@ -196,6 +203,13 @@
     align-items: center;
 }
 
+.numbers-on-top-v2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .numbers-on-top label {
     color: #FFF;
     font-family: Inter;
@@ -211,10 +225,31 @@
     margin: 0 2%; /* Adjust margin as needed */
 }
 
+.numbers-on-top-v2 label {
+    color: #FFF;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+    text-align: center;
+    transition: transform 0.2s;
+    margin-bottom: 15%;
+}
+
 .number-one {
     transform: scale(1.25);
     border-radius: 100px;
     background: #0277BD;
+}
+
+.number-one-v2 {
+    border-radius: 100px;
+    background: rgba(2, 119, 189, 0.50);
+    margin-right: 20px;
 }
 
 .number-two {
@@ -222,7 +257,20 @@
     background: rgba(2, 119, 189, 0.50);
 }
 
+.number-two-v2 {
+    border-radius: 100px;
+    background: rgba(2, 119, 189, 0.50);
+    margin-right: 20px;
+}
+
 .number-three {
+    border-radius: 100px;
+    background: rgba(2, 119, 189, 0.50);
+    margin-right: 20px;
+}
+
+.number-three-v2 {
+    transform: scale(1.00);
     border-radius: 100px;
     background: rgba(2, 119, 189, 0.50);
 }
@@ -240,5 +288,80 @@
 }
 
 .doccare-success-modal {
-    display: none; /* Initial display */
+    display: none; /* Initial display: block;*/ /*After display: flex; */
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 150vh; /* Set minimum height to 100% of the viewport height */
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: 2; 
+}
+
+.doccare-success-modal-content {
+    width: 800px;
+    height: 600px;
+    flex-shrink: 0;
+    border-radius: 50px;
+    background: #FFF;
+    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.80);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.doccare-success-modal-content p{
+    color: black;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: 5%;
+}
+
+.doccare-success-modal-content-2{
+    width: 620px;
+    height: 200px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #A3D5FF;
+    margin-top: 3%;
+}
+
+.doccare-success-modal-content-2 p {
+    color: #000;
+    text-align: center;
+    font-family: 'Montserrat';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: left;
+    margin-left: 2%;
+    margin-top: 2%
+}
+
+.doccare-success-modal-content button {
+    width: 150px;
+    height: 48px;
+    border-radius: 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 20%;
+}
+
+.muted-text {
+    color: #000; /* Use your preferred muted color */
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+    .doccare-add-forms-background {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
 }
