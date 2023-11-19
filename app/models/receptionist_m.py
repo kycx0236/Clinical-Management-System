@@ -82,7 +82,15 @@ class Appointment:
         appointment_data = cursor.fetchone()
         cursor.close()
         return appointment_data
-
+    
+    @classmethod
+    def get_booking_reference_details(cls, reference_number):
+        cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
+        cursor.execute("SELECT last_name, date_appointment, time_appointment, reference_number FROM appointment WHERE reference_number = %s", (reference_number,))
+        booking_details = cursor.fetchone()
+        cursor.close()
+        return booking_details
+    
     @classmethod
     def search_appointment(cls, query):
         try:
