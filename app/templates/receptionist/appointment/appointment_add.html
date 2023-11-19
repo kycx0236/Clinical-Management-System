@@ -225,9 +225,9 @@
                     <p>The appointment is confirmed! Below are the appointment details.</p>
                     <div class="doccare-success-modal-content-2" id="doccare-success-modal-content-2">
                         {% if booking_details %}
-                            <p>Last Name: {{ booking_details.last_name }}</p>
-                            <p>Appointment Schedule: {{ booking_details.time_appointment }} {{ booking_details.time_appointment }}</p>
-                            <p>Booking Reference No.: {{ booking_details.reference_number }}</p>
+                            <p class="patient-lastname" id="patient-lastname">Last Name: {{ booking_details.last_name }}</p>
+                            <p class="patient-appoinment" id="patient-appoinment">Appointment Schedule: {{ booking_details.date_appointment }} {{ booking_details.time_appointment }}</p>
+                            <p class="patient-reference" id="patient-reference">Booking Reference No.: {{ booking_details.reference_number }}</p>
                         {% else %}
                             <p class="text-muted">Booking details are being processed. Please wait...</p>
                         {% endif %}
