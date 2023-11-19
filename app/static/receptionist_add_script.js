@@ -13,6 +13,7 @@ const dateAppointmentInput = document.getElementById('validationCustom08');
 const timeAppointmentInput = document.getElementById('validationCustom09');
 const emailInput = document.getElementById('validationCustom10');
 const csrfTokenInput = document.querySelector('input[name="csrf_token"]').value;
+const doneButton = document.querySelector('.doccare-done-modal-button');
 
 // Function to handle form transition and validation
 function handleFormTransition() {
@@ -85,13 +86,46 @@ function handleFormBackTransition() {
 // Add an event listener to the BACK button
 backButton.addEventListener('click', handleFormBackTransition);
 
+// Function to handle success modal
+function successModal(booking_details) {
+    console.log('Inside successModal function');
+    const successModal = document.getElementById('doccare-success-modal');
+    const numberThree = document.getElementById('number-three-v2');
+    const numberTwo = document.getElementById('number-two-v2');
+
+    // Toggle the visibility of the modal
+    successModal.style.display = 'flex';
+
+    // Animate the transition of the modal and numbers-on-top
+    numberTwo.style.transition = 'transform 0.5s ease';
+    numberTwo.style.transform = 'scale(1.00)';
+    numberTwo.style.background = 'rgba(2, 119, 189, 0.50)';
+
+    numberThree.style.transition = 'transform 0.5s ease';
+    numberThree.style.transform = 'scale(1.25)';
+    numberThree.style.background = '#0277BD';
+
+    // Display booking details in the modal
+    const bookingDetailsContainer = document.getElementById('doccare-success-modal-content-2');
+    if (booking_details && booking_details.last_name) {
+        bookingDetailsContainer.innerHTML = `<p>Last Name: ${booking_details.last_name}</p>
+                                            <p>Appointment Schedule: ${booking_details.time_appointment}</p>
+                                            <p>Booking Reference No.: ${booking_details.reference_number}</p>`;
+        console.log('Booking details fetch!');
+    } else {
+        bookingDetailsContainer.innerHTML = '<p class="text-muted">Booking details are being processed. Please wait...</p>';
+    }
+}
 
 // Add the function to handle the form submission
-function handleFormSubmission() {
+async function handleFormSubmission() {
     // Check individual field validity
     const isDateAppointmentValid = dateAppointmentInput.checkValidity();
     const isTimeAppointmentValid = timeAppointmentInput.checkValidity();
     const isEmailValid = emailInput.checkValidity();
+
+    // Define data variable to store the response data
+    let data;
 
     // Check if all individual fields are valid
     if (isDateAppointmentValid && isTimeAppointmentValid && isEmailValid) {
@@ -109,38 +143,63 @@ function handleFormSubmission() {
         formData.append('date_appointment', dateAppointmentInput.value);
         formData.append('time_appointment', timeAppointmentInput.value);
         formData.append('email', emailInput.value);
-        formData.append('csrf_token', formData.get('csrf_token'));  // Include CSRF token
+        formData.append('csrf_token', csrfTokenInput);  // Use the csrfTokenInput directly
 
-        // Perform AJAX request to submit form data
-        fetch('/receptionist/add-appointment/', {
-            method: 'POST',
-            body: formData,  // Use FormData instead of JSON.stringify
-            headers: {
-                'X-CSRFToken': formData.get('csrf_token')  // Include CSRF token in headers
+        try {
+            // Perform AJAX request to submit form data
+            const response = await fetch('/receptionist/add-appointment/', {
+                method: 'POST',
+                body: formData,  // Use FormData instead of JSON.stringify
+                headers: {
+                    'X-CSRFToken': csrfTokenInput  // Include CSRF token in headers
+                }
+            });
+    
+            // Check if the response is successful
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Server response:', data);
-                // Successful submission, redirect to success modal or do something else
-                console.log('Form submitted successfully');
-                // Redirect to success modal or perform any other action
+    
+            // Check the content type of the response
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                // Parse the JSON response
+                data = await response.json();
+                // Handle the JSON data as needed
+                if (data.success) {
+                    // Successful submission
+                    console.log('Server response:', data);
+                    console.log('Form submitted successfully');
+                    // Redirect to success modal or perform any other action
+                } else {
+                    // Handle submission failure
+                    console.error('Form submission failed:', data.message);
+                    // Display an error message or handle the failure appropriately
+                }
             } else {
-                // Handle submission failure
-                console.error('Form submission failed:', data.message);
-                // Display an error message or handle the failure appropriately
+                // The response is not in JSON format
+                console.error('Unexpected response content type:', contentType);
+                // Handle the error appropriately, for example, show an error message
             }
-        })
-        .catch(error => {
+        } catch (error) {
+            // Handle other errors, such as network errors
             console.error('Error during form submission:', error);
-            // Handle the error appropriately
-        });
-    } else {
-        // If any field is invalid, prevent form submission and display validation styles
-        console.log('Some fields contain validation errors');
-        form.classList.add('was-validated');
+        }
+    
+        // Return the data variable
+        return data;
     }
 }
 // Add an event listener to the SUBMIT button
-submitButton.addEventListener('click', handleFormSubmission);
+submitButton.addEventListener('click', async function() {
+    // Handle form submission
+    const response = await handleFormSubmission();
+
+    // Call successModal with booking details from the response
+    successModal(response.booking_details);
+});
+
+doneButton.addEventListener('click', function() {
+    // Redirect to the /appointment/ route
+    window.location.href = '/receptionist/appointment/';
+});
