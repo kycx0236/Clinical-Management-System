@@ -51,7 +51,7 @@
                             Patient details are required for the medical record. Please fill in all the details below
                         </p>
                     </section>
-                    <form class="row g-3 needs-validation" method="POST" action="/receptionist/add-appointment/" novalidate>
+                    <form class="row g-3 needs-validation" id="appointment-form" method="POST" action="/receptionist/add-appointment/" novalidate>
                         {{ form.csrf_token }}
                         <div class="appointment-first-forms" id="appointment-first-forms">
                             <!-- FIRST NAME -->
@@ -200,7 +200,7 @@
                         
                             <div class="doccare-final-buttons">
                                 <button class="btn btn-primary doccare-appointment-back-button" type="button" id="add-appoinment-back-button">BACK</button>
-                                <button class="btn btn-primary doccare-appointment-submit-button" type="submit" id="add-appoinment-submit-button">SUBMIT</button>
+                                <button class="btn btn-primary doccare-appointment-submit-button" type="button" id="add-appoinment-submit-button">SUBMIT</button>
                             </div>
                         </div>  
                     </form>
@@ -214,14 +214,23 @@
             </div>
 
             <!-- Modal for Success Confirmation -->
-            <div id="successModal" class="doccare-success-modal">
+            <div id="doccare-success-modal" class="doccare-success-modal">
                 <div class="doccare-success-modal-content">
+                    <section class="numbers-on-top-v2">
+                        <label class="number-one-v2" id="number-one-v2">1</label>
+                        <label class="number-two-v2" id="number-two-v2">2</label>
+                        <label class="number-three-v2" id="number-three-v2">3</label>
+                    </section>
                     <h1>Well Done!</h1>
                     <p>The appointment is confirmed! Below are the appointment details.</p>
-                    <div class="doccare-success-modal-content-2">
-                        <p>Last Name</p>
-                        <p>Appointment Schedule</p>
-                        <p>Booking Reference No.</p>
+                    <div class="doccare-success-modal-content-2" id="doccare-success-modal-content-2">
+                        {% if booking_details %}
+                            <p>Last Name: {{ booking_details.last_name }}</p>
+                            <p>Appointment Schedule: {{ booking_details.time_appointment }} {{ booking_details.time_appointment }}</p>
+                            <p>Booking Reference No.: {{ booking_details.reference_number }}</p>
+                        {% else %}
+                            <p class="text-muted">Booking details are being processed. Please wait...</p>
+                        {% endif %}
                     </div>
                     <div class="doccare-success-modal-buttons">
                         <button class="doccare-done-modal-button">DONE</button>
