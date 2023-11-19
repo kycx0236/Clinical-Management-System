@@ -1,7 +1,7 @@
 from app import mysql
 
 class doctor():
-    
+# ADD PATIENT INFORMATION
     def add(self):
         cursor = mysql.connection.cursor()
 
@@ -18,7 +18,8 @@ class doctor():
         mysql.connection.commit()
 
         return True
-    
+
+# ADD PATIENT MEDICAL HISTORY
     @classmethod
     def add_medical_history(cls, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, heartCheckbox, birthCheckbox, boneCheckbox, alzheimerCheckbox, cancerCheckbox, thyroidCheckbox, tuberculosisCheckbox, eyeCheckbox, clotsCheckbox, mentalCheckbox, kidneyCheckbox, anemiaCheckbox, muscleCheckbox, highbloodCheckbox, epilepsyCheckbox, skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, numSexPartner, contraception, useDrugs, specifyDrugs, frequencyDrugs, surgeryDate1, surgeryProcedure1, hospital1, surgeryDate2, surgeryProcedure2, hospital2, surgeryDate3, surgeryProcedure3, hospital3, medications, allergies):
         cursor = mysql.connection.cursor()
@@ -30,6 +31,7 @@ class doctor():
 
         return True
     
+# ADD PATIENT MEDICAL ASSESSMENT
     @classmethod
     def add_medical_assessment(cls, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis):
         cursor = mysql.connection.cursor()
@@ -40,7 +42,76 @@ class doctor():
         mysql.connection.commit()
 
         return True
+    
+# ADD PRESCRIPTION
+    @classmethod
+    def add_prescription(cls, assessment_id, medication_name, dosage, p_quantity, duration, instructions):
+        cursor = mysql.connection.cursor()
 
+        add_prescription = "INSERT INTO prescription (assessmentID) VALUES (%s)"
+        cursor.execute(add_prescription, (assessment_id,))
+        prescriptionID = cursor.lastrowid  
+
+        add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
+        mysql.connection.commit()
+
+        return True
+
+    @classmethod 
+    def add_laboratory_request(cls, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
+                               bloodtypingCheckbox, ESRCheckbox, plateCheckbox, hgbCheckbox, hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox, culsenCheckbox, cultureCheckbox, 
+                               gramCheckbox, KOHCheckbox, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, 
+                               ELISACheckbox, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, RFCheckbox, QuantiCheckbox, 
+                               QualiCheckbox, TyphidotCheckbox, TubexCheckbox, HAVIgMCheckbox, DengueCheckbox, AFPCheckbox, ferritinCheckbox, HBcIgMCheckbox, AntiHBECheckbox, CA125Checkbox, PROBNPCheckbox, 
+                               CA153Checkbox, CA199Checkbox, PSACheckbox, CEACheckbox, FreeT3Checkbox, ANA2Checkbox, FreeT4Checkbox, HBsAGCheckbox, TroponiniCheckbox, HbACheckbox, HBAeAgCheckbox, BetaCheckbox, 
+                               T3Checkbox, T4Checkbox, TSHCheckbox, ALPCheckbox, AmylaseCheckbox, BUACheckbox, BUNCheckbox, CreatinineCheckbox, SGPTCheckbox, SGOTCheckbox, FBSCheckbox, RBSCheckbox, HPPCheckbox, 
+                               OGCTCheckbox, HGTCheckbox, OGTTCheckbox, NaCheckbox, MgCheckbox, LipidCheckbox, TriglyCheckbox, CholCheckbox, ClCheckbox, TPAGCheckbox, TotalCheckbox, GlobCheckbox, AlbCheckbox, 
+                               CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox):
+        cursor = mysql.connection.cursor()
+
+        labrequest = "INSERT INTO labrequest (patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(labrequest, (patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest))
+
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        orderID = cursor.fetchone()[0]
+
+        hematology = "INSERT INTO hematology (orderID, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, bloodtypingCheckbox, ESRCheckbox, plateCheckbox, \
+                    hgbCheckbox, hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(hematology, (orderID, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, bloodtypingCheckbox, ESRCheckbox, plateCheckbox, hgbCheckbox, 
+                                    hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox))
+
+        bacteriology = "INSERT INTO bacteriology (orderID, culsenCheckbox, cultureCheckbox, gramCheckbox, KOHCheckbox) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(bacteriology, (orderID, culsenCheckbox, cultureCheckbox, gramCheckbox, KOHCheckbox))
+
+        histopathology = "INSERT INTO histopathology (orderID, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(histopathology, (orderID, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox))
+
+        microscopy = "INSERT INTO microscopy (orderID, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, ELISACheckbox) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(microscopy, (orderID, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, ELISACheckbox))
+
+        serology = "INSERT INTO serology (orderID, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, \
+                    RFCheckbox, QuantiCheckbox, QualiCheckbox, TyphidotCheckbox, TubexCheckbox, HAVIgMCheckbox, DengueCheckbox) \
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(serology, (orderID, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, RFCheckbox, 
+                                  QuantiCheckbox, QualiCheckbox, TyphidotCheckbox, TubexCheckbox, HAVIgMCheckbox, DengueCheckbox))
+
+        immunochem = "INSERT INTO immunochem (orderID, AFPCheckbox, ferritinCheckbox, HBcIgMCheckbox, AntiHBECheckbox, CA125Checkbox, PROBNPCheckbox, CA153Checkbox, CA199Checkbox, \
+                    PSACheckbox, CEACheckbox, FreeT3Checkbox, ANA2Checkbox, FreeT4Checkbox, HBsAGCheckbox, TroponiniCheckbox, HbACheckbox, HBAeAgCheckbox, BetaCheckbox, T3Checkbox, \
+                    T4Checkbox, TSHCheckbox) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(immunochem, (orderID, AFPCheckbox, ferritinCheckbox, HBcIgMCheckbox, AntiHBECheckbox, CA125Checkbox, PROBNPCheckbox, CA153Checkbox, CA199Checkbox, PSACheckbox, CEACheckbox, 
+                                    FreeT3Checkbox, ANA2Checkbox, FreeT4Checkbox, HBsAGCheckbox, TroponiniCheckbox, HbACheckbox, HBAeAgCheckbox, BetaCheckbox, T3Checkbox, T4Checkbox, TSHCheckbox))
+
+        clinicalchem = "INSERT INTO clinicalchem (orderID, ALPCheckbox, AmylaseCheckbox, BUACheckbox, BUNCheckbox, CreatinineCheckbox, SGPTCheckbox, SGOTCheckbox, FBSCheckbox, RBSCheckbox, \
+                    HPPCheckbox, OGCTCheckbox, HGTCheckbox, OGTTCheckbox, NaCheckbox, MgCheckbox, LipidCheckbox, TriglyCheckbox, CholCheckbox, ClCheckbox, TPAGCheckbox, TotalCheckbox, GlobCheckbox, \
+                    AlbCheckbox, CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(clinicalchem, (orderID, ALPCheckbox, AmylaseCheckbox, BUACheckbox, BUNCheckbox, CreatinineCheckbox, SGPTCheckbox, SGOTCheckbox, FBSCheckbox, RBSCheckbox, HPPCheckbox, OGCTCheckbox, 
+                                      HGTCheckbox, OGTTCheckbox, NaCheckbox, MgCheckbox, LipidCheckbox, TriglyCheckbox, CholCheckbox, ClCheckbox, TPAGCheckbox, TotalCheckbox, GlobCheckbox, AlbCheckbox, 
+                                      CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox))
+        mysql.connection.commit()
+        return True
+    
+# GET INFORMATION
     @staticmethod
     def get_patients():
         cursor = mysql.connection.cursor()
@@ -83,18 +154,104 @@ class doctor():
         return assessment_info 
     
     @staticmethod
-    def get_prescription_info(prescriptionID, assessmentID):
+    def get_prescription_info(assessmentID):
         cursor = mysql.connection.cursor()
-        query = """SELECT p.*, pi.firstName, pi.lastName, pi.p_contactNum, pi.p_address, pi.gender, pd.*
-                FROM prescription p
-                JOIN prescriptiondetails pd ON p.prescriptionID = pd.prescriptionID
-                JOIN assessment a ON a.assessmentID = p.assessmentID
-                JOIN patientinfo pi ON a.patientID = pi.patientID
-                WHERE p.prescriptionID = %s AND a.assessmentID = %s"""
-        cursor.execute(query, (prescriptionID, assessmentID))
-        prescription_info  = cursor.fetchone()
+        query = "SELECT prescriptiondetails.medication_name, prescriptiondetails.dosage, prescriptiondetails.p_quantity, prescriptiondetails.duration, prescriptiondetails.instructions \
+                FROM prescription JOIN prescriptiondetails ON prescription.prescriptionID = prescriptiondetails.prescriptionID WHERE prescription.assessmentID = %s"
+        cursor.execute(query, (assessmentID,))
+        prescription_info  = cursor.fetchall()
         return prescription_info 
 
+    @staticmethod
+    def get_labrequest_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM labrequest WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        labreqdata = cursor.fetchone()
+        return labreqdata
+    
+    @staticmethod
+    def get_hematology_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM hematology WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        hematology_data = cursor.fetchone()
+        cursor.close()
+        return hematology_data
+
+    @staticmethod
+    def get_bacteriology_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM bacteriology WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        bacteriology_data = cursor.fetchone()
+        cursor.close()
+        return bacteriology_data
+    
+    @staticmethod
+    def get_histopathology_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM histopathology WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        histopathology_data = cursor.fetchone()
+        cursor.close()
+        return histopathology_data
+    
+    @staticmethod
+    def get_microscopy_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM microscopy WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        microscopy_data = cursor.fetchone()
+        cursor.close()
+        return microscopy_data
+    
+    @staticmethod
+    def get_serology_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM serology WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        serology_data = cursor.fetchone()
+        cursor.close()
+        return serology_data
+    
+    @staticmethod
+    def get_immunochem_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM immunochem WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        immunochem_data = cursor.fetchone()
+        cursor.close()
+        return immunochem_data
+    
+    @staticmethod
+    def get_clinicalchem_data(orderID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM clinicalchem WHERE orderID = %s"
+        cursor.execute(query, (orderID,))
+        clinicalchem_data = cursor.fetchone()
+        cursor.close()
+        return clinicalchem_data
+    
+    @staticmethod
+    def get_lab_report(reportID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM labtest WHERE reportID = %s"
+        cursor.execute(query, (reportID,))
+        labreport = cursor.fetchall()
+        return labreport
+    
+    @staticmethod
+    def get_lab_reports(patient_id):
+        cursor = mysql.connection.cursor()
+        query = "SELECT labrequest.labSubject, labreport.reportDate, labrequest.orderID, labrequest.patientID , labreport.reportID \
+                FROM labrequest JOIN labreport ON labrequest.orderID = labreport.orderID \
+                WHERE labrequest.patientID = %s"
+        cursor.execute(query, (patient_id,))
+        lab_reports = cursor.fetchall()
+        return lab_reports
+
+# UPDATE PATIENT INFORMATION
     @classmethod
     def update_patient_info(cls, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
         cursor = mysql.connection.cursor()
@@ -106,6 +263,7 @@ class doctor():
         
         return True
 
+# UPDATE PATIENT MEDICAL HISTORY
     @classmethod
     def update_medical_history(cls, historyID, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, heartCheckbox, birthCheckbox, boneCheckbox, alzheimerCheckbox, cancerCheckbox, thyroidCheckbox, tuberculosisCheckbox, eyeCheckbox, clotsCheckbox, mentalCheckbox, kidneyCheckbox, anemiaCheckbox, muscleCheckbox, highbloodCheckbox, epilepsyCheckbox, skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, numSexPartner, contraception, useDrugs, specifyDrugs, frequencyDrugs, surgeryDate1, surgeryProcedure1, hospital1, surgeryDate2, surgeryProcedure2, hospital2, surgeryDate3, surgeryProcedure3, hospital3, medications, allergies):
         cursor = mysql.connection.cursor()
@@ -125,6 +283,7 @@ class doctor():
 
         return True
     
+# UPDATE PATIENT MEDICAL ASSESSMENT
     @classmethod 
     def update_medical_assessment(cls, assessmentID, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis):
         cursor = mysql.connection.cursor()
@@ -135,4 +294,31 @@ class doctor():
         print('SQL Query:', assessmentID, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis)
 
         return True
+    
+# DELETE PATIENT RECORD
+    @classmethod 
+    def delete_patient_record(cls, patient_id):
+        cursor = mysql.connection.cursor()
+        try:
+            query = "DELETE FROM patientinfo WHERE patientID = %s"
+            cursor.execute(query, (patient_id,))
+            mysql.connection.commit()
+            return True
+        except:
+            return False
+
+# DELETE MEDICAL ASSESSMENT
+    @classmethod 
+    def delete_medical_assessment(cls, assessment_id, patient_id):
+        cursor = mysql.connection.cursor()
+        try:
+            query = "DELETE FROM assessment WHERE assessmentID = %s AND patientID = %s"
+            cursor.execute(query, (assessment_id, patient_id,))
+            mysql.connection.commit()
+            return True
+        except:
+            return False
+
+# DELETE LABORATORY RESULTS
+    
     

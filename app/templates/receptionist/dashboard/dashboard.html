@@ -33,19 +33,17 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Receptionist</p>
             </div>
         </div>
         <ul>
-            <a href="{{ url_for('receptionist.logout') }}">
-                <li class="logout">
-                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                    <p>Logout</p>
-                </li>
-            </a>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
         </ul>
     </div>
     <main>
@@ -68,6 +66,7 @@
     </main>
 
     <script>
+        // TO DISPLAY THE DATE
         function displayDateAndTime() {
         const demoElement = document.getElementById('demo');
 
@@ -75,14 +74,12 @@
                 const currentDateAndTime = new Date();
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
-                const currentTime = currentDateAndTime.toLocaleTimeString();
 
-                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}<br>${currentTime}`;
+                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}`;
             }
             updateDateAndTime();
-            setInterval(updateDateAndTime, 1000);
+            setInterval(updateDateAndTime);
         }
-
         displayDateAndTime();   
     </script>
 {% endblock %}

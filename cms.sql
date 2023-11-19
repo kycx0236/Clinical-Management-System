@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS `appointment` (
     `last_name` VARCHAR(50) NOT NULL,
     `sex` VARCHAR(10) NOT NULL,
     `birth_date` DATE NOT NULL,
-    `contact_number` VARCHAR(50) NULL,
-    `email` VARCHAR(100) NULL,
-    `address` VARCHAR(255) NULL
+    `contact_number` VARCHAR(50) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `address` VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- PATIENT INFORMATION

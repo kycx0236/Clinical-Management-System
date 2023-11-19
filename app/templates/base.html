@@ -17,10 +17,61 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     {% block link %} {% endblock %}
+
 </head>
 <body>
 
     {% block content %} {% endblock %}
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Logout Confirmation</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmLogout" type="button" class="btn-done">LOGOUT</button>
+                    <button id="cancelLogout" type="button" class="btn-done cancel">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script> var logoutUrl = "{{ url_for('admin.logout') }}";</script>
+    <script src="{{ url_for('static', filename='logout.js') }}"></script>
+
+    <!-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var element = document.getElementById('logoutButton');
+            if (element) { 
+                element.addEventListener('click', function() {
+                    document.getElementById("logoutModal").style.display = "block";
+                });
+            } else {
+                console.error("Element with ID 'logoutButton' not found");
+            }
+
+            //document.getElementById("logoutButton").addEventListener("click", function() {
+               // document.getElementById("logoutModal").style.display = "block";
+           // });
+        
+            document.getElementById("cancelLogout").addEventListener("click", function() {
+                document.getElementById("logoutModal").style.display = "none";
+            });
+        
+            document.getElementById("confirmLogout").addEventListener("click", function() {
+                console.log("Performing logout action");
+        
+                document.getElementById("logoutModal").style.display = "none";
+        
+                window.location.href = "{{ url_for('admin.logout') }}";
+            });
+        });
+    </script> -->
 
 </body>
 </html>

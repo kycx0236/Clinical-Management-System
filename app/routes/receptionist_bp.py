@@ -6,6 +6,8 @@ from flask import Blueprint
 from datetime import datetime
 import secrets
 import string
+from flask_login import login_required, logout_user
+from app.routes.utils import role_required
 
 receptionist_bp = Blueprint('receptionist', __name__)
 
@@ -13,14 +15,20 @@ headings = ("Reference Number", "Date", "Time", "Status", "Actions")
 
 # Main routes
 @receptionist_bp.route('/')
+@login_required
+@role_required('receptionist')
 def dashboard():
     return render_template("receptionist/dashboard/dashboard.html")
 
 @receptionist_bp.route('/calendar/')
+@login_required
+@role_required('receptionist')
 def calendar():
     return render_template("receptionist/calendar/calendar.html")
 
 @receptionist_bp.route('/appointment/')
+@login_required
+@role_required('receptionist')
 def appointment():
     # Get the page number from the query string, default to 1 if not specified
     page = int(request.args.get('page', 1))
@@ -45,12 +53,17 @@ def appointment():
 
 
 @receptionist_bp.route('/profile/')
+@login_required
+@role_required('receptionist')
 def profile():
     return render_template("receptionist/profile/profile.html")
 
-@receptionist_bp.route('/login/')
+@receptionist_bp.route('/logout/')
+@login_required
 def logout():
-    return render_template("login.html")
+    print("Logout route accessed")  
+    logout_user()
+    return redirect(url_for('login'))
 
 # Function and function routes
 

@@ -2,29 +2,7 @@
 
 /* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    height: 65px; 
-    background-color: white;
-    border-radius: 350px; 
     margin-top: 138px;
-    margin-bottom: 25px;
-    overflow: hidden;
-    justify-content: left;
-}
-
-/* SIDEBAR */
-.sidenav-bg {
-    width: 80px;
-    height: 100%; /* Set the height to 100% to make it full height */
-    background-color: var(--blueC);
-    border-radius: 50px;
-    position: fixed;
-    top: 0; /* Stick it to the top of the viewport */
-    left: 0; /* Stick it to the left of the viewport */
-    padding: 8px;
-    z-index: 1;
 }
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */

@@ -42,35 +42,50 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Family Medicine</p>
             </div>
         </div>
         <ul>
-            <a href="{{ url_for('doctor.logout') }}">
-                <li class="logout">
-                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                    <p>Logout</p>
-                </li>
-            </a>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
         </ul>
     </div>
 
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">
+    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
 
     <ul class="nav nav-underline">
         <li class="nav-item">
-        <a class="nav-link active" aria-current="page">PRESCRIPTION</a>
+            <a class="nav-link active" aria-current="page">PRESCRIPTION</a>
         </li>
     </ul>
 
-    <form action="{{ url_for('doctor.prescription') }}" method="POST">
-        {{ PatientForm.csrf_token }}
+    <form id="prescriptionForm" action="{{ url_for('doctor.prescription') }}">
+
+        <!-- PRESCRIPTION ID -->
+        <!-- <div class="inputBox code" style="display: none;">
+            <input disabled name="prescription_id" value="{{ consultation[0] }}">
+            <input hidden name="prescription_id" value="{{ consultation[0] }}" >
+        </div> -->
+
+        <!-- ASSESSMENT ID -->
+        <div class="inputBox code" style="display: none;">
+            <input disabled name="assessment_id" value="{{ consultation[0] }}">
+            <input hidden name="assessment_id" value="{{ consultation[0] }}" >
+        </div>
+
+        <!-- PATIENT ID -->
+        <div class="inputBox code" style="display: none;">
+            <input disabled name="patient_id" value="{{ consultation[1] }}">
+            <input hidden name="patient_id" value="{{ consultation[1] }}" >
+        </div>
 
         <!-- PRESCRIPTION -->
         <div class="patient-bg prescription">
@@ -83,79 +98,114 @@
                 <img src="{{ url_for('static', filename='/images/Rx.png') }}">
             </div>
 
-            <h4 class="doctor">PHYSICIAN: DR.</h4>
-            <h4 class="doctor name">EDA GRACE J. PARAGOSO</h4>
-            <h4 class="doctor">PHYSICIAN: DR.</h4>
-            <h4 class="p_date">DATE:</h4>
-            <p class="p_date current">{{ patient[2] }}</p>
-
             <div class="line-border"></div>
 
             <h4 class="columnA">NAME:</h4>
-            <p class="columnB">ELIZABETH CARMEL A. WILLIAMS</p>
+            <p class="columnB">{{ patient[1] }} {{ patient[3] }}</p>
 
-            <h4 class="columnC">CONTACT NUMBER:</h4>
-            <p class="columnD">09351454490</p>
+            <h4 class="columnC">DATE:</h4>
+            <p class="columnD" id="prescriptionDate"></p>
 
             <h4 class="columnA address">ADDRESS:</h4>
-            <p class="columnB p_adress">PUROK 4 TAMBO, HINAPLANON, ILIGAN CITY</p>
+            <p class="columnB p_adress">{{ patient[10] }}</p>
 
             <h4 class="columnC gender">GENDER:</h4>
-            <p class="columnD p_gender">FEMALE</p>
+            <p class="columnD p_gender">{{ patient[6] }}</p>
 
+            <div class="med-header prescription" id="p_header"  style="display: none;">PRESCRIPTION</div>
+            
             <!-- PRESCRIPTION -->
-            <div class="med-header prescription">PRESCRIPTION</div>
+            <div class="prescription-container" id="prescriptionContainer" style="display: none;">
+                
+            </div>
 
-            <div class="p_row row3">
-                <div class="inputBox prescription">
-                    <input type="text" name="specifications" disabled>
-                    <span>MEDIFICATION NAME</span>
-                </div>
-            </div>
-            <div class="p_row row4">
-                <div class="inputBox dosage">
-                    <input type="text" name="first_name" disabled>
-                    <span>DOSAGE</span>
-                </div>
-                <div class="inputBox route">
-                    <input type="text" name="middle_name" disabled>
-                    <span>ROUTE</span>
-                </div>
-            </div>
-            <div class="p_row row5">
-                <div class="inputBox prescription">
-                    <input type="text" name="specifications" disabled>
-                    <span>DURATION</span>
-                </div>
-            </div>
-            <div class="p_row row">
-                <div class="inputBox prescription">
-                    <input type="text" name="specifications" disabled>
-                    <span>INSTRUCTIONS</span>
-                </div>
-            </div>
-            <div class="prescription-container">
-                <!-- Newly created prescriptions will be appended here -->
+            <table class="prescription-table" id="prescriptionTable">
+                <tbody>
+                    {% for prescription in prescriptions %}
+                        <tr>
+                            <td colspan="5" style="text-align: left;">{{ prescription[0] }} {{ prescription[1] }}<br>
+                                {{ prescription[2] }}<br>
+                                {{ prescription[3] }}<br>
+                                {{ prescription[4] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="page-break"></div>
+            <h4 class="doctor">EDA GRACE J. PARAGOSO, MD, FPPS</h4>
+            <h4 class="license">License No. <p style="text-decoration:underline;"> 84303</p> </h4>
+        
+            <div class="btn-container">
+                <button type="button" class="btn-prescription" id="addButton" style="display: none;">+ ADD PRESCRIPTION</button>
             </div>
 
             <div class="btn-container">
-                <button class="btn-prescription" id="addButton" style="display: none;">+ ADD PRESCRIPTION</button>
-            </div>
-
-            <div class="btn-container">
-                <button class="btn-submit" id="updateButton" type="submit" style="display: none;">DONE</button>
+                <button class="btn-submit" id="submitData" type="button" style="display: none;">SUBMIT</button>
             </div>
 
             <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
 
-            <button class="print-icon" onclick="window.print()">
+            <button class="print-icon" onclick="window.print()" id="printButton">
                 <img id="editIcon" src="{{ url_for('static', filename='images/Print.png') }}">
             </button>
         </div>
-
     </form>
 
+    <div id="successModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Success</h1>
+                </div>
+                <div class="modal-body">
+                    Prescription added successfully!
+                </div>
+                <a href="{{ url_for('doctor.prescription', assessment_id=consultation[0], patient_id=patient[0]) }}"> 
+                    <div class="modal-footer">
+                        <button type="button" class="btn-done">DONE</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Error</h1>
+                </div>
+                <div class="modal-body">
+                    Error in adding prescription.
+                </div>
+                <a href="{{ url_for('doctor.prescription', assessment_id=consultation[0], patient_id=patient[0]) }}">
+                    <div class="modal-footer">
+                        <button type="button" class="btn-done">OKAY</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // CURRENT DATE
+        function displayDate() {
+            const dateElement = document.getElementById('prescriptionDate');
+        
+            function updateDate() {
+                const currentDate = new Date();
+                const year = currentDate.getFullYear();
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+        
+                dateElement.textContent = `${formattedDate}`;
+            }
+            updateDate();
+        }
+        displayDate();
+
         // EDIT BUTTON
         function enableEdit() {
             const inputFields = document.querySelectorAll('.prescription input');
@@ -164,11 +214,23 @@
                 input.disabled = false;
             });
 
-            const submitButton = document.querySelector('#updateButton');
-            submitButton.style.display = 'block';
+            const header = document.querySelector('#p_header');
+            header.style.display = 'flex';
 
             const addPrescription = document.querySelector('#addButton');
             addPrescription.style.display = 'block';
+
+            const submitButton = document.querySelector('#submitData');
+            submitButton.style.display = 'block';
+
+            const printButton = document.querySelector('#printButton');
+            printButton.style.display = 'none';
+
+            const prescriptionTable = document.querySelector('#prescriptionTable');
+            prescriptionTable.style.display = 'none';
+
+            const prescriptions = document.querySelector('#prescriptionContainer');
+            prescriptions.style.display = 'block';
 
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
@@ -182,11 +244,23 @@
                 input.disabled = true;
             });
 
-            const submitButton = document.querySelector('#updateButton');
-            submitButton.style.display = 'none';
+            const header = document.querySelector('#p_header');
+            header.style.display = 'none';
 
             const addPrescription = document.querySelector('#addButton');
             addPrescription.style.display = 'none';
+
+            const submitButton = document.querySelector('#submitData');
+            submitButton.style.display = 'none';
+
+            const printButton = document.querySelector('#printButton');
+            printButton.style.display = 'block';
+
+            const prescriptionTable = document.querySelector('#prescriptionTable');
+            prescriptionTable.style.display = 'block';
+
+            const prescriptions = document.querySelector('#prescriptionContainer');
+            prescriptions.style.display = 'none';
 
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
@@ -194,50 +268,126 @@
         }
 
         // ADD PRESCRIPTION
-        // Get the button and the container where new prescriptions will be added
         const addPrescriptionBtn = document.querySelector('.btn-prescription');
         const prescriptionContainer = document.querySelector('.prescription-container');
+        let prescriptionCount = 0;
 
-        // Function to create a new prescription section
         function createPrescription() {
-            const newPrescription = document.createElement('div');
-            newPrescription.classList.add('prescription-section');
-            newPrescription.innerHTML = `
-                <div class="p_row row6">
-                    <div class="inputBox prescription">
-                        <input type="text" name="specifications" disabled>
-                        <span>MEDIFICATION NAME</span>
+            if (prescriptionCount < 3) { 
+                const newPrescription = document.createElement('div');
+                newPrescription.classList.add('prescription-section');
+                newPrescription.innerHTML = `
+                    <div class="p_row row1">
+                        <div class="inputBox prescription">
+                            <input type="text" name="medication_name" required>
+                            <span>MEDICINE</span>
+                        </div>
+                        <div class="inputBox dosage">
+                            <input type="text" name="dosage" required>
+                            <span>DOSAGE</span>
+                        </div>
                     </div>
-                </div>
-                <div class="p_row row4">
-                    <div class="inputBox dosage">
-                        <input type="text" name="first_name" disabled>
-                        <span>DOSAGE</span>
+                    <div class="p_row row2">
+                        <div class="inputBox quantity">
+                            <input type="text" name="quantity" required>
+                            <span>QUANTITY</span>
+                        </div>
+                        <div class="inputBox prescription">
+                            <input type="text" name="duration" required>
+                            <span>DURATION</span>
+                        </div>
                     </div>
-                    <div class="inputBox route">
-                        <input type="text" name="middle_name" disabled>
-                        <span>ROUTE</span>
+                    <div class="p_row row3">
+                        <div class="inputBox p_instructions">
+                            <input type="text" name="instructions" required>
+                            <span>INSTRUCTIONS</span>
+                        </div>
+                        <button class="btn-submit remove" type="button">REMOVE</button>
                     </div>
-                </div>
-                <div class="p_row row5">
-                    <div class="inputBox prescription">
-                        <input type="text" name="specifications" disabled>
-                        <span>DURATION</span>
-                    </div>
-                </div>
-                <div class="p_row row">
-                    <div class="inputBox prescription">
-                        <input type="text" name="specifications" disabled>
-                        <span>INSTRUCTIONS</span>
-                    </div>
-                </div>
-            `;
-            prescriptionContainer.appendChild(newPrescription);
+                `;
+                prescriptionContainer.appendChild(newPrescription);
+
+                const removeButton = newPrescription.querySelector('.remove');
+                removeButton.addEventListener('click', function () {
+                    newPrescription.remove(); 
+                });
+                prescriptionCount++;
+            } else {
+                console.log('Maximum limit of prescriptions reached (3 allowed).');
+                alert('Maximum limit of prescriptions reached (3 allowed). Please add any additional prescriptions later after submission.');
+            }
         }
 
-        // Event listener for the "Add Prescription" button
         addPrescriptionBtn.addEventListener('click', createPrescription);
-    </script>
+        
+       // GET THE PRESCRIPTION INPUTS
+       function getPrescriptionInputs() {
+            const prescriptionSections = document.querySelectorAll('.prescription-section');
+        
+            const prescriptions = [];
+        
+            prescriptionSections.forEach(section => {
+                const medicationName = section.querySelector('input[name="medication_name"]').value;
+                const dosage = section.querySelector('input[name="dosage"]').value;
+                const quantity = section.querySelector('input[name="quantity"]').value;
+                const duration = section.querySelector('input[name="duration"]').value;
+                const instructions = section.querySelector('input[name="instructions"]').value;
+        
+                const prescription = {
+                    medicationName,
+                    dosage,
+                    quantity,
+                    duration,
+                    instructions
+                };
+                prescriptions.push(prescription);
+            });
+        
+            return prescriptions;
+        }
+    
+        function sendPrescriptionData() {
+            const prescriptions = getPrescriptionInputs(); 
+            var assessmentId = document.querySelector('input[name="assessment_id"][hidden]').value;
+            var patientId = document.querySelector('input[name="patient_id"][hidden]').value;
+            console.log('assessment ID:', assessmentId);
+            console.log('patient ID:', patientId);
+            
+            var dataToFetch = {
+                assessment_id: assessmentId,
+                patient_id: patientId,
+                prescriptions: prescriptions,
+            };
 
+            fetch('/doctor/prescription/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToFetch)
+            })
+            .then(response => { 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('successModal').style.display = 'block';
+                } else {
+                    document.getElementById('errorModal').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        const submitButton = document.getElementById('submitData');
+        submitButton.addEventListener('click', function() {
+            sendPrescriptionData();
+        });
+    </script>
     
 {% endblock %}

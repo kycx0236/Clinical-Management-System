@@ -1,0 +1,138 @@
+@import "base_style.css";
+
+/* -------------------------------------------- LOGIN -------------------------------------------- */
+body {  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #DFF1FF ;
+    font-family: 'Inter', sans-serif;
+
+}
+
+.login-form {  
+    width: 450px;
+    height: 400px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    text-align: center;
+    background: #ffffff;
+    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.60);
+    margin: 5% 25% 5% 25%;
+    
+}
+
+.login-button {
+    width: 100px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    text-align: center;
+    background: var(--blueA);
+    border: none; 
+    color: #fff; 
+    font-size: 16px; 
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-button:hover {
+    background: #01579B; 
+}
+
+.container {
+    text-align: center;
+    justify-content: center;
+}
+
+.container-2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.margin-tb {
+    display: inline-block;
+    margin-top: 40px ;
+    margin-bottom: 40px;
+}
+
+.margin-t {
+    display: inline-block;
+    margin-top: 10px ;
+}
+.doc {
+    color: #000;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.care {
+    color: var(--blueA);
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.title {
+    color: var(--darkBlue);
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    display: block;
+    margin-bottom: 8px;
+    text-align: left;
+    margin-left: 55px;
+}
+
+.form-input {
+    width: 338px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background-color: white;
+    /* border-bottom: 2px solid var(--blueA) !important;
+    border: var(--blueC); */
+    border: 2px solid var(--blueB);
+    background: #FFF;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.form-input:active,
+.form-input:focus {
+    outline: none; 
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
+    /* border-bottom: 2px solid var(--blueA);  */
+    /* box-shadow: 0 4px 6px -1px rgba(163, 213, 255, 1); */
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: block;
+}
+
+.app-info {
+    display: block;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color:#000;
+}
+
+.flash-messages {
+    text-align: center;
+    margin-bottom: 10px;
+    color: red;  
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal; 
+    line-height: normal;
+}

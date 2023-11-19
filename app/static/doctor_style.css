@@ -2,68 +2,48 @@
 
 /* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    height: 65px; 
-    background-color: white;
-    border-radius: 350px; 
     margin-top: 70px;
-    margin-bottom: 25px;
-    overflow: hidden;
 }
 
 /* -------------------------------------------- ADD/UPDATE PATIENT, ADD ASSESSMENT, REQUEST LAB TEST ICON -------------------------------------------- */
 .add-icon img {
     width: 60px;
-    top: 625px;
+    top: 610px;
     left: 1445px;
     border-radius: 100%;
     z-index: 99;
     position: fixed;
-}
-
-.add-icon img:hover {
-    transform: scale(105%);
-    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
 }
 
 .add-icon img:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
 }
 
 .update-icon {
-    top: 100px;
-    width: 60px;
-    left: 1445px;
-    border-radius: 100%;
-    z-index: 99;
+    top: 43px;
+    width: 45px;
+    left: 1453px;
+    z-index: 1;
     position: fixed;
-}
-
-.update-icon:hover {
-    transform: scale(105%);
     cursor: pointer;
 }
 
 .update-icon:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
 }
 
 /* -------------------------------------------- BACK ICON -------------------------------------------- */
 .back-icon img {
     position: absolute;
-    width: 25px;
+    width: 20px;
     z-index: 1;
-    top: 55px;
+    top: 60px;
     left: 145px;
 }
 
 .back-icon img:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-    transform: translateY(2px);
+    transform: translateX(2px);
 }
 
 /* -------------------------------------------- PATIENT DETAILS NAVBAR -------------------------------------------- */
@@ -73,13 +53,6 @@
     top: 50px;
     left: 200px;
     position: absolute;
-}
-
-.nav-item:hover {
-    color: var(--grayA); 
-    text-decoration: none;
-    background-color: var(--grayB); 
-    transition: 0.2s;
 }
 
 .nav-item:active {
@@ -99,20 +72,11 @@
     color: var(--blueD); 
 }
 
-/* -------------------------------------------- PATIENT TABLE -------------------------------------------- */
-.patient-header p {
-    position: absolute;
-    top: 40px;
-    left: 150px;
-    font-weight: 900;
-    font-size: 22px;
-}
-
 /* -------------------------------------------- PATIENT INFORMATION -------------------------------------------- */
 .patient-bg {
     position: absolute;
     width: 1230px;  
-    height: 100%; 
+    height: 610px; 
     background-color: white;
     box-shadow: 10px 10px 20px 10px var(--blueC);
     top: 85px;
@@ -120,39 +84,6 @@
 }
 
 /* Input boxes */
-.inputBox {
-    position: relative;
-}
-
-.inputBox input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid var(--blueB);
-    border-radius: 5px;
-    outline-color: var(--blueB);
-    color: black;
-    font-size: 1em;
-}
-
-.inputBox span {
-    position: absolute;
-    top: -8px;
-    left: 15px;
-    padding: 0 10px;
-    background: white; 
-    font-size: 0.75em;
-    color: var(--blueA);
-    font-weight: 900;
-    font-size: 14px;
-}
-
-.inputBox input:focus {
-    color: black; 
-    background-color: white; 
-    outline: 0;
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
-} 
-
 .inputBox.fName, .inputBox.mName, .inputBox.lName, .inputBox.job, .inputBox.c_number, .inputBox.email, .relationship, .inputBox.dob, .nationality {
     width: 300px;
 }
@@ -177,21 +108,14 @@
     width: 100px;
 }
 
-/* Dropdown styles */
+/* dropdown styles */
 input, select {
     padding: 10px;
     border: 2px solid var(--blueB);
     border-radius: 5px;
     outline-color: var(--blueB);
-    color: black;
+    color: var(--darkBlue);
     font-size: 1em;
-}
-
-/* Align each row */
-.p_row {
-    position: relative;
-    justify-content: center;
-    display: flex;
 }
 
 .group-info div {
@@ -225,105 +149,28 @@ input, select {
     gap: 55px;
 }
 
-/* Modal for success and error messages */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-  
-.modal-dialog {
-    position: relative;
-    width: auto;
-    margin: 10% auto;
-}
-  
-.modal-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    background-color: #fff;
-    border-radius: 5px;
-    margin: 0 auto;
-    padding: 10px;
-}
-  
-.modal-header {
-    padding: 10px;
-    border-bottom: 1px solid var(--blueA);
-    color: var(--blueA);
-}
-  
-.modal-body {
-    padding: 20px;
-    font-size: 16px;
-}
-  
-.modal-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-  
-.modal-title {
-    margin: 0;
-}
-  
-/* modal confirmation button */
-.btn-done {
-    color: white;
-    background-color: var(--blueA);
-    border: none;
-    border-radius: 5px;
-    width: 100px;
-    height: 35px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION BACKGROUNDS -------------------------------------------- */
+/* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.history {
-    width: 1230px;  
     height: 2650px; 
 }
 
 .patient-bg.assessment {
-    width: 1230px;  
-    height: 3300px; 
-}
-
-.patient-bg.request {
-    width: 1230px;  
-    height: 2000px; 
-}
-
-.patient-bg.prescription {
-    width: 1230px;  
     height: 3000px; 
 }
 
-/* -------------------------------------------- HEADER FOR EACH FORMS -------------------------------------------- */
-.med-header {
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    width: 1100px;  
-    height: 50px; 
-    background-color: var(--blueC);
-    color: var(--blueA);
-    font-weight: 900;
-    left: 65px;
+.patient-bg.request {
+    height: 1650px; 
 }
 
+.patient-bg.prescription {
+    height: 1570px; 
+}
+
+.patient-bg.report {
+    height: 2000px; 
+}
+
+/* -------------------------------------------- FORM HEADER -------------------------------------------- */
 .med-header.A {
     top: 50px;
 }
@@ -389,10 +236,10 @@ input, select {
 }
 
 .med-header.prescription {
-    top: 390px;
+    top: 330px;
 }
 
-/* Sub messages */
+/* subheading */
 .subtext {
     position: relative;
     top: 95px;
@@ -400,7 +247,7 @@ input, select {
     font-size: 14px;
 }
 
-/* Checkboxes */
+/* checkboxes */
 .checkbox {
     display: flex;
     gap: 5px;
@@ -408,7 +255,7 @@ input, select {
     font-size: 17px;
 }
 
-/* More row arrangements */
+/* more row arrangements */
 .p_row.immunize {
     gap: 20px;
     margin-top: 165px;
@@ -465,17 +312,17 @@ input, select {
     margin-top: 160px;
 }
 
-/* Input box for past history */
+/* input box for past history */
 .inputBox.p_history {
     width: 270px;
 }
 
-/* Input box for the date, the condition started */
+/* input box for the date, the condition started */
 .inputBox.h_date {
     width: 165px;
 }
 
-/* Dropdown for social history */
+/* dropdown for social history */
 .historyA {
     width: 120px;
 }
@@ -535,12 +382,12 @@ input, select {
     top: 50px; 
     left: 65px;
     line-height: 1.5;
-    color: black;
+    color: var(--darkBlue);
     background-color: white;
     font-size: 16px;
 }
 
-/* Text area */
+/* text area */
 .complaints textarea {
     width: 1000px;
     height: 200px;
@@ -556,8 +403,7 @@ input, select {
     outline: none;
 }
 
-
-/* Assessment rows */
+/* assessment rows */
 .p_row.vitalRowA {
     gap: 19px;
     margin-top: 160px;
@@ -634,7 +480,7 @@ input, select {
     width: 553px;
 }
 
-/* Assessment header */
+/* assessment header */
 .med-header.Q {
     top: 520px;
 }
@@ -663,44 +509,6 @@ input, select {
     top: 2690px;
 }
 
-/* -------------------------------------------- LABORATORY RESULTS -------------------------------------------- */
-/* Lab results rows */
-.p_row.rowOne {
-    gap: 70px;
-    margin-top: 160px;
-}
-
-.p_row.rowTwo {
-    gap: 55px;
-    margin-top: 40px;
-}
-
-.p_row.rowThree {
-    gap: 32px;
-    margin-top: 150px;
-}
-
-.p_row.rowFour {
-    gap: 40px;
-    margin-top: 40px;
-}
-
-/* Lab results text area */
-.labTest textarea {
-    width: 1000px;
-    height: 250px;
-    border: 1px solid var(--blueB);
-    border-radius: 10px;
-    resize: none;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.labTest textarea:focus {
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
-    outline: none;
-}
-
 /* -------------------------------------------- PRESCRIPTION -------------------------------------------- */
 .cms-logo.prescription {
     margin-top: 70px;
@@ -711,90 +519,95 @@ input, select {
 .rx img {
     width: 100px;
     position: relative;
+    margin-top: 25px;
     margin-left: 100px;
 }
 
 .doctor {
     position: absolute;
-    top: 190px;
-    left: 230px;
+    top: 1430px;
+    left: 830px;
+    text-decoration: underline;
 }
 
-.doctor.name {
-    left: 360px;
-}
-
-.p_date {
+.license {
     position: absolute;
-    top: 190px;
+    display: flex;
+    gap: 10px;
+    top: 1460px;
     left: 830px;
 }
 
-.p_date.current {
-    left: 890px;
-}
-
 .line-border {
-    border: 1px solid black;
+    border: 1px solid var(--darkBlue);
     width: 895px;
     left: 230px;
     top: -25px;
     position: relative;
 }
 
-/* Prescription rows */
+/* prescription rows */
 .columnA {
     position: absolute;
-    top: 300px;
-    left: 115px;
+    top: 190px;
+    left: 230px;
 }
 
 .columnB {
     position: absolute;
-    top: 300px;
-    left: 215px;
+    top: 190px;
+    left: 330px;
 }
 
 .columnC {
     position: absolute;
-    top: 300px;
-    left: 830px;
+    top: 190px;
+    left: 940px;
 }
 
 .columnD {
     position: absolute;
-    top: 300px;
-    left: 1010px;
+    top: 190px;
+    left: 1035px;
 }
 
 .columnA.address, .columnB.p_adress, .columnC.gender, .columnD.p_gender  {
-    top: 340px;
+    top: 220px;
+}
+
+.p_row.row1 {
+    gap: 20px;
+}
+
+.p_row.row2 {
+    margin-top: 20px;
+    gap: 20px;
 }
 
 .p_row.row3 {
-    margin-top: 210px;
-}
-
-.p_row.row4 {
+    margin-top: 20px;
     gap: 20px;
-    margin-top: 30px;
-}
-
-.p_row.row5 {
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-.p_row.row6 {
-    margin-top: 80px;
+    margin-bottom: 50px;
 }
 
 .inputBox.prescription {
+    width: 600px;
+}
+
+.inputBox.p_instruction {
     width: 1040px;
 }
 
-.inputBox.dosage, .inputBox.route {
-    width: 510px;
+.inputBox.p_instructions {
+    width: 900px;
+}
+
+.inputBox.dosage, .inputBox.quantity {
+    width: 420px;
+}
+
+.prescription-container {
+    margin-top: 160px;
 }
 
 .btn-prescription {
@@ -806,7 +619,7 @@ input, select {
     width: 200px;
     height: 35px;
     font-size: 16px;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 .btn-prescription:active {
@@ -817,6 +630,20 @@ input, select {
 .btn-prescription:hover {
     transform: scale(101%);
     cursor: pointer;
+}
+
+.medicine {
+    position: absolute;
+    top: 450px;
+    left: 115px;
+}
+
+.page-break {
+    position: absolute; 
+    top:1400px;
+    border: 1px solid var(--darkBlue);
+    width: 1000px;
+    left: 110px;
 }
 
 @media print {
@@ -846,24 +673,154 @@ input, select {
 }
 
 .print-icon img {
-    width: 60px;
+    width: 55px;
     top: 625px;
-    left: 1445px;
+    left: 1448px;
     border-radius: 100%;
     z-index: 99;
     position: fixed;
-}
-
-.print-icon img:hover {
-    transform: scale(105%);
     cursor: pointer;
 }
 
 .print-icon img:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
 }
 
+.prescription-table {
+    left:105px; 
+    position: absolute; 
+    top: 350px; 
+    width: 1020px; 
+    font-size: 20px;
+}
+
+.prescription-table td {
+    padding: 0.50rem;
+}
+
+/* -------------------------------------------- LABORATORY TEST REQUEST -------------------------------------------- */
+/* lab results rows */
+.p_row.rowOne {
+    gap: 30px;
+    margin-top: 160px;
+}
+
+.p_row.rowTwo {
+    gap: 55px;
+    margin-top: 40px;
+}
+
+.p_row.rowThree {
+    gap: 32px;
+    margin-top: 150px;
+}
+
+.p_row.rowFour {
+    gap: 40px;
+    margin-top: 40px;
+}
+
+/* lab results text area */
+.labTest textarea {
+    width: 1000px;
+    height: 250px;
+    border: 1px solid var(--blueB);
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.labTest textarea:focus {
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
+    outline: none;
+}
+
+.inputBox.fullName {
+    width: 615px;
+}
+
+.inputBox.labsubject {
+    width: 400px;
+}
+
+.inputBox.doctorName {
+    width: 450px;
+}
+
+.inputBox.dateofRequest {
+    width: 230px;
+}
+
+.inputBox.specifyTest {
+    width: 1020px;
+    left: 105px;
+}
+
+.med-header.jobOrder {
+    top: 320px
+}
+
+.p_row.rowTen {
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.p_row.rowEleven {
+    gap: 90px;
+    margin-top: 150px;
+    margin-bottom: 20px;
+}
+
+.p_row.rowTwelve {
+    gap: 42px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.p_row.rowThirteen {
+    gap: 72px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.p_row.rowFourteen {
+    gap: 87px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.testRow {
+    display: block;
+}
+
+.testRow.col2 {
+    display: flex;
+    gap: 20px;
+}
+
+.head {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--blueA);
+    font-weight: 900;
+}
+
+/* -------------------------------------------- LABORATORY REPORT -------------------------------------------- */
+.patient-bg.test {
+    width: 1230px;  
+    height: 2000px; 
+}
+
+.lab-result {
+    margin-top: 150px;
+    width: 1000px;
+    margin-right: 30px;
+}
+
+.med-header.labReport {
+    top: 1510px
+}
 
 /* APPOINTMENT */
 /* style here */
