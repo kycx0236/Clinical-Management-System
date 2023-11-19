@@ -9,6 +9,7 @@ flask-mysql-connector = "*"
 werkzeug = "*"
 flask-wtf = "*"
 python-dotenv = "*"
+flask-login = "*"
 
 [dev-packages]
 
