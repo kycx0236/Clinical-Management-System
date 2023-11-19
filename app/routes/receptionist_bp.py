@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash, jsonify
+from flask import render_template, redirect, request, url_for, flash, jsonify, session
 import math
 from app.forms.receptionist_f import AppointmentForm
 import app.models.receptionist_m as models_receptionist
@@ -69,49 +69,61 @@ def generate_bookdate():
 @receptionist_bp.route('/add-appointment/', methods=['GET', 'POST'])
 def add_appointment():
     form = AppointmentForm(request.form)
+    booking_details = None
 
     if request.method == 'POST':
-        check_reference = generate_reference_number()
-        form.reference_number.data = check_reference 
-        initial_status = generate_status()
-        form.status_.data = initial_status 
-        generated_bookdate = generate_bookdate().strftime("%Y-%m-%d %I:%M:%S %p")
-        form.book_date.data = generated_bookdate
+        try:
+            check_reference = generate_reference_number()
+            form.reference_number.data = check_reference 
+            initial_status = generate_status()
+            form.status_.data = initial_status 
+            generated_bookdate = generate_bookdate().strftime("%Y-%m-%d %I:%M:%S %p")
+            form.book_date.data = generated_bookdate
+            
+            input_time = request.form['time_appointment']
+            time_object = datetime.strptime(input_time, "%H:%M")
+            form.time_appointment.data = time_object.strftime("%I:%M %p")
         
-        input_time = request.form['time_appointment']
-        time_object = datetime.strptime(input_time, "%H:%M")
-        form.time_appointment.data = time_object.strftime("%I:%M %p")
+            print(request.form)  # Print the form data for debugging
+            if form.validate_on_submit():
+                reference_exists = models_receptionist.Appointment.unique_code(check_reference)
+                
+                if reference_exists:
+                    flash("Appointment already exists. Please enter a new appointment.")
+                else:
+                    new_appointment = models_receptionist.Appointment(
+                        reference_number=form.reference_number.data,
+                        date_appointment=form.date_appointment.data,
+                        time_appointment=form.time_appointment.data,
+                        status_=form.status_.data,
+                        book_date=form.book_date.data,
+                        first_name=form.first_name.data,
+                        middle_name=form.middle_name.data,
+                        last_name=form.last_name.data,
+                        sex=form.sex.data,
+                        birth_date=form.birth_date.data,
+                        contact_number=form.contact_number.data,
+                        email=form.email.data,
+                        address=form.address.data
+                    )
+                    new_appointment.add()
+                    flash('New appointment added!', 'success')
+                    
+                    # Fetch booking details after adding the appointment
+                    booking_details = models_receptionist.Appointment.get_booking_reference_details(form.reference_number.data)
+                    
+                    print(booking_details)
+                    
+                    return jsonify(success=True, message="Appointment added successfully", booking_details=booking_details)
+            else:
+                print(form.errors)  # Add this line to print form errors for debugging
+                flash('Failed to add appointment. Please check the form for errors.', 'danger')
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            flash('An error occurred while processing the appointment.', 'danger')
+            return jsonify(success=False, message="Internal Server Error"), 500
 
-    if form.validate_on_submit():
-        reference_exists = models_receptionist.Appointment.unique_code(check_reference)
-
-        if reference_exists:
-            flash("Appointment already exists. Please enter a new appointment.")
-        else:
-            new_appointment = models_receptionist.Appointment(
-                reference_number=form.reference_number.data,
-                date_appointment=form.date_appointment.data,
-                time_appointment=form.time_appointment.data,
-                status_=form.status_.data,
-                book_date=form.book_date.data,
-                first_name=form.first_name.data,
-                middle_name=form.middle_name.data,
-                last_name=form.last_name.data,
-                sex=form.sex.data,
-                birth_date=form.birth_date.data,
-                contact_number=form.contact_number.data,
-                email=form.email.data,
-                address=form.address.data
-            )
-            new_appointment.add()
-            flash('New appointment added!', 'success')
-            return redirect(url_for('receptionist.appointment'))
-    else:
-        print(form.errors)  # Add this line to print form errors for debugging
-        flash('Failed to add appointment. Please check the form for errors.', 'danger')
-
-    return render_template("receptionist/appointment/appointment_add.html", form=form)
-
+    return render_template("receptionist/appointment/appointment_add.html", form=form, booking_details=booking_details)
 
 @receptionist_bp.route('/delete-appointment/', methods=['POST'])
 def delete_appointment():
@@ -126,3 +138,20 @@ def delete_appointment():
         receptionist_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500
 
+
+@receptionist_bp.route('/view-appointment/')
+def view_appointment():
+    try:
+        pass
+    except:
+        pass    
+
+@receptionist_bp.route('/get-booking-details/<reference_number>', methods=['GET'])
+def get_booking_details(reference_number):
+    booking_details = models_receptionist.Appointment.get_booking_reference_details(reference_number)
+
+    if booking_details:
+        return jsonify(booking_details)
+    else:
+        return jsonify({'error': 'Booking details not available'}), 404
+    
