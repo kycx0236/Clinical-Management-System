@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Dashboard{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
+
 {% block content %}
+
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -33,7 +35,7 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Receptionist</p>
@@ -66,6 +68,7 @@
     </main>
 
     <script>
+        // TO DISPLAY THE DATE
         function displayDateAndTime() {
         const demoElement = document.getElementById('demo');
 
@@ -73,14 +76,13 @@
                 const currentDateAndTime = new Date();
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
-                const currentTime = currentDateAndTime.toLocaleTimeString();
 
-                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}<br>${currentTime}`;
+                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}`;
             }
             updateDateAndTime();
-            setInterval(updateDateAndTime, 1000);
+            setInterval(updateDateAndTime);
         }
-
         displayDateAndTime();   
     </script>
+    
 {% endblock %}

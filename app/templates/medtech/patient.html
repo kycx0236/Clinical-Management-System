@@ -25,7 +25,7 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Medtech</p>
@@ -38,4 +38,70 @@
             </li>
         </ul>
     </div>
+    
+    <!-- PATIENT RECORD -->
+    <div class="patient-header">
+        <p>LABORATORY REPORTS</p>
+    </div>
+
+    <div class="patient-table">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>SUBJECT</th>
+                    <th>PATIENT NAME</th>
+                    <th>GENDER</th>
+                    <th>PHYSICIAN</th>
+                    <th>DATE</th>
+                    <th>LAB REPORT</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for labrequest in labrequests %}
+                <tr>
+                    <td>{{ labrequest[2] }}</td>
+                    <td>{{ labrequest[3] }}</td>
+                    <td>{{ labrequest[4] }}</td>
+                    <td>{{ labrequest[5] }}</td>
+                    <td>{{ labrequest[7] }}</td>
+                    <td>
+                        <!-- VIEW RECORD -->
+                        <form method="GET" action="/medtech/laboratory_report/">
+                            <div class="delete-icon">
+                                <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
+                                <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
+                                <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
+                                <button type="submit" style="background: none; border: none;">
+                                    <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Lab Report">
+                                </button>
+                            </div>
+                        </form> 
+                    </td>
+                    <td>
+                        <!-- DELETE RECORD -->
+                        <form method="POST" action="/medtech/delete_report/">
+                            <div class="delete-icon">
+                                <input id="patient_id" name="patient_id" value="" type="hidden">
+                                <button type="submit" style="background: none; border: none;">
+                                    <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Report">
+                                </button>
+                            </div>
+                        </form> 
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
+
+
+
 {% endblock %}

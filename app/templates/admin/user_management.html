@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}DocCare | User Management{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}"> {% endblock %}
+
 {% block content %}
+
     <!-- SIDE NAV -->
     <div class="sidenav-bg">
         <div class="cms-logo">
@@ -26,7 +28,7 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Admin</p>
@@ -40,6 +42,5 @@
         </ul>
     </div>
 
-</body>
-</html>
+
 {% endblock %}  

@@ -18,23 +18,25 @@
     {% block content %} {% endblock %}
 
     <!-- Logout Modal -->
-    <div id="logoutModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Logout Confirmation</h2>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to logout?</p>
-            </div>
-            <div class="modal-footer">
-                <button id="confirmLogout" class="btn-done">Logout</button> 
-                <button id="cancelLogout" class="btn-done cancel">Cancel</button>
+    <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Logout Confirmation</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmLogout" type="button" class="btn-done">LOGOUT</button>
+                    <button id="cancelLogout" type="button" class="btn-done cancel">CANCEL</button>
+                </div>
             </div>
         </div>
     </div>
     
     <script> var logoutUrl = "{{ url_for('admin.logout') }}";</script>
-    <script src="{{ url_for('static', filename='/logout.js') }}"></script>
-    
+    <script src="{{ url_for('static', filename='logout.js') }}"></script>
+
 </body>
 </html>

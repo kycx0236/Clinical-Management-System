@@ -1,199 +1,871 @@
 @import "base_style.css";
 
-/* SIDEBAR USER */
+/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    height: 65px; 
-    background-color: white;
-    border-radius: 350px; 
     margin-top: 70px;
-    margin-bottom: 25px;
-    overflow: hidden;
 }
 
-/* DASHBOARD */
-.main-bg {
-    width: 1350px; 
-    height: 600px; 
+/* -------------------------------------------- ADD/UPDATE PATIENT, ADD ASSESSMENT, REQUEST LAB TEST ICON -------------------------------------------- */
+.add-icon img {
+    width: 60px;
+    right: 20px;
+    bottom: 20px;
+    justify-content: flex-end;
+    border-radius: 100%;
+    z-index: 99;
+    position: fixed;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+}
+
+.add-icon img:active {
+    transform: translateY(1px);
+}
+
+.update-icon {
+    top: 40px;
+    right: 105px;
+    width: 35px;
+    border-radius: 5px;
+    z-index: 1;
+    position: fixed;
+    cursor: pointer;
+}
+
+.update-icon.details {
+    right: 90px;
+}
+
+.update-icon:active {
+    transform: translateY(1px);
+}
+
+/* -------------------------------------------- BACK ICON -------------------------------------------- */
+.back-icon img {
+    position: absolute;
+    width: 20px;
+    z-index: 1;
+    top: 60px;
+    left: 145px;
+}
+
+.back-icon img:active {
+    transform: translateX(2px);
+}
+
+/* -------------------------------------------- PATIENT DETAILS NAVBAR -------------------------------------------- */
+.nav-underline {
+    display: flex;
+    margin-right: 150px;
+    top: 50px;
+    left: 200px;
+    position: absolute;
+}
+
+.nav-item:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
+}
+
+.nav-underline .nav-link {
+    border: none; 
+    text-decoration: none; 
+    padding: 0.5rem 1rem; 
+    color: var(--grayA); 
+}
+
+.nav-underline .nav-link.active {
+    border-bottom: 2px solid var(--blueD);
+    color: var(--blueD); 
+}
+
+/* -------------------------------------------- PATIENT INFORMATION -------------------------------------------- */
+.patient-bg {
+    position: absolute;
+    width: 1230px;  
+    height: 610px; 
     background-color: white;
     box-shadow: 10px 10px 20px 10px var(--blueC);
-    border-radius: 12px;
-    top: 50%; 
-    left: 53%; 
-    transform: translate(-50%, -50%);
-    position: absolute;
+    top: 85px;
+    left: 200px;
 }
 
-/* PATIENT */
-.patient-header p {
-    position: absolute;
-    top: 40px;
-    left: 150px;
-    font-weight: 900;
-    font-size: 22px;
+/* Input boxes */
+.inputBox.fName, .inputBox.mName, .inputBox.lName, .inputBox.job, .inputBox.c_number, .inputBox.email, .relationship, .inputBox.dob, .nationality {
+    width: 300px;
 }
 
-.patient-table {
+.inputBox.e_person {
+    width: 420px;
+}
+
+.inputBox.birth_place, .inputBox.p_address {
+    width: 665px;
+}
+
+.status, .gender, .bloodType, .inputBox.status {
+    width: 170px;
+}
+
+.religion, .inputBox.e_number {
+    width: 210px;
+}
+
+.inputBox.age {
+    width: 100px;
+}
+
+/* dropdown styles */
+input, select {
+    padding: 10px;
+    border: 2px solid var(--blueB);
+    border-radius: 5px;
+    outline-color: var(--blueB);
+    color: var(--darkBlue);
+    font-size: 1em;
+}
+
+.group-info div {
+    top: 5px;
+    margin-top: 17px;
+    justify-content: center;
+    align-items: center;
+}
+
+.p_row.firstRow {
+    gap: 70px;
+}
+
+.p_row.secondRow {
+    gap: 55px;
+}
+
+.p_row.thirdRow {
+    gap: 75px;
+}
+
+.p_row.fourthRow {
+    gap: 70px;
+}
+
+.p_row.fifthRow {
+    gap: 75px;
+}
+
+.p_row.sixthRow {
+    gap: 55px;
+}
+
+/* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
+.patient-bg.history {
+    height: 2750px; 
+}
+
+.patient-bg.assessment {
+    height: 3100px; 
+}
+
+.patient-bg.request {
+    height: 1650px; 
+}
+
+.patient-bg.prescription {
+    height: 1570px; 
+}
+
+.patient-bg.report {
+    height: 2000px; 
+}
+
+/* -------------------------------------------- FORM HEADER -------------------------------------------- */
+.med-header.A {
+    top: 50px;
+}
+
+.med-header.B {
+    top: 255px;   
+}
+
+.med-header.C {
+    top: 750px;
+}
+
+.med-header.D {
+    top: 1105px;   
+}
+
+.med-header.E {
+    top: 1650px;
+}
+
+.med-header.F {
+    top: 1990px;
+}
+
+.med-header.G {
+    top: 2300px;
+}
+
+.med-header.H {
+    top: 480px;
+}
+
+.med-header.I {
+    top: 835px;
+}
+
+.med-header.J {
+    top: 1200px;
+}
+
+.med-header.K {
+    top: 2630px;
+}
+
+.med-header.L {
+    top: 330px;
+}
+
+.med-header.M {
+    top: 620px;
+}
+
+.med-header.N {
+    top: 830px;
+}
+
+.med-header.O {
+    top: 1235px;
+}
+
+.med-header.P {
+    top: 1545px;
+}
+
+.med-header.prescription {
+    top: 330px;
+}
+
+/* subheading */
+.subtext {
+    position: relative;
+    top: 95px;
+    left: 65px;
+    font-size: 14px;
+}
+
+/* -------------------------------------------- CHECKBOXES -------------------------------------------- */
+.checkbox {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    font-size: 17px;
+}
+
+.checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox input[type="checkbox"] + label:before {
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 1px solid var(--darkBlue);
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-color: white; 
+    transition: transform 0.3s ease-in;
+}
+
+.checkbox input[type="checkbox"]:checked + label:before {
+    background-color: var(--blueA);
+    transform: scale(1.1); 
+    border: 2px solid white;
+    box-shadow: 0 0 0.3rem 0.1rem rgba(163, 213, 255, 1);
+}
+
+/* -------------------------------------------- MORE ROW ARRANGEMENTS -------------------------------------------- */
+.p_row.immunize {
+    gap: 20px;
+    margin-top: 165px;
+    margin-bottom: 15px;
+}
+
+.p_row.one {
+    gap: 20px;
+    margin-top: 180px;
+}
+
+.p_row.two {
+    gap: 90px;
+    margin-top: 130px;
+}
+
+.p_row.three {
+    gap: 10px;
+    margin-top: 180px;
+}
+
+.p_row.four {
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.p_row.five {
+    gap: 26px;
+    margin-top: 160px;
+}
+
+.p_row.six {
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.p_row.seven {
+    gap: 16px;
+    margin-top:150px;
+}
+
+.p_row.eight {
+    gap: 16px;
+    margin-top: 30px;
+}
+
+.p_row.nine {
+    gap: 16px;
+    margin-top: 155px;
+}
+
+.p_row.ten {
+    gap: 16px;
+    margin-top: 160px;
+}
+
+/* input box for past history */
+.inputBox.p_history {
+    width: 270px;
+}
+
+/* input box for the date, the condition started */
+.inputBox.h_date {
+    width: 165px;
+}
+
+/* dropdown for social history */
+.historyA {
+    width: 120px;
+}
+
+.historyB {
+    width: 242px;
+}
+
+.historyC {
+    width: 320px;
+}
+
+.historyD {
+    width: 337px;
+}
+
+.inputBox.specifications, .inputBox.others {
+    width: 1010px; 
+    top: 20px;
+    left: 110px;
+    position: relative;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.inputBox.subject {
+    width: 1000px; 
+    top: 160px;
+    left: 115px;
+    position: relative;
+    font-size: 14px;
+}
+
+.t_surgery {
+    width: 400px;
+}
+
+.medications textarea {
+    width: 1000px;
+    height: 150px;
+    border: 1px solid var(--blueB);
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.medications textarea:focus {
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
+    outline: none;
+}
+
+/* -------------------------------------------- MEDICAL ASSESSMENT -------------------------------------------- */
+.assessment-table {
     position: relative; 
-    width: 1325px; 
-    top: 85px; 
-    left: 150px;
+    width: 1100px; 
+    top: 50px; 
+    left: 65px;
     line-height: 1.5;
-    color: black;
+    color: var(--darkBlue);
     background-color: white;
     font-size: 16px;
 }
 
-/* Default table */
-.table {
-    margin-bottom: 1rem;
-    text-align: center;
+/* text area */
+.complaints textarea {
+    width: 1000px;
+    height: 200px;
+    border: 1px solid var(--blueB);
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
 }
 
-.table th,
-.table td {
-    padding: 0.30rem;
-    width: 50px;
+.complaints textarea:focus {
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
+    outline: none;
 }
 
-.table thead {
-    background-color: var(--blueB);
-    color: black;
+/* assessment rows */
+.p_row.vitalRowA {
+    gap: 19px;
+    margin-top: 160px;
 }
 
-/* Striped table */
-.table-striped tbody tr:nth-of-type(even) {
-    background-color: var(--blueC)
+.p_row.vitalRowB {
+    gap: 19px;
+    margin-top: 40px;
 }
 
-/* Example button styling */
-.view-btn {
-    background-color: var(--blueA); 
-    color: white; 
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px; 
-    cursor: pointer; 
-}
-  
-/* Hover effect for the button */
-.view-btn:hover {
-    transform: scale(103%);
+.p_row.vitalRowC {
+    gap: 25px;
+    margin-top: 150px;
 }
 
-/* Pagination container */
-.pagination {
-    display: flex;
-    padding-left: 0;
-    list-style: none;
+.p_row.vitalRowD {
+    gap: 26px;
+    margin-top: 40px;
 }
-  
-/* Individual pagination item */
-.page-link {
+
+.p_row.vitalRowE {
+    gap: 23px;
+    margin-top: 40px;
+}
+
+.p_row.vitalRowF {
+    gap: 23px;
+    margin-top: 40px;
+}
+
+.p_row.vitalRowH {
+    gap: 23px;
+    margin-top: 150px;
+}
+
+/* Input boxes for assessment */
+.inputBox.vitalsA {
+    width: 320px;
+}
+
+.inputBox.vitalsB {
+    width: 150px;
+}
+
+.inputBox.vitalsC {
+    width: 200px;
+}
+
+.inputBox.vitalsD {
+    width: 700px;
+}
+
+.inputBox.vitalsE {
+    width: 680px;
+}
+
+.inputBox.vitalsF {
+    width: 690px;
+}
+
+.inputBox.vitalsG {
+    width: 662px;
+}
+
+.inputBox.vitalsH {
+    width: 584px;
+}
+
+.inputBox.vitalsI {
+    width: 581px;
+}
+
+.inputBox.vitalsJ {
+    width: 560px;
+}
+
+.inputBox.vitalsK {
+    width: 557px;
+}
+
+.inputBox.vitalsK {
+    width: 557px;
+}
+
+.inputBox.vitalsL {
+    width: 380px;
+}
+
+.inputBox.vitalsM {
+    width: 655px;
+}
+
+/* assessment header */
+.med-header.Q {
+    top: 520px;
+}
+
+.med-header.R {
+    top: 680px;
+}
+
+.med-header.S {
+    top: 1175px;
+}
+
+.med-header.T {
+    top: 1540px;
+}
+
+.med-header.U {
+    top: 2035px;
+}
+
+.med-header.V {
+    top: 2385px;
+}
+
+.med-header.W {
+    top: 2690px;
+}
+
+/* -------------------------------------------- PRESCRIPTION -------------------------------------------- */
+.cms-logo.prescription {
+    margin-top: 70px;
+    justify-content: center;
     position: relative;
-    display: block;
-    padding: 0.5rem 0.75rem;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #007bff; 
-    background-color: #fff; 
-    border: 1px solid #dee2e6; 
-}
-  
-/* Active page item */
-.page-item.active .page-link {
-    z-index: 2;
-    color: #fff; 
-    background-color: #007bff; 
-    border-color: #007bff; 
-}
-  
-/* Disabled page item */
-.page-item.disabled .page-link {
-    pointer-events: none;
-    color: #6c757d; 
-    background-color: #D3D3D3; 
-    border-color: #dee2e6; 
-}
-  
-/* Hover effect */
-.page-link:hover {
-    color: #0056b3;
-    text-decoration: none;
-    background-color: #e9ecef; 
 }
 
-/* search */
-.dataTables_wrapper .dataTables_filter input {
-    padding: 0.375rem 0.5rem;
-    margin-bottom: 1rem; 
-    color: black; 
-    background-color: white; 
-    border: 1px solid var(--blueB); 
-    border-radius: 0.25rem; 
-    margin-left: 5px;
+.rx img {
+    width: 100px;
+    position: relative;
+    margin-top: 25px;
+    margin-left: 100px;
 }
 
-.dataTables_wrapper .dataTables_filter {
-    margin-left: 1065px;
-    margin-top: 0px;
-}
-
-.dataTables_wrapper .dataTables_length {
-    margin-bottom: 0px;
+.doctor {
     position: absolute;
-}
-  
-/* Focus state for search input */
-.dataTables_wrapper .dataTables_filter input:focus {
-    color: black; 
-    background-color: white; 
-    border-color:  var(--blueB); 
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(163, 213, 255, 1) 
+    top: 1430px;
+    left: 830px;
+    text-decoration: underline;
 }
 
-/* SHOW NUMBER ENTRIES */
-.dataTables_wrapper .dataTables_length label {
-    font-weight: normal;
-    text-align: left;
-    white-space: nowrap;
+.license {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    top: 1460px;
+    left: 830px;
 }
-  
-.dataTables_wrapper .dataTables_length select {
-    width: auto;
-    display: inline-block;
-    padding: 0.375rem 0.25rem;
-    color: #495057; 
-    background-color: #fff; 
-    border: 1px solid var(--blueB); 
-    border-radius: 0.25rem; 
+
+.line-border {
+    border: 1px solid var(--darkBlue);
+    width: 895px;
+    left: 230px;
+    top: -25px;
+    position: relative;
 }
-  
-/* Focus state for "Show [number] entries" dropdown */
-.dataTables_wrapper .dataTables_length select:focus {
-    color: #495057; 
-    background-color: #fff; 
-    border-color: var(--blueB); 
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(163, 213, 255, 1); 
+
+/* prescription rows */
+.columnA {
+    position: absolute;
+    top: 190px;
+    left: 230px;
 }
- 
-/* Add Icon */
-.add-icon img {
-    width: 60px;
+
+.columnB {
+    position: absolute;
+    top: 190px;
+    left: 330px;
+}
+
+.columnC {
+    position: absolute;
+    top: 190px;
+    left: 940px;
+}
+
+.columnD {
+    position: absolute;
+    top: 190px;
+    left: 1035px;
+}
+
+.columnA.address, .columnB.p_adress, .columnC.gender, .columnD.p_gender  {
+    top: 220px;
+}
+
+.p_row.row1 {
+    gap: 20px;
+}
+
+.p_row.row2 {
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.p_row.row3 {
+    margin-top: 20px;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.inputBox.prescription {
+    width: 600px;
+}
+
+.inputBox.p_instruction {
+    width: 1040px;
+}
+
+.inputBox.p_instructions {
+    width: 900px;
+}
+
+.inputBox.dosage, .inputBox.quantity {
+    width: 420px;
+}
+
+.prescription-container {
+    margin-top: 160px;
+}
+
+.btn-prescription {
+    color: var(--blueA);
+    font-weight: 900;
+    background-color: var(--blueB);
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+    height: 35px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btn-prescription:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
+}
+
+.btn-prescription:hover {
+    transform: scale(101%);
+    cursor: pointer;
+}
+
+.medicine {
+    position: absolute;
+    top: 450px;
+    left: 115px;
+}
+
+.page-break {
+    position: absolute; 
+    top:1400px;
+    border: 1px solid var(--darkBlue);
+    width: 1000px;
+    left: 110px;
+}
+
+@media print {
+    @page {
+        size: 8.5in 11in;
+        margin: 0;
+    }
+
+    body {
+        width: 8.5in;
+        height: 11in;
+        margin: 0 auto; 
+        box-sizing: border-box; 
+    }
+
+    .patient-bg.prescription {
+        display: block;
+        position: absolute; 
+        height: 100%; 
+        top: 0px;
+        left: 0px;
+    }
+
+    .sidenav-bg, .back-icon, .nav.nav-underline, .btn-container, .med-header.prescription {
+        display: none; 
+    }
+}
+
+.print-icon img {
+    width: 55px;
     top: 625px;
-    left: 1445px;
+    left: 1448px;
     border-radius: 100%;
     z-index: 99;
     position: fixed;
+    cursor: pointer;
 }
 
-.add-icon img:hover {
-    transform: scale(105%);
-    cursor: pointer;
+.print-icon img:active {
+    transform: translateY(1px);
+}
+
+.prescription-table {
+    left:105px; 
+    position: absolute; 
+    top: 350px; 
+    width: 1020px; 
+    font-size: 20px;
+}
+
+.prescription-table td {
+    padding: 0.50rem;
+}
+
+/* -------------------------------------------- LABORATORY TEST REQUEST -------------------------------------------- */
+/* lab results rows */
+.p_row.rowOne {
+    gap: 30px;
+    margin-top: 160px;
+}
+
+.p_row.rowTwo {
+    gap: 55px;
+    margin-top: 40px;
+}
+
+.p_row.rowThree {
+    gap: 32px;
+    margin-top: 150px;
+}
+
+.p_row.rowFour {
+    gap: 40px;
+    margin-top: 40px;
+}
+
+/* lab results text area */
+.labTest textarea {
+    width: 1000px;
+    height: 250px;
+    border: 1px solid var(--blueB);
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.labTest textarea:focus {
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
+    outline: none;
+}
+
+.inputBox.fullName {
+    width: 615px;
+}
+
+.inputBox.labsubject {
+    width: 400px;
+}
+
+.inputBox.doctorName {
+    width: 450px;
+}
+
+.inputBox.dateofRequest {
+    width: 230px;
+}
+
+.inputBox.specifyTest {
+    width: 1020px;
+    left: 105px;
+}
+
+.med-header.jobOrder {
+    top: 320px
+}
+
+.p_row.rowTen {
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.p_row.rowEleven {
+    gap: 90px;
+    margin-top: 150px;
+    margin-bottom: 20px;
+}
+
+.p_row.rowTwelve {
+    gap: 42px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.p_row.rowThirteen {
+    gap: 72px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.p_row.rowFourteen {
+    gap: 87px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.testRow {
+    display: block;
+}
+
+.testRow.col2 {
+    display: flex;
+    gap: 20px;
+}
+
+.head {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--blueA);
+    font-weight: 900;
+}
+
+/* -------------------------------------------- LABORATORY REPORT -------------------------------------------- */
+.patient-bg.test {
+    width: 1230px;  
+    height: 2000px; 
+}
+
+.lab-result {
+    margin-top: 150px;
+    width: 1000px;
+    margin-right: 30px;
+}
+
+.med-header.labReport {
+    top: 1510px
 }
 
 /* APPOINTMENT */

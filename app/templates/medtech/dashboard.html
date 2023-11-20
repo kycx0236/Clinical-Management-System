@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Dashboard{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='medtech_style.css') }}"> {% endblock %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='medtech_style.css') }}"> 
+{% endblock %}
+
 {% block content %}
+
+    <meta http-equiv="refresh" content="10">
+
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <li class="selected-icon-bg">
@@ -27,7 +31,7 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Medtech</p>
@@ -42,27 +46,90 @@
     </div>
 
     <!-- DASHBOARD -->
-    <main>
-        <p class="date-time" id="demo"></p>
-    </main>
+    <div class="notification-container">
+        <div class="notif-header">
+            <div class="notif-box">
+              <p class="request-header">LABORATORY TEST REQUEST</p>
+              <span id="notifs"></span>
+            </div>
+            <p id="mark-all">Mark all as read</p>
+        </div>
+
+        <main id="notificationList">
+            {% for labrequest in labrequests %}
+                <form method="GET" action="/medtech/laboratory_test/">
+                    <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
+                    <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
+                    <button style="background: none; border: none; font-size: 16px;">
+                        <div class="notif_card unread" data-id="{{ labrequest[0] }}">
+                            <div class="description">
+                                <p class="user_activity">
+                                    <strong>DR. {{ labrequest[2] }}</strong> sent you a laboratory job order for patient
+                                    <b>{{ labrequest[3] }}</b>
+                                </p>
+                                <p class="time" id="time"></p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
+            {% endfor %}
+        </main>
+    </div>
 
     <script>
-        function displayDateAndTime() {
-        const demoElement = document.getElementById('demo');
+        // LAB REQUEST NOTIFICATION
+        const markAll = document.getElementById("mark-all");
 
-            function updateDateAndTime() {
-                const currentDateAndTime = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
-                const currentTime = currentDateAndTime.toLocaleTimeString();
-
-                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}<br>${currentTime}`;
-            }
-            updateDateAndTime();
-            setInterval(updateDateAndTime, 1000);
+        function updateUnreadCount() {
+            const unreadMessages = document.querySelectorAll(".unread");
+            const unread = document.getElementById("notifs");
+            unread.innerText = unreadMessages.length;
         }
 
-        displayDateAndTime();   
+        function markAsRead(message) {
+            message.classList.remove("unread");
+            updateUnreadCount();
+        }
+
+        function markAllAsRead() {
+            const unreadMessages = document.querySelectorAll(".unread");
+            unreadMessages.forEach(message => {
+                message.classList.remove("unread");
+            });
+            updateUnreadCount();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const readState = JSON.parse(localStorage.getItem('readState')) || {};
+
+            const unreadMessages = Array.from(document.querySelectorAll(".unread")).reverse();
+            unreadMessages.forEach(message => {
+                const messageId = message.getAttribute('data-id');
+                if (readState[messageId]) {
+                    message.classList.remove("unread");
+                } else {
+                 
+                    message.addEventListener("click", () => {
+                        markAsRead(message);
+                
+                        readState[messageId] = true;
+                        localStorage.setItem('readState', JSON.stringify(readState));
+                    });
+                }
+            });
+            updateUnreadCount();
+
+            markAll.addEventListener("click", () => {
+                markAllAsRead();
+         
+                unreadMessages.forEach(message => {
+                    const messageId = message.getAttribute('data-id');
+                    readState[messageId] = true;
+                });
+                localStorage.setItem('readState', JSON.stringify(readState));
+            });
+        });
     </script>
-    
+
 {% endblock %}
