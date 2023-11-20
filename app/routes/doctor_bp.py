@@ -658,21 +658,17 @@ def delete_patient():
 @role_required('doctor')
 def delete_assessment():
     form = PatientForm()
-
     if request.method == "POST":
         assessment_id = request.form.get("assessment_id")
         patient_id = request.form.get("patient_id")
-
         result = doctor.delete_medical_assessment(assessment_id, patient_id)
         patient_info = doctor.get_patient_info(patient_id)
-
         if result:
             return render_template("doctor/patient/consultation.html", success=True, patient=patient_info, PatientForm=form)
         else:
-            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form)
-
-    return render_template("doctor/patient/patient_record.html", PatientForm=form)
-
+            return render_template("doctor/patient/consultation.html", error=True, patient=patient_info, PatientForm=form)
+        
+    return render_template("doctor/patient/consultation.html", PatientForm=form)
 
 # UPDATE MEDICAL ASSESSMENT
 @doctor_bp.route('/assessment/', methods=['GET', 'POST'])
