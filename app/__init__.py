@@ -1,14 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysql_connector import MySQL
 from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY
-# from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user
 
-
-    
 mysql = MySQL()
 login_manager = LoginManager()
-
 
 def create_app():
     app = Flask(__name__)
@@ -21,9 +18,7 @@ def create_app():
 
     mysql.init_app(app)
     login_manager = LoginManager(app)
-
-
-    
+ 
     @login_manager.user_loader
     def load_user(user_id):
         return User.get(user_id)
@@ -58,9 +53,9 @@ def create_app():
     from app.routes.receptionist_bp import receptionist_bp
     from app.models.login_m import User
     
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(doctor_bp, url_prefix='/doctor')
-    app.register_blueprint(medtech_bp, url_prefix='/medtech')
-    app.register_blueprint(receptionist_bp, url_prefix='/receptionist')
+    app.register_blueprint(admin_bp, url_prefix='/admin/')
+    app.register_blueprint(doctor_bp, url_prefix='/doctor/')
+    app.register_blueprint(medtech_bp, url_prefix='/medtech/')
+    app.register_blueprint(receptionist_bp, url_prefix='/receptionist/')
 
     return app

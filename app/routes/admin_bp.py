@@ -14,19 +14,19 @@ admin_bp = Blueprint('admin', __name__)
 def dashboard():
     return render_template("admin/dashboard.html")
 
-@admin_bp.route('/user_management')
+@admin_bp.route('/user_management/')
 @login_required
 @role_required('admin')
 def user_management():
     return render_template("admin/user_management.html")
 
-@admin_bp.route('/profile')
+@admin_bp.route('/profile/')
 @login_required
 @role_required('admin')
 def profile():
     return render_template("admin/profile.html")
 
-@admin_bp.route("/logout")
+@admin_bp.route("/logout/")
 @login_required
 def logout():
     print("Logout route accessed")  

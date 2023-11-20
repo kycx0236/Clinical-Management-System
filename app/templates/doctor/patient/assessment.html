@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Assessment{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAVIGATION -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('doctor.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Family Medicine</p>
+            </div>
+        </div>
+        <ul>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- before patient_id=patient[1] -->
+
+    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">MEDICAL ASSESSMENT</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY REPORTS</a>
+        </li>
+    </ul>
+
+    <form action="{{ url_for('doctor.assessment') }}" method="POST">
+        {{ PatientForm.csrf_token }}
+
+        <!-- ASSESSMENT ID -->
+        <div class="inputBox code" style="display: none;">
+            <input disabled name="assessment_id" value="{{ patient[0] }}">
+            <input hidden name="assessment_id" value="{{ patient[0] }}" >
+        </div>
+        
+        <!-- PATIENT ID -->
+        <div class="inputBox code" style="display: none;">
+            <input disabled name="patient_id" value="{{ patient[1] }}">
+            <input hidden name="patient_id" value="{{ patient[1] }}">
+        </div>
+
+        <!-- MEDICAL ASSESSMENT -->
+        <div class="patient-bg assessment">
+    
+            <!-- CHIEF COMPLAINTS -->
+            <div class="med-header A">CHIEF COMPLAINTS</div>
+            <div class="inputBox subject">
+                <input type="text" name="subject" value="{{ patient[2] }}" disabled>
+                <span>SUBJECT</span>
+            </div>
+            <div class="p_row one">
+                <div class="inputBox complaints">
+                    <textarea class="complaints" name="complaints" disabled rows="2" placeholder="List down the complaints of the patient">{{ patient[3] }}</textarea>
+                </div>
+            </div>
+    
+            <!-- HISTORY OF PRESENT ILLNESS -->
+            <div class="med-header H">HISTORY OF PRESENT ILLNESS</div>
+            <div class="p_row ten">
+                <div class="inputBox complaints">
+                    <textarea class="complaints" name="h_illness" disabled rows="2" placeholder="Enter the present history of the illness">{{ patient[4] }}</textarea>
+                </div>
+            </div>
+    
+            <!-- VITAL SIGNS -->
+            <div class="med-header I">VITAL SIGNS</div>
+            <div class="p_row vitalRowA">
+                <div class="inputBox vitalsA">
+                    <input type="text" name="blood_p" value="{{ patient[5] }}" disabled>
+                    <span>BLOOD PRESSURE</span>
+                </div>
+                <div class="inputBox vitalsB">
+                    <input type="text" name="pulse_r" value="{{ patient[6] }}" disabled>
+                    <span>PULSE RATE</span>
+                </div>
+                <div class="inputBox vitalsB">
+                    <input type="text" name="temp" value="{{ patient[7] }}" disabled>
+                    <span>TEMPERATURE</span>
+                </div>
+                <div class="inputBox vitalsA">
+                    <input type="text" name="respiratory_r" value="{{ patient[8] }}" disabled>
+                    <span>RESPIRATORY RATE</span>
+                </div>
+            </div>
+    
+            <div class="p_row vitalRowB" id="bmi">
+                <div class="inputBox vitalsC">
+                    <input type="text" name="height" id="height" value="{{ patient[9] }}" disabled>
+                    <span>HEIGHT <em>(cm)</em></span>
+                </div>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="weight" id="weight" value="{{ patient[10] }}" disabled>
+                    <span>WEIGHT <em>(kg)</em></span>
+                </div>
+                <button class="btn-submit bmi" type="button" id="calculateBmi" style="display: none;">CALCULATE BMI</button>
+                <div class="inputBox vitalsK">
+                    <input type="text" name="body_mass" id="bmiResult" value="{{ patient[11] }}" disabled>
+                    <span>BODY MASS INDEX</span>
+                </div>
+            </div>
+
+            <div class="p_row vitalRowB">
+                <div class="inputBox vitalsA">
+                    <input type="text" name="oxygenSaturation" value="{{ patient[40] }}" disabled>
+                    <span>SpO<sub>2</sub></span>
+                </div>
+                <div class="inputBox vitalsM">
+                    <input type="text" name="painSection" value="{{ patient[41] }}" disabled>
+                    <span>PAIN</span>
+                </div>
+            </div>
+    
+            <!-- PHYSICAL EXAMINATIONS -->
+            <div class="med-header J">PHYSICAL EXAMINATIONS</div>
+            <div class="p_row vitalRowC">
+                <p>HEAD</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_head" value="{{ patient[12] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_head" value="{{ patient[13] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowD">
+                <p>EARS</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_ears" value="{{ patient[14] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_ears" value="{{ patient[15] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowD">
+                <p>EYES</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_eyes" value="{{ patient[16] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_eyes" value="{{ patient[17] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowD">
+                <p>NOSE</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_nose" value="{{ patient[18] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_nose" value="{{ patient[19] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowD">
+                <p>SKIN</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_skin" value="{{ patient[20] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_skin" value="{{ patient[21] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>BACK</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_back" value="{{ patient[22] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_back" value="{{ patient[23] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>NECK</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_neck" value="{{ patient[24] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsD">
+                    <input type="text" name="abnormalities_neck" value="{{ patient[25] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+    
+            <div class="p_row vitalRowE">
+                <p>THROAT</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_throat" value="{{ patient[26] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsE">
+                    <input type="text" name="abnormalities_throat" value="{{ patient[27] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>CHEST</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_chest" value="{{ patient[28] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsF">
+                    <input type="text" name="abnormalities_chest" value="{{ patient[29] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>ABDOMEN</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_abdomen" value="{{ patient[30] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsG">
+                    <input type="text" name="abnormalities_abdomen" value="{{ patient[31] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>UPPER EXTREMITIES</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_upper" value="{{ patient[32] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsH">
+                    <input type="text" name="abnormalities_upper" value="{{ patient[33] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>LOWER EXTREMITIES</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_lower" value="{{ patient[34] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsI">
+                    <input type="text" name="abnormalities_lower" value="{{ patient[35] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+            <div class="p_row vitalRowE">
+                <p>GENITOURINARY TRACT</p>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="normal_tract" value="{{ patient[36] }}" disabled>
+                    <span>NORMAL</span>
+                </div>
+                <div class="inputBox vitalsJ">
+                    <input type="text" name="abnormalities_tract" value="{{ patient[37] }}" disabled>
+                    <span>ABNORMALITIES <em>(specify)</em></span>
+                </div>
+            </div>
+    
+            <div class="p_row vitalRowF">
+                <div class="inputBox complaints">
+                    <textarea class="complaints" name="comments" disabled rows="2" placeholder="Enter additional comments">{{ patient[38] }}</textarea>
+                </div>
+            </div>
+    
+            <!-- DIAGNOSIS -->
+            <div class="med-header K">DIAGNOSIS</div>
+            <div class="p_row vitalRowH">
+                <div class="inputBox complaints">
+                    <textarea class="complaints" name="diagnosis" disabled rows="2" placeholder="Enter additional comments">{{ patient[39] }}</textarea>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-submit" type="submit" id="updateButton" style="display: none;">SUBMIT</button>
+            </div>
+
+            <img class="update-icon details" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
+        
+        </div>
+    </form>
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient's medical assessment was updated successfully!
+                    </div>
+                    <a href="{{ url_for('doctor.assessment', assessment_id=patient[0], patient_id=patient[1]) }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in saving changes in patient's medical assessment!
+                    </div>
+                    <a href="{{ url_for('doctor.assessment', assessment_id=patient[0], patient_id=patient[1]) }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        // EDIT BUTTON
+        function enableEdit() {
+            const inputFields = document.querySelectorAll('.assessment input, .assessment textarea');
+
+            inputFields.forEach((input) => {
+                input.disabled = false;
+            });
+
+            const submitButton = document.querySelector('#updateButton');
+            submitButton.style.display = 'block';
+
+            const calculateBmi = document.querySelector('#calculateBmi');
+            calculateBmi.style.display = 'block';
+
+            const bmiResult = document.querySelector('#bmiResult');
+            bmiResult.style.width = '381px';
+
+            const bmi = document.querySelector('#bmi');
+            bmi.style.left = '88px';
+
+            const editIcon = document.getElementById('editIcon');
+            editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
+            editIcon.setAttribute('onclick', 'disableEdit()'); 
+        }
+
+        function disableEdit() {
+            const inputFields = document.querySelectorAll('.assessment input, .assessment textarea');
+
+            inputFields.forEach((input) => {
+                input.disabled = true;
+            });
+
+            const submitButton = document.querySelector('#updateButton');
+            submitButton.style.display = 'none';
+
+            const calculateBmi = document.querySelector('#calculateBmi');
+            calculateBmi.style.display = 'none';
+
+            const bmiResult = document.querySelector('#bmiResult');
+            bmiResult.style.width = '557px';
+
+            const bmi = document.querySelector('#bmi');
+            bmi.style.left = '0px';
+
+            const editIcon = document.getElementById('editIcon');
+            editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
+            editIcon.setAttribute('onclick', 'enableEdit()');
+        }
+
+        // CALCULATE BMI
+        let button = document.querySelector("#calculateBmi");
+        button.addEventListener("click", calculateBMI);
+
+        function calculateBMI() {
+ 
+            let height = parseInt(document.querySelector("#height").value);
+            let weight = parseInt(document.querySelector("#weight").value);
+            let result = document.querySelector("#bmiResult");
+         
+            if (isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0) {
+                result.value = "Please provide valid Height and Weight!";
+            } else {
+                let bmi = (weight / ((height * height) / 10000)).toFixed(2);
+        
+                if (bmi < 18.6) {
+                    result.value = `Underweight: ${bmi}`;
+                } else if (bmi >= 18.6 && bmi < 24.9) {
+                    result.value = `Normal: ${bmi}`;
+                } else {
+                    result.value = `Overweight: ${bmi}`;
+                }
+            }
+        }
+    </script>
+    
+{% endblock %}

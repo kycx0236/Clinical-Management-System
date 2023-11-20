@@ -1,0 +1,618 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Laboratory Result{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAVIGATION -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('doctor.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('doctor.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('doctor.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Family Medicine</p>
+            </div>
+        </div>
+        <ul>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <a class="back-icon" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">LABORATORY RESULTS</a>
+        </li>
+    </ul>
+
+    <form action="{{ url_for('doctor.results') }}">
+
+        <!-- LABORATORY TEST -->
+        <div class="patient-bg test">
+
+            <!-- PATIENT INFORMATION -->
+            <div class="med-header A">PATIENT INFORMATION</div>
+            
+            <div class="p_row rowOne">
+                <div class="inputBox fullName">
+                    <input type="text" name="fullName" value="{{ labreq[2] }}" disabled>
+                    <span>PATIENT NAME</span>
+                </div>
+                <div class="inputBox labsubject">
+                    <input type="text" name="labsubject" value="{{ labreq[3] }}" disabled>
+                    <span>TESTING PURPOSE</span>
+                </div>
+            </div>
+
+            <div class="p_row rowTen">
+                <div class="inputBox gender">
+                    <select class="gender" name="gender" disabled>
+                        <option value="" disabled selected></option>
+                        <option value="FEMALE" {% if labreq[4] == "FEMALE" %} selected {% endif %}>FEMALE</option>
+                        <option value="MALE" {% if labreq[4] == "MALE" %} selected {% endif %}>MALE</option>
+                    </select>
+                    <span>GENDER</span>
+                </div>
+                <div class="inputBox age">
+                    <input type="text" name="age" value="{{ labreq[5] }}" disabled>
+                    <span>AGE</span>
+                </div>
+                <div class="inputBox doctorName">
+                    <input type="text" name="doctorName"  value="{{ labreq[6] }}" disabled>
+                    <span>DOCTOR</span>
+                </div>
+                <div class="inputBox dateofRequest">
+                    <input type="text" name="dateofRequest" id="dateofRequest" value="{{ labreq[7] }}" disabled> 
+                    <span>DATE OF REQUEST</span>
+                </div>
+            </div>
+
+            <!-- LABORATORY JOB ORDER -->
+            <div class="med-header jobOrder">LABORATORY JOB ORDER</div>
+            <div class="p_row rowEleven">
+
+                <!-- HEMATOLOGY -->
+                <div class="testRow">
+                    <p class="head">HEMATOLOGY</p>
+                    <div class="testRow col2">
+                        <div class="testRow">
+                            <div class="checkbox">
+                                <input type="checkbox" id="cbcplateCheckbox" name="cbcplateCheckbox" value="checked" {% if hematology[2] == 1 %}checked{% endif %} disabled>
+                                <label for="cbcplateCheckbox">CBC & Platelet</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="hgbhctCheckbox" name="hgbhctCheckbox" value="checked" {% if hematology[3] == 1 %}checked{% endif %} disabled>
+                                <label for="hgbhctCheckbox">Hgb & Hct</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="protimeCheckbox" name="protimeCheckbox" value="checked" {% if hematology[4] == 1 %}checked{% endif %} disabled>
+                                <label for="protimeCheckbox">Protime</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="APTTCheckbox" name="APTTCheckbox" value="checked" {% if hematology[5] == 1 %}checked{% endif %} disabled> 
+                                <label for="APTTCheckbox">APTT</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="bloodtypingCheckbox" name="bloodtypingCheckbox" value="checked" {% if hematology[6] == 1 %}checked{% endif %} disabled> 
+                                <label for="bloodtypingCheckbox">Blood Typing</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="ESRCheckbox" name="ESRCheckbox" value="checked" {% if hematology[7] == 1 %}checked{% endif %} disabled> 
+                                <label for="ESRCheckbox">ESR</label>
+                            </div>
+                        </div>
+                        <div class="testRow">
+                            <div class="checkbox">
+                                <input type="checkbox" id="plateCheckbox" name="plateCheckbox" value="checked" {% if hematology[8] == 1 %}checked{% endif %} disabled>
+                                <label for="plateCheckbox">Platelet</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="hgbCheckbox" name="hgbCheckbox" value="checked" {% if hematology[9] == 1 %}checked{% endif %} disabled>
+                                <label for="hgbCheckbox">Hgb</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="hctCheckbox" name="hctCheckbox" value="checked" {% if hematology[10] == 1 %}checked{% endif %} disabled>
+                                <label for="hctCheckbox">Hct</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="cbcCheckbox" name="cbcCheckbox" value="checked" {% if hematology[11] == 1 %}checked{% endif %} disabled> 
+                                <label for="cbcCheckbox">CBC</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="reticsCheckbox" name="reticsCheckbox" value="checked" {% if hematology[12] == 1 %}checked{% endif %} disabled> 
+                                <label for="reticsCheckbox">Retics</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="CTBTCheckbox" name="CTBTCheckbox" value="checked" {% if hematology[13] == 1 %}checked{% endif %} disabled> 
+                                <label for="CTBTCheckbox">CTBT</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BACTERIOLOGY -->
+                <div class="testRow">
+                    <p class="head">BACTERIOLOGY</p>
+                    <div class="checkbox">
+                        <input type="checkbox" id="culsenCheckbox" name="culsenCheckbox" value="checked" {% if bacteriology[2] == 1 %}checked{% endif %} disabled>
+                        <label for="culsenCheckbox">Culture & Sensitivity</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="cultureCheckbox" name="cultureCheckbox" value="checked" {% if bacteriology[3] == 1 %}checked{% endif %} disabled>
+                        <label for="cultureCheckbox">Culture only</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="gramCheckbox" name="gramCheckbox" value="checked" {% if bacteriology[4] == 1 %}checked{% endif %} disabled>
+                        <label for="gramCheckbox">Gram stain</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="KOHCheckbox" name="KOHCheckbox" value="checked" {% if bacteriology[5] == 1 %}checked{% endif %} disabled> 
+                        <label for="KOHCheckbox">KOH & Wet Mount</label>
+                    </div>
+                </div>
+
+                <!-- HISTOPATHOLOGY -->
+                <div class="testRow">
+                    <p class="head">HISTOPATHOLOGY</p>
+                    <div class="checkbox">
+                        <input type="checkbox" id="biopsyCheckbox" name="biopsyCheckbox" value="checked" {% if histopathology[2] == 1 %}checked{% endif %} disabled>
+                        <label for="biopsyCheckbox">Biopsy</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="papsCheckbox" name="papsCheckbox" value="checked" {% if histopathology[3] == 1 %}checked{% endif %} disabled>
+                        <label for="papsCheckbox">Paps Smear</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="FNABCheckbox" name="FNABCheckbox" value="checked" {% if histopathology[4] == 1 %}checked{% endif %} disabled>
+                        <label for="FNABCheckbox">FNAB</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="cellCheckbox" name="cellCheckbox" value="checked" {% if histopathology[5] == 1 %}checked{% endif %} disabled> 
+                        <label for="cellCheckbox">Cellblock</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="cytolCheckbox" name="cytolCheckbox" value="checked" {% if histopathology[6] == 1 %}checked{% endif %} disabled> 
+                        <label for="cytolCheckbox">Cytology</label>
+                    </div>
+                </div>
+
+                <!-- CLINICAL MIRCROSCOPY & PARASITOLOGY -->
+                <div class="testRow">
+                    <p class="head">CLINICAL MIRCROSCOPY <br>& PARASITOLOGY</p>
+                    <div class="checkbox">
+                        <input type="checkbox" id="urinCheckbox" name="urinCheckbox" value="checked" {% if microscopy[2] == 1 %}checked{% endif %} disabled>
+                        <label for="urinCheckbox">Urinalysis</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="stoolCheckbox" name="stoolCheckbox" value="checked" {% if microscopy[3] == 1 %}checked{% endif %} disabled>
+                        <label for="stoolCheckbox">Stool Exam</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="occultCheckbox" name="occultCheckbox" value="checked" {% if microscopy[4] == 1 %}checked{% endif %} disabled>
+                        <label for="occultCheckbox">Occult Blood</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="semenCheckbox" name="semenCheckbox" value="checked" {% if microscopy[5] == 1 %}checked{% endif %} disabled> 
+                        <label for="semenCheckbox">Semen Analysis</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ELISACheckbox" name="ELISACheckbox" value="checked" {% if microscopy[6] == 1 %}checked{% endif %} disabled> 
+                        <label for="ELISACheckbox">ELISA</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEROLOGY -->
+            <p class="head">SEROLOGY</p>
+            <div class="p_row rowTwelve">
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="ASOCheckbox" name="ASOCheckbox" value="checked" {% if serology[2] == 1 %}checked{% endif %} disabled>
+                        <label for="ASOCheckbox">ASO Tier</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="AntiHBSCheckbox" name="AntiHBSCheckbox" value="checked" {% if serology[3] == 1 %}checked{% endif %} disabled>
+                        <label for="AntiHBSCheckbox">Anti-HBS</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="HCVCheckbox" name="HCVCheckbox" value="checked" {% if serology[4] == 1 %}checked{% endif %} disabled> 
+                        <label for="HCVCheckbox">HCV</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="C3Checkbox" name="C3Checkbox" value="checked" {% if serology[5] == 1 %}checked{% endif %} disabled> 
+                        <label for="C3Checkbox">C3</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="HIVICheckbox" name="HIVICheckbox" value="checked" {% if serology[6] == 1 %}checked{% endif %} disabled> 
+                        <label for="HIVICheckbox">HIV I</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="HIVIICheckbox" name="HIVIICheckbox" value="checked" {% if serology[7] == 1 %}checked{% endif %} disabled> 
+                        <label for="HIVIICheckbox">HIV II</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="NS1Checkbox" name="NS1Checkbox" value="checked" {% if serology[8] == 1 %}checked{% endif %} disabled> 
+                        <label for="NS1Checkbox">NS1</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="VDRLCheckbox" name="VDRLCheckbox" value="checked" {% if serology[9] == 1 %}checked{% endif %} disabled> 
+                        <label for="VDRLCheckbox">VDRL</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="PregCheckbox" name="PregCheckbox" value="checked" {% if serology[10] == 1 %}checked{% endif %} disabled> 
+                        <label for="PregCheckbox">Pregnancy Test</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="RFCheckbox" name="RFCheckbox" value="checked" {% if serology[11] == 1 %}checked{% endif %} disabled> 
+                        <label for="RFCheckbox">RF</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="QuantiCheckbox" name="QuantiCheckbox" value="checked" {% if serology[12] == 1 %}checked{% endif %} disabled> 
+                        <label for="QuantiCheckbox">CRP Quanti</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="QualiCheckbox" name="QualiCheckbox" value="checked" {% if serology[13] == 1 %}checked{% endif %} disabled> 
+                        <label for="QualiCheckbox">CRP Quali</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="TyphidotCheckbox" name="TyphidotCheckbox" value="checked" {% if serology[14] == 1 %}checked{% endif %} disabled> 
+                        <label for="TyphidotCheckbox">Typhidot</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="TubexCheckbox" name="TubexCheckbox" value="checked" {% if serology[15] == 1 %}checked{% endif %} disabled> 
+                        <label for="TubexCheckbox">Tubex</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="HAVIgMCheckbox" name="HAVIgMCheckbox" value="checked" {% if serology[16] == 1 %}checked{% endif %} disabled> 
+                        <label for="HAVIgMCheckbox">HAV IgM</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="DengueCheckbox" name="DengueCheckbox" value="checked" {% if serology[17] == 1 %}checked{% endif %} disabled> 
+                        <label for="DengueCheckbox">Dengue Duo</label>
+                    </div>
+                </div>
+            </div>  
+
+            <!-- IMMUNOCHEMISTRY -->
+            <p class="head">IMMUNOCHEMISTRY</p>
+            <div class="p_row rowThirteen">
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="AFPCheckbox" name="AFPCheckbox" value="checked" {% if immunochem[2] == 1 %}checked{% endif %} disabled> 
+                        <label for="AFPCheckbox">AFP</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ferritinCheckbox" name="ferritinCheckbox" value="checked" {% if immunochem[3] == 1 %}checked{% endif %} disabled> 
+                        <label for="ferritinCheckbox">Ferritin</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="HBcIgMCheckbox" name="HBcIgMCheckbox" value="checked" {% if immunochem[4] == 1 %}checked{% endif %} disabled> 
+                        <label for="HBcIgMCheckbox">HBcIgM</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="AntiHBECheckbox" name="AntiHBECheckbox" value="checked" {% if immunochem[5] == 1 %}checked{% endif %} disabled> 
+                        <label for="AntiHBECheckbox">Anti HBE</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CA125Checkbox" name="CA125Checkbox" value="checked" {% if immunochem[6] == 1 %}checked{% endif %} disabled> 
+                        <label for="CA125Checkbox">CA12-5</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="PROBNPCheckbox" name="PROBNPCheckbox" value="checked" {% if immunochem[7] == 1 %}checked{% endif %} disabled> 
+                        <label for="PROBNPCheckbox">PRO-BNP</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="CA153Checkbox" name="CA153Checkbox" value="checked" {% if immunochem[8] == 1 %}checked{% endif %} disabled> 
+                        <label for="CA153Checkbox">CA15-3</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CA199Checkbox" name="CA199Checkbox" value="checked" {% if immunochem[9] == 1 %}checked{% endif %} disabled> 
+                        <label for="CA199Checkbox">CA19-9</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="PSACheckbox" name="PSACheckbox" value="checked" {% if immunochem[10] == 1 %}checked{% endif %} disabled> 
+                        <label for="PSACheckbox">PSA</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="CEACheckbox" name="CEACheckbox" value="checked" {% if immunochem[11] == 1 %}checked{% endif %} disabled> 
+                        <label for="CEACheckbox">CEA</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="FreeT3Checkbox" name="FreeT3Checkbox" value="checked" {% if immunochem[12] == 1 %}checked{% endif %} disabled> 
+                        <label for="FreeT3Checkbox">Free T3</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ANA2Checkbox" name="ANA2Checkbox" value="checked" {% if immunochem[13] == 1 %}checked{% endif %} disabled> 
+                        <label for="ANA2Checkbox">ANA</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="FreeT4Checkbox" name="FreeT4Checkbox" value="checked" {% if immunochem[14] == 1 %}checked{% endif %} disabled> 
+                        <label for="FreeT4Checkbox">Free T4</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="HBsAGCheckbox" name="HBsAGCheckbox" value="checked" {% if immunochem[15] == 1 %}checked{% endif %} disabled> 
+                        <label for="HBsAGCheckbox">HBsAG</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="TroponiniCheckbox" name="TroponiniCheckbox" value="checked" {% if immunochem[16] == 1 %}checked{% endif %} disabled> 
+                        <label for="TroponiniCheckbox">Troponini</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="HbACheckbox" name="HbACheckbox" value="checked" {% if immunochem[17] == 1 %}checked{% endif %} disabled> 
+                        <label for="HbACheckbox">HbA<sub>1C</sub></label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="HBAeAgCheckbox" name="HBAeAgCheckbox" value="checked" {% if immunochem[18] == 1 %}checked{% endif %} disabled> 
+                        <label for="HBAeAgCheckbox">HBAeAg</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="BetaCheckbox" name="BetaCheckbox" value="checked" {% if immunochem[19] == 1 %}checked{% endif %} disabled> 
+                        <label for="BetaCheckbox">Beta-HCG</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="T3Checkbox" name="T3Checkbox" value="checked" {% if immunochem[20] == 1 %}checked{% endif %} disabled> 
+                        <label for="T3Checkbox">T3</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="T4Checkbox" name="T4Checkbox" value="checked" {% if immunochem[21] == 1 %}checked{% endif %} disabled> 
+                        <label for="T4Checkbox">T4</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="TSHCheckbox" name="TSHCheckbox" value="checked" {% if immunochem[22] == 1 %}checked{% endif %} disabled> 
+                        <label for="TSHCheckbox">TSH</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLINICAL CHEMISTRY -->
+            <p class="head">CLINICAL CHEMISTRY</p>
+            <div class="p_row rowFourteen">
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="ALPCheckbox" name="ALPCheckbox" value="checked" {% if clinicalchem[2] == 1 %}checked{% endif %} disabled> 
+                        <label for="ALPCheckbox">ALP</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="AmylaseCheckbox" name="AmylaseCheckbox" value="checked" {% if clinicalchem[3] == 1 %}checked{% endif %} disabled> 
+                        <label for="AmylaseCheckbox">Amylase</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="BUACheckbox" name="BUACheckbox" value="checked" {% if clinicalchem[4] == 1 %}checked{% endif %} disabled> 
+                        <label for="BUACheckbox">BUA</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="BUNCheckbox" name="BUNCheckbox" value="checked" {% if clinicalchem[5] == 1 %}checked{% endif %} disabled> 
+                        <label for="BUNCheckbox">BUN</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CreatinineCheckbox" name="CreatinineCheckbox" value="checked" {% if clinicalchem[6] == 1 %}checked{% endif %} disabled> 
+                        <label for="CreatinineCheckbox">Creatinine</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="SGPTCheckbox" name="SGPTCheckbox" value="checked" {% if clinicalchem[7] == 1 %}checked{% endif %} disabled> 
+                        <label for="SGPTCheckbox">SGPT</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="SGOTCheckbox" name="SGOTCheckbox" value="checked" {% if clinicalchem[8] == 1 %}checked{% endif %} disabled> 
+                        <label for="SGOTCheckbox">SGOT</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="FBSCheckbox" name="FBSCheckbox" value="checked" {% if clinicalchem[9] == 1 %}checked{% endif %} disabled> 
+                        <label for="FBSCheckbox">FBS</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="RBSCheckbox" name="RBSCheckbox" value="checked" {% if clinicalchem[10] == 1 %}checked{% endif %} disabled> 
+                        <label for="RBSCheckbox">RBS</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="HPPCheckbox" name="HPPCheckbox" value="checked" {% if clinicalchem[11] == 1 %}checked{% endif %} disabled> 
+                        <label for="HPPCheckbox">2HPP</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="OGCTCheckbox" name="OGCTCheckbox" value="checked" {% if clinicalchem[12] == 1 %}checked{% endif %} disabled> 
+                        <label for="OGCTCheckbox">OGCT</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="HGTCheckbox" name="HGTCheckbox" value="checked" {% if clinicalchem[13] == 1 %}checked{% endif %} disabled> 
+                        <label for="HGTCheckbox">HGT</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="OGTTCheckbox" name="OGTTCheckbox" value="checked" {% if clinicalchem[14] == 1 %}checked{% endif %} disabled> 
+                        <label for="OGTTCheckbox">OGTT</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="NaCheckbox" name="NaCheckbox" value="checked" {% if clinicalchem[15] == 1 %}checked{% endif %} disabled> 
+                        <label for="NaCheckbox">Na<sup>+</sup></label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="MgCheckbox" name="MgCheckbox" value="checked" {% if clinicalchem[16] == 1 %}checked{% endif %} disabled> 
+                        <label for="MgCheckbox">Mg<sup>++</sup></label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="LipidCheckbox" name="LipidCheckbox" value="checked" {% if clinicalchem[17] == 1 %}checked{% endif %} disabled> 
+                        <label for="LipidCheckbox">Lipid Profile</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="TriglyCheckbox" name="TriglyCheckbox" value="checked" {% if clinicalchem[18] == 1 %}checked{% endif %} disabled> 
+                        <label for="TriglyCheckbox">Triglycerides</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CholCheckbox" name="CholCheckbox" value="checked" {% if clinicalchem[19] == 1 %}checked{% endif %} disabled> 
+                        <label for="CholCheckbox">Cholesterol</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ClCheckbox" name="ClCheckbox" value="checked" {% if clinicalchem[20] == 1 %}checked{% endif %} disabled> 
+                        <label for="ClCheckbox">Cl<sup>-</sup></label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="TPAGCheckbox" name="TPAGCheckbox" value="checked" {% if clinicalchem[21] == 1 %}checked{% endif %} disabled> 
+                        <label for="TPAGCheckbox">TPAG</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="TotalCheckbox" name="TotalCheckbox" value="checked" {% if clinicalchem[22] == 1 %}checked{% endif %} disabled> 
+                        <label for="TotalCheckbox">Total Protein</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="GlobCheckbox" name="GlobCheckbox" value="checked" {% if clinicalchem[23] == 1 %}checked{% endif %} disabled> 
+                        <label for="GlobCheckbox">Globulin</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="AlbCheckbox" name="AlbCheckbox" value="checked" {% if clinicalchem[24] == 1 %}checked{% endif %} disabled> 
+                        <label for="AlbCheckbox">Albumin</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CKMBCheckbox" name="CKMBCheckbox" value="checked" {% if clinicalchem[25] == 1 %}checked{% endif %} disabled> 
+                        <label for="CKMBCheckbox">CK-MB</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CKTotalCheckbox" name="CKTotalCheckbox" value="checked" {% if clinicalchem[26] == 1 %}checked{% endif %} disabled> 
+                        <label for="CKTotalCheckbox">CK-Total</label>
+                    </div>
+                </div>
+                <div class="testRow">
+                    <div class="checkbox">
+                        <input type="checkbox" id="LDHCheckbox" name="LDHCheckbox" value="checked" {% if clinicalchem[27] == 1 %}checked{% endif %} disabled> 
+                        <label for="LDHCheckbox">LDH</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="KCheckbox" name="KCheckbox" value="checked" {% if clinicalchem[28] == 1 %}checked{% endif %} disabled> 
+                        <label for="KCheckbox">K<sup>+</sup></label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="CaCheckbox" name="CaCheckbox" value="checked" {% if clinicalchem[29] == 1 %}checked{% endif %} disabled> 
+                        <label for="CaCheckbox">Ca<sup>+</sup></label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="IonizedCheckbox" name="IonizedCheckbox" value="checked" {% if clinicalchem[30] == 1 %}checked{% endif %} disabled> 
+                        <label for="IonizedCheckbox">Ionized Ca</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="PhosCheckbox" name="PhosCheckbox" value="checked" {% if clinicalchem[31] == 1 %}checked{% endif %} disabled> 
+                        <label for="PhosCheckbox">Phosphorus</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inputBox specifyTest">
+                <input type="text" name="others" value="{{ labreq[8] }}" disabled>
+                <span>OTHERS <em>(specify)</em></span>
+            </div>
+
+            <!-- LABORATORY REPORT -->
+            <div class="med-header labReport" id="r_header">LABORATORY REPORT</div>
+            <center>
+                <div class="lab-result">
+                    <table cellpadding="5" id="resultTable" class="table table-striped" width="1030px"> 
+                        <thead>
+                            <tr> 
+                                <th>PROCESS NAME</th> 
+                                <th>TEST RESULT</th> 
+                                <th>REFERENCE VALUE</th> 
+                                <th>DIAGNOSIS</th> 
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {% for report in reports %}
+                            <tr>
+                                <td>{{ report[2] }}</td> 
+                                <td>{{ report[3] }}</td> 
+                                <td>{{ report[4] }}</td> 
+                                <td>{{ report[5] }}</td> 
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+            </center>
+
+        </div>
+    </form>
+    
+
+
+{% endblock %}

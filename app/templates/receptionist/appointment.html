@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Appointment{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
+
 {% block content %}
+
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -31,7 +33,7 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
             <div>
                 <h3>Eda Grace P.</h3>
                 <p>Receptionist</p>
@@ -44,4 +46,5 @@
             </li>
         </ul>
     </div>
+    
 {% endblock %}
