@@ -83,7 +83,7 @@
             <!-- CHIEF COMPLAINTS -->
             <div class="med-header A">CHIEF COMPLAINTS</div>
             <div class="inputBox subject">
-                <input type="text" name="subject">
+                <input type="text" name="subject" required>
                 <span>SUBJECT</span>
             </div>
             <div class="p_row one">
@@ -122,17 +122,29 @@
             </div>
     
             <div class="p_row vitalRowB">
-                <div class="inputBox vitalsA">
-                    <input type="text" name="height">
-                    <span>HEIGHT</span>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="height" id="height">
+                    <span>HEIGHT <em>(cm)</em></span>
                 </div>
-                <div class="inputBox vitalsA">
-                    <input type="text" name="weight">
-                    <span>WEIGHT</span>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="weight" id="weight">
+                    <span>WEIGHT <em>(kg)</em></span>
                 </div>
-                <div class="inputBox vitalsA">
-                    <input type="text" name="body_mass">
+                <button class="btn-submit bmi" type="button" id="calculateBmi">CALCULATE BMI</button>
+                <div class="inputBox vitalsL">
+                    <input type="text" name="body_mass" id="bmiResult">
                     <span>BODY MASS INDEX</span>
+                </div>
+            </div>
+
+            <div class="p_row vitalRowB">
+                <div class="inputBox vitalsA">
+                    <input type="text" name="oxygenSaturation">
+                    <span>SpO<sub>2</sub></span>
+                </div>
+                <div class="inputBox vitalsM">
+                    <input type="text" name="painSection">
+                    <span>PAIN</span>
                 </div>
             </div>
     
@@ -337,5 +349,32 @@
             </div>
         </div>
     {% endif %}
+
+    <script>
+        // CALCULATE BMI
+        let button = document.querySelector("#calculateBmi");
+        button.addEventListener("click", calculateBMI);
+
+        function calculateBMI() {
+ 
+            let height = parseInt(document.querySelector("#height").value);
+            let weight = parseInt(document.querySelector("#weight").value);
+            let result = document.querySelector("#bmiResult");
+         
+            if (isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0) {
+                result.value = "Provide valid Height and Weight";
+            } else {
+                let bmi = (weight / ((height * height) / 10000)).toFixed(2);
+        
+                if (bmi < 18.6) {
+                    result.value = `Underweight: ${bmi}`;
+                } else if (bmi >= 18.6 && bmi < 24.9) {
+                    result.value = `Normal: ${bmi}`;
+                } else {
+                    result.value = `Overweight: ${bmi}`;
+                }
+            }
+        }
+    </script>
     
 {% endblock %}

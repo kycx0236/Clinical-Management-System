@@ -51,6 +51,7 @@ def create_app():
         return render_template("login.html")
 
 
+
     from app.routes.admin_bp import admin_bp
     from app.routes.doctor_bp import doctor_bp
     from app.routes.medtech_bp import medtech_bp

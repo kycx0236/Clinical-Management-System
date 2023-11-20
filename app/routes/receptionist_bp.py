@@ -63,7 +63,7 @@ def profile():
 def logout():
     print("Logout route accessed")  
     logout_user()
-    return redirect(url_for('login'))
+    # return redirect(url_for('login'))
 
 # Function and function routes
 

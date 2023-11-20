@@ -209,6 +209,7 @@ def medical_history():
         use = request.form.get('useDrugs')
         sDrugs = request.form.get('specifyDrugs').upper()
         fDrugs = request.form.get('frequencyDrugs').upper()
+        diet = request.form.get('diet').upper()
 
     # SURGICAL HISTORY  
         sDate1 = request.form.get('surgeryDate1')
@@ -256,7 +257,7 @@ def medical_history():
                                                 numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
                                                 surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
                                                 surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
-                                                hospital3 = shospital3, medications = meds, allergies = allergy)  
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
             
             updated_info = doctor.get_patient_history(new_patient_id)
             print('UPDATED INFO:', updated_info)
@@ -286,7 +287,7 @@ def medical_history():
                                                 numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
                                                 surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
                                                 surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
-                                                hospital3 = shospital3, medications = meds, allergies = allergy)
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)
             
             updated_info = doctor.get_patient_history(new_patient_id)
             print('NEW PATIENT HISTORY:', updated_info)
@@ -307,11 +308,13 @@ def add_assessment():
     patient_id = None
 
     if request.method == 'GET':
+        assessment_id = request.args.get('assessment_id')
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_info(patient_id)
         return render_template('doctor/patient/add_assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
     
     elif request.method == 'POST':
+        new_assessment_id = request.form.get('assessment_id')
         new_patient_id = request.form.get('patient_id')
         print('THIS IS THE NEW PATIENT ID:', new_patient_id)
 
@@ -327,9 +330,11 @@ def add_assessment():
         pulse_r = request.form.get('pulse_r').upper()
         temp = request.form.get('temp').upper()
         respiratory_r = request.form.get('respiratory_r').upper()
-        height = request.form.get('height').upper()
-        weight = request.form.get('weight').upper()
-        body_mass = request.form.get('body_mass').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
 
     # PHYSICAL EXAMINATIONS
         normal_head = request.form.get('normal_head').upper()
@@ -424,41 +429,245 @@ def patient_record():
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_info(patient_id)
 
-        return render_template('doctor/patient/patient_record.html', patient=patient_info, patient_id=patient_id, PatientForm=form)
-
+        print('THIS IS THE PATIENT ID:', patient_id)
+        print('THIS IS THE PATIENT INFORMATION:', patient_info)
+        return render_template('doctor/patient/labtest_request.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+    
     elif request.method == 'POST':
         new_patient_id = request.form.get('patient_id')
-        new_first_name = request.form.get('first_name').upper()
-        new_middle_name = request.form.get('middle_name').upper()
-        new_last_name = request.form.get('last_name').upper()
-        new_age = int(request.form.get("age"))    
-        new_civil_status = request.form.get('civil_status')   
-        new_gender = request.form.get('gender')
-        new_bloodType = request.form.get('bloodType')    
-        new_religion = request.form.get('religion')
-        new_birth_place = request.form.get('birth_place').upper()    
-        new_birth_date = request.form.get('birth_date')
-        new_occupation = request.form.get('occupation').upper()    
-        new_email = request.form.get('email')
-        new_contact_num = ''.join(filter(str.isdigit, request.form.get("contact_num"))) 
-        new_p_address = request.form.get('p_address')
-        new_nationality = request.form.get('nationality')    
-        new_e_person = request.form.get('e_person').upper()
-        new_relationship = request.form.get('relationship')    
-        new_e_number = ''.join(filter(str.isdigit, request.form.get("e_number")))
+        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
 
-        updated = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
-                                             civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
-                                             occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
-                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)  
+    # PATIENT INFORMATION
+        patient_fullName = request.form.get('fullName')
+        lab_subject = request.form.get('labsubject').upper()
+        sex = request.form.get("gender")
+        age = request.form.get("age")
+        physician = request.form.get("doctorName").upper()
+        requestDate = request.form.get("dateofRequest")
+        otherTest = request.form.get("others").upper()
+        print('patient_fullName:', patient_fullName)
+        print('sex:', sex)
+        print('age:', age)
+        print('requestDate:', requestDate)
+
+    # HEMATOLOGY
+        cbcplateCheckbox_value = 1 if request.form.get('cbcplateCheckbox') == 'checked' else 0
+        hgbhctCheckbox = 1 if request.form.get('hgbhctCheckbox') == 'checked' else 0
+        protimeCheckbox = 1 if request.form.get('protimeCheckbox') == 'checked' else 0
+        APTTCheckbox = 1 if request.form.get('APTTCheckbox') == 'checked' else 0
+        bloodtypingCheckbox = 1 if request.form.get('bloodtypingCheckbox') == 'checked' else 0
+        ESRCheckbox = 1 if request.form.get('ESRCheckbox') == 'checked' else 0
+        plateCheckbox = 1 if request.form.get('plateCheckbox') == 'checked' else 0
+        hgbCheckbox = 1 if request.form.get('hgbCheckbox') == 'checked' else 0
+        hctCheckbox = 1 if request.form.get('hctCheckbox') == 'checked' else 0
+        cbcCheckbox = 1 if request.form.get('cbcCheckbox') == 'checked' else 0
+        reticsCheckbox = 1 if request.form.get('reticsCheckbox') == 'checked' else 0
+        CTBTCheckbox = 1 if request.form.get('CTBTCheckbox') == 'checked' else 0
+
+    # BACTERIOLOGY
+        culsenCheckbox = 1 if request.form.get('culsenCheckbox') == 'checked' else 0
+        cultureCheckbox = 1 if request.form.get('cultureCheckbox') == 'checked' else 0
+        gramCheckbox = 1 if request.form.get('gramCheckbox') == 'checked' else 0
+        KOHCheckbox = 1 if request.form.get('KOHCheckbox') == 'checked' else 0
+
+    # HISTOPATHOLOGY
+        biopsyCheckbox = 1 if request.form.get('biopsyCheckbox') == 'checked' else 0
+        papsCheckbox = 1 if request.form.get('papsCheckbox') == 'checked' else 0
+        FNABCheckbox = 1 if request.form.get('FNABCheckbox') == 'checked' else 0
+        cellCheckbox = 1 if request.form.get('cellCheckbox') == 'checked' else 0
+        cytolCheckbox = 1 if request.form.get('cytolCheckbox') == 'checked' else 0
+
+    # CLINICAL MICROSCOPY AND PARASITOLOGY
+        urinCheckbox = 1 if request.form.get('urinCheckbox') == 'checked' else 0
+        stoolCheckbox = 1 if request.form.get('stoolCheckbox') == 'checked' else 0
+        occultCheckbox = 1 if request.form.get('occultCheckbox') == 'checked' else 0
+        semenCheckbox = 1 if request.form.get('semenCheckbox') == 'checked' else 0
+        ELISACheckbox = 1 if request.form.get('ELISACheckbox') == 'checked' else 0
+
+    # SEROLOGY
+        ASOCheckbox = 1 if request.form.get('ASOCheckbox') == 'checked' else 0
+        AntiHBSCheckbox = 1 if request.form.get('AntiHBSCheckbox') == 'checked' else 0
+        HCVCheckbox = 1 if request.form.get('HCVCheckbox') == 'checked' else 0
+        C3Checkbox = 1 if request.form.get('C3Checkbox') == 'checked' else 0
+        HIVICheckbox = 1 if request.form.get('HIVICheckbox') == 'checked' else 0
+        HIVIICheckbox = 1 if request.form.get('HIVIICheckbox') == 'checked' else 0
+        NS1Checkbox = 1 if request.form.get('NS1Checkbox') == 'checked' else 0
+        VDRLCheckbox = 1 if request.form.get('VDRLCheckbox') == 'checked' else 0
+        PregCheckbox = 1 if request.form.get('PregCheckbox') == 'checked' else 0
+        RFCheckbox = 1 if request.form.get('RFCheckbox') == 'checked' else 0
+        QuantiCheckbox = 1 if request.form.get('QuantiCheckbox') == 'checked' else 0
+        QualiCheckbox = 1 if request.form.get('QualiCheckbox') == 'checked' else 0
+        TyphidotCheckbox = 1 if request.form.get('TyphidotCheckbox') == 'checked' else 0
+        TubexCheckbox = 1 if request.form.get('TubexCheckbox') == 'checked' else 0
+        HAVIgMCheckbox = 1 if request.form.get('HAVIgMCheckbox') == 'checked' else 0
+        DengueCheckbox = 1 if request.form.get('DengueCheckbox') == 'checked' else 0
+
+    # IMMUNOCHEMISTRY
+        AFPCheckbox = 1 if request.form.get('AFPCheckbox') == 'checked' else 0
+        ferritinCheckbox = 1 if request.form.get('ferritinCheckbox') == 'checked' else 0
+        HBcIgMCheckbox = 1 if request.form.get('HBcIgMCheckbox') == 'checked' else 0
+        AntiHBECheckbox = 1 if request.form.get('AntiHBECheckbox') == 'checked' else 0
+        CA125Checkbox = 1 if request.form.get('CA125Checkbox') == 'checked' else 0
+        PROBNPCheckbox = 1 if request.form.get('PROBNPCheckbox') == 'checked' else 0
+        CA153Checkbox = 1 if request.form.get('CA153Checkbox') == 'checked' else 0
+        CA199Checkbox = 1 if request.form.get('CA199Checkbox') == 'checked' else 0
+        PSACheckbox = 1 if request.form.get('PSACheckbox') == 'checked' else 0
+        CEACheckbox = 1 if request.form.get('CEACheckbox') == 'checked' else 0
+        FreeT3Checkbox = 1 if request.form.get('FreeT3Checkbox') == 'checked' else 0
+        ANA2Checkbox = 1 if request.form.get('ANA2Checkbox') == 'checked' else 0
+        FreeT4Checkbox = 1 if request.form.get('FreeT4Checkbox') == 'checked' else 0
+        HBsAGCheckbox = 1 if request.form.get('HBsAGCheckbox') == 'checked' else 0
+        TroponiniCheckbox = 1 if request.form.get('TroponiniCheckbox') == 'checked' else 0
+        HbACheckbox = 1 if request.form.get('HbACheckbox') == 'checked' else 0
+        HBAeAgCheckbox = 1 if request.form.get('HBAeAgCheckbox') == 'checked' else 0
+        BetaCheckbox = 1 if request.form.get('BetaCheckbox') == 'checked' else 0
+        T3Checkbox = 1 if request.form.get('T3Checkbox') == 'checked' else 0
+        T4Checkbox = 1 if request.form.get('T4Checkbox') == 'checked' else 0
+        TSHCheckbox = 1 if request.form.get('TSHCheckbox') == 'checked' else 0
+
+    # CLINICAL CHEMISTRY
+        ALPCheckbox = 1 if request.form.get('ALPCheckbox') == 'checked' else 0
+        AmylaseCheckbox = 1 if request.form.get('AmylaseCheckbox') == 'checked' else 0
+        BUACheckbox = 1 if request.form.get('BUACheckbox') == 'checked' else 0
+        BUNCheckbox = 1 if request.form.get('BUNCheckbox') == 'checked' else 0
+        CreatinineCheckbox = 1 if request.form.get('CreatinineCheckbox') == 'checked' else 0
+        SGPTCheckbox = 1 if request.form.get('SGPTCheckbox') == 'checked' else 0
+        SGOTCheckbox = 1 if request.form.get('SGOTCheckbox') == 'checked' else 0
+        FBSCheckbox = 1 if request.form.get('FBSCheckbox') == 'checked' else 0
+        RBSCheckbox = 1 if request.form.get('RBSCheckbox') == 'checked' else 0
+        HPPCheckbox = 1 if request.form.get('HPPCheckbox') == 'checked' else 0
+        OGCTCheckbox = 1 if request.form.get('OGCTCheckbox') == 'checked' else 0
+        HGTCheckbox = 1 if request.form.get('HGTCheckbox') == 'checked' else 0
+        OGTTCheckbox = 1 if request.form.get('OGTTCheckbox') == 'checked' else 0
+        NaCheckbox = 1 if request.form.get('NaCheckbox') == 'checked' else 0
+        MgCheckbox = 1 if request.form.get('MgCheckbox') == 'checked' else 0
+        LipidCheckbox = 1 if request.form.get('LipidCheckbox') == 'checked' else 0
+        TriglyCheckbox = 1 if request.form.get('TriglyCheckbox') == 'checked' else 0
+        CholCheckbox = 1 if request.form.get('CholCheckbox') == 'checked' else 0
+        ClCheckbox = 1 if request.form.get('ClCheckbox') == 'checked' else 0
+        TPAGCheckbox = 1 if request.form.get('TPAGCheckbox') == 'checked' else 0
+        TotalCheckbox = 1 if request.form.get('TotalCheckbox') == 'checked' else 0
+        GlobCheckbox = 1 if request.form.get('GlobCheckbox') == 'checked' else 0
+        AlbCheckbox = 1 if request.form.get('AlbCheckbox') == 'checked' else 0
+        CKMBCheckbox = 1 if request.form.get('CKMBCheckbox') == 'checked' else 0
+        CKTotalCheckbox = 1 if request.form.get('CKTotalCheckbox') == 'checked' else 0
+        LDHCheckbox = 1 if request.form.get('LDHCheckbox') == 'checked' else 0
+        KCheckbox = 1 if request.form.get('KCheckbox') == 'checked' else 0
+        CaCheckbox = 1 if request.form.get('CaCheckbox') == 'checked' else 0
+        IonizedCheckbox = 1 if request.form.get('IonizedCheckbox') == 'checked' else 0
+        PhosCheckbox = 1 if request.form.get('PhosCheckbox') == 'checked' else 0
+
+        result = doctor.add_laboratory_request(patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=physician, orderDate=requestDate, 
+                                               otherTest=otherTest, cbcplateCheckbox=cbcplateCheckbox_value, hgbhctCheckbox=hgbhctCheckbox, protimeCheckbox=protimeCheckbox, 
+                                               APTTCheckbox=APTTCheckbox, bloodtypingCheckbox=bloodtypingCheckbox, ESRCheckbox=ESRCheckbox, plateCheckbox=plateCheckbox, 
+                                               hgbCheckbox=hgbCheckbox, hctCheckbox=hctCheckbox, cbcCheckbox=cbcCheckbox, reticsCheckbox=reticsCheckbox, CTBTCheckbox=CTBTCheckbox, 
+                                               culsenCheckbox=culsenCheckbox, cultureCheckbox=cultureCheckbox, gramCheckbox=gramCheckbox, KOHCheckbox=KOHCheckbox, biopsyCheckbox=biopsyCheckbox, 
+                                               papsCheckbox=papsCheckbox, FNABCheckbox=FNABCheckbox, cellCheckbox=cellCheckbox, cytolCheckbox=cytolCheckbox, urinCheckbox=urinCheckbox, 
+                                               stoolCheckbox=stoolCheckbox, occultCheckbox=occultCheckbox, semenCheckbox=semenCheckbox, ELISACheckbox=ELISACheckbox, ASOCheckbox=ASOCheckbox, 
+                                               AntiHBSCheckbox=AntiHBSCheckbox, HCVCheckbox=HCVCheckbox, C3Checkbox=C3Checkbox, HIVICheckbox=HIVICheckbox, HIVIICheckbox=HIVIICheckbox, 
+                                               NS1Checkbox=NS1Checkbox, VDRLCheckbox=VDRLCheckbox, PregCheckbox=PregCheckbox, RFCheckbox=RFCheckbox, QuantiCheckbox=QuantiCheckbox, 
+                                               QualiCheckbox=QualiCheckbox, TyphidotCheckbox=TyphidotCheckbox, TubexCheckbox=TubexCheckbox, HAVIgMCheckbox=HAVIgMCheckbox, DengueCheckbox=DengueCheckbox, 
+                                               AFPCheckbox=AFPCheckbox, ferritinCheckbox=ferritinCheckbox, HBcIgMCheckbox=HBcIgMCheckbox, AntiHBECheckbox=AntiHBECheckbox, CA125Checkbox=CA125Checkbox, 
+                                               PROBNPCheckbox=PROBNPCheckbox, CA153Checkbox=CA153Checkbox, CA199Checkbox=CA199Checkbox, PSACheckbox=PSACheckbox, CEACheckbox=CEACheckbox, FreeT3Checkbox=FreeT3Checkbox, 
+                                               ANA2Checkbox=ANA2Checkbox, FreeT4Checkbox=FreeT4Checkbox, HBsAGCheckbox=HBsAGCheckbox, TroponiniCheckbox=TroponiniCheckbox, HbACheckbox=HbACheckbox, HBAeAgCheckbox=HBAeAgCheckbox, 
+                                               BetaCheckbox=BetaCheckbox, T3Checkbox=T3Checkbox, T4Checkbox=T4Checkbox, TSHCheckbox=TSHCheckbox, ALPCheckbox=ALPCheckbox, AmylaseCheckbox=AmylaseCheckbox, BUACheckbox=BUACheckbox, 
+                                               BUNCheckbox=BUNCheckbox, CreatinineCheckbox=CreatinineCheckbox, SGPTCheckbox=SGPTCheckbox, SGOTCheckbox=SGOTCheckbox, FBSCheckbox=FBSCheckbox, RBSCheckbox=RBSCheckbox, 
+                                               HPPCheckbox=HPPCheckbox, OGCTCheckbox=OGCTCheckbox, HGTCheckbox=HGTCheckbox, OGTTCheckbox=OGTTCheckbox, NaCheckbox=NaCheckbox, MgCheckbox=MgCheckbox, LipidCheckbox=LipidCheckbox, 
+                                               TriglyCheckbox=TriglyCheckbox, CholCheckbox=CholCheckbox, ClCheckbox=ClCheckbox, TPAGCheckbox=TPAGCheckbox, TotalCheckbox=TotalCheckbox, GlobCheckbox=GlobCheckbox, AlbCheckbox=AlbCheckbox, 
+                                               CKMBCheckbox=CKMBCheckbox, CKTotalCheckbox=CKTotalCheckbox, LDHCheckbox=LDHCheckbox, KCheckbox=KCheckbox, CaCheckbox=CaCheckbox, IonizedCheckbox=IonizedCheckbox, PhosCheckbox=PhosCheckbox) 
+
+        new_lab_results = doctor.get_patient_info(new_patient_id)
+        print('result', result)
+
+        if result:
+            return render_template("doctor/patient/labtest_request.html", success=True, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
+        else:
+            return render_template("doctor/patient/labtest_request.html", error=True, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
+
+    return render_template("doctor/patient/labtest_request.html", patient_id=patient_id, Patientform=form)
+
+# PRESCRIPTION
+@doctor_bp.route('/prescription/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
+def prescription():
+    form = PatientForm()
+    patient_id = None
+
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        assessment_id = request.args.get('assessment_id')
+        patient_info = doctor.get_patient_info(patient_id)
+        consultation_info = doctor.get_consultation_info(assessment_id, patient_id)
+        prescription_info = doctor.get_prescription_info(assessment_id)
+        print('PATIENT INFORMATION:', patient_info)
+        print('ASSESSMENT INFORMATION:', consultation_info)
+        print('prescription INFORMATION:', prescription_info)
+        return render_template('doctor/patient/prescription.html', patient=patient_info, consultation=consultation_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
+    
+    elif request.method == 'POST':
+        prescription_data = request.get_json()
+        new_assessment_id = prescription_data.get('assessment_id')
+        new_patient_id = prescription_data.get('patient_id')
+        prescriptions = prescription_data.get('prescriptions')
+    
+        for prescription in prescriptions:
+            medication_name = prescription['medicationName'].capitalize()
+            dosage = prescription['dosage'].upper()
+            p_quantity = prescription['quantity'].capitalize()
+            duration = prescription['duration'].capitalize()
+            instructions = prescription['instructions'].capitalize()
+
+            result = doctor.add_prescription(assessment_id=new_assessment_id, medication_name=medication_name, dosage=dosage, p_quantity=p_quantity, duration=duration, instructions=instructions)
         
-        print('New Patient ID:', new_patient_id)
+        patient_info = doctor.get_patient_info(new_patient_id)
+        consultation_info = doctor.get_consultation_info(new_assessment_id, new_patient_id)
+        prescription_info = doctor.get_prescription_info(new_assessment_id)
+        print('new prescription INFORMATION:', prescription_info)
+        print('RESULT:', result)
 
-        updated_info = doctor.get_patient_info(new_patient_id)
-        print('Updated information:', updated_info)
+        if result:
+            return jsonify({'success': True})
+        else:
+             return jsonify({'error': True}), 500  
 
-        if updated:
-            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form)
+    return render_template("doctor/patient/prescription.html", consultation=consultation_info, patient=patient_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
+
+# DELETE PATIENT RECORD
+@doctor_bp.route('/delete_patient/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
+def delete_patient():
+    form = PatientForm()
+
+    if request.method == "POST":
+        patient_id = request.form.get("patient_id")
+
+        result = doctor.delete_patient_record(patient_id)
+
+        if result:
+            return render_template("doctor/patient/patient.html", success=True, PatientForm=form)
+        else:
+            return render_template("doctor/patient/patient.html", error=True, PatientForm=form)
+        
+    return render_template("doctor/patient/patient.html", PatientForm=form)
+
+# DELETE ASSESSMENT RECORD
+@doctor_bp.route('/delete_assessment/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
+def delete_assessment():
+    form = PatientForm()
+
+    if request.method == "POST":
+        assessment_id = request.form.get("assessment_id")
+        patient_id = request.form.get("patient_id")
+
+        result = doctor.delete_medical_assessment(assessment_id, patient_id)
+        patient_info = doctor.get_patient_info(patient_id)
+
+        if result:
+            return render_template("doctor/patient/consultation.html", success=True, patient=patient_info, PatientForm=form)
         else:
             return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form)
 
@@ -499,9 +708,11 @@ def assessment():
         pulse_r = request.form.get('pulse_r').upper()
         temp = request.form.get('temp').upper()
         respiratory_r = request.form.get('respiratory_r').upper()
-        height = request.form.get('height').upper()
-        weight = request.form.get('weight').upper()
-        body_mass = request.form.get('body_mass').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
 
     # PHYSICAL EXAMINATIONS
         normal_head = request.form.get('normal_head').upper()
@@ -543,7 +754,7 @@ def assessment():
                                                , abnormalities_neck=abnormalities_neck, normal_throat=normal_throat, abnormalities_throat=abnormalities_throat, normal_chest=normal_chest
                                                , abnormalities_chest=abnormalities_chest, normal_abdomen=normal_abdomen, abnormalities_abdomen=abnormalities_abdomen, normal_upper=normal_upper
                                                , abnormalities_upper=abnormalities_upper, normal_lower=normal_lower, abnormalities_lower=abnormalities_lower, normal_tract=normal_tract
-                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis)
+                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis, oxygenSaturation=oxygenSaturation, painSection=painSection)
             
         new_consultation = doctor.get_consultation_info(new_assessment_id, new_patient_id)
         print('NEW ASSESSMENT:', new_consultation)

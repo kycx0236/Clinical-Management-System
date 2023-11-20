@@ -50,7 +50,7 @@
 /* -------------------------------------------- SIDEBAR -------------------------------------------- */
 .sidenav-bg {
     width: 80px;  
-    height: 700px; 
+    height: 100vh;
     background-color: var(--blueC);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
     position: fixed;  
@@ -217,7 +217,6 @@ ul li p {
     font-weight: 900;
     font-size: 18px;
 }
-
 
 .patient-table {
     position: relative; 
@@ -421,6 +420,12 @@ ul li p {
     position: absolute;
     height: 40px;
     width: 120px;
+}
+
+.btn-submit.bmi {
+    background-color: var(--blueA);
+    height: 40px;
+    width: 157px;
 }
 
 /* -------------------------------------------- ROW -------------------------------------------- */
