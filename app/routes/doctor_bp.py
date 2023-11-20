@@ -209,6 +209,7 @@ def medical_history():
         use = request.form.get('useDrugs')
         sDrugs = request.form.get('specifyDrugs').upper()
         fDrugs = request.form.get('frequencyDrugs').upper()
+        diet = request.form.get('diet').upper()
 
     # SURGICAL HISTORY  
         sDate1 = request.form.get('surgeryDate1')
@@ -256,7 +257,7 @@ def medical_history():
                                                 numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
                                                 surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
                                                 surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
-                                                hospital3 = shospital3, medications = meds, allergies = allergy)  
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
             
             updated_info = doctor.get_patient_history(new_patient_id)
             print('UPDATED INFO:', updated_info)
@@ -286,7 +287,7 @@ def medical_history():
                                                 numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
                                                 surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
                                                 surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
-                                                hospital3 = shospital3, medications = meds, allergies = allergy)
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)
             
             updated_info = doctor.get_patient_history(new_patient_id)
             print('NEW PATIENT HISTORY:', updated_info)
@@ -327,9 +328,11 @@ def add_assessment():
         pulse_r = request.form.get('pulse_r').upper()
         temp = request.form.get('temp').upper()
         respiratory_r = request.form.get('respiratory_r').upper()
-        height = request.form.get('height').upper()
-        weight = request.form.get('weight').upper()
-        body_mass = request.form.get('body_mass').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
 
     # PHYSICAL EXAMINATIONS
         normal_head = request.form.get('normal_head').upper()
@@ -371,7 +374,7 @@ def add_assessment():
                                                , abnormalities_neck=abnormalities_neck, normal_throat=normal_throat, abnormalities_throat=abnormalities_throat, normal_chest=normal_chest
                                                , abnormalities_chest=abnormalities_chest, normal_abdomen=normal_abdomen, abnormalities_abdomen=abnormalities_abdomen, normal_upper=normal_upper
                                                , abnormalities_upper=abnormalities_upper, normal_lower=normal_lower, abnormalities_lower=abnormalities_lower, normal_tract=normal_tract
-                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis)
+                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis, oxygenSaturation=oxygenSaturation, painSection=painSection)
             
         new_consultation = doctor.get_patient_info(new_patient_id)
         print('NEW ASSESSMENT:', new_consultation)
@@ -499,9 +502,11 @@ def assessment():
         pulse_r = request.form.get('pulse_r').upper()
         temp = request.form.get('temp').upper()
         respiratory_r = request.form.get('respiratory_r').upper()
-        height = request.form.get('height').upper()
-        weight = request.form.get('weight').upper()
-        body_mass = request.form.get('body_mass').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
 
     # PHYSICAL EXAMINATIONS
         normal_head = request.form.get('normal_head').upper()
@@ -543,7 +548,7 @@ def assessment():
                                                , abnormalities_neck=abnormalities_neck, normal_throat=normal_throat, abnormalities_throat=abnormalities_throat, normal_chest=normal_chest
                                                , abnormalities_chest=abnormalities_chest, normal_abdomen=normal_abdomen, abnormalities_abdomen=abnormalities_abdomen, normal_upper=normal_upper
                                                , abnormalities_upper=abnormalities_upper, normal_lower=normal_lower, abnormalities_lower=abnormalities_lower, normal_tract=normal_tract
-                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis)
+                                               , abnormalities_tract=abnormalities_tract, comments=comments, diagnosis=diagnosis, oxygenSaturation=oxygenSaturation, painSection=painSection)
             
         new_consultation = doctor.get_consultation_info(new_assessment_id, new_patient_id)
         print('NEW ASSESSMENT:', new_consultation)
