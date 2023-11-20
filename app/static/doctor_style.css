@@ -151,11 +151,11 @@ input, select {
 
 /* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.history {
-    height: 2650px; 
+    height: 2750px; 
 }
 
 .patient-bg.assessment {
-    height: 3000px; 
+    height: 3100px; 
 }
 
 .patient-bg.request {
@@ -188,15 +188,15 @@ input, select {
 }
 
 .med-header.E {
-    top: 1600px;
+    top: 1670px;
 }
 
 .med-header.F {
-    top: 1950px;
+    top: 2020px;
 }
 
 .med-header.G {
-    top: 2255px;
+    top: 2330px;
 }
 
 .med-header.H {
@@ -208,11 +208,11 @@ input, select {
 }
 
 .med-header.J {
-    top: 1120px;
+    top: 1200px;
 }
 
 .med-header.K {
-    top: 2550px;
+    top: 2630px;
 }
 
 .med-header.L {
@@ -247,7 +247,7 @@ input, select {
     font-size: 14px;
 }
 
-/* checkboxes */
+/* -------------------------------------------- CHECKBOXES -------------------------------------------- */
 .checkbox {
     display: flex;
     gap: 5px;
@@ -255,7 +255,31 @@ input, select {
     font-size: 17px;
 }
 
-/* more row arrangements */
+.checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox input[type="checkbox"] + label:before {
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 1px solid var(--darkBlue);
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-color: white; 
+    transition: transform 0.3s ease-in;
+}
+
+.checkbox input[type="checkbox"]:checked + label:before {
+    background-color: var(--blueA);
+    transform: scale(1.1); 
+    border: 2px solid white;
+    box-shadow: 0 0 0.3rem 0.1rem rgba(163, 213, 255, 1);
+}
+
+/* -------------------------------------------- MORE ROW ARRANGEMENTS -------------------------------------------- */
 .p_row.immunize {
     gap: 20px;
     margin-top: 165px;
@@ -328,19 +352,19 @@ input, select {
 }
 
 .historyB {
-    width: 240px;
+    width: 242px;
 }
 
 .historyC {
-    width: 308px;
+    width: 320px;
 }
 
 .historyD {
-    width: 330px;
+    width: 337px;
 }
 
 .inputBox.specifications, .inputBox.others {
-    width: 1005px; 
+    width: 1010px; 
     top: 20px;
     left: 110px;
     position: relative;
@@ -477,7 +501,23 @@ input, select {
 }
 
 .inputBox.vitalsJ {
-    width: 553px;
+    width: 560px;
+}
+
+.inputBox.vitalsK {
+    width: 557px;
+}
+
+.inputBox.vitalsK {
+    width: 557px;
+}
+
+.inputBox.vitalsL {
+    width: 380px;
+}
+
+.inputBox.vitalsM {
+    width: 655px;
 }
 
 /* assessment header */

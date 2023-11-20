@@ -158,13 +158,6 @@ ul li p {
     white-space: nowrap;
     display: none;
 }
-/* 
-.border-line {
-    border: 1px solid var(--darkBlue);
-    position: absolute;
-    width: 65px;
-    margin-top: 180px;
-} */
 
 /* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
@@ -215,7 +208,6 @@ ul li p {
     font-weight: 900;
     font-size: 18px;
 }
-
 
 .patient-table {
     position: relative; 
@@ -419,6 +411,12 @@ ul li p {
     position: absolute;
     height: 40px;
     width: 120px;
+}
+
+.btn-submit.bmi {
+    background-color: var(--blueA);
+    height: 40px;
+    width: 157px;
 }
 
 /* -------------------------------------------- ROW -------------------------------------------- */
