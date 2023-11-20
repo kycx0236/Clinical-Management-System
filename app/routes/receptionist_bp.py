@@ -63,7 +63,7 @@ def profile():
 def logout():
     print("Logout route accessed")  
     logout_user()
-    # return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 # Function and function routes
 
@@ -80,6 +80,8 @@ def generate_bookdate():
     return current_datetime
 
 @receptionist_bp.route('/add-appointment/', methods=['GET', 'POST'])
+@login_required
+@role_required('receptionist')
 def add_appointment():
     form = AppointmentForm(request.form)
     booking_details = None
@@ -139,6 +141,8 @@ def add_appointment():
     return render_template("receptionist/appointment/appointment_add.html", form=form, booking_details=booking_details)
 
 @receptionist_bp.route('/delete-appointment/', methods=['POST'])
+@login_required
+@role_required('receptionist')
 def delete_appointment():
     try:
         reference_number = request.form.get('reference_number')
@@ -153,6 +157,8 @@ def delete_appointment():
 
 
 @receptionist_bp.route('/view-appointment/')
+@login_required
+@role_required('receptionist')
 def view_appointment():
     try:
         pass
@@ -160,6 +166,8 @@ def view_appointment():
         pass    
 
 @receptionist_bp.route('/get-booking-details/<reference_number>', methods=['GET'])
+@login_required
+@role_required('receptionist')
 def get_booking_details(reference_number):
     booking_details = models_receptionist.Appointment.get_booking_reference_details(reference_number)
 
