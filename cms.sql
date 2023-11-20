@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `assessment` (
   `temperature` varchar(100),
   `respRate` varchar(100),
   `height` varchar(50),
-  `weight` varchar(50),
+  `weight_p` varchar(50),
   `bmi` varchar(50),
   `normal_head` varchar(50),
   `abnormalities_head` varchar(255),
