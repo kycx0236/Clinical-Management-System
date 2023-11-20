@@ -13,8 +13,8 @@ class AppointmentForm(FlaskForm):
     last_name = StringField('last_name', [validators.Length(min=2, max=50)])
     sex = StringField('sex', [validators.Length(min=3)])
     birth_date = StringField('birth_date', [validators.Length(min=8, max=100)])
-    contact_number = StringField('contact_number', [validators.Length(min=11, max=50)])
+    contact_number = StringField('contact_number', [validators.Length(max=11)])
     email = StringField('email', [validators.Length(min=10, max=50)])
-    address = StringField('address', [validators.Length(min=10, max=50)])
+    address = StringField('address', [validators.Length(min=10, max=255)])
     submit = SubmitField("Submit")
 
