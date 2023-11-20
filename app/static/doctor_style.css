@@ -8,8 +8,9 @@
 /* -------------------------------------------- ADD/UPDATE PATIENT, ADD ASSESSMENT, REQUEST LAB TEST ICON -------------------------------------------- */
 .add-icon img {
     width: 60px;
-    top: 610px;
-    left: 1445px;
+    right: 20px;
+    bottom: 20px;
+    justify-content: flex-end;
     border-radius: 100%;
     z-index: 99;
     position: fixed;
