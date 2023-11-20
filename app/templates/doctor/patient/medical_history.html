@@ -132,7 +132,7 @@
             </div>
 
             <!-- FAMILY HISTORY -->
-            <div class="med-header B">FAMILY HISTORY</div>
+            <div class="med-header B">FAMILY HEALTH HISTORY</div>
             <p class="subtext"><em>(check the box if the family has a history of)</em></p>
             
             <div class="p_row two">
@@ -311,7 +311,7 @@
                 </div>
                 <div class="inputBox historyB">
                     <input type="number" name="yearsDrunk" value="{{ patient[45] }}" disabled>
-                    <span>YEARS DRUNK</span>
+                    <span>YEARS DRANK</span>
                 </div>
                 <div class="inputBox historyB">
                     <input type="text" name="frequencyDrink" value="{{ patient[46] }}" disabled>
@@ -419,7 +419,11 @@
                     <span><em>(if <strong>yes</strong>)</em> FREQUENCY</span>
                 </div>
             </div>
-
+            <div class="inputBox others">
+                <input type="text" name="diet" value="{{ patient[74] }}" disabled>
+                <span>DIET</span>
+            </div>
+ 
             <!-- SURGICAL HISTORY -->
             <div class="med-header E">SURGICAL HISTORY</div>
             <div class="p_row seven">

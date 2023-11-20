@@ -38,34 +38,5 @@
     <script> var logoutUrl = "{{ url_for('admin.logout') }}";</script>
     <script src="{{ url_for('static', filename='logout.js') }}"></script>
 
-    <!-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var element = document.getElementById('logoutButton');
-            if (element) { 
-                element.addEventListener('click', function() {
-                    document.getElementById("logoutModal").style.display = "block";
-                });
-            } else {
-                console.error("Element with ID 'logoutButton' not found");
-            }
-
-            //document.getElementById("logoutButton").addEventListener("click", function() {
-               // document.getElementById("logoutModal").style.display = "block";
-           // });
-        
-            document.getElementById("cancelLogout").addEventListener("click", function() {
-                document.getElementById("logoutModal").style.display = "none";
-            });
-        
-            document.getElementById("confirmLogout").addEventListener("click", function() {
-                console.log("Performing logout action");
-        
-                document.getElementById("logoutModal").style.display = "none";
-        
-                window.location.href = "{{ url_for('admin.logout') }}";
-            });
-        });
-    </script> -->
-
 </body>
 </html>

@@ -137,18 +137,30 @@
                 </div>
             </div>
     
+            <div class="p_row vitalRowB" id="bmi">
+                <div class="inputBox vitalsC">
+                    <input type="text" name="height" id="height" value="{{ patient[9] }}" disabled>
+                    <span>HEIGHT <em>(cm)</em></span>
+                </div>
+                <div class="inputBox vitalsC">
+                    <input type="text" name="weight" id="weight" value="{{ patient[10] }}" disabled>
+                    <span>WEIGHT <em>(kg)</em></span>
+                </div>
+                <button class="btn-submit bmi" type="button" id="calculateBmi" style="display: none;">CALCULATE BMI</button>
+                <div class="inputBox vitalsK">
+                    <input type="text" name="body_mass" id="bmiResult" value="{{ patient[11] }}" disabled>
+                    <span>BODY MASS INDEX</span>
+                </div>
+            </div>
+
             <div class="p_row vitalRowB">
                 <div class="inputBox vitalsA">
-                    <input type="text" name="height" value="{{ patient[9] }}" disabled>
-                    <span>HEIGHT</span>
+                    <input type="text" name="oxygenSaturation" value="{{ patient[40] }}" disabled>
+                    <span>SpO<sub>2</sub></span>
                 </div>
-                <div class="inputBox vitalsA">
-                    <input type="text" name="weight" value="{{ patient[10] }}" disabled>
-                    <span>WEIGHT</span>
-                </div>
-                <div class="inputBox vitalsA">
-                    <input type="text" name="body_mass" value="{{ patient[11] }}" disabled>
-                    <span>BODY MASS INDEX</span>
+                <div class="inputBox vitalsM">
+                    <input type="text" name="painSection" value="{{ patient[41] }}" disabled>
+                    <span>PAIN</span>
                 </div>
             </div>
     
@@ -372,6 +384,15 @@
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'block';
 
+            const calculateBmi = document.querySelector('#calculateBmi');
+            calculateBmi.style.display = 'block';
+
+            const bmiResult = document.querySelector('#bmiResult');
+            bmiResult.style.width = '381px';
+
+            const bmi = document.querySelector('#bmi');
+            bmi.style.left = '88px';
+
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
             editIcon.setAttribute('onclick', 'disableEdit()'); 
@@ -387,9 +408,43 @@
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'none';
 
+            const calculateBmi = document.querySelector('#calculateBmi');
+            calculateBmi.style.display = 'none';
+
+            const bmiResult = document.querySelector('#bmiResult');
+            bmiResult.style.width = '557px';
+
+            const bmi = document.querySelector('#bmi');
+            bmi.style.left = '0px';
+
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');
+        }
+
+        // CALCULATE BMI
+        let button = document.querySelector("#calculateBmi");
+        button.addEventListener("click", calculateBMI);
+
+        function calculateBMI() {
+ 
+            let height = parseInt(document.querySelector("#height").value);
+            let weight = parseInt(document.querySelector("#weight").value);
+            let result = document.querySelector("#bmiResult");
+         
+            if (isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0) {
+                result.value = "Please provide valid Height and Weight!";
+            } else {
+                let bmi = (weight / ((height * height) / 10000)).toFixed(2);
+        
+                if (bmi < 18.6) {
+                    result.value = `Underweight: ${bmi}`;
+                } else if (bmi >= 18.6 && bmi < 24.9) {
+                    result.value = `Normal: ${bmi}`;
+                } else {
+                    result.value = `Overweight: ${bmi}`;
+                }
+            }
         }
     </script>
     
