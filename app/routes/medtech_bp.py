@@ -40,7 +40,7 @@ def laboratory_test():
         return render_template('medtech/laboratory_test.html', labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info,)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info)
     
     elif request.method == 'POST':
         data = request.get_json()
@@ -104,6 +104,26 @@ def laboratory_report():
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report)
+
+# DELETE LABORATORY RECORD
+@medtech_bp.route('/delete_laboratory_report/', methods=['GET', 'POST'])
+@login_required
+@role_required('medtech')
+def delete_laboratory_report():
+    form = PatientForm()
+
+    if request.method == "POST":
+        report_id = request.form.get("report_id")
+        order_id = request.form.get("order_id")
+
+        result = medtech.delete_laboratory_report(report_id, order_id)
+
+        if result:
+            return render_template("medtech/patient.html", success=True, PatientForm=form)
+        else:
+            return render_template("medtech/patient.html", error=True, PatientForm=form)
+        
+    return render_template("medtech/patient.html", PatientForm=form)
 
 @medtech_bp.route('/profile/')
 @login_required

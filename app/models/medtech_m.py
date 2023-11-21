@@ -112,3 +112,19 @@ class medtech():
         cursor.execute(query, (reportID,))
         labreport = cursor.fetchall()
         return labreport
+    
+# DELETE LABORATORY REPORT
+    @classmethod 
+    def delete_laboratory_report(cls, reportID, orderID):
+        cursor = mysql.connection.cursor()
+        try:
+            reportQuery = "DELETE FROM labreport WHERE reportID = %s"
+            cursor.execute(reportQuery, (reportID,))
+
+            requestQuery = "DELETE FROM labrequest WHERE orderID = %s"
+            cursor.execute(requestQuery, (orderID,))
+
+            mysql.connection.commit()
+            return True
+        except:
+            return False

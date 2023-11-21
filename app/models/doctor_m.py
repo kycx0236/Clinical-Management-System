@@ -263,12 +263,12 @@ class doctor():
         return labreport
     
     @staticmethod
-    def get_lab_reports(patient_id):
+    def get_lab_reports(patientID):
         cursor = mysql.connection.cursor()
         query = "SELECT labrequest.labSubject, labreport.reportDate, labrequest.orderID, labrequest.patientID , labreport.reportID \
                 FROM labrequest JOIN labreport ON labrequest.orderID = labreport.orderID \
                 WHERE labrequest.patientID = %s"
-        cursor.execute(query, (patient_id,))
+        cursor.execute(query, (patientID,))
         lab_reports = cursor.fetchall()
         return lab_reports
 
@@ -333,11 +333,11 @@ class doctor():
     
 # DELETE PATIENT RECORD
     @classmethod 
-    def delete_patient_record(cls, patient_id):
+    def delete_patient_record(cls, patientID):
         cursor = mysql.connection.cursor()
         try:
             query = "DELETE FROM patientinfo WHERE patientID = %s"
-            cursor.execute(query, (patient_id,))
+            cursor.execute(query, (patientID,))
             mysql.connection.commit()
             return True
         except:
@@ -345,11 +345,11 @@ class doctor():
 
 # DELETE MEDICAL ASSESSMENT
     @classmethod 
-    def delete_medical_assessment(cls, assessment_id, patient_id):
+    def delete_medical_assessment(cls, assessmentID, patientID):
         cursor = mysql.connection.cursor()
         try:
             query = "DELETE FROM assessment WHERE assessmentID = %s AND patientID = %s"
-            cursor.execute(query, (assessment_id, patient_id,))
+            cursor.execute(query, (assessmentID, patientID,))
             mysql.connection.commit()
             return True
         except:
