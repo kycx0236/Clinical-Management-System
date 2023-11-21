@@ -12,6 +12,8 @@
             <img src="{{ url_for('static', filename='images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <span class="new-notifs" id="new-notifs" style="display: none;"></span>
+            <div class="notif_card unread" style="display: none;"></div>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -224,7 +226,7 @@
                     <div class="checkbox">
                         <input type="checkbox" id="urinCheckbox" name="urinCheckbox" value="checked" {% if microscopy[2] == 1 %}checked{% endif %} disabled>
                         <label for="urinCheckbox">Urinalysis</label>
-                    </div>
+                    </div>  
                     <div class="checkbox">
                         <input type="checkbox" id="stoolCheckbox" name="stoolCheckbox" value="checked" {% if microscopy[3] == 1 %}checked{% endif %} disabled>
                         <label for="stoolCheckbox">Stool Exam</label>
@@ -570,56 +572,58 @@
             </div>
 
             <div class="inputBox specifyTest">
-                <input type="text" name="others" value="{{ labreq[7] }}" disabled>
+                <input type="text" name="others" value="{{ labreq[8] }}" disabled>
                 <span>OTHERS <em>(specify)</em></span>
             </div>
 
             <!-- LABORATORY REPORT -->
             <div class="med-header labReport" id="r_header">LABORATORY REPORT</div>
-            <center>
-                <div class="lab-result">
-                    <table cellspacing="5"> 
+            
+            <div class="lab-result">
+                <p class="subtext test" id="subtext" style="display: none;"><em>(Click the test name above to conveniently input the process name.)</em></p>
+                <center>
+                    <table cellspacing="5" style="width:1100px;"> 
                         <tr> 
                             <td>
-                                <div class="inputBox fName">
+                                <div class="inputBox fName" id="pName" style="display: none;">
                                     <input type="text" id="processName" required="required" name="processName" disabled>
                                     <span>PROCESS NAME</span>
                                 </div>
                             </td>
                             <td>
-                                <div class="inputBox status">
+                                <div class="inputBox status" id="tResult" style="display: none;">
                                     <input type="text" id="testResult" required="required" name="testResult" disabled>
                                     <span>TEST RESULT</span>
                                 </div>
                             </td>
                             <td>
-                                <div class="inputBox refValue">
+                                <div class="inputBox refValue" id="rValue" style="display: none;">
                                     <input type="text" id="refValue" required="required" name="refValue" disabled>
                                     <span>REFERENCE VALUE</span>
                                 </div>
                             </td>
                             <td>
-                                <div class="inputBox fName">
+                                <div class="inputBox fName" id="prognosis" style="display: none;">
                                     <input type="text" id="diagnosis" required="required" name="diagnosis" disabled>
                                     <span>DIAGNOSIS</span>
                                 </div>
                             </td>
+                            <td>
+                                <button class="btn-submit test" type="button" id="testButton" onclick="test()" style="display: none;">ADD TEST</button>
+                            </td>
                         </tr> 
                         <tr> 
-                            <td colspan="4"> 
+                            <td colspan="5"> 
                                 <div class="btn-container">
-                                    <button class="btn-submit test" type="button" id="testButton" onclick="test()" style="display: none;">ADD TEST</button>
-                                </div>
-                                <div class="btn-container">
-                                    <button class="btn-submit" type="button" id="doneButton" style="display: none;" onclick="toSubmitReport()">DONE</button>
+                                    <button class="btn-submit" type="button" id="doneButton" onclick="toSubmitReport()" style="display: none;">DONE</button>
                                 </div>
                             </td>
                         </tr>	 
                     </table> 
                 
                     <br><br>
-                    
-                    <table cellpadding="5" id="resultTable" class="table table-striped" width="1030px"> 
+                
+                    <table cellpadding="5" id="resultTable" class="table table-striped" style="width: 1090px;"> 
                         <tr> 
                             <th>PROCESS NAME</th> 
                             <th>TEST RESULT</th> 
@@ -627,13 +631,14 @@
                             <th>DIAGNOSIS</th> 
                         </tr> 
                     </table> 
-                    <div class="btn-container">
-                        <button type="button" class="btn-submit" id="submitData" style="display: none;">SUBMIT</button>
-                    </div>
-                </div>
-            </center>
+                </center>
+            
+                <div class="btn-container">
+                    <button type="button" class="btn-submit" id="submitData" style="display: none;">SUBMIT</button>
+                </div>  
+            </div>
 
-            <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
+            <img class="update-icon test" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
         </div>
     </form>
   
@@ -709,7 +714,6 @@
                     cell3.innerHTML = r_value;
                     cell4.innerHTML = diagnosis;
 
-                    // Clear input fields
                     document.getElementById('processName').value = ''; 
                     document.getElementById('testResult').value = ''; 
                     document.getElementById('refValue').value = ''; 
@@ -736,7 +740,6 @@
                     referenceValue: cells[2].innerText,
                     diagnosisSummary: cells[3].innerText
                 };
-
                 extractedValues.push(rowValues);
             }
 
@@ -776,11 +779,26 @@
 
         // EDIT BUTTON
         function enableEdit() {
-            const inputFields = document.querySelectorAll('.lab-result input');
+            const inputFields = document.querySelectorAll('.lab-result input, .lab-result select');
 
             inputFields.forEach((input) => {
                 input.disabled = false;
             });
+
+            const subtext = document.querySelector('#subtext');
+            subtext.style.display = 'block';
+
+            const processnameInput = document.querySelector('#pName');
+            processnameInput.style.display = 'block';
+
+            const testresultInput = document.querySelector('#tResult');
+            testresultInput.style.display = 'block';
+
+            const refValueInput = document.querySelector('#rValue');
+            refValueInput.style.display = 'block';
+
+            const diagnosisInput = document.querySelector('#prognosis');
+            diagnosisInput.style.display = 'block';
 
             const testButton = document.querySelector('#testButton');
             testButton.style.display = 'block';
@@ -794,11 +812,26 @@
         }
 
         function disableEdit() {
-            const inputFields = document.querySelectorAll('.lab-result input');
+            const inputFields = document.querySelectorAll('.lab-result input, .lab-result select');
 
             inputFields.forEach((input) => {
                 input.disabled = true;
             });
+
+            const subtext = document.querySelector('#subtext');
+            subtext.style.display = 'none';
+
+            const processnameInput = document.querySelector('#pName');
+            processnameInput.style.display = 'none';
+
+            const testresultInput = document.querySelector('#tResult');
+            testresultInput.style.display = 'none';
+
+            const refValueInput = document.querySelector('#rValue');
+            refValueInput.style.display = 'none';
+
+            const diagnosisInput = document.querySelector('#prognosis');
+            diagnosisInput.style.display = 'none';
 
             const testButton = document.querySelector('#testButton');
             testButton.style.display = 'none';
@@ -811,26 +844,42 @@
             editIcon.setAttribute('onclick', 'enableEdit()');
         }
 
+        // TO SUBMIT REPORT
         function toSubmitReport() {
-            const inputFields = document.querySelectorAll('.lab-result input');
+            const proceed = confirm('Are you done with the test and wish to proceed with the submission of report?') 
+            
+            if (proceed) {
+                const inputFields = document.querySelectorAll('.lab-result input');
 
-            inputFields.forEach((input) => {
-                input.disabled = true;
-            });
+                inputFields.forEach((input) => {
+                    input.disabled = true;
+                });
 
-            const testButton = document.querySelector('#testButton');
-            testButton.style.display = 'none';
+                const doneButton = document.querySelector('#doneButton');
+                doneButton.style.display = 'none';
 
-            const doneButton = document.querySelector('#doneButton');
-            doneButton.style.display = 'none';
+                const submitButton = document.querySelector('#submitData');
+                submitButton.style.display = 'block';
 
-            const submitButton = document.querySelector('#submitData');
-            submitButton.style.display = 'block';
-
-            const editIcon = document.getElementById('editIcon');
-            editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
-            editIcon.setAttribute('onclick', 'enableEdit()');
+                const editIcon = document.getElementById('editIcon');
+                editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
+                editIcon.setAttribute('onclick', 'enableEdit()');
+            } 
+            else {
+                console.log('Submission cancelled')
+            }
         }
+
+        // EASY ACCESS PROCESS NAME
+        const checkboxLabels = document.querySelectorAll('label');
+        const processNameInput = document.getElementById('processName');
+        checkboxLabels.forEach(label => {
+            label.addEventListener('click', () => {
+                const labelText = label.textContent.trim();
+                
+                processNameInput.value = labelText;
+            });
+        });
 	</script> 
 
 {% endblock %}

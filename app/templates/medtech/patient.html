@@ -7,6 +7,8 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <span class="new-notifs" id="new-notifs" style="display: none;"></span>
+            <div class="notif_card unread" style="display: none;"></div>
             <a href="{{ url_for('medtech.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -45,7 +47,7 @@
     </div>
 
     <div class="patient-table">
-        <table id="example" class="table table-striped" style="width:100%">
+        <table id="patientTable" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
                     <th>SUBJECT</th>
@@ -80,10 +82,11 @@
                     </td>
                     <td>
                         <!-- DELETE RECORD -->
-                        <form method="POST" action="/medtech/delete_report/">
+                        <form id="deleteForm_{{ labrequest[6] }}_{{ labrequest[0] }}" method="POST" action="/medtech/delete_laboratory_report/">
                             <div class="delete-icon">
-                                <input id="patient_id" name="patient_id" value="" type="hidden">
-                                <button type="submit" style="background: none; border: none;">
+                                <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
+                                <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
+                                <button type="button" onclick="confirmation('{{ labrequest[6] }}', '{{ labrequest[0] }}')" style="background: none; border: none;">
                                     <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Report">
                                 </button>
                             </div>
@@ -95,13 +98,110 @@
         </table>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Delete Report</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to permanently delete the laboratory report?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
+                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient's laboratory report has been deleted successfully!
+                    </div>
+                    <a href="{{ url_for('medtech.patient') }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in deleting patient laboratory report. Please try again.
+                    </div>
+                    <a href="{{ url_for('medtech.patient') }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
-        new DataTable('#example');
+        new DataTable('#patientTable');
+
+        // CONFIRMATION BEFORE DELETION
+        function confirmation(reportId, orderId){
+            const confirmationModal = document.getElementById("confirmationModal");
+            confirmationModal.style.display = "block";
+
+            const confirmDelete = document.getElementById("confirmDelete");
+            const cancelDelete = document.getElementById("cancelDelete");
+            console.log(reportId)
+            console.log(orderId)
+            confirmDelete.addEventListener("click", function() {
+                document.getElementById("deleteForm_" + reportId + "_" + orderId).submit();
+            });
+    
+            cancelDelete.addEventListener("click", function() {
+                confirmationModal.style.display = "none";
+            });
+        }
+
+        // LAB REQUEST NOTIFICATION
+        const unreadMessages = document.querySelectorAll(".unread");
+
+        function updateUnreadCount() {
+            const unread = document.getElementById("notifs");
+            unread.innerText = unreadMessages.length;
+
+            if (unreadMessages.length > 0) {
+                const newNotifs = document.getElementById('new-notifs');
+                newNotifs.style.display = 'block';
+            }
+        }
+
+        function markAsRead(message) {
+            message.classList.remove("unread");
+            updateUnreadCount();
+        }
+
+        function markAllAsRead() {
+            unreadMessages.forEach(message => {
+                message.classList.remove("unread");
+            });
+            updateUnreadCount();
+        }
     </script>
-
-
 
 {% endblock %}
