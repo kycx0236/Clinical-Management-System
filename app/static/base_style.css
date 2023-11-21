@@ -408,9 +408,9 @@ ul li p {
 
 .btn-submit.test {
     background-color: var(--blueA);
-    position: absolute;
     height: 40px;
-    width: 120px;
+    width: 100px;
+    margin-top: 0px;
 }
 
 .btn-submit.bmi {
@@ -551,4 +551,30 @@ ul li p {
     color: var(--blueA);
     font-weight: 900;
     left: 65px;
+}
+
+/* -------------------------------------------- REPORT BACKGROUNDS -------------------------------------------- */
+.patient-bg.report {
+    height: 2500px; 
+}
+
+.patient-bg.test {
+    width: 1230px;  
+    height: 2800px; 
+}
+
+/* -------------------------------------------- LABORATORY REPORT -------------------------------------------- */
+.lab-result {
+    margin-top: 150px;
+    position: relative;
+    /* border: 1px solid; */
+}
+
+.med-header.labReport {
+    top: 1510px
+}
+
+.test-button {
+    border: none;
+    background-color: white;
 }
