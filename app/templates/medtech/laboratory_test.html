@@ -12,8 +12,6 @@
             <img src="{{ url_for('static', filename='images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <span class="new-notifs" id="new-notifs" style="display: none;"></span>
-            <div class="notif_card unread" style="display: none;"></div>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -641,7 +639,7 @@
             <img class="update-icon test" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
         </div>
     </form>
-  
+    
     <div id="successModal" class="modal show" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
