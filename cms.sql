@@ -384,6 +384,7 @@ CREATE TABLE IF NOT EXISTS `clinicalchem` (
 CREATE TABLE IF NOT EXISTS `labreport` (
   `reportID` int NOT NULL AUTO_INCREMENT,
   `orderID` int NOT NULL,
+  `medtech` varchar(255) NOT NULL,
   `reportDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`reportID`),
   UNIQUE KEY `report_id_UNIQUE` (`reportID`),
