@@ -69,12 +69,6 @@
 
     <form id="prescriptionForm" action="{{ url_for('doctor.prescription') }}">
 
-        <!-- PRESCRIPTION ID -->
-        <!-- <div class="inputBox code" style="display: none;">
-            <input disabled name="prescription_id" value="{{ consultation[0] }}">
-            <input hidden name="prescription_id" value="{{ consultation[0] }}" >
-        </div> -->
-
         <!-- ASSESSMENT ID -->
         <div class="inputBox code" style="display: none;">
             <input disabled name="assessment_id" value="{{ consultation[0] }}">
@@ -112,28 +106,31 @@
             <h4 class="columnC gender">GENDER:</h4>
             <p class="columnD p_gender">{{ patient[6] }}</p>
 
-            <div class="med-header prescription" id="p_header"  style="display: none;">PRESCRIPTION</div>
+            <center>
+                <div class="med-header" id="p_header"  style="display: none;">PRESCRIPTION</div>
             
-            <!-- PRESCRIPTION -->
-            <div class="prescription-container" id="prescriptionContainer" style="display: none;">
-                
-            </div>
+                <!-- PRESCRIPTION -->
+                <div class="prescription-container" id="prescriptionContainer" style="display: none;">
+                    
+                </div>
 
-            <table class="prescription-table" id="prescriptionTable">
-                <tbody>
-                    {% for prescription in prescriptions %}
-                        <tr>
-                            <td colspan="5" style="text-align: left;">{{ prescription[0] }} {{ prescription[1] }}<br>
-                                {{ prescription[2] }}<br>
-                                {{ prescription[3] }}<br>
-                                {{ prescription[4] }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <table class="prescription-table" id="prescriptionTable">
+                    <tbody>
+                        {% for prescription in prescriptions %}
+                            <tr>
+                                <td colspan="5" style="text-align: left;">{{ prescription[0] }} {{ prescription[1] }}<br>
+                                    {{ prescription[2] }}<br>
+                                    {{ prescription[3] }}<br>
+                                    {{ prescription[4] }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </center>
+
             <div class="page-break"></div>
-            <h4 class="doctor">EDA GRACE J. PARAGOSO, MD, FPPS</h4>
+            <h4 class="doctor">{{ doctor[0] }} {{ doctor[1] }}, MD, FPPS</h4>
             <h4 class="license">License No. <p style="text-decoration:underline;"> 84303</p> </h4>
         
             <div class="btn-container">
@@ -277,7 +274,7 @@
                 const newPrescription = document.createElement('div');
                 newPrescription.classList.add('prescription-section');
                 newPrescription.innerHTML = `
-                    <div class="p_row row1">
+                    <div class="p_row prescriptionA">
                         <div class="inputBox prescription">
                             <input type="text" name="medication_name" required>
                             <span>MEDICINE</span>
@@ -287,7 +284,7 @@
                             <span>DOSAGE</span>
                         </div>
                     </div>
-                    <div class="p_row row2">
+                    <div class="p_row prescription">
                         <div class="inputBox quantity">
                             <input type="text" name="quantity" required>
                             <span>QUANTITY</span>
@@ -297,7 +294,7 @@
                             <span>DURATION</span>
                         </div>
                     </div>
-                    <div class="p_row row3">
+                    <div class="p_row prescription">
                         <div class="inputBox p_instructions">
                             <input type="text" name="instructions" required>
                             <span>INSTRUCTIONS</span>

@@ -571,15 +571,24 @@
                     </div>
                 </div>
             </div>
-
-            <div class="inputBox specifyTest">
-                <input type="text" name="others" value="{{ labreq[8] }}" disabled>
-                <span>OTHERS <em>(specify)</em></span>
-            </div>
-
+            <center>
+                <div class="inputBox longtext">
+                    <input type="text" name="others" value="{{ labreq[8] }}" disabled>
+                    <span>OTHERS <em>(specify)</em></span>
+                </div>
+            </center>
+            
             <!-- LABORATORY REPORT -->
             <div class="med-header labReport" id="r_header">LABORATORY REPORT</div>
             
+            <div class="p_row rowOne">
+                <div class="inputBox labsubject">
+                    <input type="text" value="{{ medtech[0] }} {{ medtech[1] }}" disabled>
+                    <input hidden type="text" name="medtech_name" value="{{ medtech[0] }} {{ medtech[1] }}">
+                    <span>CARRIED OUT BY:</span>
+                </div>
+            </div>  
+           
             <div class="lab-result">
                 <p class="subtext test" id="subtext" style="display: none;"><em>(Click the test name above to conveniently input the process name.)</em></p>
                 <center>
@@ -682,9 +691,11 @@
     <script> 
         var orderId = document.querySelector('input[name="order_id"][hidden]').value;
         var patientId = document.querySelector('input[name="patient_id"][hidden]').value;
+        var medtechName = document.querySelector('input[name="medtech_name"][hidden]').value;
 
         console.log('Order ID:', orderId);
         console.log('Patient ID:', patientId);
+        console.log('Medtech Name:', medtechName);
 
         // TEST REPORT
 		function test(){ 
@@ -747,7 +758,8 @@
             var dataToFetch = {
                 data: extractedValues,
                 order_id: orderId,
-                patient_id: patientId
+                patient_id: patientId,
+                medtech_name: medtechName
             };
        
             fetch('/medtech/laboratory_test/', {
@@ -877,7 +889,6 @@
         checkboxLabels.forEach(label => {
             label.addEventListener('click', () => {
                 const labelText = label.textContent.trim();
-                
                 processNameInput.value = labelText;
             });
         });
