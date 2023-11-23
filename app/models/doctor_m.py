@@ -1,20 +1,31 @@
 from app import mysql
+# from app.models.login_m import *
 
 class doctor():
 # ADD PATIENT INFORMATION
-    def add(self):
+    def add(self, current_user):
         cursor = mysql.connection.cursor()
 
-        check_duplicate_sql = "SELECT patientID FROM patientinfo WHERE firstName = %s AND lastName = %s AND birthDate = %s"
-        cursor.execute(check_duplicate_sql, (self.firstName, self.lastName, self.birthDate))
+        check_duplicate_sql = "SELECT patientinfo.patientID FROM patientinfo INNER JOIN docpatient_relation ON patientinfo.patientID = docpatient_relation.patientID \
+                            WHERE patientinfo.firstName = %s AND patientinfo.lastName = %s AND docpatient_relation.doctorID = %s"
+        cursor.execute(check_duplicate_sql, (self.firstName, self.lastName, current_user))
         existing_patient = cursor.fetchone()
 
         if existing_patient:
             return False
         
-        sql = "INSERT INTO patientinfo(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (self.firstName, self.midName, self.lastName, self.age, self.civilStatus, self.gender, self.bloodType, self.birthPlace, self.birthDate, self.p_address, self.nationality, self.religion, self.eContactName, self.relationship, self.eContactNum, self.occupation, self.p_email, self.p_contactNum))
+        sql = "INSERT INTO patientinfo(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, \
+            relationship, eContactNum, occupation, p_email, p_contactNum) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (self.firstName, self.midName, self.lastName, self.age, self.civilStatus, self.gender, self.bloodType, self.birthPlace, self.birthDate, 
+                             self.p_address, self.nationality, self.religion, self.eContactName, self.relationship, self.eContactNum, self.occupation, self.p_email, 
+                             self.p_contactNum))
+        mysql.connection.commit()
 
+        new_patient_id = cursor.lastrowid
+        doctor_id = current_user
+
+        sql_docpatient_relation = "INSERT INTO docpatient_relation(doctorID, patientID) VALUES (%s, %s)"
+        cursor.execute(sql_docpatient_relation, (doctor_id, new_patient_id))
         mysql.connection.commit()
 
         return True
@@ -134,13 +145,33 @@ class doctor():
     
 # GET INFORMATION
     @staticmethod
-    def get_patients():
+    def get_doctor_info(doctor_id):
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM patientinfo") 
-        patients = cursor.fetchall()
+        query = "SELECT first_name, last_name FROM users WHERE id = %s"
+        cursor.execute(query, (doctor_id,))
+        doctor = cursor.fetchone()
         cursor.close()
-        return patients 
-    
+        return doctor
+
+    @staticmethod
+    def get_patients(doctorID):
+        cursor = mysql.connection.cursor()
+        select_doctor_query = "SELECT patientID FROM docpatient_relation WHERE doctorID = %s"
+        cursor.execute(select_doctor_query, (doctorID,))
+        patient_ids = cursor.fetchall()
+
+        patient_records = []
+
+        for patient_id in patient_ids:
+            select_patient_query = "SELECT * FROM patientinfo WHERE patientID = %s"
+            cursor.execute(select_patient_query, (patient_id[0],))
+            patient_data = cursor.fetchone()
+            patient_records.append(patient_data)
+
+        cursor.close()
+
+        return patient_records
+
     @staticmethod
     def get_consultations(patientID):
         cursor = mysql.connection.cursor()
@@ -271,6 +302,14 @@ class doctor():
         cursor.execute(query, (patientID,))
         lab_reports = cursor.fetchall()
         return lab_reports
+    
+    @staticmethod
+    def get_labreport_info(reportID):
+        cursor = mysql.connection.cursor()
+        query = ("SELECT medtech, reportDate FROM labreport WHERE reportID = %s")
+        cursor.execute(query, (reportID,))
+        reportInfo = cursor.fetchone()
+        return reportInfo
 
 # UPDATE PATIENT INFORMATION
     @classmethod
@@ -354,7 +393,3 @@ class doctor():
             return True
         except:
             return False
-
-# DELETE LABORATORY RESULTS
-    
-    

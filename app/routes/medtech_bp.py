@@ -3,7 +3,7 @@ from app.forms.medtech_f import *
 import app.models as models
 from app.models.medtech_m import *
 from flask import Blueprint
-from flask_login import login_required, logout_user
+from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 
 medtech_bp = Blueprint('medtech', __name__)
@@ -22,6 +22,7 @@ def dashboard():
 def laboratory_test():
     form=PatientForm()
     patient_id = None
+    user_id = current_user.id
 
     if request.method == 'GET':
         order_id = request.args.get('order_id')
@@ -34,22 +35,23 @@ def laboratory_test():
         serology_info = medtech.get_serology_data(order_id)
         immunochem_info = medtech.get_immunochem_data(order_id)
         clinicalchem_info = medtech.get_clinicalchem_data(order_id)
-        
-        print('THIS IS THE PATIENT ID:', patient_id)
-        print('THIS IS THE PATIENT INFORMATION:', labreq_info)
+        user_info = medtech.get_user_info(user_id)
+
         return render_template('medtech/laboratory_test.html', labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info)
     
     elif request.method == 'POST':
         data = request.get_json()
         new_order_id = data.get('order_id')
         new_patient_id = data.get('patient_id')
+        new_medtech_name = data.get('medtech_name')
         extracted_values = data.get('data')
 
         print('THIS IS THE ORDER ID:', new_order_id)
         print('THIS IS THE NEW PATIENT ID:', new_patient_id)
+        print('THIS IS THE NEW MEDTECH NAME:', new_medtech_name)
         print('Received data:', extracted_values)
         
         success = True
@@ -59,7 +61,7 @@ def laboratory_test():
             ref_value = item['referenceValue']
             diagnosis_report = item['diagnosisSummary']
 
-            report = medtech.add_laboratory_report(orderID=new_order_id, processName=process_name, testResult=test_result, refValue=ref_value, diagnosisReport=diagnosis_report)
+            report = medtech.add_laboratory_report(orderID=new_order_id, medtech=new_medtech_name, processName=process_name, testResult=test_result, refValue=ref_value, diagnosisReport=diagnosis_report)
             print('REPORT:', report)
             if not report:
                 success = False
@@ -88,8 +90,10 @@ def laboratory_report():
     order_id = request.args.get('order_id')
     patient_id = request.args.get('patient_id')
     report_id = request.args.get('report_id')
-    print("report id:", report_id)
+
     labreq_info = medtech.get_labrequest_data(order_id)
+    labrep_info = medtech.get_labreport_info(report_id)
+    lab_report = medtech.get_lab_report(report_id)
     hematology_info = medtech.get_hematology_data(order_id)
     bacteriology_info = medtech.get_bacteriology_data(order_id)
     histopathology_info = medtech.get_histopathology_data(order_id)
@@ -97,13 +101,11 @@ def laboratory_report():
     serology_info = medtech.get_serology_data(order_id)
     immunochem_info = medtech.get_immunochem_data(order_id)
     clinicalchem_info = medtech.get_clinicalchem_data(order_id)
-    lab_report = medtech.get_lab_report(report_id)
-    print('lab report:', lab_report)
     
     return render_template("medtech/laboratory_report.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info)
 
 # DELETE LABORATORY RECORD
 @medtech_bp.route('/delete_laboratory_report/', methods=['GET', 'POST'])
