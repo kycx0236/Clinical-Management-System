@@ -38,7 +38,7 @@
 .update-icon.test {
     position: absolute;
     right: 17px;
-    top: 1515px;
+    top: 1600px;
 }
 
 .update-icon:active {
@@ -171,7 +171,7 @@ input, select {
 }
 
 .patient-bg.request {
-    height: 1650px; 
+    height: 1700px; 
 }
 
 .patient-bg.prescription {
@@ -788,11 +788,11 @@ input, select {
 }
 
 .inputBox.fullName {
-    width: 615px;
+    width: 1040px;
 }
 
 .inputBox.labsubject {
-    width: 400px;
+    width: 1040px;
 }
 
 .inputBox.doctorName {
@@ -809,7 +809,7 @@ input, select {
 }
 
 .med-header.jobOrder {
-    top: 320px
+    top: 400px
 }
 
 .p_row.rowTen {
