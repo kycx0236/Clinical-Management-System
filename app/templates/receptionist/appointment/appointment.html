@@ -62,7 +62,7 @@
                                             <a href="{{ url_for('receptionist.logout') }}" class="doccare-view-appoinment-icon">
                                                 <span class="material-symbols-outlined">info</span>
                                             </a>
-                                            <a href="{{ url_for('receptionist.logout') }}" class="doccare-edit-appoinment-icon">
+                                            <a href="{{ url_for('receptionist.reschedule', reference_number=row[0]) }}" class="doccare-edit-appoinment-icon">
                                                 <span class="material-symbols-outlined">edit</span>
                                             </a>
                                             <button type="button" class="delete-appoinment-button" data-id="{{ row[0] }}" onclick="openDeleteModal('{{ row[0] }}')">
