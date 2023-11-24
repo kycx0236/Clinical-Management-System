@@ -18,7 +18,9 @@ headings = ("Reference Number", "Date", "Time", "Status", "Actions")
 @login_required
 @role_required('receptionist')
 def dashboard():
-    return render_template("receptionist/dashboard/dashboard.html")
+    # Retrieve all appointment data from your model
+    all_appointments = models_receptionist.Appointment.all()
+    return render_template("receptionist/dashboard/dashboard.html", row=all_appointments)
 
 @receptionist_bp.route('/calendar/')
 @login_required
@@ -175,4 +177,62 @@ def get_booking_details(reference_number):
         return jsonify(booking_details)
     else:
         return jsonify({'error': 'Booking details not available'}), 404
+
+@receptionist_bp.route('/edit-appointment/', methods=["GET", "POST"])
+@login_required
+@role_required('receptionist')
+def reschedule():
+    booking_ref_number = request.args.get('reference_number')
+    form = AppointmentForm()
+    appointment_data = models_receptionist.Appointment.get_appointment_by_reference(booking_ref_number)
+    print(appointment_data)
+    # all_courses = student_models.Students.get_all_courses()
+    booking_details = None
+    
+    if appointment_data:
+        # Ensure that appointment_data is not empty before accessing elements
+        appointment_data_dict = {
+            "reference_number": appointment_data['reference_number'],
+            "date_appointment": appointment_data['date_appointment'],
+            "time_appointment": appointment_data['time_appointment'],
+            "status_": appointment_data['status_'],
+            "first_name": appointment_data['first_name'],
+            "middle_name": appointment_data['middle_name'],
+            "last_name": appointment_data['last_name'],
+            "sex": appointment_data['sex'],
+            "birth_date": appointment_data['birth_date'],
+            "contact_number": appointment_data['contact_number'],
+            "email": appointment_data['email'],
+            "address": appointment_data['address']
+        }
+        print(appointment_data_dict)
+    else:
+        # Handle the case where no student data was found
+        flash("Appointment not found.", "error")
+        return redirect(url_for("receptionist.appointment"))
+
+    if request.method == "POST" and form.validate():
+        new_date_appointment = form.date_appointment.data
+        new_time_appointment = form.time_appointment.data
+        new_status_ = form.status_.data
+        new_first_name = form.first_name.data
+        new_middle_name = form.middle_name.data
+        new_last_name = form.last_name.data
+        new_sex = form.sex.data
+        new_birth_date = form.birth_date.data
+        new_contact_number = form.contact_number.data
+        new_email = form.email.data
+        new_address = form.address.data
+
+        if models_receptionist.Appointment.update(booking_ref_number, new_date_appointment, new_time_appointment, new_status_, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address):
+            booking_details = models_receptionist.Appointment.get_booking_reference_details(form.reference_number.data)
+                    
+            print(booking_details)
+                    
+            return jsonify(success=True, message="Appointment added successfully", booking_details=booking_details)
+        
+        else:
+            flash("Failed to update student information.", "error")
+
+    return render_template("receptionist/appointment/appointment_edit.html", form=form, row=appointment_data_dict, booking_details=booking_details)
     
