@@ -22,7 +22,7 @@ CREATE TABLE docpatient_relation (
     doctorID int NOT NULL,
     patientID int NOT NULL,
     PRIMARY KEY (`relationID`),
-    UNIQUE KEY `relation_id_UNIQUE` (`relationID`)
+    UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
     FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
 );
