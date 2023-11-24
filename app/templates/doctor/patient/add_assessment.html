@@ -77,239 +77,238 @@
             <input hidden name="patient_id" value="{{ patient_id }}">
         </div>
 
-        <!-- MEDICAL ASSESSMENT -->
-        <div class="patient-bg assessment">
+        <center>
+            <!-- MEDICAL ASSESSMENT -->
+            <div class="patient-bg assessment">
     
-            <!-- CHIEF COMPLAINTS -->
-            <div class="med-header A">CHIEF COMPLAINTS</div>
-            <div class="inputBox subject">
-                <input type="text" name="subject" required>
-                <span>SUBJECT</span>
-            </div>
-            <div class="p_row one">
-                <div class="inputBox complaints">
-                    <textarea class="complaints" name="complaints" rows="2" placeholder="List down the complaints of the patient"></textarea>
+                <!-- CHIEF COMPLAINTS -->
+                <div class="med-header">CHIEF COMPLAINTS</div>
+                <div class="inputBox subject">
+                    <input type="text" name="subject" required>
+                    <span>SUBJECT</span>
                 </div>
-            </div>
-    
-            <!-- HISTORY OF PRESENT ILLNESS -->
-            <div class="med-header H">HISTORY OF PRESENT ILLNESS</div>
-            <div class="p_row ten">
-                <div class="inputBox complaints">
+
+                <div class="p_row one">
+                    <textarea  name="complaints" rows="2" placeholder="List down the complaints of the patient"></textarea>
+                </div>
+        
+                <!-- HISTORY OF PRESENT ILLNESS -->
+                <div class="med-header">HISTORY OF PRESENT ILLNESS</div>
+
+                <div class="p_row ten">
                     <textarea class="complaints" name="h_illness" rows="2" placeholder="Enter the present history of the illness"></textarea>
                 </div>
-            </div>
+        
+                <!-- VITAL SIGNS -->
+                <div class="med-header">VITAL SIGNS</div>
     
-            <!-- VITAL SIGNS -->
-            <div class="med-header I">VITAL SIGNS</div>
-            <div class="p_row vitalRowA">
-                <div class="inputBox vitalsA">
-                    <input type="text" name="blood_p">
-                    <span>BLOOD PRESSURE</span>
+                <div class="p_row vitalRowA">
+                    <div class="inputBox vitalsA">
+                        <input type="text" name="blood_p">
+                        <span>BLOOD PRESSURE</span>
+                    </div>
+                    <div class="inputBox vitalsB">
+                        <input type="text" name="pulse_r">
+                        <span>PULSE RATE</span>
+                    </div>
+                    <div class="inputBox vitalsB">
+                        <input type="text" name="temp">
+                        <span>TEMPERATURE</span>
+                    </div>
+                    <div class="inputBox vitalsA">
+                        <input type="text" name="respiratory_r">
+                        <span>RESPIRATORY RATE</span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsB">
-                    <input type="text" name="pulse_r">
-                    <span>PULSE RATE</span>
+        
+                <div class="p_row vitalRowB">
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="height" id="height">
+                        <span>HEIGHT <em>(cm)</em></span>
+                    </div>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="weight" id="weight">
+                        <span>WEIGHT <em>(kg)</em></span>
+                    </div>
+                    <button class="btn-submit bmi" type="button" id="calculateBmi">CALCULATE BMI</button>
+                    <div class="inputBox vitalsL">
+                        <input type="text" name="body_mass" id="bmiResult">
+                        <span>BODY MASS INDEX</span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsB">
-                    <input type="text" name="temp">
-                    <span>TEMPERATURE</span>
-                </div>
-                <div class="inputBox vitalsA">
-                    <input type="text" name="respiratory_r">
-                    <span>RESPIRATORY RATE</span>
-                </div>
-            </div>
     
-            <div class="p_row vitalRowB">
-                <div class="inputBox vitalsC">
-                    <input type="text" name="height" id="height">
-                    <span>HEIGHT <em>(cm)</em></span>
+                <div class="p_row vitalRowB">
+                    <div class="inputBox vitalsA">
+                        <input type="text" name="oxygenSaturation">
+                        <span>SpO<sub>2</sub></span>
+                    </div>
+                    <div class="inputBox vitalsM">
+                        <input type="text" name="painSection">
+                        <span>PAIN</span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="weight" id="weight">
-                    <span>WEIGHT <em>(kg)</em></span>
+        
+                <!-- PHYSICAL EXAMINATIONS -->
+                <div class="med-header">PHYSICAL EXAMINATIONS</div>
+              
+                <div class="p_row vitalRowC">
+                    <p>HEAD</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_head">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_head">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <button class="btn-submit bmi" type="button" id="calculateBmi">CALCULATE BMI</button>
-                <div class="inputBox vitalsL">
-                    <input type="text" name="body_mass" id="bmiResult">
-                    <span>BODY MASS INDEX</span>
+                <div class="p_row vitalRowD">
+                    <p>EARS</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_ears">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_ears">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-            </div>
-
-            <div class="p_row vitalRowB">
-                <div class="inputBox vitalsA">
-                    <input type="text" name="oxygenSaturation">
-                    <span>SpO<sub>2</sub></span>
+                <div class="p_row vitalRowD">
+                    <p>EYES</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_eyes">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_eyes">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsM">
-                    <input type="text" name="painSection">
-                    <span>PAIN</span>
+                <div class="p_row vitalRowD">
+                    <p>NOSE</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_nose">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_nose">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-            </div>
-    
-            <!-- PHYSICAL EXAMINATIONS -->
-            <div class="med-header J">PHYSICAL EXAMINATIONS</div>
-            <div class="p_row vitalRowC">
-                <p>HEAD</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_head">
-                    <span>NORMAL</span>
+                <div class="p_row vitalRowD">
+                    <p>SKIN</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_skin">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_skin">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_head">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
+                <div class="p_row vitalRowE">
+                    <p>BACK</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_back">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_back">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-            </div>
-            <div class="p_row vitalRowD">
-                <p>EARS</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_ears">
-                    <span>NORMAL</span>
+                <div class="p_row vitalRowE">
+                    <p>NECK</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_neck">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsD">
+                        <input type="text" name="abnormalities_neck">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_ears">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
+                <div class="p_row vitalRowE">
+                    <p>THROAT</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_throat">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsE">
+                        <input type="text" name="abnormalities_throat">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-            </div>
-            <div class="p_row vitalRowD">
-                <p>EYES</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_eyes">
-                    <span>NORMAL</span>
+                <div class="p_row vitalRowE">
+                    <p>CHEST</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_chest">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsF">
+                        <input type="text" name="abnormalities_chest">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_eyes">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
+                <div class="p_row vitalRowE">
+                    <p>ABDOMEN</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_abdomen">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsG">
+                        <input type="text" name="abnormalities_abdomen">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-            </div>
-            <div class="p_row vitalRowD">
-                <p>NOSE</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_nose">
-                    <span>NORMAL</span>
+                <div class="p_row vitalRowE">
+                    <p>UPPER EXTREMITIES</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_upper">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsH">
+                        <input type="text" name="abnormalities_upper">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_nose">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
+                <div class="p_row vitalRowE">
+                    <p>LOWER EXTREMITIES</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_lower">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsI">
+                        <input type="text" name="abnormalities_lower">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-            </div>
-            <div class="p_row vitalRowD">
-                <p>SKIN</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_skin">
-                    <span>NORMAL</span>
+                <div class="p_row vitalRowE">
+                    <p>GENITOURINARY TRACT</p>
+                    <div class="inputBox vitalsC">
+                        <input type="text" name="normal_tract">
+                        <span>NORMAL</span>
+                    </div>
+                    <div class="inputBox vitalsJ">
+                        <input type="text" name="abnormalities_tract">
+                        <span>ABNORMALITIES <em>(specify)</em></span>
+                    </div>
                 </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_skin">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>BACK</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_back">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_back">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>NECK</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_neck">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsD">
-                    <input type="text" name="abnormalities_neck">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>THROAT</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_throat">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsE">
-                    <input type="text" name="abnormalities_throat">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>CHEST</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_chest">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsF">
-                    <input type="text" name="abnormalities_chest">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>ABDOMEN</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_abdomen">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsG">
-                    <input type="text" name="abnormalities_abdomen">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>UPPER EXTREMITIES</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_upper">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsH">
-                    <input type="text" name="abnormalities_upper">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>LOWER EXTREMITIES</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_lower">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsI">
-                    <input type="text" name="abnormalities_lower">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowE">
-                <p>GENITOURINARY TRACT</p>
-                <div class="inputBox vitalsC">
-                    <input type="text" name="normal_tract">
-                    <span>NORMAL</span>
-                </div>
-                <div class="inputBox vitalsJ">
-                    <input type="text" name="abnormalities_tract">
-                    <span>ABNORMALITIES <em>(specify)</em></span>
-                </div>
-            </div>
-            <div class="p_row vitalRowF">
-                <div class="inputBox complaints">
+                <div class="p_row vitalRowF">
                     <textarea class="complaints" name="comments" rows="2" placeholder="Enter additional comments"></textarea>
                 </div>
-            </div>
-    
-            <!-- DIAGNOSIS -->
-            <div class="med-header K">DIAGNOSIS</div>
-            <div class="p_row vitalRowH">
-                <div class="inputBox complaints">
+        
+                <!-- DIAGNOSIS -->
+                <div class="med-header">DIAGNOSIS</div>
+
+                <div class="p_row vitalRowH">
                     <textarea class="complaints" name="diagnosis" rows="2" placeholder="Enter additional comments"></textarea>
                 </div>
+                <div class="btn-container">
+                    <button class="btn-submit" type="submit" id="updateButton">SUBMIT</button>
+                </div>
             </div>
-            <div class="btn-container">
-                <button class="btn-submit" type="submit" id="updateButton">SUBMIT</button>
-            </div>
-        </div>
+        </center>
     </form>
 
     {% if success %}

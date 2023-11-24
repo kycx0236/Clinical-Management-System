@@ -13,6 +13,7 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <span class="new-notif" id="new-notifs" style="display: none;"></span>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -44,7 +45,6 @@
             </li>
         </ul>
     </div>
-
     <!-- DASHBOARD -->
     <div class="notification-container">
         <div class="notif-header">
@@ -79,11 +79,20 @@
     <script>
         // LAB REQUEST NOTIFICATION
         const markAll = document.getElementById("mark-all");
+        const unreadMessages = document.querySelectorAll(".unread");
 
         function updateUnreadCount() {
-            const unreadMessages = document.querySelectorAll(".unread");
             const unread = document.getElementById("notifs");
             unread.innerText = unreadMessages.length;
+
+            const unreadCount = document.querySelectorAll(".unread").length;
+            const newNotifs = document.getElementById('new-notifs');
+            
+            if (unreadCount > 0) {
+                newNotifs.style.display = 'block';
+            } else {
+                newNotifs.style.display = 'none';
+            }
         }
 
         function markAsRead(message) {
@@ -92,7 +101,6 @@
         }
 
         function markAllAsRead() {
-            const unreadMessages = document.querySelectorAll(".unread");
             unreadMessages.forEach(message => {
                 message.classList.remove("unread");
             });
