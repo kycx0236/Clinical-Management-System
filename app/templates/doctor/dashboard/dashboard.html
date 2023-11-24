@@ -6,8 +6,6 @@
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <li class="selected-icon-bg">
@@ -42,8 +40,8 @@
         <div class="sidenav-user-bg">
             <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
             <div>
-                <h3>Eda Grace P.</h3>
-                <p>Family Medicine</p>
+                <h3>{{ info[0] }}</h3>
+                <p>{{ info[2] }}</p>
             </div>
         </div>
         <ul>

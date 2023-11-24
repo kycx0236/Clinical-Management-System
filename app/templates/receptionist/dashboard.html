@@ -7,8 +7,6 @@
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <li class="selected-icon-bg">
@@ -37,8 +35,8 @@
         <div class="sidenav-user-bg">
             <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
             <div>
-                <h3>Eda Grace P.</h3>
-                <p>Receptionist</p>
+                <h3>{{ info[0] }}</h3>
+                <p>{{ info[1] }}</p>
             </div>
         </div>
         <ul>
@@ -48,7 +46,22 @@
             </li>
         </ul>
     </div>
+
+    <!-- DASHBOARD -->
     <main>
+        <div class="doctor-bg">
+            <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
+            <div class="greetings-name">
+                <p>Welcome,</p>
+                <h2>{{ info[0] }}</h2>
+            </div>
+            <div class="greetings">
+                <p>Have a nice day at work!</p>
+            </div>
+        </div>
+    </main>
+    <!-- <main>
+        
         <p class="date-time" id="demo"></p>
         <a href="#">
             <div class="add-icon">
@@ -65,7 +78,7 @@
                 <img src="{{ url_for('static', filename='images/Cancel Appointment.png') }}">
             </div>
         </a>
-    </main>
+    </main> -->
 
     <script>
         // TO DISPLAY THE DATE

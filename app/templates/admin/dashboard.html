@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Dashboard{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}"> {% endblock %}
+
 {% block content %}
+
     <!-- SIDE NAV -->
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <li class="selected-icon-bg">
@@ -31,11 +31,11 @@
         <div class="sidenav-user-bg">
             <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
             <div>
-                <h3>Eda Grace P.</h3>
-                <p>Admin</p>
+                <h3>{{ info[0] }}</h3>
+                <p>{{ info[1] }}</p>
             </div>
         </div>
-        <!-- admin logout -->
+        
         <ul>
             <li class="logout" id="logoutButton">
                 <img src="{{ url_for('static', filename='images/Logout.png') }}">
@@ -46,20 +46,16 @@
 
     <!-- DASHBOARD -->
     <main>
-        <a href="#">
-            <div class="doctors-icon">
-                <img src="{{ url_for('static', filename='images/Doctors.png') }}">
+        <div class="doctor-bg">
+            <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
+            <div class="greetings-name">
+                <p>Welcome,</p>
+                <h2>{{ info[0] }}</h2>
             </div>
-        </a>
-        <a href="#">
-            <div class="medtech-icon">
-                <img src="{{ url_for('static', filename='images/Medtech.png') }}">
+            <div class="greetings">
+                <p>Have a nice day at work!</p>
             </div>
-        </a>
-        <a href="#">
-            <div class="receptionist-icon">
-                <img src="{{ url_for('static', filename='images/Receptionist.png') }}">
-            </div>
-        </a>
+        </div>
     </main>
+
 {% endblock %}  
