@@ -12,25 +12,33 @@ doctor_bp = Blueprint('doctor', __name__)
 @login_required
 @role_required('doctor')
 def dashboard():
-    return render_template("doctor/dashboard/dashboard.html")
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    return render_template("doctor/dashboard/dashboard.html", info=doctor_info)
 
 @doctor_bp.route('/calendar/')
 @login_required
 @role_required('doctor')
 def calendar():
-    return render_template("doctor/calendar/calendar.html")
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    return render_template("doctor/calendar/calendar.html", info=doctor_info)
 
 @doctor_bp.route('/appointment/')
 @login_required
 @role_required('doctor')
 def appointment():
-    return render_template("doctor/appointment/appointment.html")
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    return render_template("doctor/appointment/appointment.html", info=doctor_info)
 
 @doctor_bp.route('/profile/')
 @login_required
 @role_required('doctor')
 def profile():
-    return render_template("doctor/profile/profile.html")
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    return render_template("doctor/profile/profile.html", info=doctor_info)
 
 @doctor_bp.route('/logout/')
 @login_required
@@ -46,8 +54,10 @@ def logout():
 def add_patient():
     form = PatientForm()
     user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
 
     if request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(user_id)
         fName = request.form.get("first_name").upper()
         mName = request.form.get("middle_name").upper()
         lname = request.form.get("last_name").upper()
@@ -90,11 +100,11 @@ def add_patient():
         result = new_patient.add(user_id)
 
         if result:
-            return render_template("doctor/patient/add_patient.html", success=True, PatientForm=form)
+            return render_template("doctor/patient/add_patient.html", success=True, PatientForm=form, info=doctor_info)
         else:
-            return render_template("doctor/patient/add_patient.html", error=True, PatientForm=form)
+            return render_template("doctor/patient/add_patient.html", error=True, PatientForm=form, info=doctor_info)
 
-    return render_template("doctor/patient/add_patient.html", PatientForm=form)
+    return render_template("doctor/patient/add_patient.html", PatientForm=form, info=doctor_info)
 
 # ADD AND UPDATE MEDICAL HISTORY
 @doctor_bp.route('/medical_history/', methods=['GET', 'POST'])
@@ -103,18 +113,19 @@ def add_patient():
 def medical_history():
     form = PatientForm()
     patient_id = None
-
+    user_id = current_user.id
+    
     if request.method == 'GET':
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_history (patient_id)
-        print('THIS IS THE PATIENT ID:', patient_id)
-        print('THIS IS THE PATIENT INFORMATION:', patient_info)
-        return render_template('doctor/patient/medical_history.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+        doctor_info = doctor.get_doctor_info(user_id)
+
+        return render_template('doctor/patient/medical_history.html', patient=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info)
 
     elif request.method == 'POST':
         new_history_id = request.form.get('history_id')
         new_patient_id = request.form.get('patient_id')
-        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
+        doctor_info = doctor.get_doctor_info(user_id)
 
     # IMMUNIZATION
         bcg_checkbox_value = 1 if request.form.get('bcgCheckbox') == 'checked' else 0
@@ -264,9 +275,9 @@ def medical_history():
             print('UPDATED INFO:', updated_info)
             
             if updated:
-                return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form)
+                return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form, info=doctor_info)
             else:
-                return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form)
+                return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form, info=doctor_info)
 
         else:
             result = doctor.add_medical_history(patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
@@ -294,11 +305,11 @@ def medical_history():
             print('NEW PATIENT HISTORY:', updated_info)
 
             if result:
-                return render_template("doctor/patient/medical_history.html", patient_id=patient_id, success=True, patient=updated_info, PatientForm=form)
+                return render_template("doctor/patient/medical_history.html", patient_id=patient_id, success=True, patient=updated_info, PatientForm=form, info=doctor_info)
             else:
-                return render_template("doctor/patient/medical_history.html", patient_id=patient_id, error=True, patient=updated_info, PatientForm=form)
+                return render_template("doctor/patient/medical_history.html", patient_id=patient_id, error=True, patient=updated_info, PatientForm=form, info=doctor_info)
 
-    return render_template("doctor/patient/medical_history.html", patient_id=patient_id, PatientForm=form)
+    return render_template("doctor/patient/medical_history.html", patient_id=patient_id, PatientForm=form, info=doctor_info)
 
 # ADD MEDICAL ASSESSMENT FOR EACH APPOINTMENT
 @doctor_bp.route('/add_assessment/', methods=['GET', 'POST'])
@@ -307,15 +318,18 @@ def medical_history():
 def add_assessment():
     form = PatientForm()
     patient_id = None
+    user_id = current_user.id
 
     if request.method == 'GET':
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_info(patient_id)
-        return render_template('doctor/patient/add_assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+        doctor_info = doctor.get_doctor_info(user_id)
+
+        return render_template('doctor/patient/add_assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info)
     
     elif request.method == 'POST':
         new_patient_id = request.form.get('patient_id')
-        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
+        doctor_info = doctor.get_doctor_info(user_id)
 
     # COMPLAINT
         sub = request.form.get('subject').upper()
@@ -381,11 +395,11 @@ def add_assessment():
         print('NEW ASSESSMENT:', new_consultation)
 
         if result:
-            return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, success=True, patient=new_consultation, PatientForm=form)
+            return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, success=True, patient=new_consultation, PatientForm=form, info=doctor_info)
         else:
-            return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, error=True, patient=new_consultation, PatientForm=form)
+            return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, error=True, patient=new_consultation, PatientForm=form, info=doctor_info)
 
-    return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, PatientForm=form)
+    return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, PatientForm=form, info=doctor_info)
 
 # PATIENT TABLE
 @doctor_bp.route('/patient/')
@@ -393,10 +407,10 @@ def add_assessment():
 @role_required('doctor')
 def patient():
     user_id = current_user.id
-    print(f"Logged-in doctor ID: {user_id}")
-
+    doctor_info = doctor.get_doctor_info(user_id)
     patients_data = doctor.get_patients(user_id)
-    return render_template("doctor/patient/patient.html", patients=patients_data)
+
+    return render_template("doctor/patient/patient.html", patients=patients_data, info=doctor_info)
 
 # CONSULTATION TABLE
 @doctor_bp.route('/consultation/')
@@ -406,8 +420,10 @@ def consultation():
     patient_id = request.args.get('patient_id')
     patient_info = doctor.get_patient_info(patient_id)
     consultation_data = doctor.get_consultations(patient_id)
-    print('PATIENT ID:', patient_id)
-    return render_template("doctor/patient/consultation.html", consultations=consultation_data,patient=patient_info, patient_id=patient_id)
+    user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
+
+    return render_template("doctor/patient/consultation.html", consultations=consultation_data,patient=patient_info, patient_id=patient_id, info=doctor_info)
 
 # LAB RESULTS TABLE
 @doctor_bp.route('/lab_results/')
@@ -416,9 +432,10 @@ def consultation():
 def lab_results():
     patient_id = request.args.get('patient_id')
     report_info = doctor.get_lab_reports(patient_id)
-    print('patient id:', patient_id)
-    print('report info:', report_info)
-    return render_template("doctor/patient/lab_results.html", patient_id=patient_id, labreports=report_info)
+    user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
+
+    return render_template("doctor/patient/lab_results.html", patient_id=patient_id, labreports=report_info, info=doctor_info)
 
 # UPDATE PATIENT INFORMATION
 @doctor_bp.route('/patient_record/', methods=['GET', 'POST'])
@@ -426,14 +443,17 @@ def lab_results():
 @role_required('doctor')
 def patient_record():
     form = PatientForm()
+    user_id = current_user.id
 
     if request.method == 'GET':
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_info(patient_id)
+        doctor_info = doctor.get_doctor_info(user_id)
 
-        return render_template('doctor/patient/patient_record.html', patient=patient_info, patient_id=patient_id, PatientForm=form)
+        return render_template('doctor/patient/patient_record.html', patient=patient_info, patient_id=patient_id, PatientForm=form, info=doctor_info)
 
     elif request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
         new_first_name = request.form.get('first_name').upper()
         new_middle_name = request.form.get('middle_name').upper()
@@ -465,11 +485,11 @@ def patient_record():
         print('Updated information:', updated_info)
 
         if updated:
-            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form)
+            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form, info=doctor_info)
         else:
-            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form)
+            return render_template("doctor/patient/patient_record.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form, info=doctor_info)
 
-    return render_template("doctor/patient/patient_record.html", PatientForm=form)
+    return render_template("doctor/patient/patient_record.html", PatientForm=form, info=doctor_info)
 
 
 # UPDATE MEDICAL ASSESSMENT
@@ -479,21 +499,21 @@ def patient_record():
 def assessment():
     form=PatientForm()
     patient_id = None
+    user_id = current_user.id
 
     if request.method == 'GET':
+        doctor_info = doctor.get_doctor_info(user_id)
         assessment_id = request.args.get('assessment_id')
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_consultation_info(assessment_id, patient_id)
-        print('THIS IS THE ASSESSMENT ID:', assessment_id)
-        print('THIS IS THE PATIENT ID:', patient_id)
-        print('THIS IS THE PATIENT INFORMATION:', patient_info)
-        return render_template('doctor/patient/assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+        
+        return render_template('doctor/patient/assessment.html', patient=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info)
     
     elif request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(user_id)
         new_assessment_id = request.form.get('assessment_id')
         new_patient_id = request.form.get('patient_id')
-        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
-
+        
     # COMPLAINT
         sub = request.form.get('subject').upper()
         complain = request.form.get('complaints').upper()
@@ -558,11 +578,11 @@ def assessment():
         print('NEW ASSESSMENT:', new_consultation)
 
         if update:
-            return render_template("doctor/patient/assessment.html", new_patient_id=new_patient_id, success=True, patient=new_consultation, PatientForm=form)
+            return render_template("doctor/patient/assessment.html", new_patient_id=new_patient_id, success=True, patient=new_consultation, PatientForm=form, info=doctor_info)
         else:
-            return render_template("doctor/patient/assessment.html", new_patient_id=new_patient_id, error=True, patient=new_consultation, PatientForm=form)
+            return render_template("doctor/patient/assessment.html", new_patient_id=new_patient_id, error=True, patient=new_consultation, PatientForm=form, info=doctor_info)
 
-    return render_template("doctor/patient/assessment.html", patient_id=patient_id, PatientForm=form)
+    return render_template("doctor/patient/assessment.html", patient_id=patient_id, PatientForm=form, info=doctor_info)
   
 # LABORATORY RESULT
 @doctor_bp.route('/results/')
@@ -571,6 +591,8 @@ def assessment():
 def results():
     form=PatientForm()
     patient_id = None
+    user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
 
     order_id = request.args.get('order_id')
     patient_id = request.args.get('patient_id')
@@ -590,7 +612,7 @@ def results():
     return render_template("doctor/patient/results.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info, info=doctor_info)
 
 # REQUEST TO RUN LABORATORY TESTS
 @doctor_bp.route('/labtest_request/', methods=['GET', 'POST'])
@@ -599,9 +621,9 @@ def results():
 def labtest_request():
     form=PatientForm()
     patient_id = None
+    user_id = current_user.id
 
     if request.method == 'GET':
-        user_id = current_user.id
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_info(patient_id)
         doctor_info = doctor.get_doctor_info(user_id)
@@ -609,7 +631,6 @@ def labtest_request():
         return render_template('doctor/patient/labtest_request.html', patient=patient_info, doctor=doctor_info, PatientForm=form, patient_id=patient_id)
     
     elif request.method == 'POST':
-        user_id = current_user.id
         doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
 
@@ -761,7 +782,7 @@ def labtest_request():
         else:
             return render_template("doctor/patient/labtest_request.html", error=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
 
-    return render_template("doctor/patient/labtest_request.html", patient_id=patient_id, Patientform=form)
+    return render_template("doctor/patient/labtest_request.html", patient_id=patient_id, Patientform=form, doctor=doctor_info)
 
 # PRESCRIPTION
 @doctor_bp.route('/prescription/', methods=['GET', 'POST'])
@@ -770,9 +791,10 @@ def labtest_request():
 def prescription():
     form = PatientForm()
     patient_id = None
+    user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
 
     if request.method == 'GET':
-        user_id = current_user.id
         patient_id = request.args.get('patient_id')
         assessment_id = request.args.get('assessment_id')
         patient_info = doctor.get_patient_info(patient_id)
@@ -808,7 +830,7 @@ def prescription():
         else:
              return jsonify({'error': True}), 500  
 
-    return render_template("doctor/patient/prescription.html", consultation=consultation_info, patient=patient_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
+    return render_template("doctor/patient/prescription.html", consultation=consultation_info, patient=patient_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form, info=doctor_info)
 
 # DELETE PATIENT RECORD
 @doctor_bp.route('/delete_patient/', methods=['GET', 'POST'])
@@ -816,18 +838,21 @@ def prescription():
 @role_required('doctor')
 def delete_patient():
     form = PatientForm()
+    user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
 
     if request.method == "POST":
         patient_id = request.form.get("patient_id")
+        doctor_info = doctor.get_doctor_info(user_id)
 
         result = doctor.delete_patient_record(patient_id)
 
         if result:
-            return render_template("doctor/patient/patient.html", success=True, PatientForm=form)
+            return render_template("doctor/patient/patient.html", success=True, PatientForm=form, info=doctor_info)
         else:
-            return render_template("doctor/patient/patient.html", error=True, PatientForm=form)
+            return render_template("doctor/patient/patient.html", error=True, PatientForm=form, info=doctor_info)
         
-    return render_template("doctor/patient/patient.html", PatientForm=form)
+    return render_template("doctor/patient/patient.html", PatientForm=form, info=doctor_info)
 
 # DELETE ASSESSMENT RECORD
 @doctor_bp.route('/delete_assessment/', methods=['GET', 'POST'])
@@ -835,17 +860,20 @@ def delete_patient():
 @role_required('doctor')
 def delete_assessment():
     form = PatientForm()
+    user_id = current_user.id
+    doctor_info = doctor.get_doctor_info(user_id)
 
     if request.method == "POST":
         assessment_id = request.form.get("assessment_id")
         patient_id = request.form.get("patient_id")
+        doctor_info = doctor.get_doctor_info(user_id)
 
         result = doctor.delete_medical_assessment(assessment_id, patient_id)
         patient_info = doctor.get_patient_info(patient_id)
 
         if result:
-            return render_template("doctor/patient/consultation.html", success=True, patient=patient_info, PatientForm=form)
+            return render_template("doctor/patient/consultation.html", success=True, patient=patient_info, PatientForm=form, info=doctor_info)
         else:
-            return render_template("doctor/patient/consultation.html", error=True, patient=patient_info, PatientForm=form)
+            return render_template("doctor/patient/consultation.html", error=True, patient=patient_info, PatientForm=form, info=doctor_info)
         
-    return render_template("doctor/patient/consultation.html", PatientForm=form)
+    return render_template("doctor/patient/consultation.html", PatientForm=form, info=doctor_info)

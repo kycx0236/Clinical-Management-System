@@ -13,8 +13,11 @@ medtech_bp = Blueprint('medtech', __name__)
 @login_required
 @role_required('medtech')
 def dashboard():
+    current_id = current_user.id 
+    medtech_info = medtech.get_user_info(current_id)
     labrequest_data = medtech.get_lab_requests()
-    return render_template("medtech/dashboard.html", labrequests=labrequest_data)
+
+    return render_template("medtech/dashboard.html", labrequests=labrequest_data, info=medtech_info)
 
 @medtech_bp.route('/laboratory_test/', methods=['GET', 'POST'])
 @login_required
@@ -23,6 +26,7 @@ def laboratory_test():
     form=PatientForm()
     patient_id = None
     user_id = current_user.id
+    user_info = medtech.get_user_info(user_id)
 
     if request.method == 'GET':
         order_id = request.args.get('order_id')
@@ -71,14 +75,16 @@ def laboratory_test():
         else:
             return jsonify({'error': True}), 500  
         
-    return render_template("medtech/laboratory_test.html", patient_id=patient_id)
+    return render_template("medtech/laboratory_test.html", patient_id=patient_id, medtech=user_info)
 
 @medtech_bp.route('/patient/')
 @login_required
 @role_required('medtech')
 def patient():
     labrequest_data = medtech.get_lab_reports()
-    return render_template("medtech/patient.html", labrequests=labrequest_data)
+    user_id = current_user.id
+    medtech_info = medtech.get_user_info(user_id)
+    return render_template("medtech/patient.html", labrequests=labrequest_data, info=medtech_info)
 
 @medtech_bp.route('/laboratory_report/')
 @login_required
@@ -90,6 +96,8 @@ def laboratory_report():
     order_id = request.args.get('order_id')
     patient_id = request.args.get('patient_id')
     report_id = request.args.get('report_id')
+    user_id = current_user.id
+    medtech_info = medtech.get_user_info(user_id)
 
     labreq_info = medtech.get_labrequest_data(order_id)
     labrep_info = medtech.get_labreport_info(report_id)
@@ -105,7 +113,7 @@ def laboratory_report():
     return render_template("medtech/laboratory_report.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info, info=medtech_info)
 
 # DELETE LABORATORY RECORD
 @medtech_bp.route('/delete_laboratory_report/', methods=['GET', 'POST'])
@@ -113,25 +121,30 @@ def laboratory_report():
 @role_required('medtech')
 def delete_laboratory_report():
     form = PatientForm()
+    user_id = current_user.id
+    medtech_info = medtech.get_user_info(user_id)
 
     if request.method == "POST":
+        medtech_info = medtech.get_user_info(user_id)
         report_id = request.form.get("report_id")
         order_id = request.form.get("order_id")
 
         result = medtech.delete_laboratory_report(report_id, order_id)
 
         if result:
-            return render_template("medtech/patient.html", success=True, PatientForm=form)
+            return render_template("medtech/patient.html", success=True, PatientForm=form, info=medtech_info)
         else:
-            return render_template("medtech/patient.html", error=True, PatientForm=form)
+            return render_template("medtech/patient.html", error=True, PatientForm=form, info=medtech_info)
         
-    return render_template("medtech/patient.html", PatientForm=form)
+    return render_template("medtech/patient.html", PatientForm=form, info=medtech_info)
 
 @medtech_bp.route('/profile/')
 @login_required
 @role_required('medtech')
 def profile():
-    return render_template("medtech/profile.html")
+    user_id = current_user.id
+    medtech_info = medtech.get_user_info(user_id)
+    return render_template("medtech/profile.html", info=medtech_info)
 
 @medtech_bp.route('/logout/')
 @login_required

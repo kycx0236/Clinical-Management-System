@@ -147,7 +147,7 @@ class doctor():
     @staticmethod
     def get_doctor_info(doctor_id):
         cursor = mysql.connection.cursor()
-        query = "SELECT first_name, last_name FROM users WHERE id = %s"
+        query = "SELECT first_name, last_name, user_role FROM users WHERE id = %s"
         cursor.execute(query, (doctor_id,))
         doctor = cursor.fetchone()
         cursor.close()

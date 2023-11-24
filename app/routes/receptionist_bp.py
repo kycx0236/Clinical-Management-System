@@ -3,7 +3,7 @@ from app.forms.receptionist_f import *
 import app.models as models
 from app.models.receptionist_m import *
 from flask import Blueprint
-from flask_login import login_required, logout_user
+from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 
 receptionist_bp = Blueprint('receptionist', __name__)
@@ -12,25 +12,33 @@ receptionist_bp = Blueprint('receptionist', __name__)
 @login_required
 @role_required('receptionist')
 def dashboard():
-    return render_template("receptionist/dashboard.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/dashboard.html", info=receptionist_info)
 
 @receptionist_bp.route('/calendar/')
 @login_required
 @role_required('receptionist')
 def calendar():
-    return render_template("receptionist/calendar.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/calendar.html", info=receptionist_info)
 
 @receptionist_bp.route('/appointment/')
 @login_required
 @role_required('receptionist')
 def appointment():
-    return render_template("receptionist/appointment.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/appointment.html", info=receptionist_info)
 
 @receptionist_bp.route('/profile/')
 @login_required
 @role_required('receptionist')
 def profile():
-    return render_template("receptionist/profile.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/profile.html", info=receptionist_info)
 
 @receptionist_bp.route('/logout/')
 @login_required

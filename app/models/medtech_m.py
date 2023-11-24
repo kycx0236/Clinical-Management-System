@@ -18,7 +18,7 @@ class medtech():
     @staticmethod
     def get_user_info(current_user):
         cursor = mysql.connection.cursor()
-        query = ("SELECT first_name, last_name FROM users WHERE id = %s")
+        query = ("SELECT first_name, last_name, user_role FROM users WHERE id = %s")
         cursor.execute(query, (current_user,))
         userInfo = cursor.fetchone()
         return userInfo
