@@ -3,11 +3,11 @@ from app import mysql
 class medtech():
 # ADD LABORATORY REPORT
     @classmethod 
-    def add_laboratory_report(cls, orderID, processName, testResult, refValue, diagnosisReport):
+    def add_laboratory_report(cls, orderID, medtech, processName, testResult, refValue, diagnosisReport):
         cursor = mysql.connection.cursor()
 
-        add_report = "INSERT INTO labreport (orderID) VALUES (%s)"
-        cursor.execute(add_report, (orderID,))
+        add_report = "INSERT INTO labreport (orderID, medtech) VALUES (%s, %s)"
+        cursor.execute(add_report, (orderID, medtech))
         reportID = cursor.lastrowid  
 
         add_test = "INSERT INTO labtest (reportID, processName, testResult, refValue, diagnosisReport) VALUES  (%s, %s, %s, %s, %s)"
@@ -15,6 +15,22 @@ class medtech():
         mysql.connection.commit()
         return True
     
+    @staticmethod
+    def get_user_info(current_user):
+        cursor = mysql.connection.cursor()
+        query = ("SELECT first_name, last_name FROM users WHERE id = %s")
+        cursor.execute(query, (current_user,))
+        userInfo = cursor.fetchone()
+        return userInfo
+    
+    @staticmethod
+    def get_labreport_info(reportID):
+        cursor = mysql.connection.cursor()
+        query = ("SELECT medtech, reportDate FROM labreport WHERE reportID = %s")
+        cursor.execute(query, (reportID,))
+        reportInfo = cursor.fetchone()
+        return reportInfo
+
 # TO DISPLAY THE LABORATORY REQUESTS IN THE DASHBOARD
     @staticmethod
     def get_lab_requests():
@@ -29,7 +45,7 @@ class medtech():
     def get_lab_reports():
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT labrequest.orderID, labrequest.patientID, labrequest.labSubject, labrequest.patientname, labrequest.gender, labrequest.physician, labreport.reportID, labreport.reportDate \
-                        FROM labrequest JOIN labreport ON labrequest.orderID = labreport.orderID") 
+                        FROM labrequest JOIN labreport ON labrequest.orderID = labreport.orderID ORDER BY labreport.reportDate DESC") 
         labrequest = cursor.fetchall()
         cursor.close()
         return labrequest 
@@ -112,3 +128,19 @@ class medtech():
         cursor.execute(query, (reportID,))
         labreport = cursor.fetchall()
         return labreport
+    
+# DELETE LABORATORY REPORT
+    @classmethod 
+    def delete_laboratory_report(cls, reportID, orderID):
+        cursor = mysql.connection.cursor()
+        try:
+            reportQuery = "DELETE FROM labreport WHERE reportID = %s"
+            cursor.execute(reportQuery, (reportID,))
+
+            requestQuery = "DELETE FROM labrequest WHERE orderID = %s"
+            cursor.execute(requestQuery, (orderID,))
+
+            mysql.connection.commit()
+            return True
+        except:
+            return False

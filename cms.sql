@@ -16,6 +16,17 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 )
 
+-- DOCTOR-PATIENT RELATION
+CREATE TABLE docpatient_relation (
+    relationID int NOT NULL AUTO_INCREMENT,
+    doctorID int NOT NULL,
+    patientID int NOT NULL,
+    PRIMARY KEY (`relationID`),
+    UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
+    FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+);
+
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
   `patientID` int NOT NULL AUTO_INCREMENT,
@@ -373,6 +384,7 @@ CREATE TABLE IF NOT EXISTS `clinicalchem` (
 CREATE TABLE IF NOT EXISTS `labreport` (
   `reportID` int NOT NULL AUTO_INCREMENT,
   `orderID` int NOT NULL,
+  `medtech` varchar(255) NOT NULL,
   `reportDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`reportID`),
   UNIQUE KEY `report_id_UNIQUE` (`reportID`),
