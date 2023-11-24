@@ -287,20 +287,21 @@
     transform: scale(1); /* Initial scale */
 }
 
-.doccare-success-modal {
-    display: none; /* Initial display: block;*/ /*After display: flex; */
+.doccare-success-modal, .doccare-failed-confirmation-modal {
+    display: none; /* Initial display */ /* use flex after initialization */
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed; /* Use fixed position for overlay to cover the entire screen */
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 150vh; /* Set minimum height to 100% of the viewport height */
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Maintain the semi-transparent overlay */
     z-index: 2; 
 }
 
-.doccare-success-modal-content {
+
+.doccare-success-modal-content, .doccare-failed-modal-content {
     width: 800px;
     height: 600px;
     flex-shrink: 0;
@@ -311,6 +312,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 3;
 }
 
 .doccare-success-modal-content p{
