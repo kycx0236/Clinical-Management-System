@@ -158,14 +158,36 @@ def delete_appointment():
         return jsonify(success=False, message="Internal Server Error"), 500
 
 
-@receptionist_bp.route('/view-appointment/')
+@receptionist_bp.route('/view-appointment/', methods=["GET"])
 @login_required
 @role_required('receptionist')
 def view_appointment():
-    try:
-        pass
-    except:
-        pass    
+    booking_ref_number = request.args.get('reference_number')
+    view_appointment =models_receptionist.Appointment.view_appointment_by_reference(booking_ref_number)
+    print(view_appointment)
+    
+    if view_appointment:
+        appointment_data_dict = {
+            "reference_number": view_appointment['reference_number'],
+            "date_appointment": view_appointment['date_appointment'],
+            "time_appointment": view_appointment['time_appointment'],
+            "book_date": view_appointment['book_date'],
+            "status_": view_appointment['status_'],
+            "first_name": view_appointment['first_name'],
+            "middle_name": view_appointment['middle_name'],
+            "last_name": view_appointment['last_name'],
+            "sex": view_appointment['sex'],
+            "birth_date": view_appointment['birth_date'],
+            "contact_number": view_appointment['contact_number'],
+            "email": view_appointment['email'],
+            "address": view_appointment['address']
+        }
+        print(appointment_data_dict)
+    else:
+        flash("Appointment not found.", "error")
+        return jsonify(success=False, message="Appointment not found.")
+    
+    return render_template("receptionist/appointment/appointment_view.html", row=view_appointment)
 
 @receptionist_bp.route('/get-booking-details/<reference_number>', methods=['GET'])
 @login_required
@@ -186,11 +208,9 @@ def reschedule():
     form = AppointmentForm()
     appointment_data = models_receptionist.Appointment.get_appointment_by_reference(booking_ref_number)
     print(appointment_data)
-    # all_courses = student_models.Students.get_all_courses()
     booking_details = None
-    
+
     if appointment_data:
-        # Ensure that appointment_data is not empty before accessing elements
         appointment_data_dict = {
             "reference_number": appointment_data['reference_number'],
             "date_appointment": appointment_data['date_appointment'],
@@ -207,9 +227,8 @@ def reschedule():
         }
         print(appointment_data_dict)
     else:
-        # Handle the case where no student data was found
         flash("Appointment not found.", "error")
-        return redirect(url_for("receptionist.appointment"))
+        return jsonify(success=False, message="Appointment not found.")
 
     if request.method == "POST" and form.validate():
         new_date_appointment = form.date_appointment.data
@@ -224,15 +243,15 @@ def reschedule():
         new_email = form.email.data
         new_address = form.address.data
 
-        if models_receptionist.Appointment.update(booking_ref_number, new_date_appointment, new_time_appointment, new_status_, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address):
-            booking_details = models_receptionist.Appointment.get_booking_reference_details(form.reference_number.data)
-                    
+        if models_receptionist.Appointment.update(
+            booking_ref_number, new_date_appointment, new_time_appointment, new_status_,
+            new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date,
+            new_contact_number, new_email, new_address
+        ):
+            booking_details = models_receptionist.Appointment.get_booking_reference_details(booking_ref_number)
             print(booking_details)
-                    
-            return jsonify(success=True, message="Appointment added successfully", booking_details=booking_details)
-        
+            return jsonify(success=True, message="Appointment updated successfully", booking_details=booking_details)
         else:
-            flash("Failed to update student information.", "error")
+            return jsonify(success=False, message="Failed to update appointment.")
 
     return render_template("receptionist/appointment/appointment_edit.html", form=form, row=appointment_data_dict, booking_details=booking_details)
-    

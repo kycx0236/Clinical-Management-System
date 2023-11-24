@@ -117,7 +117,6 @@
     width: 95%;
     max-height: calc(90% - 1.6rem);
     background-color: #fffb;
-    
     margin: .8rem auto;
     border-radius: .6rem;
     overflow: auto;
@@ -303,7 +302,7 @@ thead th.active, tbody td.active {
 main.doccare-appointment-table {
     width: 82vw;
     height: 90vh;
-    background-color: #fff5 !important;
+    background-color: #fff5;
     backdrop-filter: blur(10px);
     box-shadow: 0 .4rem .8rem #0005;
     border-radius: 0.8rem;
@@ -312,7 +311,7 @@ main.doccare-appointment-table {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #ecf6ff !important;
+    background-color: #ecf6ff;
 }
 
 tbody tr{
@@ -348,31 +347,10 @@ tbody tr.hide {
     transform: translateX(100%);
 }
 
-.status {
+.status-cell {
     padding: 0.4rem 0;
     border-radius: 2rem;
-}
-
-.status.done {
-    background-color: #86E49D;
-    color: #006b21;
-    text-align: center;
-}
-
-.status.pending {
-    background-color: #fbedd0;
-    color: #ebc474;
-    text-align: center;
-}
-
-.status.cancelled {
-    background-color: #d893a3;
-    color: #b30021;
-}
-
-.status.scheduled {
-    background-color: #DFF1FF;
-    color: #0277BD;
+    font-weight: 1000;
 }
 
 

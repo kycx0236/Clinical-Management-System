@@ -55,7 +55,7 @@ class Appointment:
             return False
 
     @classmethod
-    def update(cls, reference_number, new_date_appointment, new_time_appointment, new_status_, new_book_date, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address):
+    def update(cls, reference_number, new_date_appointment, new_time_appointment, new_status_, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address):
         try:
             cursor = mysql.connection.cursor()
             sql = "UPDATE appointment SET date_appointment = %s, time_appointment = %s, status_ = %s, first_name = %s, middle_name = %s, last_name = %s, sex = %s, birth_date = %s, contact_number = %s, email = %s, address = %s WHERE reference_number = %s"
@@ -92,6 +92,16 @@ class Appointment:
         booking_details = cursor.fetchone()
         cursor.close()
         return booking_details
+    
+    @classmethod
+    def view_appointment_by_reference(cls, reference_number):
+        print("Reference Number:", reference_number)
+        cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
+        cursor.execute("SELECT * FROM appointment WHERE reference_number = %s", (reference_number,))
+        appointment_data = cursor.fetchone()
+        print("Appointment Data:", appointment_data)
+        cursor.close()
+        return appointment_data
     
     @classmethod
     def search_appointment(cls, query):
