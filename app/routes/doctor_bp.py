@@ -3,7 +3,7 @@ from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
 from flask import Blueprint
-from flask_login import login_required, logout_user
+from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 
 doctor_bp = Blueprint('doctor', __name__)
@@ -45,6 +45,7 @@ def logout():
 @role_required('doctor')
 def add_patient():
     form = PatientForm()
+    user_id = current_user.id
 
     if request.method == 'POST':
         fName = request.form.get("first_name").upper()
@@ -86,7 +87,7 @@ def add_patient():
         new_patient.relationship = relationship
         new_patient.eContactNum = e_number
 
-        result = new_patient.add()
+        result = new_patient.add(user_id)
 
         if result:
             return render_template("doctor/patient/add_patient.html", success=True, PatientForm=form)
@@ -387,11 +388,14 @@ def add_assessment():
     return render_template("doctor/patient/add_assessment.html", patient_id=patient_id, PatientForm=form)
 
 # PATIENT TABLE
-@doctor_bp.route('/patient')
+@doctor_bp.route('/patient/')
 @login_required
 @role_required('doctor')
 def patient():
-    patients_data = doctor.get_patients()
+    user_id = current_user.id
+    print(f"Logged-in doctor ID: {user_id}")
+
+    patients_data = doctor.get_patients(user_id)
     return render_template("doctor/patient/patient.html", patients=patients_data)
 
 # CONSULTATION TABLE
@@ -573,6 +577,8 @@ def results():
     report_id = request.args.get('report_id')
     print("report id:", report_id)
     labreq_info = doctor.get_labrequest_data(order_id)
+    labrep_info = doctor.get_labreport_info(report_id)
+    lab_report = doctor.get_lab_report(report_id)
     hematology_info = doctor.get_hematology_data(order_id)
     bacteriology_info = doctor.get_bacteriology_data(order_id)
     histopathology_info = doctor.get_histopathology_data(order_id)
@@ -580,13 +586,11 @@ def results():
     serology_info = doctor.get_serology_data(order_id)
     immunochem_info = doctor.get_immunochem_data(order_id)
     clinicalchem_info = doctor.get_clinicalchem_data(order_id)
-    lab_report = doctor.get_lab_report(report_id)
-    print('lab report:', lab_report)
 
     return render_template("doctor/patient/results.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info)
 
 # REQUEST TO RUN LABORATORY TESTS
 @doctor_bp.route('/labtest_request/', methods=['GET', 'POST'])
@@ -597,26 +601,28 @@ def labtest_request():
     patient_id = None
 
     if request.method == 'GET':
+        user_id = current_user.id
         patient_id = request.args.get('patient_id')
         patient_info = doctor.get_patient_info(patient_id)
+        doctor_info = doctor.get_doctor_info(user_id)
 
-        print('THIS IS THE PATIENT ID:', patient_id)
-        print('THIS IS THE PATIENT INFORMATION:', patient_info)
-        return render_template('doctor/patient/labtest_request.html', patient=patient_info, PatientForm=form, patient_id=patient_id)
+        return render_template('doctor/patient/labtest_request.html', patient=patient_info, doctor=doctor_info, PatientForm=form, patient_id=patient_id)
     
     elif request.method == 'POST':
+        user_id = current_user.id
+        doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
-        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
 
     # PATIENT INFORMATION
         patient_fullName = request.form.get('fullName')
         lab_subject = request.form.get('labsubject').upper()
         sex = request.form.get("gender")
         age = request.form.get("age")
-        physician = request.form.get("doctorName").upper()
+        doctorName = request.form.get("doctorName")
         requestDate = request.form.get("dateofRequest")
         otherTest = request.form.get("others").upper()
         print('patient_fullName:', patient_fullName)
+        print('doctor', doctor)
         print('sex:', sex)
         print('age:', age)
         print('requestDate:', requestDate)
@@ -728,7 +734,7 @@ def labtest_request():
         IonizedCheckbox = 1 if request.form.get('IonizedCheckbox') == 'checked' else 0
         PhosCheckbox = 1 if request.form.get('PhosCheckbox') == 'checked' else 0
 
-        result = doctor.add_laboratory_request(patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=physician, orderDate=requestDate, 
+        result = doctor.add_laboratory_request(patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
                                                otherTest=otherTest, cbcplateCheckbox=cbcplateCheckbox_value, hgbhctCheckbox=hgbhctCheckbox, protimeCheckbox=protimeCheckbox, 
                                                APTTCheckbox=APTTCheckbox, bloodtypingCheckbox=bloodtypingCheckbox, ESRCheckbox=ESRCheckbox, plateCheckbox=plateCheckbox, 
                                                hgbCheckbox=hgbCheckbox, hctCheckbox=hctCheckbox, cbcCheckbox=cbcCheckbox, reticsCheckbox=reticsCheckbox, CTBTCheckbox=CTBTCheckbox, 
@@ -751,9 +757,9 @@ def labtest_request():
         print('result', result)
 
         if result:
-            return render_template("doctor/patient/labtest_request.html", success=True, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
+            return render_template("doctor/patient/labtest_request.html", success=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
         else:
-            return render_template("doctor/patient/labtest_request.html", error=True, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
+            return render_template("doctor/patient/labtest_request.html", error=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
 
     return render_template("doctor/patient/labtest_request.html", patient_id=patient_id, Patientform=form)
 
@@ -766,15 +772,15 @@ def prescription():
     patient_id = None
 
     if request.method == 'GET':
+        user_id = current_user.id
         patient_id = request.args.get('patient_id')
         assessment_id = request.args.get('assessment_id')
         patient_info = doctor.get_patient_info(patient_id)
         consultation_info = doctor.get_consultation_info(assessment_id, patient_id)
         prescription_info = doctor.get_prescription_info(assessment_id)
-        print('PATIENT INFORMATION:', patient_info)
-        print('ASSESSMENT INFORMATION:', consultation_info)
-        print('prescription INFORMATION:', prescription_info)
-        return render_template('doctor/patient/prescription.html', patient=patient_info, consultation=consultation_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
+        doctor_info = doctor.get_doctor_info(user_id)
+
+        return render_template('doctor/patient/prescription.html', doctor=doctor_info, patient=patient_info, consultation=consultation_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
     
     elif request.method == 'POST':
         prescription_data = request.get_json()

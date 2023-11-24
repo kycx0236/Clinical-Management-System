@@ -397,11 +397,6 @@ ul li p {
     cursor: pointer;
 }
 
-.btn-submit:hover {
-    transform: scale(101%);
-    background-color: #0f83ff;
-}
-
 .btn-submit:active {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
@@ -411,21 +406,31 @@ ul li p {
     background-color: #EE4B2B;
     margin-top: 0px;
     position: static;
-    height: 40px;
     width: 120px;
 }
 
 .btn-submit.test {
     background-color: var(--blueA);
-    position: absolute;
-    height: 40px;
-    width: 120px;
+    width: 100px;
+    margin-top: 0px;
 }
 
 .btn-submit.bmi {
     background-color: var(--blueA);
-    height: 40px;
     width: 157px;
+}
+
+.btn-submit.order {
+    position: absolute;
+    background-color: var(--blueC);
+    font-weight: 900;
+    color: var(--blueA);
+    z-index: 1;
+    right: 90px;
+    top: 40px;
+    height: 35px;
+    width: 220px;
+    font-size: 15px;
 }
 
 /* -------------------------------------------- ROW -------------------------------------------- */
@@ -433,6 +438,7 @@ ul li p {
     position: relative;
     justify-content: center;
     display: flex;
+    margin-top: 50px;
 }
 
 /* -------------------------------------------- INPUT BOXES -------------------------------------------- */
@@ -468,6 +474,24 @@ ul li p {
     outline: 0;
     box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
 } 
+
+/* text area */
+textarea {
+    position: relative;
+    width: 1000px;
+    height: 200px;
+    border: 1px solid var(--blueB);
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* text area */
+textarea:focus {
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
+    outline: none;
+}
 
 /* -------------------------------------------- MODAL FOR SUCCESS AND ERROR MESSAGES -------------------------------------------- */
 .modal {
@@ -550,7 +574,7 @@ ul li p {
 
 /* -------------------------------------------- FORM HEADER -------------------------------------------- */
 .med-header {
-    position: absolute;
+    position: relative;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -559,5 +583,26 @@ ul li p {
     background-color: var(--blueC);
     color: var(--blueA);
     font-weight: 900;
-    left: 65px;
+    margin-top: 50px;
+}
+
+/* -------------------------------------------- REPORT BACKGROUNDS -------------------------------------------- */
+.patient-bg.report {
+    height: 2500px; 
+}
+
+.patient-bg.test {
+    width: 1230px;  
+    height: 2800px; 
+}
+
+/* -------------------------------------------- LABORATORY REPORT -------------------------------------------- */
+.lab-result {
+    margin-top: 50px;
+    position: relative;
+}
+
+.test-button {
+    border: none;
+    background-color: white;
 }
