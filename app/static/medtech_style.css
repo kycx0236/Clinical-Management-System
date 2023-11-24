@@ -8,10 +8,24 @@
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .notification-container {
     max-width: 100%;  
-    height: 100vh; 
+    height: 420px; 
     position: absolute;  
-    top: 50px;
+    top: 240px;
     left: 110px;
+    overflow-y: auto;
+}
+
+.notification-container::-webkit-scrollbar {
+    width: 10px; 
+}
+
+.notification-container::-webkit-scrollbar-thumb {
+    background-color: var(--blueB); 
+    border-radius: 5px;
+}
+
+.notification-container::-webkit-scrollbar-track {
+    background-color: none; 
 }
 
 .request-header {
@@ -21,8 +35,9 @@
 
 .notif-header {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute;
+    top: 180px;
+    left: 110px;
     gap: 985px;
     margin-bottom: 25px;
 }
@@ -100,7 +115,7 @@ strong:hover {
 
 .unread {
     border-left: 3px solid var(--blueB) !important;
-    box-shadow: 0 0 5px var(--blueC);
+    box-shadow: 0 0 1px var(--blueB);
     width: 1400px;  
     margin-left: 0px;
     height: 60px;

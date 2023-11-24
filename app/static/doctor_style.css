@@ -38,7 +38,7 @@
 .update-icon.test {
     position: absolute;
     right: 17px;
-    top: 1600px;
+    top: 1620px;
 }
 
 .update-icon:active {
@@ -411,7 +411,13 @@ input, select {
 .cms-logo.prescription {
     margin-top: 70px;
     justify-content: center;
+    display: flex;
+    font-size: 30px;
     position: relative;
+}
+
+.care {
+    color: var(--blueA);
 }
 
 .rx img {
@@ -440,7 +446,7 @@ input, select {
     border: 1px solid var(--darkBlue);
     width: 895px;
     left: 230px;
-    top: -25px;
+    top: 5px;
     position: relative;
 }
 
