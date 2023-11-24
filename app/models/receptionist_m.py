@@ -32,7 +32,7 @@ class Appointment:
     def all(cls):
         try:
             cursor = mysql.connection.cursor()
-            sql = "SELECT * FROM appointment"
+            sql = "SELECT * FROM appointment ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC;"
             cursor.execute(sql)
             result = cursor.fetchall()
             return result
@@ -58,8 +58,8 @@ class Appointment:
     def update(cls, reference_number, new_date_appointment, new_time_appointment, new_status_, new_book_date, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address):
         try:
             cursor = mysql.connection.cursor()
-            sql = "UPDATE appointment SET date_appointment = %s, time_appointment = %s, status_ = %s, book_date = %s, first_name = %s, middle_name = %s, last_name = %s, sex = %s, birth_date = %s, contact_number = %s, email = %s, address = %s WHERE reference_number = %s"
-            cursor.execute(sql, (new_date_appointment, new_time_appointment, new_status_, new_book_date, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address, reference_number))
+            sql = "UPDATE appointment SET date_appointment = %s, time_appointment = %s, status_ = %s, first_name = %s, middle_name = %s, last_name = %s, sex = %s, birth_date = %s, contact_number = %s, email = %s, address = %s WHERE reference_number = %s"
+            cursor.execute(sql, (new_date_appointment, new_time_appointment, new_status_, new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date, new_contact_number, new_email, new_address, reference_number))
             mysql.connection.commit()
             return True
         except Exception as e:
@@ -77,9 +77,11 @@ class Appointment:
     
     @classmethod
     def get_appointment_by_reference(cls, reference_number):
+        print("Reference Number:", reference_number)
         cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
-        cursor.execute("SELECT * FROM appointment WHERE reference_number = %s", (reference_number,))
+        cursor.execute("SELECT reference_number, date_appointment, time_appointment, status_, first_name, middle_name, last_name, sex, birth_date, contact_number, email, address FROM appointment WHERE reference_number = %s", (reference_number,))
         appointment_data = cursor.fetchone()
+        print("Appointment Data:", appointment_data)
         cursor.close()
         return appointment_data
     
