@@ -351,6 +351,11 @@ tbody tr.hide {
     padding: 0.4rem 0;
     border-radius: 2rem;
     font-weight: 1000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
 }
 
 
