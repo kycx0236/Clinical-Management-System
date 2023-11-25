@@ -27,3 +27,19 @@ class admin():
 
         return user_list
 
+    def add_user(self):
+        cursor = mysql.connection.cursor()
+
+        check_duplicate_sql = "SELECT * FROM users WHERE username = %s"
+        cursor.execute(check_duplicate_sql, (self.username,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return False
+        
+        sql = "INSERT INTO users (username, password, first_name, middle_name, last_name, gender, user_role) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (self.username, self.password, self.first_name, self.middle_name, self.last_name, self.gender, self.user_role))
+        mysql.connection.commit()
+
+        return True
+

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, flash
 from app.forms.admin_f import *
 import app.models as models
 from app.models.admin_m import *
@@ -41,17 +41,31 @@ def logout():
 @login_required
 @role_required('admin')
 def add_user():
-    form = UserForm() 
+    form = UserForm()
+
     if request.method == 'POST':
-        username = request.form.get("username")
-        password = request.form.get("password")
-        firstname = request.form.get("first_name").upper()
-        middlename = request.form.get("middle_name").upper()
-        lastname = request.form.get("last_name")
-        gender = request.form.get("gender")
-        userrole = request.form.get("user_role").upper()
-        
-        
-        
-        return redirect(url_for('admin.user_management'))
+        username = form.username.data
+        password = form.password.data
+        first_name = form.first_name.data
+        middle_name = form.middle_name.data
+        last_name = form.last_name.data
+        gender = form.gender.data
+        user_role = form.user_role.data
+
+        new_user = admin()
+        new_user.username = username
+        new_user.password = password
+        new_user.first_name = first_name
+        new_user.middle_name = middle_name
+        new_user.last_name = last_name
+        new_user.gender = gender
+        new_user.user_role = user_role
+
+        result = new_user.add_user()
+
+        if result:
+            return render_template("admin/user_management/add_user.html", success=True, UserForm=form)
+        else:
+            return render_template("admin/user_management/add_user.html", error=True, UserForm=form)
+    
     return render_template("admin/user_management/add_user.html", UserForm=form)
