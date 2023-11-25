@@ -53,4 +53,53 @@
 /* style here */
 
 /* -------------------------------------------- USER MANAGEMENT -------------------------------------------- */
-/* style here */
+.add-icon img {
+    width: 60px;
+    right: 20px;
+    bottom: 20px;
+    justify-content: flex-end;
+    border-radius: 100%;
+    z-index: 99;
+    position: fixed;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+}
+
+.add-icon img:active {
+    transform: translateY(1px);
+}
+
+.ur-container{
+    margin-left: 110px;
+    margin-right: 2%;
+}
+
+
+/* -------------------------------------------- USER TABLE -------------------------------------------- */
+
+.user-header{
+    position: absolute;
+    top: 45px;
+    left: 110px;
+    font-weight: 900;
+    font-size: 18px;
+}
+
+.user-table {
+    position: relative; 
+    width: 1350px; 
+    top: 85px; 
+    left: 110px;
+    line-height: 1.5;
+    color: var(--darkBlue);
+    background-color: white;
+    font-size: 16px;
+}
+
+.user-table.request {
+    top: 190px; 
+}
+
+.action-icon-container{
+    display: flex; 
+    justify-content: center;
+}
