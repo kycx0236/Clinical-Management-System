@@ -1,84 +1,88 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Get the form and modal elements
-    const editForm = document.querySelector('.needs-validation');
-    const successModal = document.getElementById('doccare-success-modal');
-    const failedModal = document.getElementById('doccare-failed-confirmation-modal');
+document.addEventListener("DOMContentLoaded", function () {
+    // Validate the form on submit
+    $(".doccare-success-button").on("click", function (event) {
+        event.preventDefault();
+        if (validateForm()) {
+            // If the form is valid, submit it
+            console.log("Form is valid. Submitting...");
 
-    // Add an event listener to the form for submission
-    editForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Perform any additional validation if needed
-
-        // Convert form data to JSON
-        const formData = new FormData(editForm);
-        const jsonData = {};
-        formData.forEach((value, key) => {
-            jsonData[key] = value;
-        });
-
-        // Include CSRF token in headers
-        const csrfToken = document.querySelector('[name=csrf_token]').value;
-
-        // Simulate form submission using Fetch API
-        fetch(editForm.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken, // Include CSRF token in headers
-            },
-            body: JSON.stringify(jsonData),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Check the success status from the response
-                if (data.success) {
-                    // Show the success modal
-                    showSuccessModal(data.booking_details);
-                } else {
-                    // Show the failed modal
+            // Assuming you are using jQuery for AJAX
+            $.ajax({
+                url: document.querySelector("form").action,
+                method: "POST",
+                data: $("form").serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        // Show success modal
+                        showSuccessModal();
+                
+                        // Delay for 2 seconds (adjust as needed)
+                        setTimeout(function () {
+                            // Redirect to the /appointment/ route
+                            window.location.href = '/receptionist/appointment/';
+                        }, 1000);
+                    } else {
+                        // Show failed modal
+                        showFailedModal();
+                    }
+                },
+                error: function () {
+                    // Show failed modal in case of an error
                     showFailedModal();
                 }
-            })
-            .catch(error => {
-                console.error('Error submitting form:', error);
-                // Show the failed modal in case of an error
-                showFailedModal();
             });
+        } else {
+            console.log("Form is not valid.");
+        }
     });
 
+    // Function to validate the form
+    function validateForm() {
+        var form = document.querySelector(".needs-validation");
+        var isValid = form.checkValidity();
+
+        // Check each form field for validity
+        form.querySelectorAll(".form-control").forEach(function (input) {
+            input.reportValidity();
+        });
+
+        return isValid;
+    }
+
     // Function to show the success modal
-    function showSuccessModal(bookingDetails) {
-        // Update the modal content with booking details
-        const lastNameElement = document.getElementById('patient-lastname');
-        const appointmentElement = document.getElementById('patient-appoinment');
-        const referenceElement = document.getElementById('patient-reference');
+    function showSuccessModal() {
+        var successModal = document.getElementById("doccare-success-confirmation-modal");
+        successModal.style.display = "flex";
 
-        lastNameElement.textContent = 'Last Name: ' + bookingDetails.last_name;
-        appointmentElement.textContent = 'Appointment Schedule: ' + bookingDetails.date_appointment + ' ' + bookingDetails.time_appointment;
-        referenceElement.textContent = 'Booking Reference No.: ' + bookingDetails.reference_number;
+        // Add event listener to the "Done" button inside the success modal
+        // Assuming you have an element with id "doccare-done-modal-button" for the "Done" button
+        var doneButton = document.getElementById("doccare-done-modal-button");
 
-        // Show the success modal
-        successModal.style.display = 'flex';
+        doneButton.addEventListener('click', async function() {
+            // Show the success modal
+            $("#doccare-success-confirmation-modal").modal("show");
+
+            // Use a Promise to wait for the modal to be fully displayed
+            await new Promise(resolve => {
+                $('#doccare-success-confirmation-modal').on('shown.bs.modal', function () {
+                    // Resolve the Promise when the modal is fully displayed
+                    resolve();
+                });
+            });
+
+            // Redirect to the /appointment/ route
+            window.location.href = '/receptionist/appointment/';
+        });
     }
 
     // Function to show the failed modal
     function showFailedModal() {
-        // Show the failed modal
-        failedModal.style.display = 'flex';
+        var failedModal = document.getElementById("doccare-failed-confirmation-modal");
+        failedModal.style.display = "flex";
     }
-
-    // Close modals when the "DONE" button is clicked
-    const doneButtons = document.querySelectorAll('.doccare-done-modal-button');
-    doneButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            successModal.style.display = 'none';
-            failedModal.style.display = 'none';
-        });
+    const arrowBackButton = document.getElementById('arrow')
+    arrowBackButton.addEventListener('click', function() {
+        // Redirect to the /appointment/ route
+        window.location.href = '/receptionist/appointment/';
     });
 });

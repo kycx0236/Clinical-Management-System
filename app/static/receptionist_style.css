@@ -203,6 +203,15 @@ thead th.active, tbody td.active {
     'opsz' 24
 }
 
+.material-symbols-outlined.search{
+    cursor: pointer;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.material-symbols-outlined.search:hover{
+    transform: scale(1.2);
+}
+
 /* Center the icon horizontally */
 .doccare-add-appointment-icon {
     text-align: center;
@@ -486,6 +495,12 @@ tbody tr.hide {
     border: 2px solid rgba(110, 110, 110, 0.5);
     background: rgba(110, 110, 110, 0.5);
     backdrop-filter: blur(2.5px);
+}
+
+.filter-select {
+    border-radius: 5px;
+    width: 150px;
+    margin-left: 5px;
 }
 
 

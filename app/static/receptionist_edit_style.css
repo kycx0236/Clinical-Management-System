@@ -27,6 +27,7 @@ body {
     font-size: 20px;
     font-weight: 600;
     color: #333;
+    margin-left: calc(100% / 2.2);
 }
 
 .doccare-edit-container form {
@@ -41,10 +42,9 @@ body {
 
 .doccare-edit-container form .title {
     display: block;
-    margin-bottom: 8px;
     font-size: 32px;
     font-weight: 600;
-    margin: 6px 0 20px 37.5%;
+    margin: 0 0 28px 39%;
     color:#333;
 }
 
@@ -125,7 +125,7 @@ form .fields .input-fields {
     background: #004f7a !important;
 }
 
-.doccare-success-modal, .doccare-failed-confirmation-modal {
+.doccare-success-confirmation-modal, .doccare-failed-confirmation-modal{
     display: none; /* Initial display */ /* use flex after initialization */
     align-items: center;
     justify-content: center;
@@ -138,65 +138,82 @@ form .fields .input-fields {
     z-index: 2; 
 }
 
-
 .doccare-success-modal-content, .doccare-failed-modal-content {
-    width: 800px;
-    height: 600px;
-    flex-shrink: 0;
+    width: 80%; /* Adjust the width as needed */
+    max-width: 800px; /* Set a maximum width if necessary */
+    height: 400px;
     border-radius: 50px;
+    text-align: center;
     background: #FFF;
     box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.80);
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0 auto; /* Center the modal content horizontally */
     z-index: 3;
 }
 
-.doccare-success-modal-content p{
-    color: black;
-    font-family: 'Montserrat';
-    font-size: 20px;
-    font-style: normal;
+  
+.doccare-success-modal-button, .doccare-failed-modal-button {
+    margin-right: 15%;
+    margin-top: 10%;
+}
+  
+.doccare-success-modal-content .material-symbols-outlined.check {
+    margin-top: 40px;
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+.doccare-failed-modal-content .material-symbols-outlined.error {
+    margin-top: 40px;
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+.doccare-success-modal-content h1,
+.doccare-success-modal-content p {
+    margin-bottom: 30px; /* Adjust the margin as needed */
+}
+
+.doccare-failed-modal-content h1,
+.doccare-failed-modal-content h6{
+    margin-bottom: 15px; /* Adjust the margin as needed */
+}
+.doccare-failed-confirmation-modal h6 {
     font-weight: 600;
-    line-height: normal;
-    margin-top: 5%;
 }
 
-.doccare-success-modal-content-2, .doccare-failed-modal-content-2{
-    width: 620px;
-    height: 200px;
-    flex-shrink: 0;
-    border-radius: 20px;
-    background: #A3D5FF;
-    margin-top: 3%;
+.doccare-success-confirmation-modal p {
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.doccare-success-modal-content-2 p, .doccare-failed-modal-content-2 p {
-    color: #000;
-    text-align: center;
-    font-family: 'Montserrat';
+
+#doccare-done-modal-button {    
+    padding: 10px 20px;
     font-size: 16px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-align: left;
-    margin-left: 2%;
-    margin-top: 2%
-}
-
-.doccare-success-modal-content, .doccare-failed-modal-content button {
-    width: 150px;
-    height: 48px;
-    border-radius: 10px;
-    margin: 0 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    outline: none;
-    margin-top: 20%;
 }
 
-.muted-text {
-    color: #000; /* Use your preferred muted color */
+#doccare-done-modal-button:hover {
+    background-color: #0056b3;
+}
+
+.material-symbols-outlined {  
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+.material-symbols-outlined.check, .material-symbols-outlined.error {
+    color:#279eff;
+    font-size: 78px;
+    font-weight: 600;
+}
+
+.material-symbols-outlined.arrow{
+    cursor: pointer;
 }
 
 

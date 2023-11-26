@@ -7,13 +7,6 @@
 {% endblock link %}
 {% block content %}
 
-    {%for message in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>{{ message }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
-
     <div class="doccare-add-forms-background">
         <section class="doccare-add-header-appoinment">
             <a href="{{ url_for('receptionist.appointment') }}" class="btn btn-secondary mb-3" style="background-color: rgba(255, 255, 255, 0); border-color: rgba(255, 255, 255, 0);">
@@ -174,12 +167,21 @@
                             <div class="doccare-forms-appointment">
                                 <label for="validationCustom09" class="form-label">TIME</label>
                                 <label class="asterisk"> * </label> 
-                                <input type="time" class="form-control" id="validationCustom09" name="time_appointment" min="09:00" max="18:00" required aria-describedby="validationCustom09Feedback"> 
+                                <select class="form-select" id="validationCustom09" name="time_appointment" required aria-describedby="validationCustom08Feedback">
+                                    <option value="" selected>Select your desired time</option>
+                                    {% if time_schedules %}
+                                        {% for time_schedule in time_schedules %}
+                                            <option value="{{ time_schedule }}">{{ time_schedule }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value="" disabled>No available time schedules</option>
+                                    {% endif %}
+                                </select>
                                 <div id="validationCustom09Feedback" class="valid-feedback">
                                     Looks good!
                                 </div>
                                 <div class="invalid-feedback">
-                                    Please select the <strong>time of appoinment</strong>.
+                                    Please select the <strong>time of appointment</strong>.
                                 </div>
                             </div>
                 
@@ -243,6 +245,36 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='receptionist_add_script.js') }}"></script>
+<script>
+    $('#validationCustom08').on('change', function() {
+        var selectedDate = $(this).val();
+    
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
+    
+        // Make an AJAX request to fetch time schedules for the selected date
+        $.ajax({
+            url: '/receptionist/get-time-schedules',
+            type: 'POST',
+            data: { selected_date: selectedDate, csrf_token: csrfToken }, // Include the CSRF token
+            success: function(response) {
+                // Update the options of the time_appointment dropdown
+                var timeDropdown = $('#validationCustom09');
+                timeDropdown.empty();
+                timeDropdown.append('<option value="" selected>Select a time</option>');
+    
+                // Add options based on the received time schedules
+                for (var i = 0; i < response.time_schedules.length; i++) {
+                    timeDropdown.append('<option value="' + response.time_schedules[i] + '">' + response.time_schedules[i] + '</option>');
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching time schedules:', error);
+            }
+        });
+    });
+    
+</script>
 
 
 {% endblock %}

@@ -20,19 +20,23 @@
                             <strong> APPOINTMENT </strong> 
                         </h1>
                         <div class="doccare-input-group">
-                            <input type="search" placeholder="Search">
-                            <span class="material-symbols-outlined">&#xe8b6;</span>
+                            <input type="search" class="search-input" id="search-input" placeholder="Search"  aria-label="Search">
+                            <button class="search-icon" id="search-icon" type="button">
+                                <span class="material-symbols-outlined search">&#xe8b6;</span>
+                            </button>
                         </div>
                     </section>
                     <section class="appointment_entries">
                     <!--<hr width="100%" color="blue"> -->
                         </br>  
-                        <label for="entriesPerPage">Show entries:</label>
-                        <select id="entriesPerPage" name="entriesPerPage" class="styled-dropdown">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
+                        <label for="filter-select">Filter Status by: </label>
+                        <select id="filter-select" name="filter-select" class="filter-select">
+                            <option value="ALL">ALL</option>
+                            <option value="PENDING">PENDING</option>
+                            <option value="DONE">DONE</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                            <option value="SCHEDULED">SCHEDULED</option>
+                            <option value="RESCHEDULED">RESCHEDULED</option>
                         </select> 
                     </section>
                     <section class="doccare-table-appointment-content">
@@ -50,24 +54,24 @@
                             <tbody>
                                 {% for row in data %}
                                     <tr>
-                                        <td class="doccare-reference-number"> {{ row[0] }} </td>
-                                        <td> {{ row[1] }} </td>
-                                        <td> {{ row[2] }} </td>
+                                        <td class="doccare-reference-number"> {{ row.reference_number }} </td>
+                                        <td> {{ row.date_appointment }} </td>
+                                        <td> {{ row.time_appointment }} </td>
                                         <td> 
                                             <div class="status-cell">
                                                 <p class="status">
-                                                    <strong> {{ row[3] }} </strong>
+                                                    <strong> {{ row.status_ }} </strong>
                                                 </p>
                                             </div>
                                         </td>
                                         <td class="table__cell">
-                                            <a href="{{ url_for('receptionist.view_appointment', reference_number=row[0]) }}" class="doccare-view-appoinment-icon">
+                                            <a href="{{ url_for('receptionist.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appoinment-icon">
                                                 <span class="material-symbols-outlined">info</span>
                                             </a>
-                                            <a href="{{ url_for('receptionist.reschedule', reference_number=row[0]) }}" class="doccare-edit-appoinment-icon">
+                                            <a href="{{ url_for('receptionist.reschedule', reference_number=row.reference_number) }}" class="doccare-edit-appoinment-icon">
                                                 <span class="material-symbols-outlined">edit</span>
                                             </a>
-                                            <button type="button" class="delete-appoinment-button" data-id="{{ row[0] }}" onclick="openDeleteModal('{{ row[0] }}')">
+                                            <button type="button" class="delete-appoinment-button" data-id="{{ row.reference_number }}" onclick="openDeleteModal('{{ row[0] }}')">
                                                 <span class="material-symbols-outlined delete-icon">delete</span>
                                             </button>                                            
                                         </td>
@@ -113,7 +117,80 @@
                      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
                      <script src="{{ url_for('static', filename='receptionist_script.js') }}" defer></script>
-                     <script src="{{ url_for('static', filename='logout.js') }}"></script>                  
+                     <script src="{{ url_for('static', filename='logout.js') }}"></script>
+                     <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const filterSelect = document.getElementById("filter-select");
+                            const rows = document.querySelectorAll(".doccare-table-appointment-content tbody tr");
+                            
+                            filterSelect.addEventListener("change", function () {
+                                const selectedValue = filterSelect.value.toUpperCase();
+                        
+                                rows.forEach(function (row) {
+                                    const statusCell = row.querySelector(".status-cell strong");
+                                    const status = statusCell.innerText.toUpperCase();
+                        
+                                    if (selectedValue === "ALL" || status === selectedValue) {
+                                        row.style.display = "";
+                                    } else {
+                                        row.style.display = "none";
+                                    }
+                                });
+                        
+                            });
+                        });
+                        
+                        
+                        $("#search-icon").click(function () {
+                            // Get the search term from the input field
+                            const searchTerm = $("#search-input").val();
+                            
+                            // Get the selected filter option
+                            const filterBy = $("#filter-select").val();
+
+                            // Make an AJAX request to the search endpoint
+                            $.ajax({
+                                type: "POST",
+                                url: "/receptionist/search-appointments/",
+                                headers: {
+                                    "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
+                                },
+                                data: JSON.stringify({ searchTerm: searchTerm, filterBy: filterBy }),
+                                contentType: "application/json", // Set content type to JSON
+                                success: function (data) {
+                                    // Update the table with the new data
+                                    updateTableWithData(data);
+                                },
+                                error: function (error) {
+                                    console.error("Error while making the search request:", error);
+                                    alert("Error while making the search request. Please check the server response.");
+                                },
+                            });
+                        });
+
+                        // Function to update the table with new data
+                        function updateTableWithData(data) {
+                            // Get the table body element
+                            var tableBody = $("tbody");
+
+                            // Clear existing rows
+                            tableBody.empty();
+
+                            // Iterate over the data and append new rows to the table
+                            for (var i = 0; i < data.length; i++) {
+                                var row = data[i];
+                                var newRow = $("<tr>");
+                                newRow.append("<td class='doccare-reference-number'>" + row.reference_number + "</td>");
+                                newRow.append("<td>" + row.date_appointment + "</td>");
+                                newRow.append("<td>" + row.time_appointment + "</td>");
+                                newRow.append("<td><div class='status-cell'><p class='status'><strong>" + row.status_ + "</strong></p></div></td>");
+                                newRow.append("<td class='table__cell'><a href='/receptionist/view_appointment?reference_number=" + row.reference_number + "' class='doccare-view-appoinment-icon'><span class='material-symbols-outlined'>info</span></a><a href='/receptionist/reschedule?reference_number=" + row.reference_number + "' class='doccare-edit-appoinment-icon'><span class='material-symbols-outlined'>edit</span></a><button type='button' class='delete-appoinment-button' data-id='" + row.reference_number + "' onclick='openDeleteModal(" + row.reference_number + ")'><span class='material-symbols-outlined delete-icon'>delete</span></button></td>");
+
+                                // Append the new row to the table body
+                                tableBody.append(newRow);
+                            }
+                        }
+                    </script>               
                 </main>
             </div>
         </body>

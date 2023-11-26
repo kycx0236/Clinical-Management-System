@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS `appointment` (
-    `reference_number` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `reference_number` VARCHAR(50) NOT NULL,
     `date_appointment` DATE,
     `time_appointment` VARCHAR(255) NOT NULL,
     `status_` VARCHAR(20) NOT NULL,
@@ -26,22 +26,45 @@ CREATE TABLE IF NOT EXISTS `appointment` (
     `middle_name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
     `sex` VARCHAR(10) NOT NULL,
-    `birth_date` DATE NOT NULL,
+    `birth_date` DATE,
     `contact_number` VARCHAR(50) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
-    `address` VARCHAR(255) NOT NULL
+    `address` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`reference_number`),
+    UNIQUE KEY `ref_number_uniq` (`reference_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE IF NOT EXISTS `receptionist` (
+    `receptionistID` INT NOT NULL,
+    `first_name` VARCHAR(30) NOT NULL,
+    `middle_name` VARCHAR(20) NOT NULL,
+    `last_name` VARCHAR(20) NOT NULL,
+    `gender` VARCHAR(20) NOT NULL,
+    INDEX `receptionistID` (`receptionistID`) USING BTREE,
+    FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+) COLLATE='utf8mb4_0900_ai_ci' ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `schedule` (
+    `scheduleID` INT NOT NULL AUTO_INCREMENT,
+    `date_appointment` DATE,
+    `time_appointment` VARCHAR(30) NOT NULL,
+    `slots` INT NOT NULL,
+    UNIQUE INDEX `schedule_id_UNIQUE` (`scheduleID`) USING BTREE,
+    PRIMARY KEY (`scheduleID`) USING BTREE,
+) COLLATE='utf8mb4_0900_ai_ci' ENGINE=InnoDB;
+
+
 -- DOCTOR-PATIENT RELATION
-CREATE TABLE docpatient_relation (
-    relationID int NOT NULL AUTO_INCREMENT,
-    doctorID int NOT NULL,
-    patientID int NOT NULL,
-    PRIMARY KEY (`relationID`),
-    UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
-    FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS docpatient_relation (
+    relationID INT NOT NULL AUTO_INCREMENT,
+    doctorID INT NOT NULL,
+    patientID INT NOT NULL,
+    PRIMARY KEY (relationID),
+    UNIQUE KEY relation_id_UNIQUE (relationID),
+    FOREIGN KEY (doctorID) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (patientID) REFERENCES patientinfo(patientID) ON DELETE CASCADE
 );
+
 
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (

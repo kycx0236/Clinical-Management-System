@@ -9,6 +9,7 @@
 {% block content %}
 </body>
     <div class="doccare-edit-container">
+        <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
         <header>RESCHEDULE</header>
         <form class="needs-validation" method="POST" action="{{ url_for('receptionist.reschedule', reference_number=row.reference_number) }}" novalidate>
             {{ form.csrf_token }}
@@ -38,7 +39,19 @@
                         <!-- Time Appointment -->
                         <div class="input-fields">
                             <label for="validationCustom03" class="form-label"> Time Appointment </label>
-                            <input type="time" class="form-control" id="validationCustom03" name="time_appointment" min="09:00" max="18:00" required value="{{ row.time_appointment }}" aria-describedby="validationCustom03Feedback">
+                            <input type="text" class="form-control" id="validationCustom03" name="time_appointment" required value="{{ row.time_appointment }}" aria-describedby="validationCustom03Feedback">
+                            <div id="validationCustom03Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>time of appoinment</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Book Date -->
+                        <div class="input-fields">
+                            <label for="validationCustom13" class="form-label"> Book Date </label>
+                            <input type="text" class="form-control" id="validationCustom13" name="book_date" required value="{{ row.book_date }}" readonly aria-describedby="validationCustom03Feedback">
                             <div id="validationCustom03Feedback" class="valid-feedback">
                                 Looks good!
                             </div>
@@ -53,7 +66,10 @@
                             <select class="form-select" id="validationCustom04" name="status_" required value= "{{row.status_}}" aria-describedby="validationCustom04Feedback">
                                 <option selected disabled value="">Choose...</option>
                                 <option value="DONE" {% if row.status_ == 'DONE' %} selected {% endif %}> DONE </option>
+                                <option value="CANCELLED" {% if row.status_ == 'CANCELLED' %} selected {% endif %}> CANCELLED </option>
                                 <option value="PENDING" {% if row.status_ == 'PENDING' %} selected {% endif %}> PENDING </option>
+                                <option value="SCHEDULED" {% if row.status_ == 'SCHEDULED' %} selected {% endif %}> SCHEDULED </option>
+                                <option value="RESCHEDULED" {% if row.status_ == 'RESCHEDULED' %} selected {% endif %}> RESCHEDULED </option>
                             </select>
                             <div id="validationCustom04Feedback" class="valid-feedback">
                                 Looks good!
@@ -102,8 +118,12 @@
                         <!-- Sex -->
                         <div class="input-fields">
                             <label for="validationCustom08" class="form-label">Sex</label>
-                            <input type="text" class="form-control" id="validationCustom08" name="sex" required value="{{ row.sex }}" aria-describedby="validationCustom08Feedback">
-                            <div id="validationCustom05Feedback" class="valid-feedback">
+                            <select class="form-select" id="validationCustom08" name="sex" required value= "{{ row.sex }}" aria-describedby="validationCustom08Feedback">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="Male" {% if row.sex == 'Male' %} selected {% endif %}> Male </option>
+                                <option value="Female" {% if row.sex == 'Female' %} selected {% endif %}> Female </option>
+                            </select>
+                            <div id="validationCustom08Feedback" class="valid-feedback">
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
@@ -161,44 +181,35 @@
                     </div>
 
                     <div>
-                        <!-- Include a hidden input for student id_number to update the correct student -->
+                        <!-- Include a hidden input for reference_number to update the correct appoinment -->
                         <input type="hidden" name="reference_number" value="{{ row.reference_number }}">
-                        <button type=" button" class="doccare-success-button" id="doccare-success-button">Submit</button>
+                        <button type="button" class="doccare-success-button" id="doccare-success-button">Submit</button>
                     </div>
                 </div>
 
                 <!-- Modal for Success Confirmation -->
-                {% if booking_details %}
-                    <div class="doccare-success-modal" id="doccare-success-modal">
-                        <div class="doccare-success-modal-content">
-                            <h1>Well Done!</h1>
-                            <p>The appointment is confirmed! Below are the appointment details.</p>
-                            <div class="doccare-success-modal-content-2" id="doccare-success-modal-content-2">
-                                    <p class="patient-lastname" id="patient-lastname">Last Name: {{ booking_details.last_name }}</p>
-                                    <p class="patient-appoinment" id="patient-appoinment">Appointment Schedule: {{ booking_details.date_appointment }} {{ booking_details.time_appointment }}</p>
-                                    <p class="patient-reference" id="patient-reference">Booking Reference No.: {{ booking_details.reference_number }}</p>
-                            </div>
-                            <div class="doccare-success-modal-buttons">
-                                <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
-                            </div>
+                <div id="doccare-success-confirmation-modal" class="doccare-success-confirmation-modal">
+                    <div class="doccare-success-modal-content">
+                        <span class="material-symbols-outlined check">check_circle</span>
+                        <h1>Well Done!</h1>
+                        <p>The appointment is now updated! </p>
+                        <div class="doccare-success-modal-button">
+                            <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
                         </div>
                     </div>
-
+                </div>
                 <!-- Modal for Failed Confirmation -->
-                {% else %}
-                    <div id="doccare-failed-confirmation-modal" class="doccare-failed-confirmation-modal">
-                        <div class="doccare-failed-modal-content">
-                            <h1>Something went Wrong!</h1>
-                            <div class="doccare-failed-modal-content-2" id="doccare-failed-modal-content-2">
-                                <p class="text-muted">Booking details are being processed. Please wait...</p>
-                            </div>
-                            <div class="doccare-failed-modal-button">
-                                <button class="doccare-done-modal-button">DONE</button>
-                            </div>
+                <div id="doccare-failed-confirmation-modal" class="doccare-failed-confirmation-modal">
+                    <div class="doccare-failed-modal-content">
+                        <span class="material-symbols-outlined error">error</span>
+                        <h1>Something went Wrong!</h1>
+                        <h6>Failed to update the appointment.</h6>
+                        <h6>Please try again. </h6>
+                        <div class="doccare-failed-modal-button">
+                            <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
                         </div>
                     </div>
-                {% endif %}
-                
+                </div>
             </div>
         <form>
     </div>
