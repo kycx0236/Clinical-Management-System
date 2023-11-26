@@ -151,12 +151,47 @@ class Appointment:
     def all_time_schedules(cls, selected_date):
         try:
             cursor = mysql.connection.cursor()
-            sql = "SELECT time_appointment FROM schedule WHERE date_appointment = %s ORDER BY date_appointment ASC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) ASC;"
+            sql = "SELECT time_appointment, slots FROM schedule WHERE date_appointment = %s ORDER BY date_appointment ASC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) ASC;"
             cursor.execute(sql, (selected_date,))
             result = cursor.fetchall()
             return result
         except Exception as e:
             print(f"Error fetching all appointments: {e}")
             return []
+
                 
+    @classmethod
+    def update_slots(cls, selected_date, selected_time):
+        try:
+            cursor = mysql.connection.cursor()
+
+            sql = "UPDATE schedule SET slots = slots - 1 WHERE date_appointment = %s AND time_appointment = %s"
+            cursor.execute(sql, (selected_date, selected_time))
+            mysql.connection.commit()
+
+            return True
+        except Exception as e:
+            print(f"Error updating slots: {e}")
+            return False
+    
+    @classmethod
+    def update_time_slots(cls, date, old_time, new_time):
+        try:
+            cursor = mysql.connection.cursor()
+
+            # Increment slots for the old time
+            sql_increment = "UPDATE schedule SET slots = slots + 1 WHERE date_appointment = %s AND time_appointment = %s"
+            cursor.execute(sql_increment, (date, old_time))
+            mysql.connection.commit()
+
+            # Decrement slots for the new time
+            sql_decrement = "UPDATE schedule SET slots = slots - 1 WHERE date_appointment = %s AND time_appointment = %s"
+            cursor.execute(sql_decrement, (date, new_time))
+            mysql.connection.commit()
+
+            return True
+        except Exception as e:
+            print(f"Error updating slots: {e}")
+            return False
+
 

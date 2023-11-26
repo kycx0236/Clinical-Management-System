@@ -116,6 +116,12 @@ def add_appointment():
             
             # Fetch available time schedules for the chosen date
             time_schedules = models_receptionist.Appointment.all_time_schedules(chosen_date)
+            
+             # Get the selected time from the form
+            selected_time = request.form['time_appointment']
+
+            # Update the slots in the schedule table
+            models_receptionist.Appointment.update_slots(chosen_date, selected_time)
 
             print(request.form)  # Print the form data for debugging
 
@@ -261,11 +267,17 @@ def reschedule():
         new_email = form.email.data
         new_address = form.address.data
 
+        old_date_appointment = appointment_data['date_appointment']
+        old_time_appointment = appointment_data['time_appointment']
+        
         if models_receptionist.Appointment.update(
             booking_ref_number, new_date_appointment, new_time_appointment, new_status_,
             new_first_name, new_middle_name, new_last_name, new_sex, new_birth_date,
             new_contact_number, new_email, new_address
         ):
+            # Update the slots for the old and new times
+            models_receptionist.Appointment.update_time_slots(old_date_appointment, old_time_appointment, new_time_appointment)
+
             return jsonify(success=True, message="Appointment updated successfully")
         else:
             return jsonify(success=False, message="Failed to update appointment.")
