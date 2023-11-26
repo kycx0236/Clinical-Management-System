@@ -43,3 +43,11 @@ class admin():
 
         return True
 
+    def delete_user_record(user_id):
+        cursor = mysql.connection.cursor()
+
+        delete_query = "DELETE FROM users WHERE id = %s"
+        cursor.execute(delete_query, (user_id,))
+        mysql.connection.commit()
+
+        return True

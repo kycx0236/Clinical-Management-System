@@ -36,7 +36,7 @@ def logout():
     return redirect(url_for('login'))
 
 # -------------------------------------------- USER -------------------------------------------- #
-
+# ADD USER
 @admin_bp.route('/add_user/',  methods=['GET', 'POST'])
 @login_required
 @role_required('admin')
@@ -69,3 +69,22 @@ def add_user():
             return render_template("admin/user_management/add_user.html", error=True, UserForm=form)
     
     return render_template("admin/user_management/add_user.html", UserForm=form)
+
+# DELETE USER
+@admin_bp.route('/delete_user/', methods=['GET', 'POST'])
+@login_required
+@role_required('admin')
+def delete_user():
+    form = UserForm()
+
+    if request.method == "POST":
+        user_id = request.form.get("user_id")
+
+        result = admin.delete_user_record(user_id)
+
+        if result:
+            return render_template("admin/user_management/user_management.html", success=True, UserForm=form)
+        else:
+            return render_template("admin/user_management/user_management.html", error=True, UserForm=form)
+        
+    return render_template("admin/user_management/user_management.html", UserForm=form)
