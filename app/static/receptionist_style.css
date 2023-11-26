@@ -115,7 +115,7 @@
 
 .doccare-table-appointment-content{
     width: 95%;
-    max-height: calc(90% - 1.6rem);
+    max-height: calc(95% - 1.6rem);
     background-color: #fffb;
     margin: .8rem auto;
     border-radius: .6rem;
@@ -503,6 +503,10 @@ tbody tr.hide {
     margin-left: 5px;
 }
 
+.search-icon {
+    outline: none;
+    border: none;
+}
 
 @media (max-width: 768px) {
     td:not(:first-of-type){

@@ -19,9 +19,7 @@ headings = ("Reference Number", "Date", "Time", "Status", "Actions")
 @login_required
 @role_required('receptionist')
 def dashboard():
-    # Retrieve all appointment data from your model
-    all_appointments = models_receptionist.Appointment.all()
-    return render_template("receptionist/dashboard/dashboard.html", row=all_appointments)
+    return render_template("receptionist/dashboard/dashboard.html")
 
 @receptionist_bp.route('/calendar/')
 @login_required
@@ -37,7 +35,7 @@ def appointment():
     page = int(request.args.get('page', 1))
 
     # Set the number of items to display per page
-    items_per_page = 8  # You can adjust this to your preferred value
+    items_per_page = 9  # You can adjust this to your preferred value
 
     # Retrieve all appointment data from your model
     all_appointments = models_receptionist.Appointment.all()

@@ -193,5 +193,27 @@ class Appointment:
         except Exception as e:
             print(f"Error updating slots: {e}")
             return False
-
-
+    
+    @classmethod
+    def reference_authenticator(cls, reference_number, last_name):
+        try:
+            cursor = mysql.connection.cursor()
+            sql = "SELECT reference_number FROM appointment WHERE reference_number=%s AND last_name= %s"
+            cursor.execute(sql, (reference_number, last_name))
+            result = cursor.fetchone()
+            return result
+        except Exception as e:
+            print(f"Error fetching all appointments: {e}")
+            return []
+        
+    @classmethod
+    def get_all_reference_numbers(cls):
+        try:
+            cursor = mysql.connection.cursor()
+            sql = "SELECT reference_number FROM appointment"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error fetching all reference_numbers: {e}")
+            return []
