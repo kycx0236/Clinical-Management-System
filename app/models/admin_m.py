@@ -51,3 +51,23 @@ class admin():
         mysql.connection.commit()
 
         return True
+    
+    @staticmethod
+    def get_user_info(user_id):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM users WHERE id = %s"
+        cursor.execute(query, (user_id,))
+        user = cursor.fetchone()
+
+        return user
+    
+    def update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role):
+        cursor = mysql.connection.cursor()
+
+        sql = "UPDATE users SET username=%s, password=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
+        cursor.execute(sql, (username, password, first_name, middle_name, last_name, gender, user_role, user_id))
+        mysql.connection.commit()
+
+        cursor.close()
+
+        return True

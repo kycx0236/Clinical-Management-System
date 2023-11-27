@@ -88,3 +88,38 @@ def delete_user():
             return render_template("admin/user_management/user_management.html", error=True, UserForm=form)
         
     return render_template("admin/user_management/user_management.html", UserForm=form)
+
+@admin_bp.route('/user_info/', methods=['GET', 'POST'])
+@login_required
+@role_required('admin')
+def user_info():
+    form = UserForm()
+
+    if request.method == 'GET':
+        user_id = request.args.get('user_id')
+        user_info = admin.get_user_info(user_id)
+        print(user_info)
+        print(user_id)
+        
+        return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form)
+
+    elif request.method == 'POST':
+        user_id = request.form.get('user_id')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        first_name = request.form.get('first_name')
+        middle_name = request.form.get('middle_name')
+        last_name = request.form.get('last_name')
+        gender = request.form.get('gender')
+        user_role = request.form.get('user_role')
+
+        print(user_id, username, password, first_name,middle_name, last_name, gender, user_role )
+
+        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role)
+
+        if updated:
+            return redirect(url_for('admin.user_info',success=True, user_id=user_id))
+        else:
+            return redirect(url_for('admin.user_info',error=True, user_id=user_id ))
+
+    return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form)

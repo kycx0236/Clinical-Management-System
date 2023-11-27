@@ -79,12 +79,12 @@
                             <!-- VIEW INFO -->
                             <form method="GET" action="/admin/user_info/">
                                 <div class="delete-icon">
-                                    <input id="user_id" name="user_id" value="{{ user[0] }}" type="hidden">
+                                    <input id="user_id" name="user_id" value="{{ user['id'] }}" type="hidden">
                                     <button type="submit" style="background: none; border: none;">
                                         <img src="{{ url_for('static', filename='images/Folder.png') }}" title="User Info">
                                     </button>
                                 </div>
-                            </form> 
+                            </form>
 
                             <!-- DELETE INFO-->
                             <form id="deleteForm_{{ user.id }}" method="POST" action="{{ url_for('admin.delete_user') }}">
