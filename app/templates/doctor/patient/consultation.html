@@ -117,18 +117,6 @@
                                 </div>
                             </form> 
                         </td>
-                        <td>
-                            <!-- DELETE RECORD -->
-                            <form id="deleteForm_{{ consultation[0] }}" method="POST" action="/doctor/delete_assessment/">
-                                <div class="delete-icon">
-                                    <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                    <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                    <button type="button" onclick="confirmation('{{ consultation[0] }}')" style="background: none; border: none;">
-                                        <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
-                                    </button>
-                                </div>
-                            </form> 
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

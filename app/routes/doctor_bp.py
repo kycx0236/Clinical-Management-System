@@ -853,27 +853,3 @@ def delete_patient():
             return render_template("doctor/patient/patient.html", error=True, PatientForm=form, info=doctor_info)
         
     return render_template("doctor/patient/patient.html", PatientForm=form, info=doctor_info)
-
-# DELETE ASSESSMENT RECORD
-@doctor_bp.route('/delete_assessment/', methods=['GET', 'POST'])
-@login_required
-@role_required('doctor')
-def delete_assessment():
-    form = PatientForm()
-    user_id = current_user.id
-    doctor_info = doctor.get_doctor_info(user_id)
-
-    if request.method == "POST":
-        assessment_id = request.form.get("assessment_id")
-        patient_id = request.form.get("patient_id")
-        doctor_info = doctor.get_doctor_info(user_id)
-
-        result = doctor.delete_medical_assessment(assessment_id, patient_id)
-        patient_info = doctor.get_patient_info(patient_id)
-
-        if result:
-            return render_template("doctor/patient/consultation.html", success=True, patient=patient_info, PatientForm=form, info=doctor_info)
-        else:
-            return render_template("doctor/patient/consultation.html", error=True, patient=patient_info, PatientForm=form, info=doctor_info)
-        
-    return render_template("doctor/patient/consultation.html", PatientForm=form, info=doctor_info)

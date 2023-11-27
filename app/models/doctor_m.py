@@ -381,15 +381,3 @@ class doctor():
             return True
         except:
             return False
-
-# DELETE MEDICAL ASSESSMENT
-    @classmethod 
-    def delete_medical_assessment(cls, assessmentID, patientID):
-        cursor = mysql.connection.cursor()
-        try:
-            query = "DELETE FROM assessment WHERE assessmentID = %s AND patientID = %s"
-            cursor.execute(query, (assessmentID, patientID,))
-            mysql.connection.commit()
-            return True
-        except:
-            return False
