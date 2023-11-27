@@ -55,7 +55,26 @@
             <div class="greetings">
                 <p>Have a nice day at work!</p>
             </div>
+            <p class="date-time" id="demo"></p>
         </div>
     </main>
+
+    <script>
+        // TO DISPLAY THE DATE
+        function displayDateAndTime() {
+        const demoElement = document.getElementById('demo');
+
+            function updateDateAndTime() {
+                const currentDateAndTime = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
+
+                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}`;
+            }
+            updateDateAndTime();
+            setInterval(updateDateAndTime);
+        }
+        displayDateAndTime();   
+    </script>
 
 {% endblock %}  

@@ -6,40 +6,26 @@
 }
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
-.add-icon img {
-    width: 345px;
-    top: 150px;
-    left: 260px;
-    border-radius: 20px;
-} 
-
-.reschedule-icon img {
-    width: 345px;
-    top: 150px;
-    left: 635px;
-    border-radius: 20px;
+.appointment-nav {
+    position: absolute;
+    display: flex;
+    gap: 20px;
+    top: 170px;
+    /* left: 110px; */
+    right: 25px;
+    /* background-color: var(--blueC); */
 }
 
-.cancel-icon img {
-    width: 345px;
-    top: 150px;
-    left: 1010px;
-    border-radius: 20px;
+.appointment {
+    background-color: var(--blueC);
+    width: 260px;
+    height: 40px;
+    font-size: 16px;
+    color: var(--blueA);
+    justify-content: center;
+    border-radius: 5px;
 }
 
-.add-icon img, .reschedule-icon img, .cancel-icon img {
-    position: fixed;
-}
-
-.add-icon img:hover, .reschedule-icon img:hover, .cancel-icon img:hover {
-    transform: scale(101%);
-    z-index: 1;
-}
-
-.add-icon img:active, .reschedule-icon img:active, .cancel-icon img:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-    transform: translateY(1px);
-}
 
 /* -------------------------------------------- APPOINTMENT -------------------------------------------- */
 /* style here */

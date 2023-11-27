@@ -187,8 +187,9 @@ ul li p {
     font-weight: 900;
     position: absolute;
     display: flex;
-    top: 70px;
-    left: 1140px;
+    top: 180px;
+    left: 110px;
+    color: var(--darkBlue);
 }
 
 .doctor-bg img {
