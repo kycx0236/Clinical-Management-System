@@ -119,7 +119,7 @@ def add_appointment():
             selected_time = request.form['time_appointment']
 
             # Update the slots in the schedule table
-            models_receptionist.Appointment.update_slots(chosen_date, selected_time)
+            models_receptionist.Appointment.update_slots(chosen_date, selected_time, increment=False)
 
             print(request.form)  # Print the form data for debugging
 
@@ -172,7 +172,15 @@ def add_appointment():
 def delete_appointment():
     try:
         reference_number = request.form.get('reference_number')
+        
+        # Retrieve the time of the deleted appointment
+        deleted_appointment = models_receptionist.Appointment.get_appointment_by_reference(reference_number)
+        deleted_time = deleted_appointment['time_appointment']
+
         if models_receptionist.Appointment.delete(reference_number):
+            # Increment the slots for the deleted time
+            models_receptionist.Appointment.update_slots(deleted_appointment['date_appointment'], deleted_time, increment=True)
+            
             return jsonify(success=True, message="Successfully deleted")
         else:
             return jsonify(success=False, message="Failed to delete appointment")
@@ -180,6 +188,7 @@ def delete_appointment():
         # Log the error for debugging purposes
         receptionist_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500
+
 
 
 @receptionist_bp.route('/view-appointment/', methods=["GET"])

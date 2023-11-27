@@ -161,11 +161,15 @@ class Appointment:
 
                 
     @classmethod
-    def update_slots(cls, selected_date, selected_time):
+    def update_slots(cls, selected_date, selected_time, increment=True):
         try:
             cursor = mysql.connection.cursor()
 
-            sql = "UPDATE schedule SET slots = slots - 1 WHERE date_appointment = %s AND time_appointment = %s"
+            # Determine whether to increment or decrement slots
+            operator = "+" if increment else "-"
+
+            # Update slots based on the operation
+            sql = f"UPDATE schedule SET slots = slots {operator} 1 WHERE date_appointment = %s AND time_appointment = %s"
             cursor.execute(sql, (selected_date, selected_time))
             mysql.connection.commit()
 
@@ -173,6 +177,7 @@ class Appointment:
         except Exception as e:
             print(f"Error updating slots: {e}")
             return False
+
     
     @classmethod
     def update_time_slots(cls, date, old_time, new_time):
