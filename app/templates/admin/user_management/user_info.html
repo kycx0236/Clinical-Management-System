@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Add User{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAV -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('admin.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/User Management.png') }}"> 
+                <p>User Management</p>
+            </li>
+            <a href="{{ url_for('admin.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
+            <div>
+                <h3>{{ info[0] }}</h3>
+                <p>{{ info[1] }}</p>
+            </div>
+        </div>
+        <ul>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- NAVBAR AND TABS FOR USER INFORMATION -->
+    <a class="back-icon" href="{{ url_for('admin.user_management') }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">USER INFORMATION</a>
+        </li>
+    </ul>
+
+    < <form action="{{ url_for('admin.user_info') }}" method="POST">
+        {{ UserForm.csrf_token }}
+
+        <!-- USER ID -->
+        <div class="inputBox code" style="display: none;">
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+        </div>
+        
+        <!-- USER INFORMATION -->
+
+        <div class="user-bg">
+            <div class="group-info">
+
+                <div class="u_row firstRow">
+
+                    <div class="inputBox fName">
+                        <input type="text" required="required" name="first_name" value="{{ user[3] }}" disabled>
+                        <span>FIRST NAME</span>
+                    </div>
+                    <div class="inputBox mName">
+                        <input type="text" required="required" name="middle_name" value="{{ user[4] }}" disabled>
+                        <span>MIDDLE NAME</span>
+                    </div>
+                    <div class="inputBox lName">
+                        <input type="text" required="required" name="last_name" value="{{ user[5] }}" disabled>
+                        <span>LAST NAME</span>
+                    </div>
+                    
+                </div>
+
+                <div class="u_row secondRow">
+
+                    <div class="inputBox username">
+                        <input type="text" required="required" name="username" value="{{ user[1] }}" disabled>
+                        <span>USERNAME</span>
+                    </div>
+
+                    <div class="inputBox gender">
+                        <select class="gender" name="gender" required="required" disabled>
+                            <option value="" disabled selected></option>
+                            <option value="male" {% if user[6] == "male" %} selected {% endif %}>Male</option>
+                            <option value="female" {% if user[6] == "female" %} selected {% endif %}>Female</option>
+                        </select>
+                        <span>Gender</span>
+                    </div>
+
+                </div>
+
+                <div class="u_row thirdRow">
+
+                    <div class="inputBox password">
+                        <input type="text" required="required" name="password" value="{{ user[2] }}" disabled>
+                        <span>PASSWORD</span>
+                    </div>
+
+                    <div class="inputBox user_role">
+                        <select class="user_role" name="user_role" required="required" disabled>
+                            <option value="" disabled selected></option>
+                            <option value="doctor" {% if user[7] == "doctor" %} selected {% endif %}>Doctor</option>
+                            <option value="receptionist" {% if user[7] == "receptionist" %} selected {% endif %}>Receptionist</option>
+                            <option value="medtech" {% if user[7] == "medtech" %} selected {% endif %}>Medtech</option>
+                            <option value="admin" {% if user[7] == "admin" %} selected {% endif %}>Admin</option>
+                        </select>
+                        <span>User Role</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+            </div>
+
+            <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
+
+        </div>
+    </form>
+    
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient information updated successfully!
+                    </div>
+                    <a href="{{ url_for('admin.user_info', user_id=user[0]) }}">
+                        <div class="modal-footer">
+                            <button type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in saving changes for patient information!
+                    </div>
+                    <a href="{{ url_for('admin.user_info', user_id=user[0]) }}">
+                        <div class="modal-footer">
+                            <button type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        // EDIT BUTTON
+        function enableEdit() {
+            const inputFields = document.querySelectorAll('.group-info input, .group-info select');
+
+            inputFields.forEach((input) => {
+                input.disabled = false;
+            });
+
+            const submitButton = document.querySelector('#updateButton');
+            submitButton.style.display = 'block';
+
+            const editIcon = document.getElementById('editIcon');
+            editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
+            editIcon.setAttribute('onclick', 'disableEdit()'); 
+        }
+
+        function disableEdit() {
+            const inputFields = document.querySelectorAll('.group-info input, .group-info select');
+
+            inputFields.forEach((input) => {
+                input.disabled = true;
+            });
+
+            const submitButton = document.querySelector('#updateButton');
+            submitButton.style.display = 'none';
+
+            const editIcon = document.getElementById('editIcon');
+            editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
+            editIcon.setAttribute('onclick', 'enableEdit()');
+        }
+    </script>
+
+
+{% endblock %}

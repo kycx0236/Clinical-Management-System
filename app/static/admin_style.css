@@ -12,4 +12,185 @@
 /* style here */
 
 /* -------------------------------------------- USER MANAGEMENT -------------------------------------------- */
-/* style here */
+.add-icon img {
+    width: 60px;
+    right: 20px;
+    bottom: 20px;
+    justify-content: flex-end;
+    border-radius: 100%;
+    z-index: 99;
+    position: fixed;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+}
+
+.add-icon img:active {
+    transform: translateY(1px);
+}
+
+.ur-container{
+    margin-left: 110px;
+    margin-right: 2%;
+}
+
+.update-icon {
+    top: 40px;
+    right: 105px;
+    width: 35px;
+    border-radius: 5px;
+    z-index: 1;
+    position: fixed;
+    cursor: pointer;
+}
+
+.update-icon.details {
+    right: 90px;
+}
+
+.update-icon.test {
+    position: absolute;
+    right: 17px;
+    top: 1600px;
+}
+
+.update-icon:active {
+    transform: translateY(1px);
+}
+
+/* -------------------------------------------- USER TABLE -------------------------------------------- */
+
+.user-header{
+    position: absolute;
+    top: 45px;
+    left: 110px;
+    font-weight: 900;
+    font-size: 18px;
+}
+
+.user-table {
+    position: relative; 
+    width: 1350px; 
+    top: 85px; 
+    left: 110px;
+    line-height: 1.5;
+    color: var(--darkBlue);
+    background-color: white;
+    font-size: 16px;
+}
+
+.user-table.request {
+    top: 190px; 
+}
+
+.action-icon-container{
+    display: flex; 
+    justify-content: center;
+}
+
+
+/* -------------------------------------------- USER INFORMATION-------------------------------------------- */
+
+/* --------------------------- BACK ICON ---------------------------- */
+.back-icon img {
+    position: absolute;
+    width: 20px;
+    z-index: 1;
+    top: 60px;
+    left: 145px;
+}
+
+.back-icon img:active {
+    transform: translateX(2px);
+}
+
+/* --------------------------- PATIENT DETAILS NAVBAR ---------------------------- */
+.nav-underline {
+    display: flex;
+    margin-right: 150px;
+    top: 50px;
+    left: 200px;
+    position: absolute;
+}
+
+.nav-item:active {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transform: translateY(1px);
+}
+
+.nav-underline .nav-link {
+    border: none; 
+    text-decoration: none; 
+    padding: 0.5rem 1rem; 
+    color: var(--grayA); 
+}
+
+.nav-underline .nav-link.active {
+    border-bottom: 2px solid var(--blueD);
+    color: var(--blueD); 
+}
+
+
+.user-bg {
+    position: absolute;
+    width: 1230px;  
+    height: 610px; 
+    background-color: white;
+    box-shadow: 10px 10px 20px 10px var(--blueC);
+    top: 85px;
+    left: 200px;
+}
+
+/* Input boxes */
+.inputBox.username, .inputBox.password{
+    width: 550px;
+}
+
+.gender, .user_role {
+    width: 400px;
+}
+
+.inputBox.fName, .inputBox.mName, .inputBox.lName{
+    width: 300px;
+}
+
+
+/* dropdown styles */
+input, select {
+    padding: 10px;
+    border: 2px solid var(--blueB);
+    border-radius: 5px;
+    outline-color: var(--blueB);
+    color: var(--darkBlue);
+    font-size: 1em;
+}
+
+.inputBox {
+    margin: 20px 20px  ; 
+}
+
+.u_row{
+    display: flex;
+    margin-left: 100px;
+    justify-content: left;
+}
+
+.u_row.firstRow {
+    
+    margin-top: 100px;
+    gap: 10px; 
+     
+}
+
+
+.u_row.secondRow {
+
+    gap: 10px; 
+   
+}
+
+.u_row.thirdRow {
+
+    gap: 10px;
+    margin-bottom: 120px; 
+
+}
+
