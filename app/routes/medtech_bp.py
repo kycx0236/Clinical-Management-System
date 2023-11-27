@@ -115,29 +115,6 @@ def laboratory_report():
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info, info=medtech_info)
 
-# DELETE LABORATORY RECORD
-@medtech_bp.route('/delete_laboratory_report/', methods=['GET', 'POST'])
-@login_required
-@role_required('medtech')
-def delete_laboratory_report():
-    form = PatientForm()
-    user_id = current_user.id
-    medtech_info = medtech.get_user_info(user_id)
-
-    if request.method == "POST":
-        medtech_info = medtech.get_user_info(user_id)
-        report_id = request.form.get("report_id")
-        order_id = request.form.get("order_id")
-
-        result = medtech.delete_laboratory_report(report_id, order_id)
-
-        if result:
-            return render_template("medtech/patient.html", success=True, PatientForm=form, info=medtech_info)
-        else:
-            return render_template("medtech/patient.html", error=True, PatientForm=form, info=medtech_info)
-        
-    return render_template("medtech/patient.html", PatientForm=form, info=medtech_info)
-
 @medtech_bp.route('/profile/')
 @login_required
 @role_required('medtech')

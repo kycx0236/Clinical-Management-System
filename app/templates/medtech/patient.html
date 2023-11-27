@@ -54,7 +54,6 @@
                     <th>PHYSICIAN</th>
                     <th>DATE</th>
                     <th>LAB REPORT</th>
-                    <th>ACTION</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,18 +73,6 @@
                                 <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
                                 <button type="submit" style="background: none; border: none;">
                                     <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Lab Report">
-                                </button>
-                            </div>
-                        </form> 
-                    </td>
-                    <td>
-                        <!-- DELETE RECORD -->
-                        <form id="deleteForm_{{ labrequest[6] }}_{{ labrequest[0] }}" method="POST" action="/medtech/delete_laboratory_report/">
-                            <div class="delete-icon">
-                                <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
-                                <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
-                                <button type="button" onclick="confirmation('{{ labrequest[6] }}', '{{ labrequest[0] }}')" style="background: none; border: none;">
-                                    <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Report">
                                 </button>
                             </div>
                         </form> 
