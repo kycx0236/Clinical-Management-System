@@ -61,17 +61,6 @@
         <div class="user-bg">
             <div class="group-info">
                 <div class="u_row firstRow">
-                    <div class="inputBox username">
-                        <input type="text" required="required" name="username" autocomplete="off">
-                        <span>Username</span>
-                    </div>
-                    <div class="inputBox password">
-                        <input type="text" required="required" name="password" autocomplete="off">
-                        <span>Password</span>
-                    </div>
-                </div>
-
-                <div class="u_row secondRow">
                     <div class="inputBox fName">
                         <input type="text" required="required" name="first_name">
                         <span>First Name</span>
@@ -86,7 +75,12 @@
                     </div>
                 </div>
 
-                <div class="u_row thirdRow">
+                <div class="u_row secondRow">
+                    <div class="inputBox username">
+                        <input type="text" required="required" name="username" autocomplete="off">
+                        <span>Username</span>
+                    </div>
+
                     <div class="inputBox gender">
                         <span>Gender</span>
                         <select class="gender" name="gender" required="required">
@@ -95,6 +89,17 @@
                             <option value="female">Female</option>
                         </select>
                     </div>
+                    
+                    
+                </div>
+
+                <div class="u_row thirdRow">
+                    
+                    <div class="inputBox password">
+                        <input type="text" required="required" name="password" autocomplete="off">
+                        <span>Password</span>
+                    </div>
+
                     <div class="inputBox user_role">
                         <span>User Role</span>
                         <select class="user_role" name="user_role" required="required">
@@ -105,6 +110,7 @@
                             <option value="admin">Admin</option>
                         </select>
                     </div>
+                    
                 </div>
             </div>
             <div class="btn-container">

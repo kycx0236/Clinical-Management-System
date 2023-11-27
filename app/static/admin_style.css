@@ -182,11 +182,11 @@
 
 /* Input boxes */
 .inputBox.username, .inputBox.password{
-    width: 400px;
+    width: 550px;
 }
 
-.inputBox.gender, .inputBox.user_role {
-    width: 100px;
+.gender, .user_role {
+    width: 400px;
 }
 
 .inputBox.fName, .inputBox.mName, .inputBox.lName{
@@ -224,12 +224,13 @@ input, select {
 
 .u_row.secondRow {
 
-    gap: 20px; 
+    gap: 10px; 
    
 }
 
 .u_row.thirdRow {
 
+    gap: 10px;
     margin-bottom: 120px; 
 
 }
