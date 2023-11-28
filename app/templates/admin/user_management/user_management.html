@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block title %}DocCare | User Management{% endblock title %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}"> {% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAV -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('admin.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/User Management.png') }}"> 
+                <p>User Management</p>
+            </li>
+            <a href="{{ url_for('admin.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Admin</p>
+            </div>
+        </div>
+        <ul>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- USER RECORD -->
+    <div class="user-header">
+        <p>USERS</p>
+    </div>
+    
+    <div class="user-table">
+        <table id="userTable" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>USERNAME</th>
+                    <th>PASSWORD</th>
+                    <th>FIRST NAME</th>
+                    <th>MIDDLE NAME</th>
+                    <th>LAST NAME</th>
+                    <th>GENDER</th>
+                    <th>USER ROLE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.middle_name }}</td>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user.gender }}</td>
+                    <td>{{ user.user_role }}</td>
+                    <td>
+                        <div class="action-icon-container">
+                            <!-- VIEW INFO -->
+                            <form method="GET" action="/admin/user_info/">
+                                <div class="delete-icon">
+                                    <input id="user_id" name="user_id" value="{{ user['id'] }}" type="hidden">
+                                    <button type="submit" style="background: none; border: none;">
+                                        <img src="{{ url_for('static', filename='images/Folder.png') }}" title="User Info">
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- DELETE INFO-->
+                            <form id="deleteForm_{{ user.id }}" method="POST" action="{{ url_for('admin.delete_user') }}">
+                                <div class="delete-icon">
+                                    <input id="user_id" name="user_id" value="{{ user.id }}" type="hidden">
+                                    <button type="button" onclick="confirmation('{{ user.id }}')" style="background: none; border: none;">
+                                        <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </td>
+                </tr>   
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Delete Record</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to permanently delete the user information?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
+                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                    User's Information has been deleted successfully!
+                    </div>
+                    <a href="{{ url_for('admin.user_management') }}"> 
+                    <div class="modal-footer">
+                        <button id="successSave" type="button" class="btn-done">DONE</button>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                    Error in deleting user information. Please try again.
+                    </div>
+                    <a href="{{ url_for('admin.user_management') }}">
+                    <div class="modal-footer">
+                        <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <a href="{{ url_for('admin.add_user') }}">
+        <div class="add-icon">
+            <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
+        </div>
+    </a>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#userTable').DataTable();
+        } );
+
+        // CONFIRMATION BEFORE DELETION
+        function confirmation(UserID){
+            const confirmationModal = document.getElementById("confirmationModal");
+            confirmationModal.style.display = "block";
+
+            const confirmDelete = document.getElementById("confirmDelete");
+            const cancelDelete = document.getElementById("cancelDelete");
+            
+            confirmDelete.addEventListener("click", function() {
+                document.getElementById("deleteForm_" + UserID).submit();
+            });
+
+            cancelDelete.addEventListener("click", function() {
+                confirmationModal.style.display = "none";
+            });
+        }
+    </script>
+
+{% endblock %}  

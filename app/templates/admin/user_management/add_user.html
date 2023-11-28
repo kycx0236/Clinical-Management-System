@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Add User{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- SIDE NAV -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <a href="{{ url_for('admin.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/User Management.png') }}"> 
+                <p>User Management</p>
+            </li>
+            <a href="{{ url_for('admin.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
+            <div>
+                <h3>Eda Grace P.</h3>
+                <p>Admin</p>
+            </div>
+        </div>
+        <ul>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- NAVBAR AND TABS FOR USER INFORMATION -->
+    <a class="back-icon" href="{{ url_for('admin.user_management') }}">
+        <img src="{{ url_for('static', filename='images/Back.png') }}">
+    </a>
+
+    <ul class="nav nav-underline">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">USER INFORMATION</a>
+        </li>
+    </ul>
+
+    <form action="{{ url_for('admin.add_user') }}" method="POST">
+        {{ UserForm.csrf_token }}
+
+        <div class="user-bg">
+            <div class="group-info">
+                <div class="u_row firstRow">
+                    <div class="inputBox fName">
+                        <input type="text" required="required" name="first_name">
+                        <span>First Name</span>
+                    </div>
+                    <div class="inputBox mName">
+                        <input type="text" required="required" name="middle_name">
+                        <span>Middle Name</span>
+                    </div>
+                    <div class="inputBox lName">
+                        <input type="text" required="required" name="last_name">
+                        <span>Last Name</span>
+                    </div>
+                </div>
+
+                <div class="u_row secondRow">
+                    <div class="inputBox username">
+                        <input type="text" required="required" name="username" autocomplete="off">
+                        <span>Username</span>
+                    </div>
+
+                    <div class="inputBox gender">
+                        <span>Gender</span>
+                        <select class="gender" name="gender" required="required">
+                            <option value="" disabled selected></option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
+                    
+                </div>
+
+                <div class="u_row thirdRow">
+                    
+                    <div class="inputBox password">
+                        <input type="text" required="required" name="password" autocomplete="off">
+                        <span>Password</span>
+                    </div>
+
+                    <div class="inputBox user_role">
+                        <span>User Role</span>
+                        <select class="user_role" name="user_role" required="required">
+                            <option value="" disabled selected></option>
+                            <option value="doctor">Doctor</option>
+                            <option value="receptionist">Receptionist</option>
+                            <option value="medtech">Medtech</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn-submit" id="modalButton" type="submit">SUBMIT</button>
+            </div>
+        </div>
+    </form>
+    
+
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        User added successfully!
+                    </div>
+                    <a href="{{ url_for('admin.user_management') }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in adding user! A user with the same username already exists.
+                    </div>
+                    <a href="{{ url_for('admin.add_user') }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

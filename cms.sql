@@ -4,7 +4,7 @@ USE `web_cms_database`;
 
 -- LOGIN
 CREATE TABLE IF NOT EXISTS users (
-    id INT NOT NULL,
+    id INT AUTO_INCREMENT NOT NULL,
     username VARCHAR(20) NOT NULL,
     password VARCHAR(20) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
