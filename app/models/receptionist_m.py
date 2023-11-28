@@ -222,3 +222,15 @@ class Appointment:
         except Exception as e:
             print(f"Error fetching all reference_numbers: {e}")
             return []
+    
+    @classmethod
+    def get_all_schedule(cls):
+        try:
+            cursor = mysql.connection.cursor()
+            sql = "SELECT time_appointment FROM schedule"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error fetching all reference_numbers: {e}")
+            return []

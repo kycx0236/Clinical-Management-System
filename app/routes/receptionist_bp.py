@@ -240,6 +240,7 @@ def reschedule():
     booking_ref_number = request.args.get('reference_number')
     form = AppointmentForm()
     appointment_data = models_receptionist.Appointment.get_appointment_by_reference(booking_ref_number)
+    time_data = models_receptionist.Appointment.get_all_schedule()
 
     if appointment_data:
         appointment_data_dict = {
@@ -291,7 +292,7 @@ def reschedule():
     else:
         print ("Failed to update appointment")
         print("Form validation failed:", form.errors)
-    return render_template("receptionist/appointment/appointment_edit.html", form=form, row=appointment_data_dict)
+    return render_template("receptionist/appointment/appointment_edit.html", form=form, row=appointment_data_dict, time_data=time_data)
 
 @receptionist_bp.route('/search-appointments/', methods=['GET', 'POST'])
 @login_required
