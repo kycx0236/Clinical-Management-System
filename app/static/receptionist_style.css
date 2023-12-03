@@ -233,18 +233,16 @@ thead th.active, tbody td.active {
     cursor: pointer;
 }
 
-.material-symbols-outlined.delete-icon {
-    font-size: 24px; 
-    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
-    cursor: pointer;
+.material-symbols-outlined.delete-icon  {
+    font-size: 24px;
 }
 
-/* Enlarge the icon on hover */
-.material-symbols-outlined.delete-icon:hover {
-    transform: scale(1.2);
+.material-symbols-outlined.cancel-icon {
+    font-size: 24px;
 }
 
-.delete-appoinment-button {
+
+.delete-appoinment-button, .cancel-appoinment-button {
     background-color: transparent;
     border: 1px solid rgb(16, 121, 137);
     border-radius: 20%;
@@ -252,9 +250,15 @@ thead th.active, tbody td.active {
     padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
     margin-left: 0.2rem;
     transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+    cursor: pointer;
 }
 
 .delete-appoinment-button:hover {
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.cancel-appoinment-button:hover {
     border: 1px solid rgb(16, 121, 137);
     transform: scale(1.2);
 }
@@ -448,7 +452,7 @@ tbody tr.hide {
     outline: none;
 }
 
-.delete-modal-button {
+.delete-modal-button, .cancellation-modal-button {
     background: #0277BD;
     color: #FFF;
     border: 1px solid #0277BD;
@@ -459,7 +463,7 @@ tbody tr.hide {
     line-height: normal;
 }
 
-.cancel-modal-button {
+.cancel-modal-button, .back-modal-button {
     background: #DFF1FF;
     color: #000;
     border: 1px solid #DFF1FF;
@@ -506,6 +510,11 @@ tbody tr.hide {
 .search-icon {
     outline: none;
     border: none;
+}
+
+.doccare-edit-appoinment-icon.disabled {
+    color: #888; /* Change the color to a visually muted one */
+    cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
 }
 
 @media (max-width: 768px) {

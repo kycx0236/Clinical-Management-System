@@ -234,3 +234,16 @@ class Appointment:
         except Exception as e:
             print(f"Error fetching all reference_numbers: {e}")
             return []
+        
+    @classmethod
+    def update_to_cancel(cls, reference_number, new_status):
+        try:
+            cursor = mysql.connection.cursor()
+            sql = "UPDATE appointment SET status_ = %s WHERE reference_number = %s"
+            cursor.execute(sql, (new_status, reference_number))
+            mysql.connection.commit()
+            print("Appointment updated to cancelled!")
+            return True
+        except Exception as e:
+            print(f"Error deleting appointment: {e}")
+            return False

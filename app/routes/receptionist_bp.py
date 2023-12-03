@@ -12,7 +12,7 @@ from app.routes.utils import role_required
 
 receptionist_bp = Blueprint('receptionist', __name__)
 
-headings = ("Reference Number", "Date", "Time", "Status", "Actions")
+headings = ("Reference Number", "Date", "Time", "Last Name", "Status", "Actions")
 
 # Main routes
 @receptionist_bp.route('/')
@@ -56,6 +56,7 @@ def appointment():
             'reference_number': appointment[0],
             'date_appointment': appointment[1],
             'time_appointment': str(appointment[2]),  # Ensure time_appointment is treated as a string
+            'last_name': appointment[7],
             'status_': appointment[3]
         }
         for appointment in data
@@ -86,6 +87,9 @@ def generate_reference_number():
 
 def generate_status():
     return 'PENDING'
+
+def generate_cancel_status():
+    return 'CANCELLED'
 
 def generate_bookdate():
     current_datetime = datetime.now()
@@ -320,3 +324,25 @@ def get_time_schedules():
         return jsonify(success=True, time_schedules=time_schedules)
     except Exception as e:
         return jsonify(success=False, message=str(e))
+
+@receptionist_bp.route('/cancel-appointment/', methods=['GET', 'POST'])
+@login_required
+@role_required('receptionist')
+def cancel_appointment():
+    try:
+        reference_number = request.form.get('reference_number')
+        cancel_status = generate_cancel_status()
+
+        cancel_appointment = models_receptionist.Appointment.get_appointment_by_reference(reference_number)
+        cancelled_time = cancel_appointment['time_appointment']
+
+        if models_receptionist.Appointment.update_to_cancel(reference_number, cancel_status):
+            models_receptionist.Appointment.update_slots(cancel_appointment['date_appointment'], cancelled_time, increment=True)
+            
+            # Modify the response to include information about the canceled appointment
+            return jsonify(success=True, message="Successfully cancelled the appointment", canceledAppointment=cancel_appointment)
+        else:
+            return jsonify(success=False, message="Failed to cancel appointment")
+    except Exception as e:
+        receptionist_bp.logger.error("An error occurred: %s" % str(e))
+        return jsonify(success=False, message="Internal Server Error"), 500
