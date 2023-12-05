@@ -105,14 +105,16 @@ class Appointment:
         try:
             with mysql.connection.cursor() as cursor:
                 sql = """
-                    SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.status_
+                    SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
                     FROM appointment
-                    WHERE appointment.reference_number = %s
-                    OR appointment.date_appointment = %s
-                    OR appointment.time_appointment = %s
-                    OR appointment.status_ = %s
+                    WHERE LOWER(appointment.reference_number) = %s
+                    OR LOWER(appointment.date_appointment) = %s
+                    OR LOWER(appointment.time_appointment) = %s
+                    OR LOWER(appointment.last_name) = %s
+                    OR LOWER(appointment.status_) = %s
                 """
-                cursor.execute(sql, (query, query, query, query))
+                cursor.execute(sql, (query.lower(), query.lower(), query.lower(), query.lower(), query.lower()))
+
                 result = cursor.fetchall()
                 return result
         except Exception as e:
@@ -124,23 +126,28 @@ class Appointment:
     def filter_appointment(cls, filter_by, query):
         try:
             with mysql.connection.cursor() as cursor:
-                columns = ["reference_number", "date_appointment", "time_appointment", "status_"]
+                columns = ["all", "reference_number", "date_appointment", "time_appointment", "last_name", "status_"]
                 if filter_by not in columns:
                     raise ValueError("Invalid filter column")
-
-                if filter_by == "reference_number":
+                
+                elif filter_by == "all":
                     sql = """
-                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.status_
+                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
                         FROM appointment
-                        WHERE appointment.reference_number = %s
+                    """
+                elif filter_by == "reference_number":
+                    sql = """
+                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
+                        FROM appointment
+                        WHERE LOWER(appointment.reference_number) = %s
                     """
                 else:
                     sql = f"""
-                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.status_
+                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
                         FROM appointment
-                        WHERE appointment.{filter_by} = %s
+                        WHERE LOWER(appointment.{filter_by}) = %s
                     """
-                cursor.execute(sql, (query,))
+                cursor.execute(sql, (query.lower(),))
                 result = cursor.fetchall()
                 return result
         except Exception as e:
@@ -224,16 +231,17 @@ class Appointment:
             return []
     
     @classmethod
-    def get_all_schedule(cls):
+    def get_all_schedule(cls, date_appointment):
         try:
             cursor = mysql.connection.cursor()
-            sql = "SELECT time_appointment FROM schedule"
-            cursor.execute(sql)
+            sql = "SELECT time_appointment FROM schedule WHERE date_appointment = %s"
+            cursor.execute(sql, (date_appointment,))
             result = cursor.fetchall()
             return result
         except Exception as e:
-            print(f"Error fetching all reference_numbers: {e}")
+            print(f"Error fetching all time schedules: {e}")
             return []
+
         
     @classmethod
     def update_to_cancel(cls, reference_number, new_status):

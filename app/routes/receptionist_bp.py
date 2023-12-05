@@ -244,7 +244,6 @@ def reschedule():
     booking_ref_number = request.args.get('reference_number')
     form = AppointmentForm()
     appointment_data = models_receptionist.Appointment.get_appointment_by_reference(booking_ref_number)
-    time_data = models_receptionist.Appointment.get_all_schedule()
 
     if appointment_data:
         appointment_data_dict = {
@@ -262,7 +261,9 @@ def reschedule():
             "email": appointment_data['email'],
             "address": appointment_data['address']
         }
+        time_data = models_receptionist.Appointment.get_all_schedule(appointment_data['date_appointment'])
         print(appointment_data_dict)
+        print(time_data)
     else:
         return jsonify(success=False, message="Appointment not found.")
 
@@ -298,23 +299,30 @@ def reschedule():
         print("Form validation failed:", form.errors)
     return render_template("receptionist/appointment/appointment_edit.html", form=form, row=appointment_data_dict, time_data=time_data)
 
-@receptionist_bp.route('/search-appointments/', methods=['GET', 'POST'])
+@receptionist_bp.route('/search-appointments/', methods=['POST'])
 @login_required
 @role_required('receptionist')
 def search_appointments():
     try:
         data = request.get_json()
+        print("Received data:", data) 
         search_query = data.get('searchTerm')
+        print("Search term:", search_query)
         filter_by = data.get('filterBy')
+        print("Filter by:", filter_by)
         
         if filter_by == 'all':
             search_results = models_receptionist.Appointment.search_appointment(search_query)
+            print("Search results:", search_results)
         else:
             search_results = models_receptionist.Appointment.filter_appointment(filter_by, search_query)
+            print("Search results:", search_results)
             
-        return jsonify(search_results)
+        return jsonify({'success': True, 'data': search_results})
     except Exception as e:
-        return jsonify(error=str(e)), 500
+        print("Error:", e)
+        return jsonify({'success': False, 'error': str(e)}), 500
+
     
 @receptionist_bp.route('/get-time-schedules', methods=['POST'])
 def get_time_schedules():
@@ -332,17 +340,19 @@ def cancel_appointment():
     try:
         reference_number = request.form.get('reference_number')
         cancel_status = generate_cancel_status()
-
+        
+        # Retrieve the time of the deleted appointment
         cancel_appointment = models_receptionist.Appointment.get_appointment_by_reference(reference_number)
         cancelled_time = cancel_appointment['time_appointment']
 
         if models_receptionist.Appointment.update_to_cancel(reference_number, cancel_status):
+            # Increment the slots for the deleted time
             models_receptionist.Appointment.update_slots(cancel_appointment['date_appointment'], cancelled_time, increment=True)
             
-            # Modify the response to include information about the canceled appointment
-            return jsonify(success=True, message="Successfully cancelled the appointment", canceledAppointment=cancel_appointment)
+            return jsonify(success=True, message="Successfully cancelled the appointment")
         else:
             return jsonify(success=False, message="Failed to cancel appointment")
     except Exception as e:
+        # Log the error for debugging purposes
         receptionist_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500

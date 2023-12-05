@@ -1,122 +1,153 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const filterSelect = document.getElementById("filter-select");
-  const rows = document.querySelectorAll(".doccare-table-appointment-content tbody tr");
-  
-  filterSelect.addEventListener("change", function () {
-      const selectedValue = filterSelect.value.toUpperCase();
-
-      rows.forEach(function (row) {
-          const statusCell = row.querySelector(".status-cell strong");
-          const status = statusCell.innerText.toUpperCase();
-
-          if (selectedValue === "ALL" || status === selectedValue) {
-              row.style.display = "";
-          } else {
-              row.style.display = "none";
-          }
-      });
-
-  });
-});
-                        
-                        
-  $("#search-icon").click(function () {
-    // Get the search term from the input field
-    const searchTerm = $("#search-input").val();
-    
-    // Get the selected filter option
-    const filterBy = $("#filter-select").val();
-
-    // Make an AJAX request to the search endpoint
-    $.ajax({
-        type: "POST",
-        url: "/receptionist/search-appointments/",
-        headers: {
-            "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
-        },
-        data: JSON.stringify({ searchTerm: searchTerm, filterBy: filterBy }),
-        contentType: "application/json", // Set content type to JSON
-        success: function (data) {
-            // Update the table with the new data
-            updateTableWithData(data);
-        },
-        error: function (error) {
-            console.error("Error while making the search request:", error);
-            alert("Error while making the search request. Please check the server response.");
-        },
-    });
-  });
-
-  // Function to update the table with new data
-  function updateTableWithData(data) {
-    // Get the table body element
-    var tableBody = $("tbody");
-
-    // Clear existing rows
-    tableBody.empty();
-
-    // Iterate over the data and append new rows to the table
-    for (var i = 0; i < data.length; i++) {
-        var row = data[i];
-        var newRow = $("<tr>");
-        newRow.append("<td class='doccare-reference-number'>" + row.reference_number + "</td>");
-        newRow.append("<td>" + row.date_appointment + "</td>");
-        newRow.append("<td>" + row.time_appointment + "</td>");
-        newRow.append("<td><div class='status-cell'><p class='status'><strong>" + row.status_ + "</strong></p></div></td>");
-        newRow.append("<td class='table__cell'><a href='/receptionist/view_appointment?reference_number=" + row.reference_number + "' class='doccare-view-appoinment-icon'><span class='material-symbols-outlined'>info</span></a><a href='/receptionist/reschedule?reference_number=" + row.reference_number + "' class='doccare-edit-appoinment-icon'><span class='material-symbols-outlined'>edit</span></a><button type='button' class='delete-appoinment-button' data-id='" + row.reference_number + "' onclick='openDeleteModal(" + row.reference_number + ")'><span class='material-symbols-outlined delete-icon'>delete</span></button></td>");
-
-        // Check if the appointment is canceled and disable the edit icon accordingly
-        if (row.status_ === 'CANCELLED') {
-            const editIcon = newRow.find('.doccare-edit-appoinment-icon');
-            if (editIcon) {
-                editIcon.addClass('disabled');
-                editIcon.removeAttr('href');
-            }
-        }
-
-        // Append the new row to the table body
-        tableBody.append(newRow);
-    }
-}
-
-
-
 // Selectors
-const searchInput = document.querySelector('.doccare-input-group input');
+// const searchInput = document.querySelector('.doccare-input-group input');
 const tableRows = document.querySelectorAll('tbody tr');
 const tableHeadings = document.querySelectorAll('thead th');
 const deleteModal = document.getElementById('deleteModal');
 const cancelModal = document.getElementById('cancelModal');
 
 // Event listeners
-searchInput.addEventListener('input', searchTable);
+// searchInput.addEventListener('input', searchTable);
 tableHeadings.forEach((head, i) => head.addEventListener('click', () => handleSortClick(i)));
 
 // Apply the Styles for STATUS at the start of the template
 applyStatusStyles();
 
 
-// Search functionality
-function searchTable() {
-  const searchValue = searchInput.value.toLowerCase();
+function searchAppointments(event) {
+  // Prevent the default form submission behavior
+  event.preventDefault();
 
-  tableRows.forEach((row, i) => {
-    const rowData = row.textContent.toLowerCase();
-    const isMatch = rowData.includes(searchValue);
+  var searchTerm = $("#search-input").val();
+  var filterBy = $("#filter-select").val();
 
-    row.classList.toggle('hide', !isMatch);
+  // Get the CSRF token from the meta tag
+  var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-    // Reset background color for even rows
-    row.style.backgroundColor = i % 2 === 0 ? '#ecf6ff' : '';
+  $.ajax({
+      type: 'POST',
+      url: '/receptionist/search-appointments/',
+      contentType: 'application/json;charset=UTF-8',
+      data: JSON.stringify({
+          searchTerm: searchTerm,
+          filterBy: filterBy
+      }),
+      headers: {
+          "X-CSRFToken": csrfToken  // Include the CSRF token in the headers
+      },
+      success: function (data) {
+          // Check if the data array is empty
+          if (data && data.data && data.data.length > 0) {
+              // Update your table with the new data
+              updateTable(data);
+
+              // Apply status styles
+              applyStatusStyles();
+          } else {
+              showAlert('No data has been found.');
+          }
+      },
+      error: function (error) {
+          console.error('Error:', error.responseText);
+          showAlert('An error occurred while searching for data.');
+      }
   });
-
-  setTimeout(() => {
-    const visibleRows = document.querySelectorAll('tbody tr:not(.hide)');
-    visibleRows.forEach((visibleRow, i) => {
-      visibleRow.style.backgroundColor = i % 2 === 0 ? '#fff5' : '#ecf6ff';
-    });
-  }, 300); // Adjust the delay to match the transition duration
 }
+
+function showAlert(message) {
+  // You can customize this alert to use a modal or any other UI element
+  alert(message);
+}
+
+function updateTable(response) {
+  // Check if the response is successful
+  if (response.success) {
+    var data = response.data;
+
+    var tbody = document.querySelector('.doccare-table-appointment-content tbody');
+    tbody.innerHTML = ''; // Clear existing rows
+
+    data.forEach(function (row) {
+      // Create a new row
+      var newRow = document.createElement('tr');
+
+      // Create cells and content for each column
+      var referenceNumberCell = document.createElement('td');
+      referenceNumberCell.className = 'doccare-reference-number';
+      referenceNumberCell.textContent = row[0];
+
+      var dateAppointmentCell = document.createElement('td');
+      dateAppointmentCell.textContent = new Date(row[1]).toLocaleDateString('en-US', { timeZone: 'Asia/Manila' });
+      
+      var timeAppointmentCell = document.createElement('td');
+      timeAppointmentCell.textContent = row[2];
+
+      var lastNameCell = document.createElement('td');
+      lastNameCell.textContent = row[3];
+
+      var statusCell = document.createElement('td');
+      var statusDiv = document.createElement('div');
+      statusDiv.className = 'status-cell';
+      var statusParagraph = document.createElement('p');
+      statusParagraph.className = 'status';
+      var strongStatus = document.createElement('strong');
+      strongStatus.textContent = row[4];
+      statusParagraph.appendChild(strongStatus);
+      statusDiv.appendChild(statusParagraph);
+      statusCell.appendChild(statusDiv);
+
+      var actionCell = document.createElement('td');
+      actionCell.className = 'table__cell';
+
+      // Add your action buttons/icons here
+      var viewButton = document.createElement('a');
+      viewButton.href = '/receptionist/view-appointment/?reference_number=' + row[0];
+      viewButton.className = 'doccare-view-appoinment-icon';
+      viewButton.innerHTML = '<span class="material-symbols-outlined">info</span>';
+
+      var rescheduleButton = document.createElement('a');
+      rescheduleButton.href = '/receptionist/edit-appointment/?reference_number=' + row[0];
+      rescheduleButton.className = 'doccare-edit-appoinment-icon';
+      rescheduleButton.innerHTML = '<span class="material-symbols-outlined">edit</span>';
+
+      var cancelModalButton = document.createElement('button');
+      cancelModalButton.type = 'button';
+      cancelModalButton.className = 'cancel-appoinment-button';
+      cancelModalButton.setAttribute('data-id', row[0]);
+      cancelModalButton.onclick = function () { openCancelModal(row[0]); };
+      cancelModalButton.innerHTML = '<span class="material-symbols-outlined cancel-icon">event_busy</span>';
+
+      var deleteModalButton = document.createElement('button');
+      deleteModalButton.type = 'button';
+      deleteModalButton.className = 'delete-appoinment-button';
+      deleteModalButton.setAttribute('data-id', row[0]);
+      deleteModalButton.onclick = function () { openDeleteModal(row[0]); };
+      deleteModalButton.innerHTML = '<span class="material-symbols-outlined delete-icon">delete</span>';
+
+      // Append buttons to actionCell
+      actionCell.appendChild(viewButton);
+      actionCell.appendChild(rescheduleButton);
+      actionCell.appendChild(cancelModalButton);
+      actionCell.appendChild(deleteModalButton);
+
+      // Append cells to the row
+      newRow.appendChild(referenceNumberCell);
+      newRow.appendChild(dateAppointmentCell);
+      newRow.appendChild(timeAppointmentCell);
+      newRow.appendChild(lastNameCell);
+      newRow.appendChild(statusCell);
+      newRow.appendChild(actionCell);
+
+      // Append the row to the tbody
+      tbody.appendChild(newRow);
+    });
+
+    applyStatusStyles();
+  } else {
+    console.error('Error in response:', response);
+  }
+}
+
+
 
 
 // Sorting functionality
@@ -265,37 +296,50 @@ function closeCancelModal() {
 
 function cancelAppointment() {
   // Assuming deleteModal is your modal element
-  const appointmentId = deleteModal.getAttribute('data-appointment-id');
+  const appointmentId = cancelModal.getAttribute('data-appointment-id');
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-
   // Make an AJAX request to delete the appointment
   $.ajax({
       type: 'POST',
       url: '/receptionist/cancel-appointment/',
       data: { reference_number: appointmentId },
       headers: {
-          "X-CSRFToken": csrfToken, // Include the CSRF token in the headers
+        "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
       },
-      success: function (response) {
-          // Check the response from the server
-          if (response.success) {
-              // Update the table with the new data
-              updateTableWithData(response.appointments);
-
-              // Display a success message or handle as needed
-              alert('Appointment cancelled successfully!');
-          } else {
-              // Display an error message or handle as needed
-              alert('Failed to cancel appointment.');
-          }
-
-          // Close the cancel modal
-          closeCancelModal();
-      },
-      error: function () {
+      success: function(response) {
+        // Check the response from the server
+        if (response.success) {
+            const appointmentRow = document.getElementById('row-' + appointmentId);
+    
+            if (appointmentRow) {
+                // Disable the edit icon in the current row
+                const editIcon = appointmentRow.querySelector('.doccare-edit-appoinment-icon');
+                if (editIcon) {
+                    editIcon.classList.add('disabled');
+                    editIcon.removeAttribute('href'); // Remove the link functionality
+                    console.log('appointmentId:', appointmentId);
+                    console.log('appointmentRow:', appointmentRow);
+                    // Optionally, you can also change the icon color or add a tooltip to indicate it's disabled
+                }
+            }
+            console.log('appointmentId:', appointmentId);
+            console.log('appointmentRow:', appointmentRow);
+            // Display a success message or handle as needed
+            alert('Appointment cancelled successfully!');
+            window.location.reload(); // Refresh the page after a successful cancel
+        } else {
+            // Display an error message or handle as needed
+            alert('Failed to cancel appointment.');
+        }
+    
+        // Close the cancel modal
+        closeCancelModal();
+      },    
+      
+      error: function() {
           // Display an error message or handle as needed
           alert('Error occurred while processing the request.');
-
+          
           // Close the delete modal
           closeDeleteModal();
       }
@@ -362,3 +406,8 @@ function applyStatusStyles() {
       }
   });
 }
+
+// Add event listener to the search form
+$("#search-form").submit(searchAppointments);
+// Add event listener to the filter select
+$("#filter-select").change(searchAppointments);

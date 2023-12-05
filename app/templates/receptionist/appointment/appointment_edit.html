@@ -39,14 +39,14 @@
                         <!-- Time Appointment -->
                         <div class="input-fields">
                             <label for="validationCustom03" class="form-label"> Time Appointment </label>
-                            <select class="form-select" id="validationCustom03" name="time_appointment" required aria-describedby="validationCustom08Feedback">
+                            <select class="form-select" id="validationCustom03" name="time_appointment" required value="{{ row.time_appointment }}" aria-describedby="validationCustom08Feedback">
                                 <option value="" selected>Select your desired time</option>
                                 {% for time_data in time_data %}
                                     <option value="{{ time_data[0] }}" {% if row.time_appointment == time_data[0] %} selected {% endif %}>{{ time_data[0] }}</option>
                                 {% endfor %}
                                 {% if time_schedules %}
                                     {% for time_schedule in time_schedules %}
-                                        <option value="{{ time_schedule[0] }}">{{ time_schedule[0] }}</option>
+                                        <option value="{{ time_schedule[0] }}" {%if row.time_appointment == time_schedule[0] %} selected {% endif %}>{{ time_schedule[0] }}</option>
                                     {% endfor %}
                                 {% else %}
                                     <option value="" disabled>No available time schedules</option>
