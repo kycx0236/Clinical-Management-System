@@ -12,6 +12,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -57,6 +60,9 @@
     </div>
 
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <div class="navbar"></div>
+    <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
+    
     <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
@@ -140,8 +146,6 @@
             <div class="btn-container">
                 <button class="btn-submit" id="submitData" type="button" style="display: none;">SUBMIT</button>
             </div>
-
-            <img class="update-icon details" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
 
             <button class="print-icon" onclick="window.print()" id="printButton">
                 <img id="editIcon" src="{{ url_for('static', filename='images/Print.png') }}">

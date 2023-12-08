@@ -2,11 +2,12 @@
 {% block title %}DocCare | Patient{% endblock title %}
 {% block link %} 
     <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}">
 {% endblock %}
 
 {% block content %}
 
-    <!-- SIDE NAVIGATION -->
+    <!-- NAVIGATION -->
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -15,19 +16,19 @@
             <li class="notifications">
                 <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
             </li>
-            <a href="{{ url_for('doctor.dashboard') }}">
+            <a href="{{ url_for('receptionist.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                     <p>Dashboard</p>
                 </li>
-            </a>
-            <a href="{{ url_for('doctor.calendar') }}">
+            </a>   
+            <a href="{{ url_for('receptionist.calendar') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
                     <p>Calendar</p>
                 </li>
             </a>
-            <a href="{{ url_for('doctor.appointment') }}">
+            <a href="{{ url_for('receptionist.appointment') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
                     <p>Appointment</p>
@@ -37,7 +38,7 @@
                 <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
                 <p>Patient</p>
             </li>
-            <a href="{{ url_for('doctor.profile') }}">
+            <a href="{{ url_for('receptionist.profile') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
                     <p>Profile</p>
@@ -45,10 +46,10 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
             <div>
                 <h3>{{ info[0] }}</h3>
-                <p>{{ info[2] }}</p>
+                <p>{{ info[1] }}</p>
             </div>
         </div>
         <ul>
@@ -62,7 +63,7 @@
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
     <div class="navbar"></div>
     
-    <a class="back-icon" href="{{ url_for('doctor.patient') }}">
+    <a class="back-icon" href="{{ url_for('receptionist.patient') }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
 
@@ -72,7 +73,7 @@
         </li>
     </ul>
 
-    <form action="{{ url_for('doctor.add_patient') }}" method="POST">
+    <form action="{{ url_for('receptionist.add_patient') }}" method="POST">
         {{ PatientForm.csrf_token }}
 
         <div class="patient-bg">
@@ -267,7 +268,7 @@
                     <div class="modal-body">
                         Patient information added successfully!
                     </div>
-                    <a href="{{ url_for('doctor.patient') }}"> 
+                    <a href="{{ url_for('receptionist.patient') }}"> 
                         <div class="modal-footer">
                             <button id="successSave" type="button" class="btn-done">DONE</button>
                         </div>
@@ -285,7 +286,7 @@
                     <div class="modal-body">
                         Error in adding patient information! A patient with the same record already exists.
                     </div>
-                    <a href="{{ url_for('doctor.patient') }}">
+                    <a href="{{ url_for('receptionist.patient') }}">
                         <div class="modal-footer">
                             <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
                         </div>

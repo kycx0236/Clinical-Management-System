@@ -13,7 +13,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <span class="new-notif" id="new-notifs" style="display: none;"></span>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -62,7 +64,6 @@
           <p class="request-header">LABORATORY TEST REQUEST</p>
           <span id="notifs"></span>
         </div>
-        <p id="mark-all">Mark all as read</p>
     </div>
 
     <div class="notification-container">
@@ -89,32 +90,16 @@
 
     <script>
         // LAB REQUEST NOTIFICATION
-        const markAll = document.getElementById("mark-all");
         const unreadMessages = document.querySelectorAll(".unread");
 
         function updateUnreadCount() {
-            const unread = document.getElementById("notifs");
-            unread.innerText = unreadMessages.length;
-
             const unreadCount = document.querySelectorAll(".unread").length;
-            const newNotifs = document.getElementById('new-notifs');
-            
-            if (unreadCount > 0) {
-                newNotifs.style.display = 'block';
-            } else {
-                newNotifs.style.display = 'none';
-            }
+            const unread = document.getElementById("notifs");
+            unread.innerText = unreadCount;
         }
 
         function markAsRead(message) {
             message.classList.remove("unread");
-            updateUnreadCount();
-        }
-
-        function markAllAsRead() {
-            unreadMessages.forEach(message => {
-                message.classList.remove("unread");
-            });
             updateUnreadCount();
         }
 
@@ -138,16 +123,6 @@
                 }
             });
             updateUnreadCount();
-
-            markAll.addEventListener("click", () => {
-                markAllAsRead();
-         
-                unreadMessages.forEach(message => {
-                    const messageId = message.getAttribute('data-id');
-                    readState[messageId] = true;
-                });
-                localStorage.setItem('readState', JSON.stringify(readState));
-            });
         });
     </script>
 

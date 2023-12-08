@@ -85,16 +85,13 @@
                         <span>Gender</span>
                         <select class="gender" name="gender" required="required">
                             <option value="" disabled selected></option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            <option value="MALE">MALE</option>
+                            <option value="FEMALE">FEMALE</option>
                         </select>
                     </div>
-                    
-                    
                 </div>
 
                 <div class="u_row thirdRow">
-                    
                     <div class="inputBox password">
                         <input type="text" required="required" name="password" autocomplete="off">
                         <span>Password</span>
@@ -104,13 +101,12 @@
                         <span>User Role</span>
                         <select class="user_role" name="user_role" required="required">
                             <option value="" disabled selected></option>
-                            <option value="doctor">Doctor</option>
-                            <option value="receptionist">Receptionist</option>
-                            <option value="medtech">Medtech</option>
-                            <option value="admin">Admin</option>
+                            <option value="doctor">doctor</option>
+                            <option value="receptionist">receptionist</option>
+                            <option value="medtech">medtech</option>
+                            <option value="admin">admin</option>
                         </select>
                     </div>
-                    
                 </div>
             </div>
             <div class="btn-container">
@@ -119,8 +115,6 @@
         </div>
     </form>
     
-
-
     {% if success %}
         <div id="successModal" class="modal" style="display: block;">
             <div class="modal-dialog">

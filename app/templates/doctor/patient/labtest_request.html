@@ -12,6 +12,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -57,6 +60,8 @@
     </div>
 
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <div class="navbar"></div>
+    
     <a class="back-icon" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
@@ -67,7 +72,7 @@
         </li>
     </ul>
 
-    <form action="{{ url_for('doctor.labtest_request') }}" method="POST">
+    <form id="testForm" action="{{ url_for('doctor.labtest_request') }}" method="POST">
         {{ PatientForm.csrf_token }}
 
         <!-- PATIENT ID -->
@@ -640,6 +645,23 @@
         </div>
     {% endif %}
 
+    <!-- ERROR MESSAGE IF THERE'S NO TEST SELECTED-->
+    <div id="testError" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Error</h1>
+                </div>
+                <div class="modal-body">
+                    You haven't selected any test to perform. Please select at least one to submit lab request.
+                </div>
+                <div class="modal-footer">
+                    <button id="successSave" type="button" class="btn-done">OKAY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // CURRENT DATE
         function displayDate() {
@@ -659,6 +681,24 @@
             updateDate();
         }
         displayDate();
+
+        // PREVENT FORM SUBMISSION IF THERE IS NO TEST SELECTED
+        document.getElementById("testForm").addEventListener("submit", function(event) {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const errorMessage = document.getElementById("testError");
+        
+            if (checkboxes.length === 0) {
+                errorMessage.style.display = "block";
+                event.preventDefault();
+            } else {
+                errorMessage.style.display = "none";
+            }
+        });
+
+        // CLOSE THE TEST ERROR MESSAGE
+        document.getElementById("successSave").addEventListener("click", function(event) {
+            document.getElementById("testError").style.display = "none";
+        });
     </script>
         
 {% endblock %}

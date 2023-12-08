@@ -9,6 +9,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -53,17 +56,17 @@
         </ul>
     </div>
 
-    <main>
-        <div class="doctor-bg">
-            <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
-            <div class="greetings-name">
-                <p>Welcome,</p>
-                <h2>{{ info[0] }}</h2>
-            </div>
-            <div class="greetings">
-                <p>Have a nice day at work!</p>
-            </div>
+   
+    <div class="doctor-bg">
+        <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
+        <div class="greetings-name">
+            <p>Welcome,</p>
+            <h2>{{ info[0] }}</h2>
         </div>
-    </main>
+        <div class="greetings">
+            <p>Have a nice day at work!</p>
+        </div>
+    </div>
+    
 
 {% endblock %}

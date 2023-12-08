@@ -12,6 +12,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('medtech.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -43,6 +46,8 @@
             </li>
         </ul>
     </div>
+
+    <div class="navbar"></div>
 
     <!-- NAVBAR AND TABS FOR MEDTECH -->
     <a class="back-icon" href="{{ url_for('medtech.patient') }}">

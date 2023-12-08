@@ -12,6 +12,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -57,6 +60,8 @@
     </div>
 
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <div class="navbar"></div>
+    
     <a class="back-icon" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
@@ -72,7 +77,7 @@
             <a class="nav-link"  href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page">LABORATORY RESULTS</a>
+            <a class="nav-link active" aria-current="page">LABORATORY REPORTS</a>
         </li>
     </ul>
     

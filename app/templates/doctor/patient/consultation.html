@@ -12,6 +12,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -57,6 +60,8 @@
     </div>
 
     <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+    <div class="navbar"></div>
+    
     <a class="back-icon" href="{{ url_for('doctor.patient') }}">
         <img src="{{ url_for('static', filename='images/Back.png') }}">
     </a>
@@ -78,12 +83,11 @@
 
     <!-- MEDICAL ASSESSMENT -->
     <div class="patient-bg">
-
         <div class="assessment-table">
-            <table id="example" class="table table-striped" style="width:100%">
+            <table id="example" class="table table-striped" style="width:100%;">
                 <thead>
                     <tr>
-                        <th>COMPLAINT</th>
+                        <th>ASSESSMENT</th>
                         <th>DATE</th>
                         <th colspan="2">ACTION</th>
                     </tr>
@@ -124,85 +128,53 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal" style="display: none;">
+    <!-- Consultation Modal -->
+    <div id="consultationModal" class="modal" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Delete Record</h1>
+                    <h1 class="modal-title fs-5">Select Medical Consultation</h1>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to permanently delete this assessment record?
+                    <button id="medicalClearance" class="btn-done option">Medical Clearance</button>
+                    <button id="medicalCertificate" class="btn-done option">Medical Certificate</button>
+                    <button id="healthComplaint" class="btn-done option">Health Complaint</button>
                 </div>
                 <div class="modal-footer">
-                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
-                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+                    <button id="cancelSelection" class="btn-done cancel">CANCEL</button>
                 </div>
             </div>
         </div>
     </div>
 
-    {% if success %}
-        <div id="successModal" class="modal" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5">Success</h1>
-                    </div>
-                    <div class="modal-body">
-                        Patient's medical assessment has been deleted successfully!
-                    </div>
-                    <a href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}"> 
-                        <div class="modal-footer">
-                            <button id="successSave" type="button" class="btn-done">DONE</button>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    {% elif error %}
-        <div id="errorModal" class="modal" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5">Error</h1>
-                    </div>
-                    <div class="modal-body">
-                        Error in deleting patient medical assessment. Please try again.
-                    </div>
-                    <a href="{{ url_for('doctor.consultation', patient_id=patient[0]) }}">
-                        <div class="modal-footer">
-                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
-    <a href="{{ url_for('doctor.add_assessment', patient_id=patient[0]) }}">
-        <div class="add-icon">
-            <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
-        </div>
-    </a>
+    
+    <div class="add-icon" id="addAssessmentIcon" onclick="displayModal()">
+        <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
+    </div>
 
     <script>
-        // CONFIRMATION BEFORE DELETION
-        function confirmation(assessmentId){
-            const confirmationModal = document.getElementById("confirmationModal");
-            confirmationModal.style.display = "block";
-
-            const confirmDelete = document.getElementById("confirmDelete");
-            const cancelDelete = document.getElementById("cancelDelete");
-            
-            confirmDelete.addEventListener("click", function() {
-                document.getElementById("deleteForm_" + assessmentId).submit();
-            });
-    
-            cancelDelete.addEventListener("click", function() {
-                confirmationModal.style.display = "none";
-            });
+        function displayModal() {
+            var modal = document.getElementById("consultationModal");
+            modal.style.display = "block";
         }
+
+        document.getElementById("medicalClearance").onclick = function() {
+            window.location.href = "{{ url_for('doctor.add_clearance', patient_id=patient[0]) }}";
+        };
+        
+        document.getElementById("medicalCertificate").onclick = function() {
+            window.location.href = "{{ url_for('doctor.add_certificate', patient_id=patient[0]) }}";
+        };
+        
+        document.getElementById("healthComplaint").onclick = function() {
+            window.location.href = "{{ url_for('doctor.add_assessment', patient_id=patient[0]) }}";
+        };
+        
+        document.getElementById("cancelSelection").onclick = function() {
+            var modal = document.getElementById("consultationModal");
+            modal.style.display = "none";
+        };
     </script>
+    
 
 {% endblock %}

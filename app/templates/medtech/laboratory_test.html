@@ -12,6 +12,9 @@
             <img src="{{ url_for('static', filename='images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -43,6 +46,9 @@
             </li>
         </ul>
     </div>
+
+    <div class="navbar"></div>
+    <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
 
     <!-- NAVBAR AND TABS FOR MEDTECH -->
     <a class="back-icon" href="{{ url_for('medtech.dashboard') }}">
@@ -591,7 +597,6 @@
                 </div>  
             
                 <div class="lab-result">
-                    <p class="subtext test" id="subtext" style="display: none;"><em>(Click the test name above to conveniently input the process name.)</em></p>
                     <center>
                         <table cellspacing="5" style="width:1100px;"> 
                             <tr> 
@@ -648,8 +653,6 @@
                         <button type="button" class="btn-submit" id="submitData" style="display: none;">SUBMIT</button>
                     </div>  
                 </div>
-
-                <img class="update-icon test" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
             </div>
         </center> 
     </form>
@@ -800,9 +803,6 @@
                 input.disabled = false;
             });
 
-            const subtext = document.querySelector('#subtext');
-            subtext.style.display = 'block';
-
             const processnameInput = document.querySelector('#pName');
             processnameInput.style.display = 'block';
 
@@ -832,9 +832,6 @@
             inputFields.forEach((input) => {
                 input.disabled = true;
             });
-
-            const subtext = document.querySelector('#subtext');
-            subtext.style.display = 'none';
 
             const processnameInput = document.querySelector('#pName');
             processnameInput.style.display = 'none';
@@ -884,16 +881,6 @@
                 console.log('Submission cancelled')
             }
         }
-
-        // EASY ACCESS PROCESS NAME
-        const checkboxLabels = document.querySelectorAll('label');
-        const processNameInput = document.getElementById('processName');
-        checkboxLabels.forEach(label => {
-            label.addEventListener('click', () => {
-                const labelText = label.textContent.trim();
-                processNameInput.value = labelText;
-            });
-        });
 	</script> 
 
 {% endblock %}

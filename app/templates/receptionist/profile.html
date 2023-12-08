@@ -9,6 +9,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('receptionist.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -25,6 +28,12 @@
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
                     <p>Appointment</p>
+                </li>
+            </a>
+            <a href="{{ url_for('receptionist.patient') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                    <p>Patient</p>
                 </li>
             </a>
             <li class="selected-icon-bg">
