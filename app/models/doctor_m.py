@@ -175,7 +175,7 @@ class doctor():
     @staticmethod
     def get_consultations(patientID):
         cursor = mysql.connection.cursor()
-        query = "SELECT * FROM assessment WHERE patientID = %s"
+        query = "SELECT * FROM assessment WHERE patientID = %s ORDER BY consultationDate DESC"
         cursor.execute(query, (patientID,))
         consultations = cursor.fetchall()
         cursor.close()

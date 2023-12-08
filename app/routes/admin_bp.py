@@ -15,7 +15,7 @@ admin_bp = Blueprint('admin', __name__)
 def dashboard():
     current_id = current_user.id 
     admin_info = admin.get_user(current_id)
-    print(admin_info)
+
     return render_template("admin/dashboard.html", info=admin_info)
 
 @admin_bp.route('/user_management/')
@@ -25,7 +25,7 @@ def user_management():
     current_id = current_user.id 
     admin_info = admin.get_user(current_id)
     users_data = admin.get_users()
-    print(admin_info)
+
     return render_template("admin/user_management/user_management.html", info=admin_info, users=users_data)
 
 @admin_bp.route('/profile/')
@@ -34,7 +34,7 @@ def user_management():
 def profile():
     current_id = current_user.id 
     admin_info = admin.get_user(current_id)
-    print(admin_info)
+
     return render_template("admin/profile.html", info=admin_info)
 
 @admin_bp.route("/logout/")
@@ -58,9 +58,9 @@ def add_user():
         admin_info = admin.get_user(current_id)
         username = form.username.data
         password = form.password.data
-        first_name = form.first_name.data
-        middle_name = form.middle_name.data
-        last_name = form.last_name.data
+        first_name = form.first_name.data.upper()
+        middle_name = form.middle_name.data.upper()
+        last_name = form.last_name.data.upper()
         gender = form.gender.data
         user_role = form.user_role.data
 
@@ -88,30 +88,33 @@ def add_user():
 @role_required('admin')
 def delete_user():
     form = UserForm()
+    current_id = current_user.id 
+    admin_info = admin.get_user(current_id)
 
-    if request.method == "POST":
+    if request.method == "POST":    
         user_id = request.form.get("user_id")
 
         result = admin.delete_user_record(user_id)
 
         if result:
-            return render_template("admin/user_management/user_management.html", success=True, UserForm=form)
+            return render_template("admin/user_management/user_management.html", success=True, UserForm=form, info=admin_info)
         else:
-            return render_template("admin/user_management/user_management.html", error=True, UserForm=form)
+            return render_template("admin/user_management/user_management.html", error=True, UserForm=form, info=admin_info)
         
-    return render_template("admin/user_management/user_management.html", UserForm=form)
+    return render_template("admin/user_management/user_management.html", UserForm=form, info=admin_info)
 
 @admin_bp.route('/user_info/', methods=['GET', 'POST'])
 @login_required
 @role_required('admin')
 def user_info():
     form = UserForm()
+    user_id = request.args.get('user_id')
 
     if request.method == 'GET':
-        user_id = request.args.get('user_id')
+        admin_info = admin.get_user(user_id)
         user_info = admin.get_user_info(user_id)
         
-        return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form)
+        return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form, info=admin_info)
 
     elif request.method == 'POST':
         user_id = request.form.get('user_id')
@@ -125,10 +128,11 @@ def user_info():
 
         updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role)
         user_info = admin.get_user_info(user_id)
+        admin_info = admin.get_user(user_id)
 
         if updated:
-            return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form, success=True)
+            return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form, success=True, info=admin_info)
         else:
-            return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form,error=True)
+            return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form, error=True, info=admin_info)
 
-    return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form)
+    return render_template('admin/user_management/user_info.html', user=user_info, user_id=user_id, UserForm=form, info=admin_info)

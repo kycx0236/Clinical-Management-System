@@ -58,24 +58,24 @@ def add_patient():
 
     if request.method == 'POST':
         doctor_info = doctor.get_doctor_info(user_id)
-        fName = request.form.get("first_name").upper()
-        mName = request.form.get("middle_name").upper()
-        lname = request.form.get("last_name").upper()
-        age = int(request.form.get("age"))
-        status = request.form.get("civil_status")
-        sex = request.form.get("gender")
-        blood = request.form.get("bloodType")
-        religion = request.form.get("religion")
-        bPlace = request.form.get("birth_place").upper()
-        bDate = request.form.get("birth_date")
-        job = request.form.get("occupation").upper()
-        emailAdd = request.form.get("email")
-        p_num = ''.join(filter(str.isdigit, request.form.get("contact_num")))
-        cAddress = request.form.get("p_address").upper()
-        p_nationality = request.form.get("nationality")
-        e_person = request.form.get("e_person").upper()
-        relationship = request.form.get("relationship")
-        e_number = ''.join(filter(str.isdigit, request.form.get("e_number")))
+        fName = form.first_name.data.upper()
+        mName = form.middle_name.data.upper()
+        lname = form.last_name.data.upper()
+        age = form.age.data
+        status = form.civil_status.data
+        sex = form.gender.data
+        blood = form.bloodType.data
+        religion = form.religion.data
+        bPlace = form.birth_place.data.upper()
+        bDate = form.birth_date.data
+        job = form.occupation.data.upper()
+        emailAdd = form.email.data
+        p_num = form.contact_num.data
+        cAddress = form.p_address.data.upper()
+        p_nationality = form.nationality.data
+        e_person = form.e_person.data.upper()
+        relationship = form.relationship.data
+        e_number = form.e_number.data
         
         new_patient = doctor()
         new_patient.firstName = fName
@@ -128,126 +128,99 @@ def medical_history():
         doctor_info = doctor.get_doctor_info(user_id)
 
     # IMMUNIZATION
-        bcg_checkbox_value = 1 if request.form.get('bcgCheckbox') == 'checked' else 0
-        dtp_checkbox_value = 1 if request.form.get('dtpCheckbox') == 'checked' else 0
-        pcv_checkbox_value = 1 if request.form.get('pcvCheckbox') == 'checked' else 0
-        influenza_checkbox_value = 1 if request.form.get('influenzaCheckbox') == 'checked' else 0
-        hepa_checkbox_value = 1 if request.form.get('hepaCheckbox') == 'checked' else 0
-        ipv_checkbox_value = 1 if request.form.get('ipvCheckbox') == 'checked' else 0
-        mmr_checkbox_value = 1 if request.form.get('mmrCheckbox') == 'checked' else 0
-        hpv_checkbox_value = 1 if request.form.get('hpvCheckbox') == 'checked' else 0
+        bcg_checkbox_value = form.bcgCheckbox.data
+        dtp_checkbox_value = form.dtpCheckbox.data
+        pcv_checkbox_value = form.pcvCheckbox.data
+        influenza_checkbox_value = form.influenzaCheckbox.data
+        hepa_checkbox_value = form.hepaCheckbox.data
+        ipv_checkbox_value = form.ipvCheckbox.data
+        mmr_checkbox_value = form.mmrCheckbox.data
+        hpv_checkbox_value = form.hpvCheckbox.data
 
     # FAMILY HISTORY
-        asthma_checkbox_value = 1 if request.form.get('asthmaCheckbox') == 'checked' else 0
-        diabetes_checkbox_value = 1 if request.form.get('diabetesCheckbox') == 'checked' else 0
-        heart_checkbox_value = 1 if request.form.get('heartCheckbox') == 'checked' else 0
-        birth_checkbox_value = 1 if request.form.get('birthCheckbox') == 'checked' else 0
-        bone_checkbox_value = 1 if request.form.get('boneCheckbox') == 'checked' else 0
-        alzheimer_checkbox_value = 1 if request.form.get('alzheimerCheckbox') == 'checked' else 0
-        cancer_checkbox_value = 1 if request.form.get('cancerCheckbox') == 'checked' else 0
-        thyroid_checkbox_value = 1 if request.form.get('thyroidCheckbox') == 'checked' else 0
-        tuberculosis_checkbox_value = 1 if request.form.get('tuberculosisCheckbox') == 'checked' else 0
-        eye_checkbox_value = 1 if request.form.get('eyeCheckbox') == 'checked' else 0
-        clots_checkbox_value = 1 if request.form.get('clotsCheckbox') == 'checked' else 0
-        mental_checkbox_value = 1 if request.form.get('mentalCheckbox') == 'checked' else 0
-        kidney_checkbox_value = 1 if request.form.get('kidneyCheckbox') == 'checked' else 0
-        anemia_checkbox_value = 1 if request.form.get('anemiaCheckbox') == 'checked' else 0
-        muscle_checkbox_value = 1 if request.form.get('muscleCheckbox') == 'checked' else 0
-        highblood_checkbox_value = 1 if request.form.get('highbloodCheckbox') == 'checked' else 0
-        epilepsy_checkbox_value = 1 if request.form.get('epilepsyCheckbox') == 'checked' else 0
-        skin_checkbox_value = 1 if request.form.get('skinCheckbox') == 'checked' else 0
-        hiv_checkbox_value = 1 if request.form.get('hivCheckbox') == 'checked' else 0
-        pulmonary_checkbox_value = 1 if request.form.get('pulmonaryCheckbox') == 'checked' else 0
-        new_specifications = request.form.get('specifications').upper()
-        new_others = request.form.get('others').upper()
+        asthma_checkbox_value = form.asthmaCheckbox.data
+        diabetes_checkbox_value = form.diabetesCheckbox.data
+        heart_checkbox_value = form.heartCheckbox.data
+        birth_checkbox_value = form.birthCheckbox.data
+        bone_checkbox_value = form.boneCheckbox.data
+        alzheimer_checkbox_value = form.alzheimerCheckbox.data
+        cancer_checkbox_value = form.cancerCheckbox.data
+        thyroid_checkbox_value = form.thyroidCheckbox.data
+        tuberculosis_checkbox_value = form.tuberculosisCheckbox.data
+        eye_checkbox_value = form.eyeCheckbox.data
+        clots_checkbox_value = form.clotsCheckbox.data
+        mental_checkbox_value = form.mentalCheckbox.data
+        kidney_checkbox_value = form.kidneyCheckbox.data
+        anemia_checkbox_value = form.anemiaCheckbox.data
+        muscle_checkbox_value = form.muscleCheckbox.data
+        highblood_checkbox_value = form.highbloodCheckbox.data
+        epilepsy_checkbox_value = form.epilepsyCheckbox.data
+        skin_checkbox_value = form.skinCheckbox.data
+        hiv_checkbox_value = form.hivCheckbox.data
+        pulmonary_checkbox_value = form.pulmonaryCheckbox.data
+        new_specifications = form.specifications.data.upper()
+        new_others = form.others.data.upper()
 
     # PAST HISTORY
-        new_past1 = request.form.get('past_c1').upper()
-        new_medication1 = request.form.get('medication1').upper()
-        new_dosage1 = request.form.get('dosage1').upper()
-        new_hdate1 = request.form.get('h_date1')
+        new_past1 = form.past_c1.data.upper()
+        new_medication1 = form.medication1.data.upper()
+        new_dosage1 = form.dosage1.data.upper()
+        new_hdate1 = form.h_date1.data
         if not new_hdate1:
             new_hdate1 = None 
-        new_past2 = request.form.get('past_c2').upper()
-        new_medication2 = request.form.get('medication2').upper()
-        new_dosage2 = request.form.get('dosage2').upper()
-        new_hdate2 = request.form.get('h_date2')
+        new_past2 = form.past_c2.data.upper()
+        new_medication2 = form.medication2.data.upper()
+        new_dosage2 = form.dosage2.data.upper()
+        new_hdate2 = form.h_date2.data
         if not new_hdate2:
             new_hdate2 = None
-        new_past3 = request.form.get('past_c3').upper()
-        new_medication3 = request.form.get('medication3').upper()
-        new_dosage3 = request.form.get('dosage3').upper()
-        new_hdate3 = request.form.get('h_date3')
+        new_past3 = form.past_c3.data.upper()
+        new_medication3 = form.medication3.data.upper()
+        new_dosage3 = form.dosage3.data.upper()
+        new_hdate3 = form.h_date3.data
         if not new_hdate3:
             new_hdate3 = None
 
     # SOCIAL HISTORY 
-        habit = request.form.get('habitually')
-        yDrunk = request.form.get('yearsDrunk')
-        if yDrunk and yDrunk.isdigit():
-            yDrunk = int(yDrunk)
-        else:
-            yDrunk = None
-        fDrink = request.form.get('frequencyDrink').upper()
-        qDrink = request.form.get('quitDrinking')
-        if qDrink and qDrink.isdigit():
-            qDrink = int(qDrink)
-        else:
-            qDrink = None
-        frequent = request.form.get('frequently')
-        ySmoked = request.form.get('yearsSmoked')
-        if ySmoked and ySmoked.isdigit():
-            ySmoked = int(ySmoked)
-        else:
-            ySmoked = None
-        fSmoke = request.form.get('frequencySmoke').upper()
-        qSmoke = request.form.get('quitSmoking')
-        if qSmoke and qSmoke.isdigit():
-            qSmoke = int(qSmoke)
-        else:
-            qSmoke = None
-        often = request.form.get('often')
-        eType = request.form.get('exerciseType').upper()
-        fExercise = request.form.get('frequencyExercise').upper()
-        dActivity = request.form.get('durationActivity').upper()
-        sActive = request.form.get('sexActive')
-        sPartner = request.form.get('sexPartner')
-        nSPartner = request.form.get('numSexPartner')
-        if nSPartner and nSPartner.isdigit():
-            nSPartner = int(nSPartner)
-        else:
-            nSPartner = None
-        contraceptions = request.form.get('contraception').upper()
-        use = request.form.get('useDrugs')
-        sDrugs = request.form.get('specifyDrugs').upper()
-        fDrugs = request.form.get('frequencyDrugs').upper()
-        diet = request.form.get('diet').upper()
+        habit = form.habitually.data
+        yDrunk = form.yearsDrunk.data
+        fDrink = form.frequencyDrink.data.upper()
+        qDrink = form.quitDrinking.data
+        frequent = form.frequently.data
+        ySmoked = form.yearsSmoked.data
+        fSmoke = form.frequencySmoke.data.upper()
+        qSmoke = form.quitSmoking.data
+        often = form.often.data
+        eType = form.exerciseType.data.upper()
+        fExercise = form.frequencyExercise.data.upper()
+        dActivity = form.durationActivity.data.upper()
+        sActive = form.sexActive.data
+        sPartner = form.sexPartner.data
+        nSPartner = form.numSexPartner.data
+        contraceptions = form.contraception.data.upper()
+        use = form.useDrugs.data
+        sDrugs = form.specifyDrugs.data.upper()
+        fDrugs = form.frequencyDrugs.data.upper()
+        diet = form.diet.data.upper()
 
     # SURGICAL HISTORY  
-        sDate1 = request.form.get('surgeryDate1')
-        if not sDate1:
-            sDate1 = None
-        sProcedure1 = request.form.get('surgeryProcedure1').upper()
-        shospital1 = request.form.get('hospital1').upper()
-        sDate2 = request.form.get('surgeryDate2')
-        if not sDate2:
-            sDate2 = None
-        sProcedure2 = request.form.get('surgeryProcedure2').upper()
-        shospital2 = request.form.get('hospital2').upper()
-        sDate3 = request.form.get('surgeryDate3')
-        if not sDate3:
-            sDate3 = None
-        sProcedure3 = request.form.get('surgeryProcedure3').upper()
-        shospital3 = request.form.get('hospital3').upper()
+        sDate1 = form.surgeryDate1.data
+        sProcedure1 = form.surgeryProcedure1.data.upper()
+        shospital1 = form.hospital1.data.upper()
+        sDate2 = form.surgeryDate2.data
+        sProcedure2 = form.surgeryProcedure2.data.upper()
+        shospital2 = form.hospital2.data.upper()
+        sDate3 = form.surgeryDate3.data
+        sProcedure3 = form.surgeryProcedure3.data.upper()
+        shospital3 = form.hospital3.data.upper()
 
     # MEDICATIONS
-        meds = request.form.get('medications').upper()
+        meds = form.medications.data.upper()
 
     # ALLERGIES
-        allergy = request.form.get('allergies').upper()
+        allergy = form.allergies.data.upper()
 
         existing_history = doctor.get_patient_history(new_patient_id)
-        print('EXISTING HISTORY:', existing_history)
         
         if existing_history:
             updated = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
@@ -272,7 +245,6 @@ def medical_history():
                                                 hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
             
             updated_info = doctor.get_patient_history(new_patient_id)
-            print('UPDATED INFO:', updated_info)
             
             if updated:
                 return render_template("doctor/patient/medical_history.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form, info=doctor_info)
@@ -302,7 +274,6 @@ def medical_history():
                                                 hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)
             
             updated_info = doctor.get_patient_history(new_patient_id)
-            print('NEW PATIENT HISTORY:', updated_info)
 
             if result:
                 return render_template("doctor/patient/medical_history.html", patient_id=patient_id, success=True, patient=updated_info, PatientForm=form, info=doctor_info)
@@ -310,6 +281,28 @@ def medical_history():
                 return render_template("doctor/patient/medical_history.html", patient_id=patient_id, error=True, patient=updated_info, PatientForm=form, info=doctor_info)
 
     return render_template("doctor/patient/medical_history.html", patient_id=patient_id, PatientForm=form, info=doctor_info)
+
+# ADD MEDICAL CLEARANCE FOR EACH APPOINTMENT
+@doctor_bp.route('/add_clearance/')
+@login_required
+@role_required('doctor')
+def add_clearance():
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    patient_id = request.args.get('patient_id')
+
+    return render_template("doctor/patient/add_clearance.html", patient_id=patient_id, info=doctor_info)
+
+# ADD MEDICAL CERTIFICATE FOR EACH APPOINTMENT
+@doctor_bp.route('/add_certificate/')
+@login_required
+@role_required('doctor')
+def add_certificate():
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    patient_id = request.args.get('patient_id')
+
+    return render_template("doctor/patient/add_certificate.html", patient_id=patient_id, info=doctor_info)
 
 # ADD MEDICAL ASSESSMENT FOR EACH APPOINTMENT
 @doctor_bp.route('/add_assessment/', methods=['GET', 'POST'])
@@ -332,54 +325,54 @@ def add_assessment():
         doctor_info = doctor.get_doctor_info(user_id)
 
     # COMPLAINT
-        sub = request.form.get('subject').upper()
-        complain = request.form.get('complaints').upper()
+        sub = form.subject.data.upper()
+        complain = form.complaints.data.upper()
 
     # HISTORY OF PRESENT ILLNESS
-        p_illness = request.form.get('h_illness').upper()
+        p_illness = form.h_illness.data.upper()
 
     # VITAL SIGNS
-        blood_p = request.form.get('blood_p').upper()
-        pulse_r = request.form.get('pulse_r').upper()
-        temp = request.form.get('temp').upper()
-        respiratory_r = request.form.get('respiratory_r').upper()
-        height = request.form.get('height')
-        weight = request.form.get('weight')
-        body_mass = request.form.get('body_mass')
-        oxygenSaturation = request.form.get('oxygenSaturation').upper()
-        painSection = request.form.get('painSection').upper()
+        blood_p = form.blood_p.data.upper()
+        pulse_r = form.pulse_r.data.upper()
+        temp = form.temp.data.upper()
+        respiratory_r = form.respiratory_r.data.upper()
+        height = form.height.data
+        weight = form.weight.data
+        body_mass = form.body_mass.data
+        oxygenSaturation = form.oxygenSaturation.data.upper()
+        painSection = form.painSection.data.upper()
 
     # PHYSICAL EXAMINATIONS
-        normal_head = request.form.get('normal_head').upper()
-        abnormalities_head = request.form.get('abnormalities_head').upper()
-        normal_ears = request.form.get('normal_ears').upper()
-        abnormalities_ears = request.form.get('abnormalities_ears').upper()
-        normal_eyes = request.form.get('normal_eyes').upper()
-        abnormalities_eyes = request.form.get('abnormalities_eyes').upper()
-        normal_nose = request.form.get('normal_nose').upper()
-        abnormalities_nose = request.form.get('abnormalities_nose').upper()
-        normal_skin = request.form.get('normal_skin').upper()
-        abnormalities_skin = request.form.get('abnormalities_skin').upper()
-        normal_back = request.form.get('normal_back').upper()
-        abnormalities_back = request.form.get('abnormalities_back').upper()
-        normal_neck = request.form.get('normal_neck').upper()
-        abnormalities_neck = request.form.get('abnormalities_neck').upper()
-        normal_throat = request.form.get('normal_throat').upper()
-        abnormalities_throat = request.form.get('abnormalities_throat').upper()
-        normal_chest = request.form.get('normal_chest').upper()
-        abnormalities_chest = request.form.get('abnormalities_chest').upper()
-        normal_abdomen = request.form.get('normal_abdomen').upper()
-        abnormalities_abdomen = request.form.get('abnormalities_abdomen').upper()
-        normal_upper = request.form.get('normal_upper').upper()
-        abnormalities_upper = request.form.get('abnormalities_upper').upper()
-        normal_lower = request.form.get('normal_lower').upper()
-        abnormalities_lower = request.form.get('abnormalities_lower').upper()
-        normal_tract = request.form.get('normal_tract').upper()
-        abnormalities_tract = request.form.get('abnormalities_tract').upper()
-        comments = request.form.get('comments').upper()
+        normal_head = form.normal_head.data.upper()
+        abnormalities_head = form.abnormalities_head.data.upper()
+        normal_ears = form.normal_ears.data.upper()
+        abnormalities_ears = form.abnormalities_ears.data.upper()
+        normal_eyes = form.normal_eyes.data.upper()
+        abnormalities_eyes = form.abnormalities_eyes.data.upper()
+        normal_nose = form.normal_nose.data.upper()
+        abnormalities_nose = form.abnormalities_nose.data.upper()
+        normal_skin = form.normal_skin.data.upper()
+        abnormalities_skin = form.abnormalities_skin.data.upper()
+        normal_back = form.normal_back.data.upper()
+        abnormalities_back = form.abnormalities_back.data.upper()
+        normal_neck = form.normal_neck.data.upper()
+        abnormalities_neck = form.abnormalities_neck.data.upper()
+        normal_throat = form.normal_throat.data.upper()
+        abnormalities_throat = form.abnormalities_throat.data.upper()
+        normal_chest = form.normal_chest.data.upper()
+        abnormalities_chest = form.abnormalities_chest.data.upper()
+        normal_abdomen = form.normal_abdomen.data.upper()
+        abnormalities_abdomen = form.abnormalities_abdomen.data.upper()
+        normal_upper = form.normal_upper.data.upper()
+        abnormalities_upper = form.abnormalities_upper.data.upper()
+        normal_lower = form.normal_lower.data.upper()
+        abnormalities_lower = form.abnormalities_lower.data.upper()
+        normal_tract = form.normal_tract.data.upper()
+        abnormalities_tract = form.abnormalities_tract.data.upper()
+        comments = form.comments.data.upper()
 
     # DIAGNOSIS
-        diagnosis = request.form.get('diagnosis').upper()
+        diagnosis = form.diagnosis.data.upper()
 
         result = doctor.add_medical_assessment(patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
@@ -455,24 +448,24 @@ def patient_record():
     elif request.method == 'POST':
         doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
-        new_first_name = request.form.get('first_name').upper()
-        new_middle_name = request.form.get('middle_name').upper()
-        new_last_name = request.form.get('last_name').upper()
-        new_age = int(request.form.get("age"))    
-        new_civil_status = request.form.get('civil_status')   
-        new_gender = request.form.get('gender')
-        new_bloodType = request.form.get('bloodType')    
-        new_religion = request.form.get('religion')
-        new_birth_place = request.form.get('birth_place').upper()    
-        new_birth_date = request.form.get('birth_date')
-        new_occupation = request.form.get('occupation').upper()    
-        new_email = request.form.get('email')
-        new_contact_num = ''.join(filter(str.isdigit, request.form.get("contact_num"))) 
-        new_p_address = request.form.get('p_address')
-        new_nationality = request.form.get('nationality')    
-        new_e_person = request.form.get('e_person').upper()
-        new_relationship = request.form.get('relationship')    
-        new_e_number = ''.join(filter(str.isdigit, request.form.get("e_number")))
+        new_first_name = form.first_name.data.upper()
+        new_middle_name = form.middle_name.data.upper()
+        new_last_name = form.last_name.data.upper()
+        new_age = form.age.data
+        new_civil_status = form.civil_status.data 
+        new_gender = form.gender.data
+        new_bloodType = form.bloodType.data  
+        new_religion = form.religion.data
+        new_birth_place = form.birth_place.data.upper()  
+        new_birth_date = form.birth_date.data
+        new_occupation = form.occupation.data.upper() 
+        new_email = form.email.data
+        new_contact_num = form.contact_num.data
+        new_p_address = form.p_address.data.upper()
+        new_nationality = form.nationality.data
+        new_e_person = form.e_person.data.upper()
+        new_relationship = form.relationship.data  
+        new_e_number = form.e_number.data
 
         updated = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
@@ -515,54 +508,54 @@ def assessment():
         new_patient_id = request.form.get('patient_id')
         
     # COMPLAINT
-        sub = request.form.get('subject').upper()
-        complain = request.form.get('complaints').upper()
+        sub = form.subject.data.upper()
+        complain = form.complaints.data.upper()
 
     # HISTORY OF PRESENT ILLNESS
-        p_illness = request.form.get('h_illness').upper()
+        p_illness = form.h_illness.data.upper()
 
     # VITAL SIGNS
-        blood_p = request.form.get('blood_p').upper()
-        pulse_r = request.form.get('pulse_r').upper()
-        temp = request.form.get('temp').upper()
-        respiratory_r = request.form.get('respiratory_r').upper()
-        height = request.form.get('height')
-        weight = request.form.get('weight')
-        body_mass = request.form.get('body_mass')
-        oxygenSaturation = request.form.get('oxygenSaturation').upper()
-        painSection = request.form.get('painSection').upper()
+        blood_p = form.blood_p.data.upper()
+        pulse_r = form.pulse_r.data.upper()
+        temp = form.temp.data.upper()
+        respiratory_r = form.respiratory_r.data.upper()
+        height = form.height.data
+        weight = form.weight.data
+        body_mass = form.body_mass.data
+        oxygenSaturation = form.oxygenSaturation.data.upper()
+        painSection = form.painSection.data.upper()
 
     # PHYSICAL EXAMINATIONS
-        normal_head = request.form.get('normal_head').upper()
-        abnormalities_head = request.form.get('abnormalities_head').upper()
-        normal_ears = request.form.get('normal_ears').upper()
-        abnormalities_ears = request.form.get('abnormalities_ears').upper()
-        normal_eyes = request.form.get('normal_eyes').upper()
-        abnormalities_eyes = request.form.get('abnormalities_eyes').upper()
-        normal_nose = request.form.get('normal_nose').upper()
-        abnormalities_nose = request.form.get('abnormalities_nose').upper()
-        normal_skin = request.form.get('normal_skin').upper()
-        abnormalities_skin = request.form.get('abnormalities_skin').upper()
-        normal_back = request.form.get('normal_back').upper()
-        abnormalities_back = request.form.get('abnormalities_back').upper()
-        normal_neck = request.form.get('normal_neck').upper()
-        abnormalities_neck = request.form.get('abnormalities_neck').upper()
-        normal_throat = request.form.get('normal_throat').upper()
-        abnormalities_throat = request.form.get('abnormalities_throat').upper()
-        normal_chest = request.form.get('normal_chest').upper()
-        abnormalities_chest = request.form.get('abnormalities_chest').upper()
-        normal_abdomen = request.form.get('normal_abdomen').upper()
-        abnormalities_abdomen = request.form.get('abnormalities_abdomen').upper()
-        normal_upper = request.form.get('normal_upper').upper()
-        abnormalities_upper = request.form.get('abnormalities_upper').upper()
-        normal_lower = request.form.get('normal_lower').upper()
-        abnormalities_lower = request.form.get('abnormalities_lower').upper()
-        normal_tract = request.form.get('normal_tract').upper()
-        abnormalities_tract = request.form.get('abnormalities_tract').upper()
-        comments = request.form.get('comments').upper()
+        normal_head = form.normal_head.data.upper()
+        abnormalities_head = form.abnormalities_head.data.upper()
+        normal_ears = form.normal_ears.data.upper()
+        abnormalities_ears = form.abnormalities_ears.data.upper()
+        normal_eyes = form.normal_eyes.data.upper()
+        abnormalities_eyes = form.abnormalities_eyes.data.upper()
+        normal_nose = form.normal_nose.data.upper()
+        abnormalities_nose = form.abnormalities_nose.data.upper()
+        normal_skin = form.normal_skin.data.upper()
+        abnormalities_skin = form.abnormalities_skin.data.upper()
+        normal_back = form.normal_back.data.upper()
+        abnormalities_back = form.abnormalities_back.data.upper()
+        normal_neck = form.normal_neck.data.upper()
+        abnormalities_neck = form.abnormalities_neck.data.upper()
+        normal_throat = form.normal_throat.data.upper()
+        abnormalities_throat = form.abnormalities_throat.data.upper()
+        normal_chest = form.normal_chest.data.upper()
+        abnormalities_chest = form.abnormalities_chest.data.upper()
+        normal_abdomen = form.normal_abdomen.data.upper()
+        abnormalities_abdomen = form.abnormalities_abdomen.data.upper()
+        normal_upper = form.normal_upper.data.upper()
+        abnormalities_upper = form.abnormalities_upper.data.upper()
+        normal_lower = form.normal_lower.data.upper()
+        abnormalities_lower = form.abnormalities_lower.data.upper()
+        normal_tract = form.normal_tract.data.upper()
+        abnormalities_tract = form.abnormalities_tract.data.upper()
+        comments = form.comments.data.upper()
 
     # DIAGNOSIS
-        diagnosis = request.form.get('diagnosis').upper()
+        diagnosis = form.diagnosis.data.upper()
 
         update = doctor.update_medical_assessment(assessmentID=new_assessment_id, patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
@@ -635,125 +628,120 @@ def labtest_request():
         new_patient_id = request.form.get('patient_id')
 
     # PATIENT INFORMATION
-        patient_fullName = request.form.get('fullName')
-        lab_subject = request.form.get('labsubject').upper()
-        sex = request.form.get("gender")
-        age = request.form.get("age")
-        doctorName = request.form.get("doctorName")
-        requestDate = request.form.get("dateofRequest")
-        otherTest = request.form.get("others").upper()
-        print('patient_fullName:', patient_fullName)
-        print('doctor', doctor)
-        print('sex:', sex)
-        print('age:', age)
-        print('requestDate:', requestDate)
+        patient_fullName = form.fullName.data
+        lab_subject = form.labsubject.data.upper()
+        sex = form.gender.data
+        age = form.age.data
+        doctorName = form.doctorName.data
+        requestDate = form.dateofRequest.data
+        otherTest = form.others.data.upper()
 
     # HEMATOLOGY
-        cbcplateCheckbox_value = 1 if request.form.get('cbcplateCheckbox') == 'checked' else 0
-        hgbhctCheckbox = 1 if request.form.get('hgbhctCheckbox') == 'checked' else 0
-        protimeCheckbox = 1 if request.form.get('protimeCheckbox') == 'checked' else 0
-        APTTCheckbox = 1 if request.form.get('APTTCheckbox') == 'checked' else 0
-        bloodtypingCheckbox = 1 if request.form.get('bloodtypingCheckbox') == 'checked' else 0
-        ESRCheckbox = 1 if request.form.get('ESRCheckbox') == 'checked' else 0
-        plateCheckbox = 1 if request.form.get('plateCheckbox') == 'checked' else 0
-        hgbCheckbox = 1 if request.form.get('hgbCheckbox') == 'checked' else 0
-        hctCheckbox = 1 if request.form.get('hctCheckbox') == 'checked' else 0
-        cbcCheckbox = 1 if request.form.get('cbcCheckbox') == 'checked' else 0
-        reticsCheckbox = 1 if request.form.get('reticsCheckbox') == 'checked' else 0
-        CTBTCheckbox = 1 if request.form.get('CTBTCheckbox') == 'checked' else 0
+        cbcplateCheckbox_value = form.cbcplateCheckbox.data
+        hgbhctCheckbox = form.hgbhctCheckbox.data
+        protimeCheckbox = form.protimeCheckbox.data
+        APTTCheckbox = form.APTTCheckbox.data
+        bloodtypingCheckbox = form.bloodtypingCheckbox.data
+        ESRCheckbox = form.ESRCheckbox.data
+        plateCheckbox = form.plateCheckbox.data
+        hgbCheckbox = form.hgbCheckbox.data
+        hctCheckbox = form.hctCheckbox.data
+        cbcCheckbox = form.cbcCheckbox.data
+        reticsCheckbox = form.reticsCheckbox.data
+        CTBTCheckbox = form.CTBTCheckbox.data
 
     # BACTERIOLOGY
-        culsenCheckbox = 1 if request.form.get('culsenCheckbox') == 'checked' else 0
-        cultureCheckbox = 1 if request.form.get('cultureCheckbox') == 'checked' else 0
-        gramCheckbox = 1 if request.form.get('gramCheckbox') == 'checked' else 0
-        KOHCheckbox = 1 if request.form.get('KOHCheckbox') == 'checked' else 0
+        culsenCheckbox = form.culsenCheckbox.data
+        cultureCheckbox = form.cultureCheckbox.data
+        gramCheckbox = form.gramCheckbox.data
+        KOHCheckbox = form.KOHCheckbox.data
 
     # HISTOPATHOLOGY
-        biopsyCheckbox = 1 if request.form.get('biopsyCheckbox') == 'checked' else 0
-        papsCheckbox = 1 if request.form.get('papsCheckbox') == 'checked' else 0
-        FNABCheckbox = 1 if request.form.get('FNABCheckbox') == 'checked' else 0
-        cellCheckbox = 1 if request.form.get('cellCheckbox') == 'checked' else 0
-        cytolCheckbox = 1 if request.form.get('cytolCheckbox') == 'checked' else 0
+        biopsyCheckbox = form.biopsyCheckbox.data
+        papsCheckbox = form.papsCheckbox.data
+        FNABCheckbox = form.FNABCheckbox.data
+        cellCheckbox = form.cellCheckbox.data
+        cytolCheckbox = form.cytolCheckbox.data
 
     # CLINICAL MICROSCOPY AND PARASITOLOGY
-        urinCheckbox = 1 if request.form.get('urinCheckbox') == 'checked' else 0
-        stoolCheckbox = 1 if request.form.get('stoolCheckbox') == 'checked' else 0
-        occultCheckbox = 1 if request.form.get('occultCheckbox') == 'checked' else 0
-        semenCheckbox = 1 if request.form.get('semenCheckbox') == 'checked' else 0
-        ELISACheckbox = 1 if request.form.get('ELISACheckbox') == 'checked' else 0
+        urinCheckbox = form.urinCheckbox.data
+        stoolCheckbox = form.stoolCheckbox.data
+        occultCheckbox = form.occultCheckbox.data
+        semenCheckbox = form.semenCheckbox.data
+        ELISACheckbox = form.ELISACheckbox.data
 
     # SEROLOGY
-        ASOCheckbox = 1 if request.form.get('ASOCheckbox') == 'checked' else 0
-        AntiHBSCheckbox = 1 if request.form.get('AntiHBSCheckbox') == 'checked' else 0
-        HCVCheckbox = 1 if request.form.get('HCVCheckbox') == 'checked' else 0
-        C3Checkbox = 1 if request.form.get('C3Checkbox') == 'checked' else 0
-        HIVICheckbox = 1 if request.form.get('HIVICheckbox') == 'checked' else 0
-        HIVIICheckbox = 1 if request.form.get('HIVIICheckbox') == 'checked' else 0
-        NS1Checkbox = 1 if request.form.get('NS1Checkbox') == 'checked' else 0
-        VDRLCheckbox = 1 if request.form.get('VDRLCheckbox') == 'checked' else 0
-        PregCheckbox = 1 if request.form.get('PregCheckbox') == 'checked' else 0
-        RFCheckbox = 1 if request.form.get('RFCheckbox') == 'checked' else 0
-        QuantiCheckbox = 1 if request.form.get('QuantiCheckbox') == 'checked' else 0
-        QualiCheckbox = 1 if request.form.get('QualiCheckbox') == 'checked' else 0
-        TyphidotCheckbox = 1 if request.form.get('TyphidotCheckbox') == 'checked' else 0
-        TubexCheckbox = 1 if request.form.get('TubexCheckbox') == 'checked' else 0
-        HAVIgMCheckbox = 1 if request.form.get('HAVIgMCheckbox') == 'checked' else 0
-        DengueCheckbox = 1 if request.form.get('DengueCheckbox') == 'checked' else 0
+        ASOCheckbox = form.ASOCheckbox.data
+        AntiHBSCheckbox = form.AntiHBSCheckbox.data
+        HCVCheckbox = form.HCVCheckbox.data
+        C3Checkbox = form.C3Checkbox.data
+        HIVICheckbox = form.HIVICheckbox.data
+        HIVIICheckbox = form.HIVIICheckbox.data
+        NS1Checkbox = form.NS1Checkbox.data
+        VDRLCheckbox = form.VDRLCheckbox.data
+        PregCheckbox = form.PregCheckbox.data
+        RFCheckbox = form.RFCheckbox.data
+        QuantiCheckbox = form.QuantiCheckbox.data
+        QualiCheckbox = form.QualiCheckbox.data
+        TyphidotCheckbox = form.TyphidotCheckbox.data
+        TubexCheckbox = form.TubexCheckbox.data
+        HAVIgMCheckbox = form.HAVIgMCheckbox.data
+        DengueCheckbox = form.DengueCheckbox.data
 
     # IMMUNOCHEMISTRY
-        AFPCheckbox = 1 if request.form.get('AFPCheckbox') == 'checked' else 0
-        ferritinCheckbox = 1 if request.form.get('ferritinCheckbox') == 'checked' else 0
-        HBcIgMCheckbox = 1 if request.form.get('HBcIgMCheckbox') == 'checked' else 0
-        AntiHBECheckbox = 1 if request.form.get('AntiHBECheckbox') == 'checked' else 0
-        CA125Checkbox = 1 if request.form.get('CA125Checkbox') == 'checked' else 0
-        PROBNPCheckbox = 1 if request.form.get('PROBNPCheckbox') == 'checked' else 0
-        CA153Checkbox = 1 if request.form.get('CA153Checkbox') == 'checked' else 0
-        CA199Checkbox = 1 if request.form.get('CA199Checkbox') == 'checked' else 0
-        PSACheckbox = 1 if request.form.get('PSACheckbox') == 'checked' else 0
-        CEACheckbox = 1 if request.form.get('CEACheckbox') == 'checked' else 0
-        FreeT3Checkbox = 1 if request.form.get('FreeT3Checkbox') == 'checked' else 0
-        ANA2Checkbox = 1 if request.form.get('ANA2Checkbox') == 'checked' else 0
-        FreeT4Checkbox = 1 if request.form.get('FreeT4Checkbox') == 'checked' else 0
-        HBsAGCheckbox = 1 if request.form.get('HBsAGCheckbox') == 'checked' else 0
-        TroponiniCheckbox = 1 if request.form.get('TroponiniCheckbox') == 'checked' else 0
-        HbACheckbox = 1 if request.form.get('HbACheckbox') == 'checked' else 0
-        HBAeAgCheckbox = 1 if request.form.get('HBAeAgCheckbox') == 'checked' else 0
-        BetaCheckbox = 1 if request.form.get('BetaCheckbox') == 'checked' else 0
-        T3Checkbox = 1 if request.form.get('T3Checkbox') == 'checked' else 0
-        T4Checkbox = 1 if request.form.get('T4Checkbox') == 'checked' else 0
-        TSHCheckbox = 1 if request.form.get('TSHCheckbox') == 'checked' else 0
+        AFPCheckbox = form.AFPCheckbox.data
+        ferritinCheckbox = form.ferritinCheckbox.data
+        HBcIgMCheckbox = form.HBcIgMCheckbox.data
+        AntiHBECheckbox = form.AntiHBECheckbox.data
+        CA125Checkbox = form.CA125Checkbox.data
+        PROBNPCheckbox = form.PROBNPCheckbox.data
+        CA153Checkbox = form.CA153Checkbox.data
+        CA199Checkbox = form.CA199Checkbox.data
+        PSACheckbox = form.PSACheckbox.data
+        CEACheckbox = form.CEACheckbox.data
+        FreeT3Checkbox = form.FreeT3Checkbox.data
+        ANA2Checkbox = form.ANA2Checkbox.data
+        FreeT4Checkbox = form.FreeT4Checkbox.data
+        HBsAGCheckbox = form.HBsAGCheckbox.data
+        TroponiniCheckbox = form.TroponiniCheckbox.data
+        HbACheckbox = form.HbACheckbox.data
+        HBAeAgCheckbox = form.HBAeAgCheckbox.data
+        BetaCheckbox = form.BetaCheckbox.data
+        T3Checkbox = form.T3Checkbox.data
+        T4Checkbox = form.T4Checkbox.data
+        TSHCheckbox = form.TSHCheckbox.data
 
     # CLINICAL CHEMISTRY
-        ALPCheckbox = 1 if request.form.get('ALPCheckbox') == 'checked' else 0
-        AmylaseCheckbox = 1 if request.form.get('AmylaseCheckbox') == 'checked' else 0
-        BUACheckbox = 1 if request.form.get('BUACheckbox') == 'checked' else 0
-        BUNCheckbox = 1 if request.form.get('BUNCheckbox') == 'checked' else 0
-        CreatinineCheckbox = 1 if request.form.get('CreatinineCheckbox') == 'checked' else 0
-        SGPTCheckbox = 1 if request.form.get('SGPTCheckbox') == 'checked' else 0
-        SGOTCheckbox = 1 if request.form.get('SGOTCheckbox') == 'checked' else 0
-        FBSCheckbox = 1 if request.form.get('FBSCheckbox') == 'checked' else 0
-        RBSCheckbox = 1 if request.form.get('RBSCheckbox') == 'checked' else 0
-        HPPCheckbox = 1 if request.form.get('HPPCheckbox') == 'checked' else 0
-        OGCTCheckbox = 1 if request.form.get('OGCTCheckbox') == 'checked' else 0
-        HGTCheckbox = 1 if request.form.get('HGTCheckbox') == 'checked' else 0
-        OGTTCheckbox = 1 if request.form.get('OGTTCheckbox') == 'checked' else 0
-        NaCheckbox = 1 if request.form.get('NaCheckbox') == 'checked' else 0
-        MgCheckbox = 1 if request.form.get('MgCheckbox') == 'checked' else 0
-        LipidCheckbox = 1 if request.form.get('LipidCheckbox') == 'checked' else 0
-        TriglyCheckbox = 1 if request.form.get('TriglyCheckbox') == 'checked' else 0
-        CholCheckbox = 1 if request.form.get('CholCheckbox') == 'checked' else 0
-        ClCheckbox = 1 if request.form.get('ClCheckbox') == 'checked' else 0
-        TPAGCheckbox = 1 if request.form.get('TPAGCheckbox') == 'checked' else 0
-        TotalCheckbox = 1 if request.form.get('TotalCheckbox') == 'checked' else 0
-        GlobCheckbox = 1 if request.form.get('GlobCheckbox') == 'checked' else 0
-        AlbCheckbox = 1 if request.form.get('AlbCheckbox') == 'checked' else 0
-        CKMBCheckbox = 1 if request.form.get('CKMBCheckbox') == 'checked' else 0
-        CKTotalCheckbox = 1 if request.form.get('CKTotalCheckbox') == 'checked' else 0
-        LDHCheckbox = 1 if request.form.get('LDHCheckbox') == 'checked' else 0
-        KCheckbox = 1 if request.form.get('KCheckbox') == 'checked' else 0
-        CaCheckbox = 1 if request.form.get('CaCheckbox') == 'checked' else 0
-        IonizedCheckbox = 1 if request.form.get('IonizedCheckbox') == 'checked' else 0
-        PhosCheckbox = 1 if request.form.get('PhosCheckbox') == 'checked' else 0
+        ALPCheckbox = form.ALPCheckbox.data
+        AmylaseCheckbox = form.AmylaseCheckbox.data
+        BUACheckbox = form.BUACheckbox.data
+        BUNCheckbox = form.BUNCheckbox.data
+        CreatinineCheckbox = form.CreatinineCheckbox.data
+        SGPTCheckbox = form.SGPTCheckbox.data
+        SGOTCheckbox = form.SGOTCheckbox.data
+        FBSCheckbox = form.FBSCheckbox.data
+        RBSCheckbox = form.RBSCheckbox.data
+        HPPCheckbox = form.HPPCheckbox.data
+        OGCTCheckbox = form.OGCTCheckbox.data
+        HGTCheckbox = form.HGTCheckbox.data
+        OGTTCheckbox = form.OGTTCheckbox.data
+        NaCheckbox = form.NaCheckbox.data
+        MgCheckbox = form.MgCheckbox.data
+        LipidCheckbox = form.LipidCheckbox.data
+        TriglyCheckbox = form.TriglyCheckbox.data
+        CholCheckbox = form.CholCheckbox.data
+        ClCheckbox = form.ClCheckbox.data
+        TPAGCheckbox = form.TPAGCheckbox.data
+        TotalCheckbox = form.TotalCheckbox.data
+        GlobCheckbox = form.GlobCheckbox.data
+        AlbCheckbox = form.AlbCheckbox.data
+        CKMBCheckbox = form.CKMBCheckbox.data
+        CKTotalCheckbox = form.CKTotalCheckbox.data
+        LDHCheckbox = form.LDHCheckbox.data
+        KCheckbox = form.KCheckbox.data
+        CaCheckbox = form.CaCheckbox.data
+        IonizedCheckbox = form.IonizedCheckbox.data
+        PhosCheckbox = form.PhosCheckbox.data
 
         result = doctor.add_laboratory_request(patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
                                                otherTest=otherTest, cbcplateCheckbox=cbcplateCheckbox_value, hgbhctCheckbox=hgbhctCheckbox, protimeCheckbox=protimeCheckbox, 
