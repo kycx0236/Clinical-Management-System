@@ -1,30 +1,6 @@
 @import "base_style.css";
 
-/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
-.sidenav-user-bg {
-    margin-top: 138px;
-}
-
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
-.appointment-nav {
-    position: absolute;
-    display: flex;
-    gap: 20px;
-    top: 170px;
-    /* left: 110px; */
-    right: 25px;
-    /* background-color: var(--blueC); */
-}
-
-.appointment {
-    background-color: var(--blueC);
-    width: 260px;
-    height: 40px;
-    font-size: 16px;
-    color: var(--blueA);
-    justify-content: center;
-    border-radius: 5px;
-}
 
 
 /* -------------------------------------------- APPOINTMENT -------------------------------------------- */

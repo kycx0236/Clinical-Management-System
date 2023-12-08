@@ -1,18 +1,14 @@
 @import "base_style.css";
 
-/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
-.sidenav-user-bg {
-    margin-top: 205px !important; 
-} 
-
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .notification-container {
-    max-width: 100%;  
+    width: 91%;  
     height: 420px; 
     position: absolute;  
     top: 240px;
     left: 110px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .notification-container::-webkit-scrollbar {
@@ -38,7 +34,6 @@
     position: absolute;
     top: 180px;
     left: 110px;
-    gap: 985px;
     margin-bottom: 25px;
 }
 
@@ -58,29 +53,6 @@
     color: white;
     font-weight: 800;
     border-radius: 100%;
-}
-
-#new-notifs {
-    position: absolute;
-    background-color: var(--blueD);
-    width: 15px;
-    height: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    border-radius: 100%;
-    margin-left: 40px;
-    margin-top: 12px;
-    box-shadow: 0 0 1px 3px var(--blueC); 
-}
-
-#mark-all {
-    cursor: pointer;
-}
-
-#mark-all:hover {
-    color: var(--blueD);
 }
 
 main {

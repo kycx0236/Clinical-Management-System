@@ -1,44 +1,13 @@
 @import "base_style.css";
 
-/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
-.sidenav-user-bg {
-    margin-top: 70px;
-}
-
 /* -------------------------------------------- ADD/UPDATE PATIENT, ADD ASSESSMENT, REQUEST LAB TEST ICON -------------------------------------------- */
-.add-icon img {
-    width: 60px;
-    right: 20px;
-    bottom: 20px;
-    justify-content: flex-end;
-    border-radius: 100%;
-    z-index: 99;
-    position: fixed;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
-}
-
-.add-icon img:active {
-    transform: translateY(1px);
-}
-
 .update-icon {
-    top: 40px;
-    right: 105px;
-    width: 35px;
-    border-radius: 5px;
-    z-index: 1;
-    position: fixed;
-    cursor: pointer;
-}
-
-.update-icon.details {
-    right: 90px;
-}
-
-.update-icon.test {
     position: absolute;
-    right: 17px;
-    top: 1620px;
+    top: -25px;
+    right: 30px;
+    width: 110px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .update-icon:active {
@@ -50,7 +19,7 @@
     position: absolute;
     width: 20px;
     z-index: 1;
-    top: 60px;
+    top: 23px;
     left: 145px;
 }
 
@@ -62,20 +31,19 @@
 .nav-underline {
     display: flex;
     margin-right: 150px;
-    top: 50px;
+    top: 7px;
     left: 200px;
     position: absolute;
 }
 
 .nav-item:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
 }
 
 .nav-underline .nav-link {
     border: none; 
     text-decoration: none; 
-    padding: 0.5rem 1rem; 
+    padding: 1.3em 1rem; 
     color: var(--grayA); 
 }
 
@@ -87,12 +55,9 @@
 /* -------------------------------------------- PATIENT INFORMATION -------------------------------------------- */
 .patient-bg {
     position: absolute;
-    width: 1230px;  
-    height: 610px; 
-    background-color: white;
-    box-shadow: 10px 10px 20px 10px var(--blueC);
-    top: 85px;
-    left: 200px;
+    width: 91%;
+    top: 90px;
+    left: 110px;
 }
 
 /* Input boxes */
@@ -132,7 +97,7 @@ input, select {
 
 .group-info div {
     top: 5px;
-    margin-top: 18px;
+    margin-top: 15px;
     justify-content: center;
     align-items: center;
 }
@@ -163,11 +128,11 @@ input, select {
 
 /* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.history {
-    height: 3050px; 
+    height: 850px; 
 }
 
 .patient-bg.assessment {
-    height: 3230px; 
+    height: 1730px; 
 }
 
 .patient-bg.request {
@@ -175,13 +140,13 @@ input, select {
 }
 
 .patient-bg.prescription {
-    height: 1570px; 
+    height: 1570px;
 }
 
 /* subheading */
 .subtext {
     position: relative;
-    margin-top: 15px;
+    margin-top: 30px;
     font-size: 14px;
 }
 
@@ -312,9 +277,6 @@ input, select {
 /* -------------------------------------------- MEDICAL ASSESSMENT -------------------------------------------- */
 .assessment-table {
     position: relative; 
-    width: 1100px; 
-    top: 50px; 
-    left: 65px;
     line-height: 1.5;
     color: var(--darkBlue);
     background-color: white;
@@ -392,11 +354,7 @@ input, select {
 }
 
 .inputBox.vitalsK {
-    width: 557px;
-}
-
-.inputBox.vitalsK {
-    width: 557px;
+    width: 560px;
 }
 
 .inputBox.vitalsL {
@@ -444,7 +402,7 @@ input, select {
 
 .line-border {
     border: 1px solid var(--darkBlue);
-    width: 895px;
+    width: 885px;
     left: 230px;
     top: 5px;
     position: relative;
@@ -466,13 +424,13 @@ input, select {
 .columnC {
     position: absolute;
     top: 190px;
-    left: 940px;
+    left: 920px;
 }
 
 .columnD {
     position: absolute;
     top: 190px;
-    left: 1035px;
+    left: 1020px;
 }
 
 .columnA.address, .columnB.p_adress, .columnC.gender, .columnD.p_gender  {
@@ -539,7 +497,7 @@ input, select {
 
 .page-break {
     position: absolute; 
-    top:1400px;
+    top: 1400px;
     border: 1px solid var(--darkBlue);
     width: 1000px;
     left: 110px;
@@ -561,23 +519,23 @@ input, select {
     .patient-bg.prescription {
         display: block;
         position: absolute; 
-        height: 100%; 
+        height: 610px; 
+        width: 1230px; 
         top: 0px;
         left: 0px;
     }
 
-    .sidenav-bg, .back-icon, .nav.nav-underline, .btn-container, .med-header, .update-icon.details {
+    .sidenav-bg, .back-icon, .nav.nav-underline, .btn-container, .med-header, .update-icon, .print-icon, .navbar {
         display: none; 
     }
 }
 
 .print-icon img {
-    width: 55px;
-    top: 625px;
-    left: 1448px;
-    border-radius: 100%;
-    z-index: 99;
-    position: fixed;
+    position: absolute;
+    top: -102px;
+    right: 40px;
+    width: 100px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -675,6 +633,51 @@ input, select {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
+    color: var(--blueA);
+    font-weight: 900;
+}
+
+/* SEGMENTED CONTROL */
+
+.segmented-controls {
+    display: flex;
+    overflow: hidden;
+    border-radius: 5px;
+    width: 1100px;
+    justify-content: center;
+    border: 2px solid var(--blueC);
+    position: relative;
+    top: 0px;
+    transition: all 0.3s ease;
+}
+
+.segmented-controls input[type="radio"] {
+    display: none;
+}
+
+.segmented-controls label {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    cursor: pointer;
+    border-right: 1px solid var(--blueC);
+    background-color: white;
+    font-size: 14px;
+    transition: 0.3s ease;
+    color: var(--blueA);
+}
+
+.segmented-controls label:first-of-type {
+    border-radius: 5px 0 0 5px;
+}
+
+.segmented-controls label:last-of-type {
+    border-right: none;
+    border-radius: 0 5px 5px 0;
+}
+
+.segmented-controls input[type="radio"]:checked + label {
+    background-color: var(--blueC);
     color: var(--blueA);
     font-weight: 900;
 }

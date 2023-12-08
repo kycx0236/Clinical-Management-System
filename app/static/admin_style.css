@@ -1,10 +1,5 @@
 @import "base_style.css";
 
-/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
-.sidenav-user-bg {
-    margin-top: 205px;
-}
-
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
 
 
@@ -12,44 +7,18 @@
 /* style here */
 
 /* -------------------------------------------- USER MANAGEMENT -------------------------------------------- */
-.add-icon img {
-    width: 60px;
-    right: 20px;
-    bottom: 20px;
-    justify-content: flex-end;
-    border-radius: 100%;
-    z-index: 99;
-    position: fixed;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
-}
-
-.add-icon img:active {
-    transform: translateY(1px);
-}
-
-.ur-container{
+.ur-container {
     margin-left: 110px;
     margin-right: 2%;
 }
 
 .update-icon {
-    top: 40px;
-    right: 105px;
-    width: 35px;
-    border-radius: 5px;
-    z-index: 1;
-    position: fixed;
-    cursor: pointer;
-}
-
-.update-icon.details {
-    right: 90px;
-}
-
-.update-icon.test {
     position: absolute;
-    right: 17px;
-    top: 1600px;
+    top: -25px;
+    right: 30px;
+    width: 110px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .update-icon:active {
@@ -57,19 +26,18 @@
 }
 
 /* -------------------------------------------- USER TABLE -------------------------------------------- */
-
-.user-header{
+.user-header p {
     position: absolute;
-    top: 45px;
+    top: 20px;
     left: 110px;
     font-weight: 900;
     font-size: 18px;
 }
 
 .user-table {
+    width: 91%;
     position: relative; 
-    width: 1350px; 
-    top: 85px; 
+    top: 20px; 
     left: 110px;
     line-height: 1.5;
     color: var(--darkBlue);
@@ -81,20 +49,17 @@
     top: 190px; 
 }
 
-.action-icon-container{
+.action-icon-container {
     display: flex; 
     justify-content: center;
 }
 
-
 /* -------------------------------------------- USER INFORMATION-------------------------------------------- */
-
-/* --------------------------- BACK ICON ---------------------------- */
 .back-icon img {
     position: absolute;
     width: 20px;
     z-index: 1;
-    top: 60px;
+    top: 23px;
     left: 145px;
 }
 
@@ -106,20 +71,19 @@
 .nav-underline {
     display: flex;
     margin-right: 150px;
-    top: 50px;
+    top: 7px;
     left: 200px;
     position: absolute;
 }
 
 .nav-item:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
 }
 
 .nav-underline .nav-link {
     border: none; 
     text-decoration: none; 
-    padding: 0.5rem 1rem; 
+    padding: 1.3em 1rem; 
     color: var(--grayA); 
 }
 
@@ -128,19 +92,17 @@
     color: var(--blueD); 
 }
 
-
 .user-bg {
     position: absolute;
     width: 1230px;  
     height: 610px; 
     background-color: white;
-    box-shadow: 10px 10px 20px 10px var(--blueC);
     top: 85px;
     left: 200px;
 }
 
 /* Input boxes */
-.inputBox.username, .inputBox.password{
+.inputBox.username, .inputBox.password {
     width: 550px;
 }
 
@@ -148,10 +110,9 @@
     width: 400px;
 }
 
-.inputBox.fName, .inputBox.mName, .inputBox.lName{
+.inputBox.fName, .inputBox.mName, .inputBox.lName {
     width: 300px;
 }
-
 
 /* dropdown styles */
 input, select {
@@ -167,30 +128,21 @@ input, select {
     margin: 20px 20px  ; 
 }
 
-.u_row{
+.u_row {
     display: flex;
-    margin-left: 100px;
-    justify-content: left;
+    justify-content: center;
 }
 
 .u_row.firstRow {
-    
-    margin-top: 100px;
+    margin-top: 60px;
     gap: 10px; 
-     
 }
 
-
 .u_row.secondRow {
-
     gap: 10px; 
-   
 }
 
 .u_row.thirdRow {
-
     gap: 10px;
-    margin-bottom: 120px; 
-
+    margin-bottom: 80px; 
 }
-
