@@ -182,14 +182,14 @@
 
 /* Input boxes */
 .inputBox.username, .inputBox.password{
-    width: 550px;
+    width: 475px;
 }
 
 .gender, .user_role {
-    width: 400px;
+    width: 300px;
 }
 
-.inputBox.fName, .inputBox.mName, .inputBox.lName{
+.inputBox.fName, .inputBox.mName, .inputBox.lName, .inputBox.email{
     width: 300px;
 }
 

@@ -51,6 +51,7 @@ def add_user():
        first_name = form.first_name.data
        middle_name = form.middle_name.data
        last_name = form.last_name.data
+       email = form.email.data
        gender = form.gender.data
        user_role = form.user_role.data
 
@@ -60,6 +61,7 @@ def add_user():
        new_user.first_name = first_name
        new_user.middle_name = middle_name
        new_user.last_name = last_name
+       new_user.email = email
        new_user.gender = gender
        new_user.user_role = user_role
 

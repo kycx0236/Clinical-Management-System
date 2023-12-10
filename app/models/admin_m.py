@@ -20,8 +20,9 @@ class admin():
                 'first_name': user[3],
                 'middle_name': user[4],
                 'last_name': user[5],
-                'gender': user[6],
-                'user_role': user[7]
+                'email': user[6],
+                'gender': user[7],
+                'user_role': user[8]
                 
             }
             user_list.append(user_dict)
@@ -39,11 +40,9 @@ class admin():
 
         if existing_user:
             return False
-        
-        hashed_password = generate_password_hash(self.password)
-        
-        sql = "INSERT INTO users (username, password, first_name, middle_name, last_name, gender, user_role) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (self.username, hashed_password, self.first_name, self.middle_name, self.last_name, self.gender, self.user_role))
+               
+        sql = "INSERT INTO users (username, password, first_name, middle_name, last_name, email, gender, user_role) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (self.username, self.password, self.first_name, self.middle_name, self.last_name, self.email, self.gender, self.user_role))
         mysql.connection.commit()
 
         return True
