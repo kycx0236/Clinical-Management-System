@@ -30,6 +30,12 @@
                     <p>Appointment</p>
                 </li>
             </a>
+            <a href="{{ url_for('receptionist.schedule') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
+                    <p>Schedule</p>
+                </li>
+            </a>
             <a href="{{ url_for('receptionist.patient') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 

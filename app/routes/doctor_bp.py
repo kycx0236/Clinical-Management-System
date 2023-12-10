@@ -32,6 +32,14 @@ def appointment():
     doctor_info = doctor.get_doctor_info(current_id)
     return render_template("doctor/appointment/appointment.html", info=doctor_info)
 
+@doctor_bp.route('/schedule/')
+@login_required
+@role_required('doctor')
+def schedule():
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+    return render_template("doctor/schedule/schedule.html", info=doctor_info)
+
 @doctor_bp.route('/profile/')
 @login_required
 @role_required('doctor')

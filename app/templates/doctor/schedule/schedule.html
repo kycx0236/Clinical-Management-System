@@ -1,9 +1,7 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Appointment{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
-
+{% block title %}DocCare | Profile{% endblock title %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}"> {% endblock %}
 {% block content %}
-
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -12,35 +10,35 @@
             <li class="notifications">
                 <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
             </li>
-            <a href="{{ url_for('receptionist.dashboard') }}">
+            <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                     <p>Dashboard</p>
                 </li>
-            </a>    
-            <a href="{{ url_for('receptionist.calendar') }}">
+            </a>
+            <a href="{{ url_for('doctor.calendar') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
                     <p>Calendar</p>
                 </li>
             </a>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
-                <p>Appointment</p>
-            </li>
-            <a href="{{ url_for('receptionist.schedule') }}">
+            <a href="{{ url_for('doctor.appointment') }}">
                 <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
-                    <p>Schedule</p>
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
                 </li>
             </a>
-            <a href="{{ url_for('receptionist.patient') }}">
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
+                <p>Schedule</p>
+            </li>
+            <a href="{{ url_for('doctor.patient') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
                     <p>Patient</p>
                 </li>
             </a>
-            <a href="{{ url_for('receptionist.profile') }}">
+            <a href="{{ url_for('doctor.profile') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
                     <p>Profile</p>
@@ -48,10 +46,10 @@
             </a>
         </ul>
         <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
+            <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
             <div>
                 <h3>{{ info[0] }}</h3>
-                <p>{{ info[1] }}</p>
+                <p>{{ info[2] }}</p>
             </div>
         </div>
         <ul>
@@ -61,5 +59,4 @@
             </li>
         </ul>
     </div>
-    
 {% endblock %}

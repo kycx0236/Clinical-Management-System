@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Appointment{% endblock title %}
+{% block title %}DocCare | Schedule{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
 
 {% block content %}
@@ -24,16 +24,16 @@
                     <p>Calendar</p>
                 </li>
             </a>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
-                <p>Appointment</p>
-            </li>
-            <a href="{{ url_for('receptionist.schedule') }}">
+            <a href="{{ url_for('receptionist.appointment') }}">
                 <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
-                    <p>Schedule</p>
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
                 </li>
             </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
+                <p>Schedule</p>
+            </li>
             <a href="{{ url_for('receptionist.patient') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 

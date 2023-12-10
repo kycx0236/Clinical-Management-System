@@ -203,11 +203,13 @@ ul li p {
 }
 
 .doctor-bg img {
-    position: relative;
-    width: 91%;
-    top: 10px;
-    left: 110px;
-    height: 150px;
+    position: absolute;
+    width: 91vw;
+    max-width: 100%;
+    height: auto;
+    max-height: 150px;
+    top: 1vw;
+    right: 36px;
     border-radius: 20px;
 } 
 

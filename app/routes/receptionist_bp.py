@@ -32,6 +32,14 @@ def appointment():
     receptionist_info = receptionist.get_user(current_id)
     return render_template("receptionist/appointment.html", info=receptionist_info)
 
+@receptionist_bp.route('/schedule/')
+@login_required
+@role_required('receptionist')
+def schedule():
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/schedule.html", info=receptionist_info)
+
 @receptionist_bp.route('/patient/')
 @login_required
 @role_required('receptionist')
