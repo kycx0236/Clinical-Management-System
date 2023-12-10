@@ -49,11 +49,6 @@
     top: 190px; 
 }
 
-.action-icon-container {
-    display: flex; 
-    justify-content: center;
-}
-
 /* -------------------------------------------- USER INFORMATION-------------------------------------------- */
 .back-icon img {
     position: absolute;

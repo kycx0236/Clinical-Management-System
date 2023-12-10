@@ -89,7 +89,7 @@
                     <tr>
                         <th>ASSESSMENT</th>
                         <th>DATE</th>
-                        <th colspan="2">ACTION</th>
+                        <th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,28 +98,29 @@
                         <td>{{ consultation[2] }}</td>
                         <td>{{ consultation[42] }}</td>
                         <td>
-                            <!-- ASSESSMENT -->
-                            <form method="GET" action="/doctor/assessment/">
-                                <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                <div class="delete-icon">
-                                    <button type="submit" style="background: none; border: none;">
-                                        <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Assessment">
-                                    </button>
-                                </div>
-                            </form> 
-                        </td>
-                        <td>
-                            <!-- PRESCRIPTION -->
-                            <form method="GET" action="/doctor/prescription/">
-                                <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                <div class="delete-icon">
-                                    <button type="submit" style="background: none; border: none;">
-                                        <img src="{{ url_for('static', filename='images/Prescription.png') }}" title="Prescription">
-                                    </button>
-                                </div>
-                            </form> 
+                            <div class="action-icon-container">
+                                <!-- ASSESSMENT -->
+                                <form method="GET" action="/doctor/assessment/">
+                                    <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                    <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                    <div class="delete-icon">
+                                        <button type="submit" style="background: none; border: none;">
+                                            <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Assessment">
+                                        </button>
+                                    </div>
+                                </form> 
+
+                                <!-- PRESCRIPTION -->
+                                <form method="GET" action="/doctor/prescription/">
+                                    <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                    <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                    <div class="delete-icon">
+                                        <button type="submit" style="background: none; border: none;">
+                                            <img src="{{ url_for('static', filename='images/Prescription.png') }}" title="Prescription">
+                                        </button>
+                                    </div>
+                                </form> 
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

@@ -47,7 +47,7 @@
 
 /* logout */
 .logout {
-    margin-left: 5px;
+    margin-left: 4px;
 }
 
 .logout:hover img {
@@ -134,8 +134,8 @@ a {
 }
 
 ul li img {
-    margin-left: 15px;
-    width: 20px;
+    margin-left: 14px;
+    width: 23px;
 }
 
 ul li p {
@@ -235,7 +235,7 @@ ul li p {
 /* -------------------------------------------- ADD ICONS -------------------------------------------- */
 .add-icon img {
     width: 40px;
-    right: 30px;
+    right: 70px;
     top: 10px;
     justify-content: flex-end;
     border-radius: 100%;
@@ -292,6 +292,12 @@ ul li p {
 
 .table-striped tbody td {
     border-bottom: 1px solid var(--blueC); 
+}
+
+.action-icon-container {
+    display: flex; 
+    justify-content: center;
+    gap: 10px;
 }
 
 .view-btn {
@@ -582,8 +588,8 @@ textarea:focus {
 }
   
 .modal-body {
-    padding: 35px;
-    font-size: 16px;
+    padding: 25px;
+    font-size: 17px;
     justify-content: center;
     text-align: center;
 }
