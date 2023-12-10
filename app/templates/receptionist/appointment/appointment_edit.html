@@ -7,7 +7,7 @@
 {% endblock link %}
 
 {% block content %}
-</body>
+<body>
     <div class="doccare-edit-container">
         <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
         <header>RESCHEDULE</header>
@@ -64,8 +64,8 @@
                         <!-- Book Date -->
                         <div class="input-fields">
                             <label for="validationCustom13" class="form-label"> Book Date </label>
-                            <input type="text" class="form-control" id="validationCustom13" name="book_date" required value="{{ row.book_date }}" readonly aria-describedby="validationCustom03Feedback">
-                            <div id="validationCustom03Feedback" class="valid-feedback">
+                            <input type="text" class="form-control" id="validationCustom13" name="book_date" required value="{{ row.book_date }}" readonly aria-describedby="validationCustom13Feedback">
+                            <div id="validationCustom13Feedback" class="valid-feedback">
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
@@ -233,84 +233,84 @@
 <script src="{{ url_for('static', filename="receptionist_edit_script.js") }}"></script>
 <script>
     // Update the time_appointment dropdown based on the selected date
-$('#validationCustom02').on('change', function() {
-    var selectedDate = $(this).val();
+    $('#validationCustom02').on('change', function() {
+        var selectedDate = $(this).val();
 
-    // Get the CSRF token from the form
-    var csrfToken = $('input[name="csrf_token"]').val();
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
 
-    // Make an AJAX request to fetch time schedules for the selected date
-    $.ajax({
-        url: '/receptionist/get-time-schedules',
-        type: 'POST',
-        data: { selected_date: selectedDate, csrf_token: csrfToken },
-        success: function(response) {
-            console.log('Server Response:', response);
+        // Make an AJAX request to fetch time schedules for the selected date
+        $.ajax({
+            url: '/receptionist/get-time-schedules',
+            type: 'POST',
+            data: { selected_date: selectedDate, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Server Response:', response);
 
-            // Update the options of the time_appointment dropdown
-            var timeDropdown = $('#validationCustom03');
-            timeDropdown.empty();
-            timeDropdown.append('<option value="" selected>Select your desired time</option>');
+                // Update the options of the time_appointment dropdown
+                var timeDropdown = $('#validationCustom03');
+                timeDropdown.empty();
+                timeDropdown.append('<option value="" selected>Select your desired time</option>');
 
-            // Add options based on the received time schedules
-            for (var i = 0; i < response.time_schedules.length; i++) {
-                var timeSlot = response.time_schedules[i];
-                console.log('Time Slot:', timeSlot); // Log each time slot
+                // Add options based on the received time schedules
+                for (var i = 0; i < response.time_schedules.length; i++) {
+                    var timeSlot = response.time_schedules[i];
+                    console.log('Time Slot:', timeSlot); // Log each time slot
 
-                // Check if the time slot has available slots
-                if (timeSlot[1] > 0) {
-                    // Use the data attribute to store the slots information
-                    timeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    // Check if the time slot has available slots
+                    if (timeSlot[1] > 0) {
+                        // Use the data attribute to store the slots information
+                        timeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    }
                 }
+            },
+            error: function(error) {
+                console.error('Error fetching time schedules:', error);
             }
-        },
-        error: function(error) {
-            console.error('Error fetching time schedules:', error);
-        }
+        });
+
+        // Example: Retrieve the selected option's slots information
+        $('#validationCustom03').on('change', function() {
+            var selectedOption = $(this).find(':selected');
+            var slots = selectedOption.data('slots');
+            console.log('Available Slots:', slots);
+        });
     });
 
-    // Example: Retrieve the selected option's slots information
+    // Additional code for the old time dropdown in the edit form
     $('#validationCustom03').on('change', function() {
-        var selectedOption = $(this).find(':selected');
-        var slots = selectedOption.data('slots');
-        console.log('Available Slots:', slots);
-    });
-});
+        var oldSelectedDate = $(this).val();
 
-// Additional code for the old time dropdown in the edit form
-$('#validationCustom08').on('change', function() {
-    var oldSelectedDate = $(this).val();
+        // Make an AJAX request to fetch time schedules for the old selected date
+        $.ajax({
+            url: '/receptionist/get-time-schedules',
+            type: 'POST',
+            data: { selected_date: oldSelectedDate, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Old Time - Server Response:', response);
 
-    // Make an AJAX request to fetch time schedules for the old selected date
-    $.ajax({
-        url: '/receptionist/get-time-schedules',
-        type: 'POST',
-        data: { selected_date: oldSelectedDate, csrf_token: csrfToken },
-        success: function(response) {
-            console.log('Old Time - Server Response:', response);
+                // Update the options of the old time_appointment dropdown
+                var oldTimeDropdown = $('#validationCustom03');
+                oldTimeDropdown.empty();
+                oldTimeDropdown.append('<option value="" selected>Select your desired time</option>');
 
-            // Update the options of the old time_appointment dropdown
-            var oldTimeDropdown = $('#validationCustom09');
-            oldTimeDropdown.empty();
-            oldTimeDropdown.append('<option value="" selected>Select your desired time</option>');
+                // Add options based on the received time schedules
+                for (var i = 0; i < response.time_schedules.length; i++) {
+                    var timeSlot = response.time_schedules[i];
+                    console.log('Old Time - Time Slot:', timeSlot); // Log each time slot
 
-            // Add options based on the received time schedules
-            for (var i = 0; i < response.time_schedules.length; i++) {
-                var timeSlot = response.time_schedules[i];
-                console.log('Old Time - Time Slot:', timeSlot); // Log each time slot
-
-                // Check if the time slot has available slots
-                if (timeSlot[1] > 0) {
-                    // Use the data attribute to store the slots information
-                    oldTimeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    // Check if the time slot has available slots
+                    if (timeSlot[1] > 0) {
+                        // Use the data attribute to store the slots information
+                        oldTimeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    }
                 }
+            },
+            error: function(error) {
+                console.error('Old Time - Error fetching time schedules:', error);
             }
-        },
-        error: function(error) {
-            console.error('Old Time - Error fetching time schedules:', error);
-        }
+        });
     });
-});
  
 </script>
 {% endblock %}

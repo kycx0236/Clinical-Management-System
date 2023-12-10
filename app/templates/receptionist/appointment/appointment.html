@@ -67,17 +67,28 @@
                                                 </p>
                                             </div>
                                         </td>
+                                        <td> {{ row.last_name}} </td>
                                         <td class="table__cell">
-                                            <a href="{{ url_for('receptionist.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appoinment-icon">
+                                            <a href="{{ url_for('receptionist.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appointment-icon">
                                                 <span class="material-symbols-outlined">info</span>
                                             </a>
-                                            <a href="{{ url_for('receptionist.reschedule', reference_number=row.reference_number) }}" class="doccare-edit-appoinment-icon">
+                                            <a href="{{ url_for('receptionist.reschedule', reference_number=row.reference_number) }}" class="doccare-edit-appointment-icon">
                                                 <span class="material-symbols-outlined">edit</span>
                                             </a>
-                                            <button type="button" class="cancel-appoinment-button" data-id="{{ row.reference_number }}" onclick="openCancelModal('{{ row.reference_number }}')">
+                                            <button type="button" class="edit-appointment-button"
+                                                data-id="{{ row.reference_number }}"
+                                                data-date="{{ row.date_appointment }}"
+                                                data-time="{{ row.time_appointment }}"
+                                                data-status="{{ row.status_ }}"
+                                                data-lastname="{{ row.last_name }}"
+                                                data-email="{{ row.email }}"
+                                                onclick="openEditModal('{{ row.reference_number }}')">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </button>
+                                            <button type="button" class="cancel-appointment-button" data-id="{{ row.reference_number }}" onclick="openCancelModal('{{ row.reference_number }}')">
                                                 <span class="material-symbols-outlined cancel-icon">event_busy</span>
                                             </button>
-                                            <button type="button" class="delete-appoinment-button" data-id="{{ row.reference_number }}" onclick="openDeleteModal('{{ row.reference_number }}')">
+                                            <button type="button" class="delete-appointment-button" data-id="{{ row.reference_number }}" onclick="openDeleteModal('{{ row.reference_number }}')">
                                                 <span class="material-symbols-outlined delete-icon">delete</span>
                                             </button>
                                         </td>
@@ -128,14 +139,189 @@
                         </div>
                     </div>
                     
+                    <!-- Modal for Edit Appointment -->
+                    <div class="doccare-edit-container" id="editModal">
+                        <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
+                        <header>RESCHEDULE</header>
+                        <form class="needs-validation" method="POST" action="/receptionist/edit-appointment-version-two/" novalidate>
+                            {{ form.hidden_tag()}}
+                            <div class="doccare-form-first">
+                                <div class="doccare-appoinment-details">
+                                    <span class="title"> Appointment Details </span>
+                                    <div class="fields">
+                                        <!-- Booking Reference Number -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom01" class="form-label"> Reference Number </label>
+                                            <input type="text" class="form-control" id="validationCustom01" name="reference_number" required readonly aria-describedby="validationCustom01Feedback">
+                                        </div>
+
+                                        <!-- Date Appointment -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom02" class="form-label"> Date Appointment </label>
+                                            <input type="date" class="form-control" id="validationCustom02" name="date_appointment" required aria-describedby="validationCustom02Feedback">
+                                        </div>
+
+                                        <!-- Time Appointment -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom03" class="form-label"> Time Appointment </label>
+                                            <select class="form-select" id="validationCustom03" name="time_appointment" required aria-describedby="validationCustom03Feedback">
+                                                <option value="" selected disabled>Select your desired time</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Status -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom04" class="form-label">Status</label>
+                                            <select class="form-select" id="validationCustom04" name="status_" required aria-describedby="validationCustom04Feedback">
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="DONE"> DONE </option>
+                                                <option value="CANCELLED"> CANCELLED </option>
+                                                <option value="PENDING"> PENDING </option>
+                                                <option value="SCHEDULED"> SCHEDULED </option>
+                                                <option value="RESCHEDULED"> RESCHEDULED </option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Last Name -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom05" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="validationCustom05" name="last_name" required readonly aria-describedby="validationCustom05Feedback">
+                                        </div>
+                                        
+                                        <!-- Email -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom06" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="validationCustom06" name="email" required readonly aria-describedby="validationCustom06Feedback">
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <!-- Include a hidden input for reference_number to update the correct appoinment -->
+                                        <input type="hidden" name="reference_number">
+                                        <button type="button" class="doccare-success-button" id="doccare-success-button">Submit</button>
+                                    </div>
+
+                                    <!-- Modal for Success Confirmation -->
+                                    <div id="doccare-success-confirmation-modal" class="doccare-success-confirmation-modal">
+                                        <div class="doccare-success-modal-content">
+                                            <span class="material-symbols-outlined check">check_circle</span>
+                                            <h1>Well Done!</h1>
+                                            <p>The appointment is now updated! </p>
+                                            <div class="doccare-success-modal-button">
+                                                <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal for Failed Confirmation -->
+                                    <div id="doccare-failed-confirmation-modal" class="doccare-failed-confirmation-modal">
+                                        <div class="doccare-failed-modal-content">
+                                            <span class="material-symbols-outlined error">error</span>
+                                            <h1>Something went Wrong!</h1>
+                                            <h6>Failed to update the appointment.</h6>
+                                            <h6>Please try again. </h6>
+                                            <div class="doccare-failed-modal-button">
+                                                <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     <a href="{{ url_for('receptionist.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
                         <span class="material-symbols-outlined add-icon">&#xe147;</span>
                     </a>
-                     <!-- Include these script tags at the end of the body content -->
-                     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-                     <script src="{{ url_for('static', filename='receptionist_script.js') }}" defer></script>
-                     <script src="{{ url_for('static', filename='logout.js') }}"></script>              
+                    <!-- Include these script tags at the end of the body content -->
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+                    <script src="{{ url_for('static', filename='receptionist_script.js') }}" defer></script>
+                    <script src="{{ url_for('static', filename='logout.js') }}"></script>
+                    <script>
+                        // Define csrfToken in a higher scope
+                        var csrfToken;
+                    
+                        // Update the time_appointment dropdown based on the selected date
+                        $('#validationCustom02').off('change').on('change', function() {
+                            var selectedDate = $(this).val();
+                    
+                            // Get the CSRF token from the form
+                            csrfToken = $('input[name="csrf_token"]').val();
+                    
+                            // Make an AJAX request to fetch time schedules for the selected date
+                            $.ajax({
+                                url: '/receptionist/get-time-schedules',
+                                type: 'POST',
+                                data: { selected_date: selectedDate, csrf_token: csrfToken },
+                                success: function(response) {
+                                    console.log('Server Response:', response);
+                    
+                                    // Update the options of the time_appointment dropdown
+                                    var timeDropdown = $('#validationCustom03');
+                                    timeDropdown.empty();
+                                    timeDropdown.append('<option value="" selected>Select your desired time</option>');
+                    
+                                    // Add options based on the received time schedules
+                                    for (var i = 0; i < response.time_schedules.length; i++) {
+                                        var timeSlot = response.time_schedules[i];
+                                        console.log('Time Slot:', timeSlot); // Log each time slot
+                    
+                                        // Check if the time slot has available slots
+                                        if (timeSlot[1] > 0) {
+                                            // Use the data attribute to store the slots information
+                                            timeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                                        }
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error('Error fetching time schedules:', error);
+                                }
+                            });
+                    
+                            // Example: Retrieve the selected option's slots information
+                            $('#validationCustom03').off('change').on('change', function() {
+                                var selectedOption = $(this).find(':selected');
+                                var slots = selectedOption.data('slots');
+                                console.log('Available Slots:', slots);
+                            });
+                        });
+                    
+                        // Additional code for the old time dropdown in the edit form
+                        $('#validationCustom03').off('change').on('change', function() {
+                            var oldSelectedDate = $(this).val();
+                    
+                            // Make an AJAX request to fetch time schedules for the old selected date
+                            $.ajax({
+                                url: '/receptionist/get-time-schedules',
+                                type: 'POST',
+                                data: { selected_date: oldSelectedDate, csrf_token: csrfToken },
+                                success: function(response) {
+                                    console.log('Old Time - Server Response:', response);
+                    
+                                    // Update the options of the old time_appointment dropdown
+                                    var oldTimeDropdown = $('#validationCustom03');
+                                    oldTimeDropdown.empty();
+                                    oldTimeDropdown.append('<option value="" selected>Select your desired time</option>');
+                    
+                                    // Add options based on the received time schedules
+                                    for (var i = 0; i < response.time_schedules.length; i++) {
+                                        var timeSlot = response.time_schedules[i];
+                                        console.log('Old Time - Time Slot:', timeSlot); // Log each time slot
+                    
+                                        // Check if the time slot has available slots
+                                        if (timeSlot[1] > 0) {
+                                            // Use the data attribute to store the slots information
+                                            oldTimeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                                        }
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error('Old Time - Error fetching time schedules:', error);
+                                }
+                            });
+                        });
+                    </script>                    
                 </main>
             </div>
         </body>

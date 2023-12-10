@@ -4,6 +4,7 @@ const tableRows = document.querySelectorAll('tbody tr');
 const tableHeadings = document.querySelectorAll('thead th');
 const deleteModal = document.getElementById('deleteModal');
 const cancelModal = document.getElementById('cancelModal');
+const editModal = document.getElementById('editModal');
 
 // Event listeners
 // searchInput.addEventListener('input', searchTable);
@@ -101,24 +102,24 @@ function updateTable(response) {
       // Add your action buttons/icons here
       var viewButton = document.createElement('a');
       viewButton.href = '/receptionist/view-appointment/?reference_number=' + row[0];
-      viewButton.className = 'doccare-view-appoinment-icon';
+      viewButton.className = 'doccare-view-appointment-icon';
       viewButton.innerHTML = '<span class="material-symbols-outlined">info</span>';
 
       var rescheduleButton = document.createElement('a');
       rescheduleButton.href = '/receptionist/edit-appointment/?reference_number=' + row[0];
-      rescheduleButton.className = 'doccare-edit-appoinment-icon';
+      rescheduleButton.className = 'doccare-edit-appointment-icon';
       rescheduleButton.innerHTML = '<span class="material-symbols-outlined">edit</span>';
 
       var cancelModalButton = document.createElement('button');
       cancelModalButton.type = 'button';
-      cancelModalButton.className = 'cancel-appoinment-button';
+      cancelModalButton.className = 'cancel-appointment-button';
       cancelModalButton.setAttribute('data-id', row[0]);
       cancelModalButton.onclick = function () { openCancelModal(row[0]); };
       cancelModalButton.innerHTML = '<span class="material-symbols-outlined cancel-icon">event_busy</span>';
 
       var deleteModalButton = document.createElement('button');
       deleteModalButton.type = 'button';
-      deleteModalButton.className = 'delete-appoinment-button';
+      deleteModalButton.className = 'delete-appointment-button';
       deleteModalButton.setAttribute('data-id', row[0]);
       deleteModalButton.onclick = function () { openDeleteModal(row[0]); };
       deleteModalButton.innerHTML = '<span class="material-symbols-outlined delete-icon">delete</span>';
@@ -171,8 +172,9 @@ function sortTable(column, sortAsc) {
 }
 
 // Select the delete icon by its class or another appropriate selector
-const deleteIcons = document.querySelectorAll('.delete-appoinment-button');
+const deleteIcons = document.querySelectorAll('.delete-appointment-button');
 const cancelIcons = document.querySelectorAll('.cancellation-modal-button');
+const editIcons = document.querySelectorAll('.edit-appointment-button');
 
 // Add a click event listener to each delete icon
 deleteIcons.forEach(deleteIcon => {
@@ -188,7 +190,7 @@ deleteIcons.forEach(deleteIcon => {
     });
 });
 
-// Add a click event listener to each delete icon
+// Add a click event listener to each cancel icon
 cancelIcons.forEach(cancelIcon => {
   cancelIcon.addEventListener('click', function(event) {
       // Prevent the default action of the delete icon
@@ -199,6 +201,20 @@ cancelIcons.forEach(cancelIcon => {
 
       // Open the delete modal
       openCancelModal(appointmentId);
+  });
+});
+
+// Add a click event listener to each edit icon
+editIcons.forEach(editIcon => {
+  editIcon.addEventListener('click', function(event) {
+      // Prevent the default action of the delete icon
+      event.preventDefault();
+
+      // Get the appointment ID from the data-id attribute
+      const appointmentId = this.getAttribute('data-id');
+
+      // Open the delete modal
+      openEditModal(appointmentId);
   });
 });
 
@@ -353,8 +369,206 @@ window.addEventListener('click', event => {
   }
 });
 
+// Edit functionality
+function openEditModal(referenceNumber) {
+  // Fetch appointment data asynchronously
+  fetchAppointmentData(referenceNumber);
+}
 
+// Edit functionality
+function openEditModal(referenceNumber) {
+  // Fetch appointment data asynchronously
+  fetchAppointmentData(referenceNumber);
+}
 
+async function fetchAppointmentData(referenceNumber) {
+  try {
+      // Make an AJAX request to fetch appointment data and time options
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');  // Get CSRF token from meta tag
+      const response = await $.ajax({
+          url: '/receptionist/get-appointment-data/',
+          method: 'GET',
+          data: { referenceNumber: referenceNumber },
+          headers: {
+              'X-CSRFToken': csrfToken,  // Include CSRF token in headers
+          },
+      });
+
+      if (response.success) {
+          // Assuming the server responds with the appointment data and time options
+          const appointmentData = response.appointmentData;
+          const timeOptions = response.timeOptions;
+
+          if (appointmentData) {
+              // Call openEditModal with the fetched data and time options
+              populateEditModal(appointmentData, timeOptions);
+          } else {
+              console.error('Error: Appointment data is missing in the response.');
+          }
+      } else {
+          console.error('Error: Server response indicates failure.');
+      }
+  } catch (error) {
+      console.error('Error fetching appointment data:', error);
+      // Handle error, show a message, etc.
+  }
+}
+
+// Function to populate the edit modal with data
+function populateEditModal(appointmentData, timeOptions) {
+  // Format the date received from the server into "yyyy-MM-dd"
+  const formattedDate = new Date(appointmentData.date_appointment).toISOString().split('T')[0];
+
+  // Populate the time select options
+  const timeSelect = document.getElementById("validationCustom03");
+  timeSelect.innerHTML = '<option value="" selected>Select your desired time</option>';
+
+  // Check if timeOptions is defined and is an array
+  if (Array.isArray(timeOptions)) {
+    // Populate options based on timeOptions array
+    timeOptions.forEach((timeOption) => {
+      const option = document.createElement("option");
+      option.value = timeOption;
+      option.text = timeOption;
+
+      // Set selected attribute if the time matches the appointmentData
+      if (appointmentData.time_appointment === timeOption) {
+        option.selected = true;
+      }
+
+      timeSelect.add(option);
+    });
+  } else {
+    console.error('Error: timeOptions is not an array or is undefined.');
+  }
+
+  // Populate other form fields with the appointment data
+  document.getElementById("validationCustom01").value = appointmentData.reference_number;
+  document.getElementById("validationCustom02").value = formattedDate;  // Use the formatted date
+  document.getElementById("validationCustom03").value = appointmentData.time_appointment;
+  document.getElementById("validationCustom04").value = appointmentData.status_;
+  document.getElementById("validationCustom05").value = appointmentData.last_name;
+  document.getElementById("validationCustom06").value = appointmentData.email;
+
+  // Set the reference_number in the hidden input for updating
+  document.getElementsByName("reference_number")[0].value = appointmentData.reference_number;
+
+  // Open the edit modal
+  editModal.style.display = 'block';
+  setTimeout(() => {
+    editModal.style.opacity = '1';
+  }, 10);
+  toggleOverlayBackground(true);
+}
+
+function closeEditModal() {
+  editModal.style.opacity = '0';
+  setTimeout(() => {
+    editModal.style.display = 'none';
+  }, 300); // Adjust the delay to match the transition duration
+  toggleOverlayBackground(false);
+}
+function validateForm() {
+  var form = document.querySelector(".needs-validation");
+  var isValid = form.checkValidity();
+
+  // Check each form field for validity
+  form.querySelectorAll(".form-control").forEach(function (input) {
+      input.reportValidity();
+  });
+
+  return isValid;
+}
+
+// Function to show the success modal
+function showSuccessModal() {
+  var successModal = document.getElementById("doccare-success-confirmation-modal");
+  successModal.style.display = "flex";
+
+  // Add event listener to the "Done" button inside the success modal
+  // Assuming you have an element with id "doccare-done-modal-button" for the "Done" button
+  var doneButton = document.getElementById("doccare-done-modal-button");
+
+  doneButton.addEventListener('click', async function() {
+      // Show the success modal
+      $("#doccare-success-confirmation-modal").modal("show");
+
+      // Use a Promise to wait for the modal to be fully displayed
+      await new Promise(resolve => {
+          $('#doccare-success-confirmation-modal').on('shown.bs.modal', function () {
+              // Resolve the Promise when the modal is fully displayed
+              resolve();
+          });
+      });
+
+      // Redirect to the /appointment/ route
+      window.location.href = '/receptionist/appointment/';
+  });
+}
+
+// Function to show the failed modal
+function showFailedModal() {
+  var failedModal = document.getElementById("doccare-failed-confirmation-modal");
+  failedModal.style.display = "flex";
+}
+
+const arrowBackButton = document.getElementById('arrow')
+arrowBackButton.addEventListener('click', function() {
+  // Redirect to the /appointment/ route
+  window.location.href = '/receptionist/appointment/';
+});
+
+// Event delegation for the document
+$(document).on("click", ".doccare-success-button", function (event) {
+  event.preventDefault();
+  editAppointment();
+});
+
+// Open the EditModal
+document.addEventListener('click', function (event) {
+  if (event.target.classList.contains('edit-appointment-button')) {
+      const referenceNumber = event.target.getAttribute('data-id');
+      
+      // Fetch and load appointment data
+      openEditModal(referenceNumber);
+  }
+});
+
+function editAppointment() {
+  if (validateForm()) {
+      // If the form is valid, submit it
+      console.log("Form is valid. Submitting...");
+
+      // Assuming you are using jQuery for AJAX
+      $.ajax({
+          // Change the url to point to the desired route
+          url: '/receptionist/edit-appointment-version-two/',
+          method: "POST",
+          data: $("form").serialize(),
+          success: function (response) {
+              if (response.success) {
+                  // Show success modal
+                  showSuccessModal();
+
+                  // Delay for 2 seconds (adjust as needed)
+                  setTimeout(function () {
+                      // Redirect to the /appointment/ route
+                      window.location.href = '/receptionist/appointment/';
+                  }, 1000);
+              } else {
+                  // Show failed modal
+                  showFailedModal();
+              }
+          },
+          error: function () {
+              // Show failed modal in case of an error
+              showFailedModal();
+          }
+      });
+  } else {
+      console.log("Form is not valid.");
+  }
+}
 
 // Add event listener to cancel button
 const cancelModalButton = document.querySelector('.cancel-modal-button');

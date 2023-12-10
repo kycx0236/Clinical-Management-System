@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField, DateField
+from wtforms import StringField, validators, SubmitField, DateField, SelectField, EmailField
 
 class AppointmentForm(FlaskForm):
     reference_number = StringField('reference_number', [validators.DataRequired()])
@@ -16,3 +16,21 @@ class AppointmentForm(FlaskForm):
     email = StringField('email', [validators.Length(min=10, max=50)])
     address = StringField('address', [validators.Length(min=10, max=255)])
     submit = SubmitField("Submit")
+    
+
+class SearchForm(FlaskForm):
+    searchTerm = StringField('Search Term')
+    filterBy = SelectField('Filter By', choices=[('all', 'All'), ('reference_number', 'Reference Number'),
+                                                 ('date_appointment', 'Date'), ('time_appointment', 'Time'),
+                                                 ('last_name', 'Last Name'), ('status_', 'Status')])
+
+class EditAppointmentForm(FlaskForm):
+    reference_number = StringField('reference_number', [validators.DataRequired()])
+    date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
+    time_appointment = StringField('time_appointment', [validators.Length(min=1, max=50)])
+    status_ = StringField('status_', [validators.Length(min=4, max=50)])
+    last_name = StringField('last_name', [validators.Length(min=2, max=50)])
+    email = EmailField('email', [validators.Length(min=10, max=50)])
+    submit = SubmitField("Submit")
+
+

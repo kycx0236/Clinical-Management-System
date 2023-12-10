@@ -1,18 +1,18 @@
 from flask import render_template, redirect, request, url_for, flash, jsonify, session
 import math
-from app.forms.receptionist_f import AppointmentForm
+from app.forms.receptionist_f import AppointmentForm, EditAppointmentForm
 from app.models.receptionist_m import Appointment
 import app.models.receptionist_m as models_receptionist
 from flask import Blueprint
 from datetime import datetime, date
 import secrets
 import string
-from flask_login import login_required, logout_user
+from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 
 receptionist_bp = Blueprint('receptionist', __name__)
 
-headings = ("Reference Number", "Date", "Time", "Last Name", "Status", "Actions")
+headings = ("Reference Number", "Date", "Time", "Last Name", "Status", "Doctor", "Actions")
 
 # Main routes
 @receptionist_bp.route('/')
@@ -31,6 +31,7 @@ def calendar():
 @login_required
 @role_required('receptionist')
 def appointment():
+    form = EditAppointmentForm()
     # Get the page number from the query string, default to 1 if not specified
     page = int(request.args.get('page', 1))
 
@@ -62,7 +63,7 @@ def appointment():
         for appointment in data
     ]
 
-    return render_template("receptionist/appointment/appointment.html", headings=headings, data=data_dict, page=page, total_pages=total_pages)
+    return render_template("receptionist/appointment/appointment.html", headings=headings, data=data_dict, page=page, total_pages=total_pages, form=form)
 
 
 @receptionist_bp.route('/profile/')
@@ -167,7 +168,7 @@ def add_appointment():
             time_schedules = []
             return jsonify(success=False, message="Internal Server Error"), 500
 
-    return render_template("receptionist/appointment/appointment_add.html", form=form, booking_details=booking_details, time_schedules=time_schedules)
+    return render_template("receptionist/appointment/appointment_add_v2.html", form=form, booking_details=booking_details, time_schedules=time_schedules)
 
 
 @receptionist_bp.route('/delete-appointment/', methods=['POST'])
@@ -192,8 +193,6 @@ def delete_appointment():
         # Log the error for debugging purposes
         receptionist_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500
-
-
 
 @receptionist_bp.route('/view-appointment/', methods=["GET"])
 @login_required
@@ -299,6 +298,55 @@ def reschedule():
         print("Form validation failed:", form.errors)
     return render_template("receptionist/appointment/appointment_edit.html", form=form, row=appointment_data_dict, time_data=time_data)
 
+@receptionist_bp.route('/edit-appointment-version-two/', methods=["GET", "POST"])
+@login_required
+@role_required('receptionist')
+def reschedule_version_two():
+    reference_number = request.form.get('reference_number')
+    print(reference_number)
+    form = EditAppointmentForm()
+    appointment_data = models_receptionist.Appointment.get_appointment_by_reference_version_two(reference_number)
+
+    if appointment_data:
+        appointment_data_dict = {
+            "reference_number": appointment_data['reference_number'],
+            "date_appointment": appointment_data['date_appointment'],
+            "time_appointment": appointment_data['time_appointment'],
+            "status_": appointment_data['status_'],
+            "last_name": appointment_data['last_name'],
+            "email": appointment_data['email']
+        }
+        time_data = models_receptionist.Appointment.get_all_schedule(appointment_data['date_appointment'])
+        print(appointment_data_dict)
+        print(time_data)
+    else:
+        return jsonify(success=False, message="Appointment not found.")
+
+    if request.method == "POST" and form.validate():
+        new_date_appointment = form.date_appointment.data
+        new_time_appointment = form.time_appointment.data
+        new_status_ = form.status_.data
+        new_last_name = form.last_name.data
+        new_email = form.email.data
+
+        old_date_appointment = appointment_data['date_appointment']
+        old_time_appointment = appointment_data['time_appointment']
+        
+        if models_receptionist.Appointment.update_second_version(
+            reference_number, new_date_appointment, new_time_appointment, new_status_,
+            new_last_name, new_email):
+            # Update the slots for the old and new times
+            models_receptionist.Appointment.update_time_slots(old_date_appointment, old_time_appointment, new_time_appointment)
+
+            return jsonify(success=True, message="Appointment updated successfully")
+        else:
+            return jsonify(success=False, message="Failed to update appointment.")
+    else:
+        print ("Failed to update appointment")
+        print("Form validation failed:", form.errors)
+    return render_template("receptionist/appointment/appointment.html", form=form, data=appointment_data_dict, time_data=time_data)
+
+
 @receptionist_bp.route('/search-appointments/', methods=['POST'])
 @login_required
 @role_required('receptionist')
@@ -356,3 +404,30 @@ def cancel_appointment():
         # Log the error for debugging purposes
         receptionist_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500
+
+@receptionist_bp.route('/get-appointment-data/', methods=['GET'])
+@login_required
+@role_required('receptionist')
+def get_appointment_data():
+    try:
+        reference_number = request.args.get('referenceNumber')
+
+        # Ensure the reference number is provided
+        if not reference_number:
+            return jsonify(success=False, message="Reference number is required.")
+
+        # Fetch appointment data using the provided reference number
+        appointment_data = models_receptionist.Appointment.get_appointment_by_reference_version_two(reference_number)
+
+        if appointment_data:
+            # Fetch time options based on the appointment's date
+            date_appointment = appointment_data.get('date_appointment')  # Adjust accordingly
+            time_options = models_receptionist.Appointment.get_all_schedule(date_appointment)
+
+            return jsonify(success=True, appointmentData=appointment_data, timeOptions=time_options)
+        else:
+            return jsonify(success=False, message="Appointment not found.")
+
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify(success=False, message="An error occurred.")

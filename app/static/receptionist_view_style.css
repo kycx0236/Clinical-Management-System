@@ -37,6 +37,9 @@ body {
     margin-bottom: 5px;
 }
 
+.material-symbols-outlined.arrow {
+    cursor: pointer;
+}
 .doccare-header {
     color: #000;
     font-size: 24px;

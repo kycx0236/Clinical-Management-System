@@ -63,6 +63,19 @@ class Appointment:
         except Exception as e:
             print(f"Error updating appointment: {e}")
             return False
+    
+    @classmethod
+    def update_second_version(cls, reference_number, new_date_appointment, new_time_appointment, new_status_, new_last_name, new_email):
+        try:
+            cursor = mysql.connection.cursor()
+            sql = "UPDATE appointment SET date_appointment = %s, time_appointment = %s, status_ = %s, last_name = %s, email = %s WHERE reference_number = %s"
+            cursor.execute(sql, (new_date_appointment, new_time_appointment, new_status_, new_last_name, new_email, reference_number))
+            mysql.connection.commit()
+            print("Time Appointment:", new_time_appointment)
+            return True
+        except Exception as e:
+            print(f"Error updating appointment: {e}")
+            return False
         
     @classmethod
     def unique_code(cls, reference_number):
@@ -77,6 +90,16 @@ class Appointment:
         print("Reference Number:", reference_number)
         cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
         cursor.execute("SELECT * FROM appointment WHERE reference_number = %s", (reference_number,))
+        appointment_data = cursor.fetchone()
+        print("Appointment Data:", appointment_data)
+        cursor.close()
+        return appointment_data
+    
+    @classmethod
+    def get_appointment_by_reference_version_two(cls, reference_number):
+        print("Reference Number:", reference_number)
+        cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
+        cursor.execute("SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.status_, appointment.last_name, appointment.email FROM appointment WHERE reference_number = %s", (reference_number,))
         appointment_data = cursor.fetchone()
         print("Appointment Data:", appointment_data)
         cursor.close()
