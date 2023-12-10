@@ -26,6 +26,12 @@
                 <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
                 <p>Appointment</p>
             </li>
+            <a href="{{ url_for('doctor.schedule') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
+                    <p>Schedule</p>
+                </li>
+            </a>
             <a href="{{ url_for('doctor.patient') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
