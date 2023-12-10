@@ -1,4 +1,7 @@
 from app import mysql
+from werkzeug.security import generate_password_hash
+import string
+import random
 
 class admin():
 
@@ -37,11 +40,19 @@ class admin():
         if existing_user:
             return False
         
+        hashed_password = generate_password_hash(self.password)
+        
         sql = "INSERT INTO users (username, password, first_name, middle_name, last_name, gender, user_role) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (self.username, self.password, self.first_name, self.middle_name, self.last_name, self.gender, self.user_role))
+        cursor.execute(sql, (self.username, hashed_password, self.first_name, self.middle_name, self.last_name, self.gender, self.user_role))
         mysql.connection.commit()
 
         return True
+    
+    def generate_password(length=12):
+        special_characters = "!@#$%^&*-_+<>?"
+        characters = string.ascii_letters + string.digits + special_characters
+        password = ''.join(random.choice(characters) for _ in range(length))
+        return password
 
     def delete_user_record(user_id):
         cursor = mysql.connection.cursor()

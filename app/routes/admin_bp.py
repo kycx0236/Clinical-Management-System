@@ -5,6 +5,7 @@ from app.models.admin_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user
 from app.routes.utils import role_required
+from werkzeug.security import generate_password_hash
 
 
 admin_bp = Blueprint('admin', __name__)
@@ -37,38 +38,42 @@ def logout():
 
 # -------------------------------------------- USER -------------------------------------------- #
 # ADD USER
-@admin_bp.route('/add_user/',  methods=['GET', 'POST'])
+@admin_bp.route('/add_user/', methods=['GET', 'POST'])
 @login_required
 @role_required('admin')
 def add_user():
     form = UserForm()
+    password = admin.generate_password()
+    hashed_password = generate_password_hash(password)
 
     if request.method == 'POST':
-        username = form.username.data
-        password = form.password.data
-        first_name = form.first_name.data
-        middle_name = form.middle_name.data
-        last_name = form.last_name.data
-        gender = form.gender.data
-        user_role = form.user_role.data
+       username = form.username.data
+       first_name = form.first_name.data
+       middle_name = form.middle_name.data
+       last_name = form.last_name.data
+       gender = form.gender.data
+       user_role = form.user_role.data
 
-        new_user = admin()
-        new_user.username = username
-        new_user.password = password
-        new_user.first_name = first_name
-        new_user.middle_name = middle_name
-        new_user.last_name = last_name
-        new_user.gender = gender
-        new_user.user_role = user_role
+       new_user = admin()
+       new_user.username = username
+       new_user.password = hashed_password
+       new_user.first_name = first_name
+       new_user.middle_name = middle_name
+       new_user.last_name = last_name
+       new_user.gender = gender
+       new_user.user_role = user_role
 
-        result = new_user.add_user()
+       result = new_user.add_user()
 
-        if result:
-            return render_template("admin/user_management/add_user.html", success=True, UserForm=form)
-        else:
-            return render_template("admin/user_management/add_user.html", error=True, UserForm=form)
-    
-    return render_template("admin/user_management/add_user.html", UserForm=form)
+       if result:
+           # Render the template with the hashed password
+           return render_template("admin/user_management/add_user.html", success=True, UserForm=form, password=hashed_password)
+       else:
+           # Render the template with the hashed password
+           return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
+  
+    # Render the template with the hashed password
+    return render_template("admin/user_management/add_user.html", UserForm=form, password=hashed_password)
 
 # DELETE USER
 @admin_bp.route('/delete_user/', methods=['GET', 'POST'])

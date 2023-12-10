@@ -5,9 +5,9 @@ from wtforms.validators import DataRequired, Length
 class UserForm(FlaskForm):
 
     # User Information
-    user_id = StringField("User ID")
+    user_id = IntegerField("User ID")
     username = StringField("Username", validators=[DataRequired(), Length(max=20)])
-    password = StringField("Password", validators=[DataRequired(), Length(max=20)])
+    password = StringField("Password")
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=50)])
     middle_name = StringField('Middle Name', validators=[Length(max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(max=50)])
