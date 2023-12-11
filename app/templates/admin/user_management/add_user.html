@@ -44,76 +44,77 @@
         </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR USER INFORMATION -->
-    <a class="back-icon" href="{{ url_for('admin.user_management') }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
+    <main>
+        <!-- NAVBAR AND TABS FOR USER INFORMATION -->
+        <ul class="nav nav-underline">
+            <a class="back-icon" href="{{ url_for('admin.user_management') }}">
+                <img src="{{ url_for('static', filename='images/Back.png') }}">
+            </a>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page">USER INFORMATION</a>
+            </li>
+        </ul>
 
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">USER INFORMATION</a>
-        </li>
-    </ul>
+        <form action="{{ url_for('admin.add_user') }}" method="POST">
+            {{ UserForm.csrf_token }}
 
-    <form action="{{ url_for('admin.add_user') }}" method="POST">
-        {{ UserForm.csrf_token }}
-
-        <div class="user-bg">
-            <div class="group-info">
-                <div class="u_row firstRow">
-                    <div class="inputBox fName">
-                        <input type="text" required="required" name="first_name">
-                        <span>First Name</span>
+            <div class="user-bg">
+                <div class="group-info">
+                    <div class="u_row firstRow">
+                        <div class="inputBox fName">
+                            <input type="text" required="required" name="first_name">
+                            <span>First Name</span>
+                        </div>
+                        <div class="inputBox mName">
+                            <input type="text" required="required" name="middle_name">
+                            <span>Middle Name</span>
+                        </div>
+                        <div class="inputBox lName">
+                            <input type="text" required="required" name="last_name">
+                            <span>Last Name</span>
+                        </div>
                     </div>
-                    <div class="inputBox mName">
-                        <input type="text" required="required" name="middle_name">
-                        <span>Middle Name</span>
+
+                    <div class="u_row secondRow">
+                        <div class="inputBox username">
+                            <input type="text" required="required" name="username" autocomplete="off">
+                            <span>Username</span>
+                        </div>
+
+                        <div class="inputBox gender">
+                            <span>Gender</span>
+                            <select class="gender" name="gender" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="MALE">MALE</option>
+                                <option value="FEMALE">FEMALE</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="inputBox lName">
-                        <input type="text" required="required" name="last_name">
-                        <span>Last Name</span>
+
+                    <div class="u_row thirdRow">
+                        <div class="inputBox password">
+                            <input type="text" required="required" name="password" autocomplete="off">
+                            <span>Password</span>
+                        </div>
+
+                        <div class="inputBox user_role">
+                            <span>User Role</span>
+                            <select class="user_role" name="user_role" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="doctor">doctor</option>
+                                <option value="receptionist">receptionist</option>
+                                <option value="medtech">medtech</option>
+                                <option value="admin">admin</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-
-                <div class="u_row secondRow">
-                    <div class="inputBox username">
-                        <input type="text" required="required" name="username" autocomplete="off">
-                        <span>Username</span>
-                    </div>
-
-                    <div class="inputBox gender">
-                        <span>Gender</span>
-                        <select class="gender" name="gender" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="MALE">MALE</option>
-                            <option value="FEMALE">FEMALE</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="u_row thirdRow">
-                    <div class="inputBox password">
-                        <input type="text" required="required" name="password" autocomplete="off">
-                        <span>Password</span>
-                    </div>
-
-                    <div class="inputBox user_role">
-                        <span>User Role</span>
-                        <select class="user_role" name="user_role" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="doctor">doctor</option>
-                            <option value="receptionist">receptionist</option>
-                            <option value="medtech">medtech</option>
-                            <option value="admin">admin</option>
-                        </select>
-                    </div>
+                <div class="btn-container">
+                    <button class="btn-submit" id="modalButton" type="submit">SUBMIT</button>
                 </div>
             </div>
-            <div class="btn-container">
-                <button class="btn-submit" id="modalButton" type="submit">SUBMIT</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </main>
     
     {% if success %}
         <div id="successModal" class="modal" style="display: block;">

@@ -65,75 +65,80 @@
         </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-    <div class="navbar"></div>
-    
-    <a class="back-icon" href="{{ url_for('doctor.patient') }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
+    <main>
+        <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+        <div class="navbar">
+            <ul class="nav nav-underline">
+                <a class="back-icon" href="{{ url_for('doctor.patient') }}">
+                    <img src="{{ url_for('static', filename='images/Back.png') }}">
+                </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">MEDICAL ASSESSMENT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY REPORTS</a>
+                </li>
+            </ul>
 
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.patient_record', patient_id=patient_id) }}">PATIENT INFORMATION</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">MEDICAL ASSESSMENT</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY REPORTS</a>
-        </li>
-    </ul>
-
-    <!-- MEDICAL ASSESSMENT -->
-    <div class="patient-bg">
-        <div class="assessment-table">
-            <table id="example" class="table table-striped" style="width:100%;">
-                <thead>
-                    <tr>
-                        <th>ASSESSMENT</th>
-                        <th>DATE</th>
-                        <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for consultation in consultations %}
-                    <tr>
-                        <td>{{ consultation[2] }}</td>
-                        <td>{{ consultation[42] }}</td>
-                        <td>
-                            <div class="action-icon-container">
-                                <!-- ASSESSMENT -->
-                                <form method="GET" action="/doctor/assessment/">
-                                    <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                    <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                    <div class="delete-icon">
-                                        <button type="submit" style="background: none; border: none;">
-                                            <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Assessment">
-                                        </button>
-                                    </div>
-                                </form> 
-
-                                <!-- PRESCRIPTION -->
-                                <form method="GET" action="/doctor/prescription/">
-                                    <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                    <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                    <div class="delete-icon">
-                                        <button type="submit" style="background: none; border: none;">
-                                            <img src="{{ url_for('static', filename='images/Prescription.png') }}" title="Prescription">
-                                        </button>
-                                    </div>
-                                </form> 
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="add-icon" id="addAssessmentIcon" onclick="displayModal()">
+                <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
+            </div>
         </div>
-    </div>
+
+        <!-- MEDICAL ASSESSMENT -->
+        <div class="patient-bg">
+            <div class="assessment-table">
+                <table id="example" class="table table-striped" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>ASSESSMENT</th>
+                            <th>DATE</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consultation in consultations %}
+                        <tr>
+                            <td>{{ consultation[2] }}</td>
+                            <td>{{ consultation[42] }}</td>
+                            <td>
+                                <div class="action-icon-container">
+                                    <!-- ASSESSMENT -->
+                                    <form method="GET" action="/doctor/assessment/">
+                                        <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                        <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                        <div class="delete-icon">
+                                            <button type="submit" style="background: none; border: none;">
+                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Assessment">
+                                            </button>
+                                        </div>
+                                    </form> 
+
+                                    <!-- PRESCRIPTION -->
+                                    <form method="GET" action="/doctor/prescription/">
+                                        <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                        <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                        <div class="delete-icon">
+                                            <button type="submit" style="background: none; border: none;">
+                                                <img src="{{ url_for('static', filename='images/Prescription.png') }}" title="Prescription">
+                                            </button>
+                                        </div>
+                                    </form> 
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
     <!-- Consultation Modal -->
     <div id="consultationModal" class="modal" style="display: none;">
@@ -152,11 +157,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    
-    <div class="add-icon" id="addAssessmentIcon" onclick="displayModal()">
-        <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
     </div>
 
     <script>

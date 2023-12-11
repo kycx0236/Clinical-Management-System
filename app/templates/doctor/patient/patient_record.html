@@ -65,221 +65,223 @@
         </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-    <div class="navbar"></div>
-    <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
-    
-    <a class="back-icon" href="{{ url_for('doctor.patient') }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
-
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">PATIENT INFORMATION</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY REPORTS</a>
-        </li>
-    </ul>
-
-    <form action="{{ url_for('doctor.patient_record') }}" method="POST">
-        {{ PatientForm.csrf_token }}
-
-        <!-- PATIENT ID -->
-        <div class="inputBox code" style="display: none;">
-            <input disabled name="patient_id" value="{{ patient[0] }}">
-            <input hidden name="patient_id" value="{{ patient[0] }}" >
+    <main>
+        <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+        <div class="navbar">
+            <ul class="nav nav-underline">
+                <a class="back-icon" href="{{ url_for('doctor.patient') }}">
+                    <img src="{{ url_for('static', filename='images/Back.png') }}">
+                </a>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">PATIENT INFORMATION</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('doctor.medical_history', patient_id=patient_id) }}">MEDICAL HISTORY</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">MEDICAL ASSESSMENT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('doctor.lab_results', patient_id=patient_id) }}">LABORATORY REPORTS</a>
+                </li>
+            </ul>
+            <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
         </div>
 
-        <!-- PATIENT INFORMATION -->
-        <div class="patient-bg">
 
-            <div class="group-info">
-                <div class="p_row firstRow">
-                    <div class="inputBox fName">
-                        <input type="text" required="required" name="first_name" value="{{ patient[1] }}" disabled>
-                        <span>FIRST NAME</span>
-                    </div>
-                    <div class="inputBox mName">
-                        <input type="text" required="required" name="middle_name" value="{{ patient[2] }}" disabled>
-                        <span>MIDDLE NAME</span>
-                    </div>
-                    <div class="inputBox lName">
-                        <input type="text" required="required" name="last_name" value="{{ patient[3] }}" disabled>
-                        <span>LAST NAME</span>
-                    </div>
-                </div>
-            
-                <div class="p_row secondRow">
-                    <div class="inputBox age">
-                        <input type="number" required="required" name="age" value="{{ patient[4] }}" disabled>
-                        <span>AGE</span>
-                    </div>
-                    <div class="inputBox status">
-                        <select class="status" name="civil_status" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="SINGLE" {% if patient[5] == "SINGLE" %} selected {% endif %}>SINGLE</option>
-                            <option value="MARRIED" {% if patient[5] == "MARRIED" %} selected {% endif %}>MARRIED</option>
-                            <option value="SEPARATED" {% if patient[5] == "SEPARATED" %} selected {% endif %}>SEPARATED</option>
-                            <option value="WIDOW/ER" {% if patient[5] == "WIDOW/ER" %} selected {% endif %}>WIDOW/ER</option>
-                        </select>
-                        <span>CIVIL STATUS</span>
-                    </div>
-                    <div class="inputBox gender">
-                        <select class="gender" name="gender" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="FEMALE" {% if patient[6] == "FEMALE" %} selected {% endif %}>FEMALE</option>
-                            <option value="MALE" {% if patient[6] == "MALE" %} selected {% endif %}>MALE</option>
-                        </select>
-                        <span>GENDER</span>
-                    </div>
-                    <div class="inputBox bloodType">
-                        <select class="bloodType" name="bloodType" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="A+" {% if patient[7] == "A+" %} selected {% endif %}>A+</option>
-                            <option value="A-" {% if patient[7] == "A-" %} selected {% endif %}>A-</option>
-                            <option value="B+" {% if patient[7] == "B+" %} selected {% endif %}>B+</option>
-                            <option value="B-" {% if patient[7] == "B-" %} selected {% endif %}>B-</option>
-                            <option value="AB+" {% if patient[7] == "AB+" %} selected {% endif %}>AB+</option>
-                            <option value="AB-" {% if patient[7] == "AB-" %} selected {% endif %}>AB-</option>
-                            <option value="O+" {% if patient[7] == "O+" %} selected {% endif %}>O+</option>
-                            <option value="O-" {% if patient[7] == "O-" %} selected {% endif %}>O-</option>
-                        </select>
-                        <span>BLOOD TYPE</span>
-                    </div>
-                    <div class="inputBox religion">
-                        <select class="religion" name="religion" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="BAPTIST" {% if patient[12] == "BAPTIST" %} selected {% endif %}>BAPTIST</option>
-                            <option value="BORN AGAIN" {% if patient[12] == "BORN AGAIN" %} selected {% endif %}>BORN AGAIN</option>
-                            <option value="IGLESIA NI KRISTO" {% if patient[12] == "IGLESIA NI KRISTO" %} selected {% endif %}>IGLESIA NI KRISTO</option>
-                            <option value="ISLAM" {% if patient[12] == "ISLAM" %} selected {% endif %}>ISLAM</option>
-                            <option value="JEHOVAH'S WITNESS" {% if patient[12] == "JEHOVAH'S WITNESS" %} selected {% endif %}>JEHOVAH'S WITNESS</option>
-                            <option value="METHODIST" {% if patient[12] == "METHODIST" %} selected {% endif %}>METHODIST</option>
-                            <option value="PENTECOSTAL" {% if patient[12] == "PENTECOSTAL" %} selected {% endif %}>PENTECOSTAL</option>
-                            <option value="PROTESTANT" {% if patient[12] == "PROTESTANT" %} selected {% endif %}>PROTESTANT</option>
-                            <option value="ROMAN CATHOLIC" {% if patient[12] == "ROMAN CATHOLIC" %} selected {% endif %}>ROMAN CATHOLIC</option>
-                            <option value="SEVENTH-DAY ADVENTIST" {% if patient[12] == "SEVENTH-DAY ADVENTIST" %} selected {% endif %}>SEVENTH-DAY ADVENTIST</option>
-                            <option value="OTHER" {% if patient[12] == "OTHER" %} selected {% endif %}>OTHER</option>
-                        </select>
-                        <span>RELIGION</span>
-                    </div>
-                </div>
-            
-                <div class="p_row thirdRow">
-                    <div class="inputBox birth_place">
-                        <input type="text" required="required" name="birth_place" value="{{ patient[8] }}" disabled>
-                        <span>PLACE OF BIRTH</span>
-                    </div>
-                    <div class="inputBox dob">
-                        <input type="date" class="text" name="birth_date" autocomplete="bDate" spellcheck="false" value="{{ patient[9] }}" disabled>
-                        <span>DATE OF BIRTH</span>
-                    </div>
-                </div>
-            
-                <div class="p_row fourthRow">
-                    <div class="inputBox job">
-                        <input type="text" required="required" name="occupation" value="{{ patient[16] }}" disabled>
-                        <span>OCCUPATION</span>
-                    </div>
-                    <div class="inputBox email">
-                        <input type="email" required="required" name="email" value="{{ patient[17] }}" disabled>
-                        <span>EMAIL</span>
-                    </div>
-                    <div class="inputBox c_number">
-                        <input type="text" required="required" name="contact_num" value="{{ patient[18] }}" disabled>
-                        <span>PATIENT CONTACT NUMBER</span>
-                    </div>
-                </div>
-            
-                <div class="p_row fifthRow">
-                    <div class="inputBox p_address">
-                        <input type="text" required="required" name="p_address" value="{{ patient[10] }}" disabled>
-                        <span>CURRENT ADDRESS</span>
-                    </div>
-                    <div class="inputBox nationality">
-                        <select class="nationality" name="nationality" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="AMERICAN" {% if patient[11] == "AMERICAN" %} selected {% endif %}>AMERICAN</option>
-                            <option value="BRITISH" {% if patient[11] == "BRITISH" %} selected {% endif %}>BRITISH</option>
-                            <option value="CANADIAN" {% if patient[11] == "CANADIAN" %} selected {% endif %}>CANADIAN</option>
-                            <option value="AUSTRALIAN" {% if patient[11] == "AUSTRALIAN" %} selected {% endif %}>AUSTRALIAN</option>
-                            <option value="FRENCH" {% if patient[11] == "FRENCH" %} selected {% endif %}>FRENCH</option>
-                            <option value="GERMAN" {% if patient[11] == "GERMAN" %} selected {% endif %}>GERMAN</option>
-                            <option value="JAPANESE" {% if patient[11] == "JAPANESE" %} selected {% endif %}>JAPANESE</option>
-                            <option value="CHINESE" {% if patient[11] == "CHINESE" %} selected {% endif %}>CHINESE</option>
-                            <option value="RUSSIAN" {% if patient[11] == "RUSSIAN" %} selected {% endif %}>RUSSIAN</option>
-                            <option value="BRAZILIAN" {% if patient[11] == "BRAZILIAN" %} selected {% endif %}>BRAZILIAN</option>
-                            <option value="INDIAN" {% if patient[11] == "INDIAN" %} selected {% endif %}>INDIAN</option>
-                            <option value="SPANISH" {% if patient[11] == "SPANISH" %} selected {% endif %}>SPANISH</option>
-                            <option value="ITALIAN" {% if patient[11] == "ITALIAN" %} selected {% endif %}>ITALIAN</option>
-                            <option value="MEXICAN" {% if patient[11] == "MEXICAN" %} selected {% endif %}>MEXICAN</option>
-                            <option value="SOUTH AFRICAN" {% if patient[11] == "SOUTH AFRICAN" %} selected {% endif %}>SOUTH AFRICAN</option>
-                            <option value="NIGERIAN" {% if patient[11] == "NIGERIAN" %} selected {% endif %}>NIGERIAN</option>
-                            <option value="EGYPTIAN" {% if patient[11] == "EGYPTIAN" %} selected {% endif %}>EGYPTIAN</option>
-                            <option value="SWEDISH" {% if patient[11] == "SWEDISH" %} selected {% endif %}>SWEDISH</option>
-                            <option value="TURKISH" {% if patient[11] == "TURKISH" %} selected {% endif %}>TURKISH</option>
-                            <option value="ARGENTINIAN" {% if patient[11] == "ARGENTINIAN" %} selected {% endif %}>ARGENTINIAN</option>
-                            <option value="KOREAN" {% if patient[11] == "KOREAN" %} selected {% endif %}>KOREAN</option>
-                            <option value="GREEK" {% if patient[11] == "GREEK" %} selected {% endif %}>GREEK</option>
-                            <option value="NORWEGIAN" {% if patient[11] == "NORWEGIAN" %} selected {% endif %}>NORWEGIAN</option>
-                            <option value="DUTCH" {% if patient[11] == "DUTCH" %} selected {% endif %}>DUTCH</option>
-                            <option value="SWISS" {% if patient[11] == "SWISS" %} selected {% endif %}>SWISS</option>
-                            <option value="POLISH" {% if patient[11] == "POLISH" %} selected {% endif %}>POLISH</option>
-                            <option value="FILIPINO" {% if patient[11] == "FILIPINO" %} selected {% endif %}>FILIPINO</option>
-                            <option value="VIETNAMESE" {% if patient[11] == "VIETNAMESE" %} selected {% endif %}>VIETNAMESE</option>
-                            <option value="MALAYSIAN" {% if patient[11] == "MALAYSIAN" %} selected {% endif %}>MALAYSIAN</option>
-                            <option value="THAI" {% if patient[11] == "THAI" %} selected {% endif %}>THAI</option>
-                        </select>
-                        <span>NATIONALITY</span>
-                    </div>
-                </div>
-            
-                <div class="p_row sixthRow"> 
-                    <div class="inputBox e_person">
-                        <input type="text" required="required" name="e_person" value="{{ patient[13] }}" disabled>
-                        <span>EMERGENCY CONTACT PERSON</span>
-                    </div>
-                    <div class="inputBox relationship">
-                        <select class="relationship" name="relationship" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="MOTHER" {% if patient[14] == "MOTHER" %} selected {% endif %}>MOTHER</option>
-                            <option value="FATHER" {% if patient[14] == "FATHER" %} selected {% endif %}>FATHER</option>
-                            <option value="DAUGHTER" {% if patient[14] == "DAUGHTER" %} selected {% endif %}>DAUGHTER</option>
-                            <option value="SON" {% if patient[14] == "SON" %} selected {% endif %}>SON</option>
-                            <option value="SISTER" {% if patient[14] == "SISTER" %} selected {% endif %}>SISTER</option>
-                            <option value="BROTHER" {% if patient[14] == "BROTHER" %} selected {% endif %}>BROTHER</option>
-                            <option value="GRANDMOTHER" {% if patient[14] == "GRANDMOTHER" %} selected {% endif %}>GRANDMOTHER</option>
-                            <option value="GRANDFATHER" {% if patient[14] == "GRANDFATHER" %} selected {% endif %}>GRANDFATHER </option>
-                            <option value="GRANDSON" {% if patient[14] == "GRANDSON" %} selected {% endif %}>GRANDSON</option>
-                            <option value="GRANDDAUGHTER" {% if patient[14] == "GRANDDAUGHTER" %} selected {% endif %}>GRANDDAUGHTER </option>
-                            <option value="AUNT" {% if patient[14] == "AUNT" %} selected {% endif %}>AUNT</option>
-                            <option value="UNCLE" {% if patient[14] == "UNCLE" %} selected {% endif %}>UNCLE </option>
-                            <option value="NIECE" {% if patient[14] == "NIECE" %} selected {% endif %}>NIECE</option>
-                            <option value="NEPHEW" {% if patient[14] == "NEPHEW" %} selected {% endif %}>NEPHEW </option>
-                            <option value="COUSIN" {% if patient[14] == "COUSIN" %} selected {% endif %}>COUSIN </option>
-                            <option value="GUARDIAN" {% if patient[14] == "GUARDIAN" %} selected {% endif %}>GUARDIAN </option>
-                        </select>
-                        <span>RELATIONSHIP TO PATIENT</span>
-                    </div>
-                    <div class="inputBox e_number">
-                        <input type="text" required="required" name="e_number" value="{{ patient[15] }}" disabled>
-                        <span>CONTACT NUMBER</span>
-                    </div>
-                </div>
+        <form action="{{ url_for('doctor.patient_record') }}" method="POST">
+            {{ PatientForm.csrf_token }}
+
+            <!-- PATIENT ID -->
+            <div class="inputBox code" style="display: none;">
+                <input disabled name="patient_id" value="{{ patient[0] }}">
+                <input hidden name="patient_id" value="{{ patient[0] }}" >
             </div>
 
-            <div class="btn-container">
-                <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+            <!-- PATIENT INFORMATION -->
+            <div class="patient-bg">
+
+                <div class="group-info">
+                    <div class="p_row firstRow">
+                        <div class="inputBox fName">
+                            <input type="text" required="required" name="first_name" value="{{ patient[1] }}" disabled>
+                            <span>FIRST NAME</span>
+                        </div>
+                        <div class="inputBox mName">
+                            <input type="text" required="required" name="middle_name" value="{{ patient[2] }}" disabled>
+                            <span>MIDDLE NAME</span>
+                        </div>
+                        <div class="inputBox lName">
+                            <input type="text" required="required" name="last_name" value="{{ patient[3] }}" disabled>
+                            <span>LAST NAME</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row secondRow">
+                        <div class="inputBox age">
+                            <input type="number" required="required" name="age" value="{{ patient[4] }}" disabled>
+                            <span>AGE</span>
+                        </div>
+                        <div class="inputBox status">
+                            <select class="status" name="civil_status" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="SINGLE" {% if patient[5] == "SINGLE" %} selected {% endif %}>SINGLE</option>
+                                <option value="MARRIED" {% if patient[5] == "MARRIED" %} selected {% endif %}>MARRIED</option>
+                                <option value="SEPARATED" {% if patient[5] == "SEPARATED" %} selected {% endif %}>SEPARATED</option>
+                                <option value="WIDOW/ER" {% if patient[5] == "WIDOW/ER" %} selected {% endif %}>WIDOW/ER</option>
+                            </select>
+                            <span>CIVIL STATUS</span>
+                        </div>
+                        <div class="inputBox gender">
+                            <select class="gender" name="gender" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="FEMALE" {% if patient[6] == "FEMALE" %} selected {% endif %}>FEMALE</option>
+                                <option value="MALE" {% if patient[6] == "MALE" %} selected {% endif %}>MALE</option>
+                            </select>
+                            <span>GENDER</span>
+                        </div>
+                        <div class="inputBox bloodType">
+                            <select class="bloodType" name="bloodType" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="A+" {% if patient[7] == "A+" %} selected {% endif %}>A+</option>
+                                <option value="A-" {% if patient[7] == "A-" %} selected {% endif %}>A-</option>
+                                <option value="B+" {% if patient[7] == "B+" %} selected {% endif %}>B+</option>
+                                <option value="B-" {% if patient[7] == "B-" %} selected {% endif %}>B-</option>
+                                <option value="AB+" {% if patient[7] == "AB+" %} selected {% endif %}>AB+</option>
+                                <option value="AB-" {% if patient[7] == "AB-" %} selected {% endif %}>AB-</option>
+                                <option value="O+" {% if patient[7] == "O+" %} selected {% endif %}>O+</option>
+                                <option value="O-" {% if patient[7] == "O-" %} selected {% endif %}>O-</option>
+                            </select>
+                            <span>BLOOD TYPE</span>
+                        </div>
+                        <div class="inputBox religion">
+                            <select class="religion" name="religion" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="BAPTIST" {% if patient[12] == "BAPTIST" %} selected {% endif %}>BAPTIST</option>
+                                <option value="BORN AGAIN" {% if patient[12] == "BORN AGAIN" %} selected {% endif %}>BORN AGAIN</option>
+                                <option value="IGLESIA NI KRISTO" {% if patient[12] == "IGLESIA NI KRISTO" %} selected {% endif %}>IGLESIA NI KRISTO</option>
+                                <option value="ISLAM" {% if patient[12] == "ISLAM" %} selected {% endif %}>ISLAM</option>
+                                <option value="JEHOVAH'S WITNESS" {% if patient[12] == "JEHOVAH'S WITNESS" %} selected {% endif %}>JEHOVAH'S WITNESS</option>
+                                <option value="METHODIST" {% if patient[12] == "METHODIST" %} selected {% endif %}>METHODIST</option>
+                                <option value="PENTECOSTAL" {% if patient[12] == "PENTECOSTAL" %} selected {% endif %}>PENTECOSTAL</option>
+                                <option value="PROTESTANT" {% if patient[12] == "PROTESTANT" %} selected {% endif %}>PROTESTANT</option>
+                                <option value="ROMAN CATHOLIC" {% if patient[12] == "ROMAN CATHOLIC" %} selected {% endif %}>ROMAN CATHOLIC</option>
+                                <option value="SEVENTH-DAY ADVENTIST" {% if patient[12] == "SEVENTH-DAY ADVENTIST" %} selected {% endif %}>SEVENTH-DAY ADVENTIST</option>
+                                <option value="OTHER" {% if patient[12] == "OTHER" %} selected {% endif %}>OTHER</option>
+                            </select>
+                            <span>RELIGION</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row thirdRow">
+                        <div class="inputBox birth_place">
+                            <input type="text" required="required" name="birth_place" value="{{ patient[8] }}" disabled>
+                            <span>PLACE OF BIRTH</span>
+                        </div>
+                        <div class="inputBox dob">
+                            <input type="date" class="text" name="birth_date" autocomplete="bDate" spellcheck="false" value="{{ patient[9] }}" disabled>
+                            <span>DATE OF BIRTH</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row fourthRow">
+                        <div class="inputBox job">
+                            <input type="text" required="required" name="occupation" value="{{ patient[16] }}" disabled>
+                            <span>OCCUPATION</span>
+                        </div>
+                        <div class="inputBox email">
+                            <input type="email" required="required" name="email" value="{{ patient[17] }}" disabled>
+                            <span>EMAIL</span>
+                        </div>
+                        <div class="inputBox c_number">
+                            <input type="text" required="required" name="contact_num" value="{{ patient[18] }}" disabled>
+                            <span>PATIENT CONTACT NUMBER</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row fifthRow">
+                        <div class="inputBox p_address">
+                            <input type="text" required="required" name="p_address" value="{{ patient[10] }}" disabled>
+                            <span>CURRENT ADDRESS</span>
+                        </div>
+                        <div class="inputBox nationality">
+                            <select class="nationality" name="nationality" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="AMERICAN" {% if patient[11] == "AMERICAN" %} selected {% endif %}>AMERICAN</option>
+                                <option value="BRITISH" {% if patient[11] == "BRITISH" %} selected {% endif %}>BRITISH</option>
+                                <option value="CANADIAN" {% if patient[11] == "CANADIAN" %} selected {% endif %}>CANADIAN</option>
+                                <option value="AUSTRALIAN" {% if patient[11] == "AUSTRALIAN" %} selected {% endif %}>AUSTRALIAN</option>
+                                <option value="FRENCH" {% if patient[11] == "FRENCH" %} selected {% endif %}>FRENCH</option>
+                                <option value="GERMAN" {% if patient[11] == "GERMAN" %} selected {% endif %}>GERMAN</option>
+                                <option value="JAPANESE" {% if patient[11] == "JAPANESE" %} selected {% endif %}>JAPANESE</option>
+                                <option value="CHINESE" {% if patient[11] == "CHINESE" %} selected {% endif %}>CHINESE</option>
+                                <option value="RUSSIAN" {% if patient[11] == "RUSSIAN" %} selected {% endif %}>RUSSIAN</option>
+                                <option value="BRAZILIAN" {% if patient[11] == "BRAZILIAN" %} selected {% endif %}>BRAZILIAN</option>
+                                <option value="INDIAN" {% if patient[11] == "INDIAN" %} selected {% endif %}>INDIAN</option>
+                                <option value="SPANISH" {% if patient[11] == "SPANISH" %} selected {% endif %}>SPANISH</option>
+                                <option value="ITALIAN" {% if patient[11] == "ITALIAN" %} selected {% endif %}>ITALIAN</option>
+                                <option value="MEXICAN" {% if patient[11] == "MEXICAN" %} selected {% endif %}>MEXICAN</option>
+                                <option value="SOUTH AFRICAN" {% if patient[11] == "SOUTH AFRICAN" %} selected {% endif %}>SOUTH AFRICAN</option>
+                                <option value="NIGERIAN" {% if patient[11] == "NIGERIAN" %} selected {% endif %}>NIGERIAN</option>
+                                <option value="EGYPTIAN" {% if patient[11] == "EGYPTIAN" %} selected {% endif %}>EGYPTIAN</option>
+                                <option value="SWEDISH" {% if patient[11] == "SWEDISH" %} selected {% endif %}>SWEDISH</option>
+                                <option value="TURKISH" {% if patient[11] == "TURKISH" %} selected {% endif %}>TURKISH</option>
+                                <option value="ARGENTINIAN" {% if patient[11] == "ARGENTINIAN" %} selected {% endif %}>ARGENTINIAN</option>
+                                <option value="KOREAN" {% if patient[11] == "KOREAN" %} selected {% endif %}>KOREAN</option>
+                                <option value="GREEK" {% if patient[11] == "GREEK" %} selected {% endif %}>GREEK</option>
+                                <option value="NORWEGIAN" {% if patient[11] == "NORWEGIAN" %} selected {% endif %}>NORWEGIAN</option>
+                                <option value="DUTCH" {% if patient[11] == "DUTCH" %} selected {% endif %}>DUTCH</option>
+                                <option value="SWISS" {% if patient[11] == "SWISS" %} selected {% endif %}>SWISS</option>
+                                <option value="POLISH" {% if patient[11] == "POLISH" %} selected {% endif %}>POLISH</option>
+                                <option value="FILIPINO" {% if patient[11] == "FILIPINO" %} selected {% endif %}>FILIPINO</option>
+                                <option value="VIETNAMESE" {% if patient[11] == "VIETNAMESE" %} selected {% endif %}>VIETNAMESE</option>
+                                <option value="MALAYSIAN" {% if patient[11] == "MALAYSIAN" %} selected {% endif %}>MALAYSIAN</option>
+                                <option value="THAI" {% if patient[11] == "THAI" %} selected {% endif %}>THAI</option>
+                            </select>
+                            <span>NATIONALITY</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row sixthRow"> 
+                        <div class="inputBox e_person">
+                            <input type="text" required="required" name="e_person" value="{{ patient[13] }}" disabled>
+                            <span>EMERGENCY CONTACT PERSON</span>
+                        </div>
+                        <div class="inputBox relationship">
+                            <select class="relationship" name="relationship" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="MOTHER" {% if patient[14] == "MOTHER" %} selected {% endif %}>MOTHER</option>
+                                <option value="FATHER" {% if patient[14] == "FATHER" %} selected {% endif %}>FATHER</option>
+                                <option value="DAUGHTER" {% if patient[14] == "DAUGHTER" %} selected {% endif %}>DAUGHTER</option>
+                                <option value="SON" {% if patient[14] == "SON" %} selected {% endif %}>SON</option>
+                                <option value="SISTER" {% if patient[14] == "SISTER" %} selected {% endif %}>SISTER</option>
+                                <option value="BROTHER" {% if patient[14] == "BROTHER" %} selected {% endif %}>BROTHER</option>
+                                <option value="GRANDMOTHER" {% if patient[14] == "GRANDMOTHER" %} selected {% endif %}>GRANDMOTHER</option>
+                                <option value="GRANDFATHER" {% if patient[14] == "GRANDFATHER" %} selected {% endif %}>GRANDFATHER </option>
+                                <option value="GRANDSON" {% if patient[14] == "GRANDSON" %} selected {% endif %}>GRANDSON</option>
+                                <option value="GRANDDAUGHTER" {% if patient[14] == "GRANDDAUGHTER" %} selected {% endif %}>GRANDDAUGHTER </option>
+                                <option value="AUNT" {% if patient[14] == "AUNT" %} selected {% endif %}>AUNT</option>
+                                <option value="UNCLE" {% if patient[14] == "UNCLE" %} selected {% endif %}>UNCLE </option>
+                                <option value="NIECE" {% if patient[14] == "NIECE" %} selected {% endif %}>NIECE</option>
+                                <option value="NEPHEW" {% if patient[14] == "NEPHEW" %} selected {% endif %}>NEPHEW </option>
+                                <option value="COUSIN" {% if patient[14] == "COUSIN" %} selected {% endif %}>COUSIN </option>
+                                <option value="GUARDIAN" {% if patient[14] == "GUARDIAN" %} selected {% endif %}>GUARDIAN </option>
+                            </select>
+                            <span>RELATIONSHIP TO PATIENT</span>
+                        </div>
+                        <div class="inputBox e_number">
+                            <input type="text" required="required" name="e_number" value="{{ patient[15] }}" disabled>
+                            <span>CONTACT NUMBER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-container">
+                    <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </main>
 
     {% if success %}
         <div id="successModal" class="modal" style="display: block;">

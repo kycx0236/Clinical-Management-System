@@ -65,20 +65,21 @@
         </ul>
     </div>
 
-    <!-- DASHBOARD -->
-    <div class="doctor-bg">
-        <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
-        <div class="greetings-name">
-            <p>Welcome,</p>
-            <h2>{{ info[0] }}</h2>
+    <main>
+        <!-- DASHBOARD -->
+        <div class="doctor-bg">
+            <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
+            <div class="greetings-name">
+                <p>Welcome,</p>
+                <h2>{{ info[0] }}</h2>
+            </div>
+            <div class="greetings">
+                <p>Have a nice day at work!</p>
+            </div>  
         </div>
-        <div class="greetings">
-            <p>Have a nice day at work!</p>
-        </div>  
-    </div>
-    <p class="date-time" id="demo"></p>
+        <p class="date-time" id="demo"></p>
+    </main>
     
-
     <script>
         // TO DISPLAY THE DATE
         function displayDateAndTime() {

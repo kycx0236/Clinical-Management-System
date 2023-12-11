@@ -66,203 +66,204 @@
         </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-    <div class="navbar"></div>
-    
-    <a class="back-icon" href="{{ url_for('receptionist.patient') }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
-
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">PATIENT INFORMATION</a>
-        </li>
-    </ul>
-
-    <form action="{{ url_for('receptionist.add_patient') }}" method="POST">
-        {{ PatientForm.csrf_token }}
-
-        <div class="patient-bg">
-
-            <div class="group-info">
-                <div class="p_row firstRow">
-                    <div class="inputBox fName">
-                        <input type="text" required="required" name="first_name">
-                        <span>FIRST NAME</span>
-                    </div>
-                    <div class="inputBox mName">
-                        <input type="text" required="required" name="middle_name">
-                        <span>MIDDLE NAME</span>
-                    </div>
-                    <div class="inputBox lName">
-                        <input type="text" required="required" name="last_name">
-                        <span>LAST NAME</span>
-                    </div>
-                </div>
-            
-                <div class="p_row secondRow">
-                    <div class="inputBox age">
-                        <input type="number" required="required" name="age">
-                        <span>AGE</span>
-                    </div>
-                    <div class="inputBox status">
-                        <span>CIVIL STATUS</span>
-                        <select class="status" name="civil_status" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="SINGLE">SINGLE</option>
-                            <option value="MARRIED">MARRIED</option>
-                            <option value="SEPARATED">SEPARATED</option>
-                            <option value="WIDOW/ER">WIDOW/ER</option>
-                        </select>
-                    </div>
-                    <div class="inputBox gender">
-                        <span>GENDER</span>
-                        <select class="gender" name="gender" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="FEMALE">FEMALE</option>
-                            <option value="MALE">MALE</option>
-                        </select>
-                    </div>
-                    <div class="inputBox bloodType">
-                        <span>BLOOD TYPE</span>
-                        <select class="bloodType" name="bloodType" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                        </select>
-                    </div>
-                    <div class="inputBox religion">
-                        <span>RELIGION</span>
-                        <select class="religion" name="religion" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="BAPTIST">BAPTIST</option>
-                            <option value="BORN AGAIN">BORN AGAIN</option>
-                            <option value="IGLESIA NI KRISTO">IGLESIA NI KRISTO</option>
-                            <option value="ISLAM">ISLAM</option>
-                            <option value="JEHOVAH'S WITNESS">JEHOVAH'S WITNESS</option>
-                            <option value="METHODIST">METHODIST</option>
-                            <option value="PENTECOSTAL">PENTECOSTAL</option>
-                            <option value="PROTESTANT">PROTESTANT</option>
-                            <option value="ROMAN CATHOLIC">ROMAN CATHOLIC</option>
-                            <option value="ADVENTIST">SEVENTH-DAY ADVENTIST</option>
-                            <option value="OTHER">OTHER</option>
-                        </select>
-                    </div>
-                </div>
-            
-                <div class="p_row thirdRow">
-                    <div class="inputBox birth_place">
-                        <input type="text" required="required" name="birth_place">
-                        <span>PLACE OF BIRTH</span>
-                    </div>
-                    <div class="inputBox dob">
-                        <input type="date" required="required" name="birth_date" autocomplete="off" spellcheck="false">
-                        <span>DATE OF BIRTH</span>
-                    </div>
-                </div>
-            
-                <div class="p_row fourthRow">
-                    <div class="inputBox job">
-                        <input type="text" required="required" name="occupation">
-                        <span>OCCUPATION</span>
-                    </div>
-                    <div class="inputBox email">
-                        <input type="email" required="required" name="email">
-                        <span>EMAIL</span>
-                    </div>
-                    <div class="inputBox c_number">
-                        <input type="text" required="required" name="contact_num">
-                        <span>PATIENT CONTACT NUMBER</span>
-                    </div>
-                </div>
-            
-                <div class="p_row fifthRow">
-                    <div class="inputBox p_address">
-                        <input type="text" required="required" name="p_address">
-                        <span>CURRENT ADDRESS</span>
-                    </div>
-                    <div class="inputBox nationality">
-                        <span>NATIONALITY</span>
-                        <select class="nationality" name="nationality" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="AMERICAN">AMERICAN</option>
-                            <option value="ARGENTINIAN">ARGENTINIAN</option>
-                            <option value="AUSTRALIAN">AUSTRALIAN</option>
-                            <option value="BRAZILIAN">BRAZILIAN</option>
-                            <option value="BRITISH">BRITISH</option>
-                            <option value="CANADIAN">CANADIAN</option>
-                            <option value="CHINESE">CHINESE</option>
-                            <option value="DUTCH">DUTCH</option>
-                            <option value="EGYPTIAN">EGYPTIAN</option>
-                            <option value="FILIPINO">FILIPINO</option>
-                            <option value="FRENCH">FRENCH</option>
-                            <option value="GERMAN">GERMAN</option>
-                            <option value="GREEK">GREEK</option>
-                            <option value="INDIAN">INDIAN</option>
-                            <option value="ITALIAN">ITALIAN</option>
-                            <option value="JAPANESE">JAPANESE</option>
-                            <option value="KOREAN">KOREAN</option>
-                            <option value="MALAYSIAN">MALAYSIAN</option>
-                            <option value="MEXICAN">MEXICAN</option>
-                            <option value="NIGERIAN">NIGERIAN</option>
-                            <option value="NORWEGIAN">NORWEGIAN</option>
-                            <option value="POLISH">POLISH</option>
-                            <option value="RUSSIAN">RUSSIAN</option>
-                            <option value="SOUTH AFRICAN">SOUTH AFRICAN</option>
-                            <option value="SPANISH">SPANISH</option>
-                            <option value="SWEDISH">SWEDISH</option>
-                            <option value="SWISS">SWISS</option>
-                            <option value="THAI">THAI</option>
-                            <option value="TURKISH">TURKISH</option>
-                            <option value="VIETNAMESE">VIETNAMESE</option>
-                        </select>
-                    </div>
-                </div>
-            
-                <div class="p_row sixthRow"> 
-                    <div class="inputBox e_person">
-                        <input type="text" required="required" name="e_person">
-                        <span>EMERGENCY CONTACT PERSON</span>
-                    </div>
-                    <div class="inputBox relationship">
-                        <span>RELATIONSHIP TO PATIENT</span>
-                        <select class="relationship" name="relationship" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="AUNT">AUNT</option>
-                            <option value="BROTHER">BROTHER</option>
-                            <option value="COUSIN">COUSIN </option>
-                            <option value="DAUGHTER">DAUGHTER</option>
-                            <option value="FATHER">FATHER</option>
-                            <option value="GRANDFATHER">GRANDFATHER </option>
-                            <option value="GRANDMOTHER">GRANDMOTHER</option>
-                            <option value="GRANDDAUGHTER">GRANDDAUGHTER </option>
-                            <option value="GRANDSON">GRANDSON</option>
-                            <option value="GUARDIAN">GUARDIAN </option>
-                            <option value="MOTHER">MOTHER</option>
-                            <option value="NEPHEW">NEPHEW </option>
-                            <option value="NIECE">NIECE</option>
-                            <option value="SISTER">SISTER</option>
-                            <option value="SON">SON</option>
-                            <option value="UNCLE">UNCLE </option>
-                        </select>
-                    </div>
-                    <div class="inputBox e_number">
-                        <input type="text" required="required" name="e_number">
-                        <span>CONTACT NUMBER</span>
-                    </div>
-                </div>
-            </div>
-            <div class="btn-container">
-                <button class="btn-submit" id="modalButton" type="submit">SUBMIT</button>
-            </div>
+    <main>
+        <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+        <div class="navbar">
+            <ul class="nav nav-underline">
+                <a class="back-icon" href="{{ url_for('receptionist.patient') }}">
+                    <img src="{{ url_for('static', filename='images/Back.png') }}">
+                </a>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">PATIENT INFORMATION</a>
+                </li>
+            </ul>
         </div>
-    </form>
+
+        <form action="{{ url_for('receptionist.add_patient') }}" method="POST">
+            {{ PatientForm.csrf_token }}
+
+            <div class="patient-bg">
+
+                <div class="group-info">
+                    <div class="p_row firstRow">
+                        <div class="inputBox fName">
+                            <input type="text" required="required" name="first_name">
+                            <span>FIRST NAME</span>
+                        </div>
+                        <div class="inputBox mName">
+                            <input type="text" required="required" name="middle_name">
+                            <span>MIDDLE NAME</span>
+                        </div>
+                        <div class="inputBox lName">
+                            <input type="text" required="required" name="last_name">
+                            <span>LAST NAME</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row secondRow">
+                        <div class="inputBox age">
+                            <input type="number" required="required" name="age">
+                            <span>AGE</span>
+                        </div>
+                        <div class="inputBox status">
+                            <span>CIVIL STATUS</span>
+                            <select class="status" name="civil_status" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="SINGLE">SINGLE</option>
+                                <option value="MARRIED">MARRIED</option>
+                                <option value="SEPARATED">SEPARATED</option>
+                                <option value="WIDOW/ER">WIDOW/ER</option>
+                            </select>
+                        </div>
+                        <div class="inputBox gender">
+                            <span>GENDER</span>
+                            <select class="gender" name="gender" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="FEMALE">FEMALE</option>
+                                <option value="MALE">MALE</option>
+                            </select>
+                        </div>
+                        <div class="inputBox bloodType">
+                            <span>BLOOD TYPE</span>
+                            <select class="bloodType" name="bloodType" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="inputBox religion">
+                            <span>RELIGION</span>
+                            <select class="religion" name="religion" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="BAPTIST">BAPTIST</option>
+                                <option value="BORN AGAIN">BORN AGAIN</option>
+                                <option value="IGLESIA NI KRISTO">IGLESIA NI KRISTO</option>
+                                <option value="ISLAM">ISLAM</option>
+                                <option value="JEHOVAH'S WITNESS">JEHOVAH'S WITNESS</option>
+                                <option value="METHODIST">METHODIST</option>
+                                <option value="PENTECOSTAL">PENTECOSTAL</option>
+                                <option value="PROTESTANT">PROTESTANT</option>
+                                <option value="ROMAN CATHOLIC">ROMAN CATHOLIC</option>
+                                <option value="ADVENTIST">SEVENTH-DAY ADVENTIST</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="p_row thirdRow">
+                        <div class="inputBox birth_place">
+                            <input type="text" required="required" name="birth_place">
+                            <span>PLACE OF BIRTH</span>
+                        </div>
+                        <div class="inputBox dob">
+                            <input type="date" required="required" name="birth_date" autocomplete="off" spellcheck="false">
+                            <span>DATE OF BIRTH</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row fourthRow">
+                        <div class="inputBox job">
+                            <input type="text" required="required" name="occupation">
+                            <span>OCCUPATION</span>
+                        </div>
+                        <div class="inputBox email">
+                            <input type="email" required="required" name="email">
+                            <span>EMAIL</span>
+                        </div>
+                        <div class="inputBox c_number">
+                            <input type="text" required="required" name="contact_num">
+                            <span>PATIENT CONTACT NUMBER</span>
+                        </div>
+                    </div>
+                
+                    <div class="p_row fifthRow">
+                        <div class="inputBox p_address">
+                            <input type="text" required="required" name="p_address">
+                            <span>CURRENT ADDRESS</span>
+                        </div>
+                        <div class="inputBox nationality">
+                            <span>NATIONALITY</span>
+                            <select class="nationality" name="nationality" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="AMERICAN">AMERICAN</option>
+                                <option value="ARGENTINIAN">ARGENTINIAN</option>
+                                <option value="AUSTRALIAN">AUSTRALIAN</option>
+                                <option value="BRAZILIAN">BRAZILIAN</option>
+                                <option value="BRITISH">BRITISH</option>
+                                <option value="CANADIAN">CANADIAN</option>
+                                <option value="CHINESE">CHINESE</option>
+                                <option value="DUTCH">DUTCH</option>
+                                <option value="EGYPTIAN">EGYPTIAN</option>
+                                <option value="FILIPINO">FILIPINO</option>
+                                <option value="FRENCH">FRENCH</option>
+                                <option value="GERMAN">GERMAN</option>
+                                <option value="GREEK">GREEK</option>
+                                <option value="INDIAN">INDIAN</option>
+                                <option value="ITALIAN">ITALIAN</option>
+                                <option value="JAPANESE">JAPANESE</option>
+                                <option value="KOREAN">KOREAN</option>
+                                <option value="MALAYSIAN">MALAYSIAN</option>
+                                <option value="MEXICAN">MEXICAN</option>
+                                <option value="NIGERIAN">NIGERIAN</option>
+                                <option value="NORWEGIAN">NORWEGIAN</option>
+                                <option value="POLISH">POLISH</option>
+                                <option value="RUSSIAN">RUSSIAN</option>
+                                <option value="SOUTH AFRICAN">SOUTH AFRICAN</option>
+                                <option value="SPANISH">SPANISH</option>
+                                <option value="SWEDISH">SWEDISH</option>
+                                <option value="SWISS">SWISS</option>
+                                <option value="THAI">THAI</option>
+                                <option value="TURKISH">TURKISH</option>
+                                <option value="VIETNAMESE">VIETNAMESE</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="p_row sixthRow"> 
+                        <div class="inputBox e_person">
+                            <input type="text" required="required" name="e_person">
+                            <span>EMERGENCY CONTACT PERSON</span>
+                        </div>
+                        <div class="inputBox relationship">
+                            <span>RELATIONSHIP TO PATIENT</span>
+                            <select class="relationship" name="relationship" required="required">
+                                <option value="" disabled selected></option>
+                                <option value="AUNT">AUNT</option>
+                                <option value="BROTHER">BROTHER</option>
+                                <option value="COUSIN">COUSIN </option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="GRANDFATHER">GRANDFATHER </option>
+                                <option value="GRANDMOTHER">GRANDMOTHER</option>
+                                <option value="GRANDDAUGHTER">GRANDDAUGHTER </option>
+                                <option value="GRANDSON">GRANDSON</option>
+                                <option value="GUARDIAN">GUARDIAN </option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="NEPHEW">NEPHEW </option>
+                                <option value="NIECE">NIECE</option>
+                                <option value="SISTER">SISTER</option>
+                                <option value="SON">SON</option>
+                                <option value="UNCLE">UNCLE </option>
+                            </select>
+                        </div>
+                        <div class="inputBox e_number">
+                            <input type="text" required="required" name="e_number">
+                            <span>CONTACT NUMBER</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button class="btn-submit" id="modalButton" type="submit">SUBMIT</button>
+                </div>
+            </div>
+        </form>
+    </main>
     
     {% if success %}
         <div id="successModal" class="modal" style="display: block;">

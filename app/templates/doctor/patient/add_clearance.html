@@ -65,18 +65,18 @@
         </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-    <div class="navbar"></div>
-    
-    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
+    <main>
+        <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+        <div class="navbar">
+            <ul class="nav nav-underline">
+                <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
+                    <img src="{{ url_for('static', filename='images/Back.png') }}">
+                </a>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">MEDICAL CLEARANCE</a>
+                </li>
+            </ul>
+        </div>
+    </main>
 
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">MEDICAL CLEARANCE</a>
-        </li>
-    </ul>
-
-    
 {% endblock %}
