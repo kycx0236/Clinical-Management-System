@@ -78,6 +78,7 @@
                         <div class="action-icon-container">
                             <!-- VIEW INFO -->
                             <form method="GET" action="/admin/user_info/">
+                                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                                 <div class="delete-icon">
                                     <input id="user_id" name="user_id" value="{{ user['id'] }}" type="hidden">
                                     <button type="submit" style="background: none; border: none;">
@@ -88,6 +89,7 @@
 
                             <!-- DELETE INFO-->
                             <form id="deleteForm_{{ user.id }}" method="POST" action="{{ url_for('admin.delete_user') }}">
+                                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                                 <div class="delete-icon">
                                     <input id="user_id" name="user_id" value="{{ user.id }}" type="hidden">
                                     <button type="button" onclick="confirmation('{{ user.id }}')" style="background: none; border: none;">

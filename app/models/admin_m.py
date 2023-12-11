@@ -1,7 +1,8 @@
 from app import mysql
-from werkzeug.security import generate_password_hash
 import string
 import random
+from flask_mail import Message
+from app import mail
 
 class admin():
 
@@ -52,6 +53,19 @@ class admin():
         characters = string.ascii_letters + string.digits + special_characters
         password = ''.join(random.choice(characters) for _ in range(length))
         return password
+
+    def send_message(email, password):
+        message = Message(
+            subject='CMS User Account',
+            recipients=[email],
+            sender=('Admin', 'cms_admin@gmail.com')
+        )
+        
+        message.html = "<p>Account Password in CMS</p><p>Password: {}</p>".format(password)
+        mail.send(message)
+        
+        return None
+
 
     def delete_user_record(user_id):
         cursor = mysql.connection.cursor()

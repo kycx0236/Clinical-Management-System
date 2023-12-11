@@ -47,32 +47,33 @@ def add_user():
     hashed_password = generate_password_hash(password)
 
     if request.method == 'POST':
-       username = form.username.data
-       first_name = form.first_name.data
-       middle_name = form.middle_name.data
-       last_name = form.last_name.data
-       email = form.email.data
-       gender = form.gender.data
-       user_role = form.user_role.data
+        username = form.username.data
+        first_name = form.first_name.data
+        middle_name = form.middle_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        gender = form.gender.data
+        user_role = form.user_role.data
 
-       new_user = admin()
-       new_user.username = username
-       new_user.password = hashed_password
-       new_user.first_name = first_name
-       new_user.middle_name = middle_name
-       new_user.last_name = last_name
-       new_user.email = email
-       new_user.gender = gender
-       new_user.user_role = user_role
+        new_user = admin()
+        new_user.username = username
+        new_user.password = hashed_password
+        new_user.first_name = first_name
+        new_user.middle_name = middle_name
+        new_user.last_name = last_name
+        new_user.email = email
+        new_user.gender = gender
+        new_user.user_role = user_role
 
-       result = new_user.add_user()
-
-       if result:
-           # Render the template with the hashed password
-           return render_template("admin/user_management/add_user.html", success=True, UserForm=form, password=hashed_password)
-       else:
-           # Render the template with the hashed password
-           return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
+        result = new_user.add_user()
+        admin.send_message(email,password)
+       
+        if result:
+            # Render the template with the hashed password
+            return render_template("admin/user_management/add_user.html", success=True, UserForm=form, password=hashed_password)
+        else:
+            # Render the template with the hashed password
+            return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
   
     # Render the template with the hashed password
     return render_template("admin/user_management/add_user.html", UserForm=form, password=hashed_password)
