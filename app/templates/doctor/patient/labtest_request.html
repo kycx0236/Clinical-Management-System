@@ -50,19 +50,21 @@
                 </li>
             </a>
         </ul>
-        <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
-            <div>
-                <h3>{{ doctor[0] }}</h3>
-                <p>{{ doctor[2] }}</p>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
+                <div>
+                    <h3>{{ doctor[0] }}</h3>
+                    <p>{{ doctor[2] }}</p>
+                </div>
             </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
         </div>
-        <ul>
-            <li class="logout" id="logoutButton">
-                <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                <p>Logout</p>
-            </li>
-        </ul>
     </div>
 
     <main>
