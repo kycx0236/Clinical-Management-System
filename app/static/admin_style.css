@@ -14,9 +14,9 @@
 
 .update-icon {
     position: absolute;
-    top: -25px;
-    right: 30px;
-    width: 110px;
+    top: 15px;
+    right: 25px;
+    width: 25px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -27,18 +27,19 @@
 
 /* -------------------------------------------- USER TABLE -------------------------------------------- */
 .user-header p {
-    position: absolute;
+    position: relative;
     top: 20px;
-    left: 120px;
+    text-align: left;
+    padding: 0px 25px;
     font-weight: 900;
     font-size: 18px;
 }
 
 .user-table {
-    width: 91%;
-    position: absolute; 
-    top: 90px; 
-    right: 35px;
+    position: relative; 
+    margin-top: 15px;
+    margin-left: 25px;
+    width: 97%;
     line-height: 1.5;
     color: var(--darkBlue);
     background-color: white;
@@ -51,11 +52,11 @@
 
 /* -------------------------------------------- USER INFORMATION-------------------------------------------- */
 .back-icon img {
-    position: absolute;
+    position: relative;
     width: 20px;
     z-index: 1;
-    top: 23px;
-    left: 145px;
+    top: 16px;
+    right: 15px;
 }
 
 .back-icon img:active {
@@ -64,11 +65,10 @@
 
 /* --------------------------- PATIENT DETAILS NAVBAR ---------------------------- */
 .nav-underline {
+    position: relative;
     display: flex;
-    margin-right: 150px;
     top: 7px;
-    left: 200px;
-    position: absolute;
+    margin-left: 40px;
 }
 
 .nav-item:active {
@@ -88,12 +88,7 @@
 }
 
 .user-bg {
-    position: absolute;
-    width: 1230px;  
-    height: 610px; 
-    background-color: white;
-    top: 85px;
-    left: 200px;
+    position: relative;
 }
 
 /* Input boxes */
@@ -106,7 +101,7 @@
 }
 
 .inputBox.fName, .inputBox.mName, .inputBox.lName {
-    width: 300px;
+    width: 310px;
 }
 
 /* dropdown styles */
@@ -119,18 +114,17 @@ input, select {
     font-size: 1em;
 }
 
-.inputBox {
-    margin: 20px 20px  ; 
-}
-
 .u_row {
-    display: flex;
+    position: relative;
     justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: 30px;
 }
 
 .u_row.firstRow {
-    margin-top: 60px;
-    gap: 10px; 
+    margin-top: 55px;
+    gap: 15px; 
 }
 
 .u_row.secondRow {
@@ -139,5 +133,4 @@ input, select {
 
 .u_row.thirdRow {
     gap: 10px;
-    margin-bottom: 80px; 
 }

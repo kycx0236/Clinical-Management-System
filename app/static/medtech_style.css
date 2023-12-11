@@ -2,11 +2,11 @@
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .notification-container {
-    width: 91%;  
-    height: 420px; 
-    position: absolute;  
-    top: 240px;
-    left: 110px;
+    position: relative;  
+    justify-content: center;
+    align-items: center;
+    width: 98%;
+    height: 360px; 
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -30,11 +30,12 @@
 }
 
 .notif-header {
+    position: relative;
     display: flex;
-    position: absolute;
-    top: 180px;
-    left: 110px;
-    margin-bottom: 25px;
+    top: 20px;
+    width: 50%;
+    left: 20px;
+    margin-bottom: 40px;
 }
 
 .notif-box {
@@ -55,18 +56,12 @@
     border-radius: 100%;
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
 .notif_card {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 1rem;
-    width: 1400px;  
-    margin-left: 0px;
+    width: 1600px;  
     height: 60px;
 }
 
@@ -88,8 +83,7 @@ strong:hover {
 .unread {
     border-left: 3px solid var(--blueB) !important;
     box-shadow: 0 0 1px var(--blueB);
-    width: 1400px;  
-    margin-left: 0px;
+    width: 1600px;   
     height: 60px;
 }
 

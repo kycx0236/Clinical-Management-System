@@ -3,9 +3,9 @@
 /* -------------------------------------------- ADD/UPDATE PATIENT, ADD ASSESSMENT, REQUEST LAB TEST ICON -------------------------------------------- */
 .update-icon {
     position: absolute;
-    top: -25px;
-    right: 30px;
-    width: 110px;
+    top: 15px;
+    right: 25px;
+    width: 25px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -16,11 +16,11 @@
 
 /* -------------------------------------------- BACK ICON -------------------------------------------- */
 .back-icon img {
-    position: absolute;
+    position: relative;
     width: 20px;
     z-index: 1;
-    top: 23px;
-    left: 145px;
+    top: 16px;
+    right: 15px;
 }
 
 .back-icon img:active {
@@ -29,11 +29,10 @@
 
 /* -------------------------------------------- PATIENT DETAILS NAVBAR -------------------------------------------- */
 .nav-underline {
+    position: relative;
     display: flex;
-    margin-right: 150px;
     top: 7px;
-    left: 200px;
-    position: absolute;
+    margin-left: 40px;
 }
 
 .nav-item:active {
@@ -54,10 +53,7 @@
 
 /* -------------------------------------------- PATIENT INFORMATION -------------------------------------------- */
 .patient-bg {
-    position: absolute;
-    width: 91%;
-    top: 90px;
-    left: 110px;
+    position: relative;
 }
 
 /* Input boxes */
@@ -96,7 +92,8 @@ input, select {
 }
 
 .group-info div {
-    top: 5px;
+    position: relative;
+    top: 0px;
     margin-top: 15px;
     justify-content: center;
     align-items: center;
@@ -140,7 +137,7 @@ input, select {
 }
 
 .patient-bg.prescription {
-    height: 1570px;
+    height: 1650px;
 }
 
 /* subheading */
@@ -277,6 +274,7 @@ input, select {
 /* -------------------------------------------- MEDICAL ASSESSMENT -------------------------------------------- */
 .assessment-table {
     position: relative; 
+    margin-top: 10px;
     line-height: 1.5;
     color: var(--darkBlue);
     background-color: white;
@@ -367,74 +365,78 @@ input, select {
 
 /* -------------------------------------------- PRESCRIPTION -------------------------------------------- */
 .cms-logo.prescription {
-    margin-top: 70px;
+    position: relative;
     justify-content: center;
+    margin-top: 50px;
+    margin-bottom: -70px;
     display: flex;
     font-size: 30px;
-    position: relative;
+    border-bottom: 0;
 }
 
 .care {
     color: var(--blueA);
 }
 
-.rx img {
-    width: 100px;
+.head_prescription {
     position: relative;
-    margin-top: 25px;
-    margin-left: 100px;
+    display: flex;
+    top: 100px;
+    justify-content: center;
+}
+
+.body_prescription {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 160px;
+}
+
+.name, .date, .address, .gender_pres {
+    position: relative;
+    display: flex;
+    gap: 10px;
+}
+
+.rx img {
+    position: relative;
+    width: 100px;
+    margin-bottom: 45px;
+}
+
+.line-border {
+    position: relative;
+    top: 50px;
+    border: 1px solid var(--darkBlue);
+    height: 1px;
+    width: 885px;
+}
+
+.foot {
+    position: relative;
+}
+
+.page-break {
+    position: relative;
+    top: 1000px;
+    border: 1px solid var(--darkBlue);
+    height: 1px;
+    width: 1000px;
 }
 
 .doctor {
-    position: absolute;
-    top: 1430px;
-    left: 830px;
+    position: relative;
+    top: 1020px;
     text-decoration: underline;
 }
 
 .license {
-    position: absolute;
-    display: flex;
-    gap: 10px;
-    top: 1460px;
-    left: 830px;
-}
-
-.line-border {
-    border: 1px solid var(--darkBlue);
-    width: 885px;
-    left: 230px;
-    top: 5px;
     position: relative;
-}
-
-/* prescription rows */
-.columnA {
-    position: absolute;
-    top: 190px;
-    left: 230px;
-}
-
-.columnB {
-    position: absolute;
-    top: 190px;
-    left: 330px;
-}
-
-.columnC {
-    position: absolute;
-    top: 190px;
-    left: 920px;
-}
-
-.columnD {
-    position: absolute;
-    top: 190px;
-    left: 1020px;
-}
-
-.columnA.address, .columnB.p_adress, .columnC.gender, .columnD.p_gender  {
-    top: 220px;
+    justify-content: center;
+    display: flex;
+    top: 1030px;
+    gap: 10px;
 }
 
 .p_row.prescriptionA {
@@ -495,14 +497,6 @@ input, select {
     left: 115px;
 }
 
-.page-break {
-    position: absolute; 
-    top: 1400px;
-    border: 1px solid var(--darkBlue);
-    width: 1000px;
-    left: 110px;
-}
-
 @media print {
     @page {
         size: 8.5in 11in;
@@ -530,13 +524,19 @@ input, select {
     }
 }
 
-.print-icon img {
+.print-icon {
     position: absolute;
-    top: -102px;
-    right: 40px;
-    width: 100px;
+    top: 15px;
+    right: 75px;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+}
+
+.print-icon img {
+    width: 25px;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: pointer;    
 }
 
 .print-icon img:active {
@@ -544,8 +544,8 @@ input, select {
 }
 
 .prescription-table {
-    margin-top: 50px;
     position: relative; 
+    margin-top: 50px;
     width: 1020px; 
     font-size: 20px;
 }
@@ -640,14 +640,14 @@ input, select {
 /* SEGMENTED CONTROL */
 
 .segmented-controls {
+    position: relative;
     display: flex;
     overflow: hidden;
     border-radius: 5px;
     width: 1100px;
     justify-content: center;
     border: 2px solid var(--blueC);
-    position: relative;
-    top: 0px;
+    top: 10px;
     transition: all 0.3s ease;
 }
 
