@@ -3,6 +3,7 @@ import string
 import random
 from flask_mail import Message
 from app import mail
+from werkzeug.security import generate_password_hash
 
 class admin():
 
@@ -85,13 +86,28 @@ class admin():
 
         return user
     
-    def update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role):
+    @staticmethod
+    def update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role, new_password=None):
         cursor = mysql.connection.cursor()
 
-        sql = "UPDATE users SET username=%s, password=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
-        cursor.execute(sql, (username, password, first_name, middle_name, last_name, gender, user_role, user_id))
-        mysql.connection.commit()
+        # Check if a new password is provided
+        if new_password:
+            # Send the new password to the user's email
+            email = admin.get_user_info(user_id)[6]  # Replace this with the actual column index for the email in your database
+            admin.send_message(email, new_password)
 
+            # Hash the new password
+            hashed_password = generate_password_hash(new_password)
+
+            # Update the database with the hashed new password
+            sql = "UPDATE users SET password=%s WHERE id=%s"
+            cursor.execute(sql, (hashed_password, user_id))
+        else:
+            # Update the database without changing the password
+            sql = "UPDATE users SET username=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
+            cursor.execute(sql, (username, first_name, middle_name, last_name, gender, user_role, user_id))
+
+        mysql.connection.commit()
         cursor.close()
 
         return True

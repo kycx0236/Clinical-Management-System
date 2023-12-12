@@ -66,7 +66,10 @@
         <!-- USER INFORMATION -->
 
         <div class="user-bg">
-            <div class="group-info">
+
+            <div id="notification" class="flash-message" style="display: none;"></div>
+
+            <div class="group-info">               
 
                 <div class="u_row firstRow">
 
@@ -92,31 +95,38 @@
                         <span>USERNAME</span>
                     </div>
 
-                    <div class="inputBox gender">
-                        <select class="gender" name="gender" required="required" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="male" {% if user[6] == "male" %} selected {% endif %}>Male</option>
-                            <option value="female" {% if user[6] == "female" %} selected {% endif %}>Female</option>
-                        </select>
-                        <span>Gender</span>
+                    <div class="inputBox password">
+                        <input type="text" required="required" name="password" value="{{ user[2] }}" disabled readonly>
+                        <span>PASSWORD</span>
                     </div>
 
+                    <input type="hidden" id="newPassword" name="new_password">
+                    
                 </div>
 
                 <div class="u_row thirdRow">
 
-                    <div class="inputBox password">
-                        <input type="text" required="required" name="password" value="{{ user[2] }}" disabled>
-                        <span>PASSWORD</span>
+                    <div class="inputBox email">
+                        <input type="email" name="email" autocomplete="off" value="{{ user[6] }}" disabled>
+                        <span>Email</span>
+                    </div>
+                    
+                    <div class="inputBox gender">
+                        <select class="gender" name="gender" required="required" disabled>
+                            <option value="" disabled selected></option>
+                            <option value="male" {% if user[7] == "male" %} selected {% endif %}>Male</option>
+                            <option value="female" {% if user[7] == "female" %} selected {% endif %}>Female</option>
+                        </select>
+                        <span>Gender</span>
                     </div>
 
                     <div class="inputBox user_role">
                         <select class="user_role" name="user_role" required="required" disabled>
                             <option value="" disabled selected></option>
-                            <option value="doctor" {% if user[7] == "doctor" %} selected {% endif %}>Doctor</option>
-                            <option value="receptionist" {% if user[7] == "receptionist" %} selected {% endif %}>Receptionist</option>
-                            <option value="medtech" {% if user[7] == "medtech" %} selected {% endif %}>Medtech</option>
-                            <option value="admin" {% if user[7] == "admin" %} selected {% endif %}>Admin</option>
+                            <option value="doctor" {% if user[8] == "doctor" %} selected {% endif %}>Doctor</option>
+                            <option value="receptionist" {% if user[8] == "receptionist" %} selected {% endif %}>Receptionist</option>
+                            <option value="medtech" {% if user[8] == "medtech" %} selected {% endif %}>Medtech</option>
+                            <option value="admin" {% if user[8] == "admin" %} selected {% endif %}>Admin</option>
                         </select>
                         <span>User Role</span>
                     </div>
@@ -126,7 +136,14 @@
             </div>
 
             <div class="btn-container">
-                <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+                <div class="btn-container">
+                    <button class="btn-new-pass" type="button" id="NewPassButton" onclick="generateNewPassword()" style="display: none;" >GENERATE NEW PASSWORD</button>
+
+                </div>
+
+                <div class="btn-container">
+                    <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+                </div>
             </div>
 
             <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
@@ -175,28 +192,37 @@
     {% endif %}
 
     <script>
-        // EDIT BUTTON
+        
+        // BUTTONS
+        let editEnabled = false;
+
         function enableEdit() {
             const inputFields = document.querySelectorAll('.group-info input, .group-info select');
-
             inputFields.forEach((input) => {
                 input.disabled = false;
             });
+
+            const NewPassButton = document.querySelector('#NewPassButton');
+            NewPassButton.style.display = 'block';
 
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'block';
 
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
-            editIcon.setAttribute('onclick', 'disableEdit()'); 
+            editIcon.setAttribute('onclick', 'disableEdit()');
+
+            editEnabled = true;
         }
 
         function disableEdit() {
             const inputFields = document.querySelectorAll('.group-info input, .group-info select');
-
             inputFields.forEach((input) => {
                 input.disabled = true;
             });
+
+            const NewPassButton = document.querySelector('#NewPassButton');
+            NewPassButton.style.display = 'none';
 
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'none';
@@ -204,8 +230,33 @@
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');
-        }
-    </script>
 
+            editEnabled = false;
+        }
+
+        // FOR GENERATING NEW PASSWORD
+        function generateNewPassword() {
+            if (editEnabled) {
+                const length = 12;
+                const specialCharacters = "!@#$%^&*-_+<>?";
+                const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' + specialCharacters;
+
+                const newPassword = Array.from({ length }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+
+                document.getElementById('newPassword').value = newPassword;
+
+                // Display the success Flash message and auto-hide after 8 seconds
+                const flashMessage = document.getElementById('notification');
+                flashMessage.innerHTML = 'New Password is Generated; Click The Update Button to Procceed With The New Password';
+                flashMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 8000);
+            }
+        }
+
+
+    </script>
 
 {% endblock %}

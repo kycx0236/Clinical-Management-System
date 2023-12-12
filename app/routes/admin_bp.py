@@ -119,7 +119,9 @@ def user_info():
         gender = request.form.get('gender')
         user_role = request.form.get('user_role')
 
-        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role)
+        new_password = request.form.get('new_password')  # Add this line
+
+        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role, new_password)
         user_info = admin.get_user_info(user_id)
 
         if updated:
