@@ -117,9 +117,11 @@
                                 </td>
                                 <td>
                                     <!-- VIEW RECORD -->
-                                    <form method="GET" action="/doctor/patient_record/">
+                                    <form method="GET" action="/medtech/laboratory_report/">
                                         <div class="patient_record">
-                                            <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                            <input id="order_id" name="order_id" value="{{ patient[0] }}" hidden>
+                                            <input id="patient_id" name="patient_id" value="{{ patient[1] }}" hidden>
+                                            <input id="report_id" name="report_id" value="{{ patient[6] }}" hidden>
                                             <button type="submit" style="background: none; border: none;">
                                                 <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
                                             </button>

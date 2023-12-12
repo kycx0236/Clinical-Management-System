@@ -83,8 +83,8 @@ def laboratory_test():
 @login_required
 @role_required('medtech')
 def patient():
-    labrequest_data = medtech.get_lab_reports()
     user_id = current_user.id
+    labrequest_data = medtech.get_lab_reports()
     medtech_info = medtech.get_user_info(user_id)
     
     return render_template("medtech/patient.html", labrequests=labrequest_data, info=medtech_info)
