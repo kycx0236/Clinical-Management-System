@@ -1,7 +1,108 @@
 @import "base_style.css";
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
+.grid_container {
+    position: relative;
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: auto 350px;
+    grid-template-rows: auto 5px;
+    padding: 10px;
+    height: 69%;
+}
 
+.grid_item {
+    padding: 15px;
+    border: 1px solid var(--grayC);
+    text-align: center;
+}
+
+/* USERS */
+.users_short {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    gap: 150px;
+}
+
+.user_buttons {
+    margin-top: 5px;
+    gap: 5px;
+    display: flex;
+}
+
+.add_user_btn img {
+    width: 35px;
+    padding: 10px;
+    background-color: var(--darkBlue);
+    border-radius: 5px;
+}
+
+.see_more {
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 85px;
+    height: 35px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: white;
+    color: var(--darkBlue);
+    border: 1px solid var(--grayA);
+    font-weight: 900;
+}
+
+.user_short_table, .logs_table {
+    position: relative;
+    font-size: 14px;
+    margin-top: 10px;
+    width: 100%;
+    background-color: white;
+}
+
+.user_short_table td {
+    text-align: left;
+    padding: 10px;
+    background-color: var(--blueC);
+}
+
+/* LOGS */
+.logs_container {
+    position: relative;  
+    height: 310px; 
+    overflow: auto;
+}
+
+.logs_list p {
+    margin-bottom: 10px;
+}
+
+.logs_container::-webkit-scrollbar {
+    width: 10px; 
+}
+
+.logs_container::-webkit-scrollbar-thumb {
+    background-color: var(--blueB); 
+    border-radius: 5px;
+}
+
+.logs_container::-webkit-scrollbar-track {
+    background-color: none; 
+    margin-top: 35px;
+}
+
+.logs_table thead {
+    background-color: var(--blueC);
+    position: sticky;
+    top: 0;
+    font-size: 14px;
+    height: 30px;
+}
+
+.logs_table td {
+    padding: 10px;
+}
 
 /* -------------------------------------------- PROFILE -------------------------------------------- */
 /* style here */
@@ -14,9 +115,9 @@
 
 .update-icon {
     position: absolute;
-    top: 15px;
+    top: 18px;
     right: 25px;
-    width: 25px;
+    width: 23px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -38,12 +139,11 @@
 .user-table {
     position: relative; 
     margin-top: 15px;
-    margin-left: 25px;
-    width: 97%;
-    line-height: 1.5;
+    width: 95%;
+    line-height: 1;
     color: var(--darkBlue);
     background-color: white;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .user-table.request {

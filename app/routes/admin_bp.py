@@ -15,8 +15,10 @@ admin_bp = Blueprint('admin', __name__)
 def dashboard():
     current_id = current_user.id 
     admin_info = admin.get_user(current_id)
+    users_data = admin.get_users()
+    limited_users = users_data[:4]
 
-    return render_template("admin/dashboard.html", info=admin_info)
+    return render_template("admin/dashboard.html", info=admin_info, users=limited_users)
 
 @admin_bp.route('/user_management/')
 @login_required

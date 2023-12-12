@@ -6,6 +6,7 @@
     --darkBlue: #2B394C;
     --grayA: #6C757D;  /* Disabled Text */
     --grayB: #E9ECEF; /* Disabled Background */
+    --grayC: #F0F0F2;
 }
 
 *,
@@ -228,16 +229,16 @@ ul li p {
     position: relative;
     margin-top: 10px;
     width: 98%; 
-    border-radius: 20px;
+    /* border-radius: 20px; */
 } 
 
 .greetings-name {
     position: absolute;
     display: flex;
     gap: 5px;
-    top: 50px;
+    top: 45px;
     left: 170px;
-    color: white;
+    color: var(--darkBlue);
 }
 
 .greetings-name p {
@@ -246,9 +247,9 @@ ul li p {
 
 .greetings {
     position: absolute;
-    top: 90px;
+    top: 80px;
     left: 170px;
-    color: white;   
+    color: var(--darkBlue);   
 }
 
 
@@ -284,12 +285,11 @@ ul li p {
 .patient-table {
     position: relative; 
     margin-top: 15px;
-    margin-left: 25px;
-    width: 97%;
-    line-height: 1.5;
+    width: 95%;
+    line-height: 1;
     color: var(--darkBlue);
     background-color: white;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .patient-table.request {
@@ -325,27 +325,8 @@ ul li p {
     gap: 10px;
 }
 
-.view-btn {
-    background-color: var(--blueA); 
-    color: white; 
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 15px;
-}
-
-.view-btn:hover {
-    background-color: #0881c7;
-}
-  
-.view-btn:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-    transform: translateY(1px);
-}
-
 .delete-icon img {
-    width: 40px;
+    width: 35px;
     cursor: pointer;
 }
 

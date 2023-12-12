@@ -14,7 +14,10 @@ receptionist_bp = Blueprint('receptionist', __name__)
 def dashboard():
     current_id = current_user.id 
     receptionist_info = receptionist.get_user(current_id)
-    return render_template("receptionist/dashboard.html", info=receptionist_info)
+    patients_data = receptionist.get_patients()
+    limited_patient = patients_data[:5]
+
+    return render_template("receptionist/dashboard.html", info=receptionist_info, patients=limited_patient)
 
 @receptionist_bp.route('/calendar/')
 @login_required

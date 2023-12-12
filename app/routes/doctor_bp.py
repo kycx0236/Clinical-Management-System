@@ -14,7 +14,10 @@ doctor_bp = Blueprint('doctor', __name__)
 def dashboard():
     current_id = current_user.id 
     doctor_info = doctor.get_doctor_info(current_id)
-    return render_template("doctor/dashboard/dashboard.html", info=doctor_info)
+    patients_data = doctor.get_patients(current_id)
+    limited_patient = patients_data[:5]
+
+    return render_template("doctor/dashboard/dashboard.html", info=doctor_info, patients=limited_patient)
 
 @doctor_bp.route('/calendar/')
 @login_required

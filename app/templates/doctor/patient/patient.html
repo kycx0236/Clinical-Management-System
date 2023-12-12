@@ -69,6 +69,7 @@
 
     <main>
         <div class="navbar">
+            
             <!-- PATIENT RECORD -->
             <div class="patient-header">
                 <p>PATIENTS</p>
@@ -80,55 +81,58 @@
                 </div>
             </a>
         </div>
-    
-        <div class="patient-table">
-            <table id="patientTable" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>FIRST NAME</th>
-                        <th>LAST NAME</th>
-                        <th>GENDER</th>
-                        <th>AGE</th>
-                        <th>CONTACT NUMBER</th>
-                        <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for patient in patients %}
-                    <tr>
-                        <td>{{ patient[1] }}</td>
-                        <td>{{ patient[3] }}</td>
-                        <td>{{ patient[6] }}</td>
-                        <td>{{ patient[4] }}</td>
-                        <td>{{ patient[18] }}</td>
-                        <td>
-                            <div class="action-icon-container">
-                                <!-- VIEW RECORD -->
-                                <form method="GET" action="/doctor/patient_record/">
-                                    <div class="delete-icon">
-                                        <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
-                                        <button type="submit" style="background: none; border: none;">
-                                            <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
-                                        </button>
-                                    </div>
-                                </form> 
-    
-                                <!-- DELETE RECORD -->
-                                <form id="deleteForm_{{ patient[0] }}" method="POST" action="/doctor/delete_patient/">
-                                    <div class="delete-icon">
-                                        <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
-                                        <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">
-                                            <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
-                                        </button>
-                                    </div>
-                                </form> 
-                            </div>
-                        </td>
-                    </tr>   
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        
+        <center>
+            <div class="patient-table">
+                <table id="patientTable" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>FIRST NAME</th>
+                            <th>LAST NAME</th>
+                            <th>GENDER</th>
+                            <th>AGE</th>
+                            <th>CONTACT NUMBER</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for patient in patients %}
+                        <tr>
+                            <td>{{ patient[1] }}</td>
+                            <td>{{ patient[3] }}</td>
+                            <td>{{ patient[6] }}</td>
+                            <td>{{ patient[4] }}</td>
+                            <td>{{ patient[18] }}</td>
+                            <td>
+                                <div class="action-icon-container">
+                                    <!-- VIEW RECORD -->
+                                    <form method="GET" action="/doctor/patient_record/">
+                                        <div class="delete-icon">
+                                            <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                            <button type="submit" style="background: none; border: none;">
+                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                            </button>
+                                        </div>
+                                    </form> 
+        
+                                    <!-- DELETE RECORD -->
+                                    <form id="deleteForm_{{ patient[0] }}" method="POST" action="/doctor/delete_patient/">
+                                        <div class="delete-icon">
+                                            <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                            <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">
+                                                <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                            </button>
+                                        </div>
+                                    </form> 
+                                </div>
+                            </td>
+                        </tr>   
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </center>
+
     </main>
 
     <!-- Confirmation Modal -->

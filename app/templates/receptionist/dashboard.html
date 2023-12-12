@@ -70,7 +70,7 @@
     <main>
         <!-- DASHBOARD -->
         <div class="doctor-bg">
-            <img src="{{ url_for('static', filename='images/Doctor BG.png') }}">
+            <img src="{{ url_for('static', filename='images/DocCare BG.png') }}">
             <div class="greetings-name">
                 <p>Welcome,</p>
                 <h2>{{ info[0] }}</h2>
@@ -80,6 +80,95 @@
             </div>  
         </div>
         <p class="date-time" id="demo"></p>
+
+        <center>
+            <div class="grid_container">
+                <!-- APPOINTMENTS -->
+                <div class="grid_item">
+                    <div class="appoint_list">
+                        <p style="margin-top: 15px; text-align:left;"><strong>Appointment of the Day</strong></p>
+                        <div class="appointement_short_container">
+                            <table class="appointment_short_table">
+                                <thead>
+                                    <th>DATE & TIME</th>
+                                    <th>PATIENT</th>
+                                    <th>STATUS</th>
+                                    <th>CONTACT NUMBER</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-12-08 12:31:16</td>
+                                        <td>NANCY SAYSON</td>
+                                        <td class="status_short done">DONE</td>
+                                        <td>09351454490</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-12-08 12:31:16</td>
+                                        <td>KURT YURI NOLLAN</td>
+                                        <td class="status_short pending">PENDING</td>
+                                        <td>09351454490</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-12-08 12:31:16</td>
+                                        <td>EDWARD JAMES BONGO</td>
+                                        <td class="status_short inprogress">IN PROGRESS</td>
+                                        <td>09351454490</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-12-08 12:31:16</td>
+                                        <td>XERXES LANCE LAURENZ LOMPON</td>
+                                        <td class="status_short cancelled">CANCELLED</td>
+                                        <td>09351454490</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PATIENTS -->
+                <div class="grid_item">
+                    <div class="short_patient_list">
+                        <div class="patients_short">
+                            <p><strong>Patients</strong></p>
+                            <div class="patient_buttons">
+                                <a href="{{ url_for('receptionist.add_patient') }}">
+                                    <div class="add_patient_btn">
+                                        <img src="{{ url_for('static', filename='images/Add User.png') }}" title="Add User">
+                                    </div>
+                                </a>
+                                <a href="{{ url_for('receptionist.patient') }}">
+                                    <div>
+                                        <button class="see_more">SEE MORE</button>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        {% for patient in patients %}
+                            <table class="patient_short_table">
+                                <tr>
+                                    <td rowspan="3">
+                                        <strong>{{ patient[1] }} {{ patient[3] }}</strong> <br>
+                                        <em style="color: var(--grayA);">{{ patient[15] }}</em>
+                                    </td>
+                                    <td>
+                                        <!-- VIEW RECORD -->
+                                        <form method="GET" action="/receptionist/patient_record/">
+                                            <div class="patient_record">
+                                                <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                                <button type="submit" style="background: none; border: none;">
+                                                    <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                                </button>
+                                            </div>
+                                        </form> 
+                                    </td>
+                                </tr>
+                            </table>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </center>
     </main>
     
     <script>
