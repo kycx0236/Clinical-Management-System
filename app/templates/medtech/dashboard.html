@@ -63,35 +63,74 @@
             </div>
         </div>
 
-        <div class="notif-header">
-            <div class="notif-box">
-            <p class="request-header">LABORATORY TEST REQUEST</p>
-            <span id="notifs"></span>
+        <div class="grid_container">
+            <div class="grid_item">
+                <div class="notif-header">
+                    <div class="notif-box">
+                    <p class="request-header">Laboratory Test Request</p>
+                    <span id="notifs"></span>
+                    </div>
+                </div>
+                <center>
+                    <div class="notification-container">
+                        <div id="notificationList">
+                            {% for labrequest in labrequests %}
+                                <form method="GET" action="/medtech/laboratory_test/">
+                                    <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
+                                    <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
+                                    <button style="background: none; border: none; font-size: 14px; width: 100%;">
+                                        <div class="notif_card unread" data-id="{{ labrequest[0] }}">
+                                            <div class="description">
+                                                <p class="user_activity">
+                                                    <strong>DR. {{ labrequest[2] }}</strong> sent you a laboratory job order for patient <br>
+                                                    <b>{{ labrequest[3] }}</b>
+                                                </p>
+                                                <p class="time" id="time"></p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </form>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </center>
+            </div>
+
+            <div class="grid_item">
+                <div class="short_patient_list">
+                    <div class="patients_short">
+                        <p><b>Reports</b></p>
+                        <div class="patient_buttons">
+                            <a href="{{ url_for('medtech.patient') }}">
+                                <div>
+                                    <button class="see_more">SEE MORE</button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% for patient in patients %}
+                        <table class="patient_short_table">
+                            <tr>
+                                <td rowspan="3">
+                                    <strong>{{ patient[2] }}</strong> <br>
+                                    <em style="color: var(--grayA);">{{ patient[3] }}</em>
+                                </td>
+                                <td>
+                                    <!-- VIEW RECORD -->
+                                    <form method="GET" action="/doctor/patient_record/">
+                                        <div class="patient_record">
+                                            <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                            <button type="submit" style="background: none; border: none;">
+                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                            </button>
+                                        </div>
+                                    </form> 
+                                </td>
+                            </tr>
+                        </table>
+                    {% endfor %}
             </div>
         </div>
-        <center>
-            <div class="notification-container">
-                <div id="notificationList">
-                    {% for labrequest in labrequests %}
-                        <form method="GET" action="/medtech/laboratory_test/">
-                            <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
-                            <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
-                            <button style="background: none; border: none; font-size: 16px;">
-                                <div class="notif_card unread" data-id="{{ labrequest[0] }}">
-                                    <div class="description">
-                                        <p class="user_activity">
-                                            <strong>DR. {{ labrequest[2] }}</strong> sent you a laboratory job order for patient
-                                            <b>{{ labrequest[3] }}</b>
-                                        </p>
-                                        <p class="time" id="time"></p>
-                                    </div>
-                                </div>
-                            </button>
-                        </form>
-                    {% endfor %}
-                </div>
-            </div>
-        </center>
         
     </main>
 

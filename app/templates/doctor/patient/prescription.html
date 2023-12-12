@@ -85,7 +85,6 @@
             <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
         </div>
 
-
         <form id="prescriptionForm" action="{{ url_for('doctor.prescription') }}">
 
             <!-- ASSESSMENT ID -->
@@ -103,8 +102,13 @@
             <!-- PRESCRIPTION -->
             <div class="patient-bg prescription">
                 <div class="cms-logo prescription">
-                    <p class="doc">Doc</p>
-                    <h4 class="care">Care</h4>
+                    <div class="prescription_logo">
+                        <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+                    </div>
+                    <div style="display: flex;">
+                        <p class="doc">Doc</p>
+                        <h4 class="care">Care</h4>
+                    </div>
                 </div>
 
                 <div class="head_prescription">

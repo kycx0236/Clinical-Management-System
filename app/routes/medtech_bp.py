@@ -16,8 +16,10 @@ def dashboard():
     current_id = current_user.id 
     medtech_info = medtech.get_user_info(current_id)
     labrequest_data = medtech.get_lab_requests()
+    labreport_data = medtech.get_lab_reports()
+    limited_patient = labreport_data[:5]
 
-    return render_template("medtech/dashboard.html", labrequests=labrequest_data, info=medtech_info)
+    return render_template("medtech/dashboard.html", labrequests=labrequest_data, info=medtech_info, patients=limited_patient)
 
 @medtech_bp.route('/laboratory_test/', methods=['GET', 'POST'])
 @login_required
@@ -84,6 +86,7 @@ def patient():
     labrequest_data = medtech.get_lab_reports()
     user_id = current_user.id
     medtech_info = medtech.get_user_info(user_id)
+    
     return render_template("medtech/patient.html", labrequests=labrequest_data, info=medtech_info)
 
 @medtech_bp.route('/laboratory_report/')

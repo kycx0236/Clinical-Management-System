@@ -1,11 +1,79 @@
 @import "base_style.css";
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
-.notification-container {
-    position: relative;  
+.grid_container {
+    position: relative;
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: auto 350px;
+    grid-template-rows: 100% 5px;
+    padding: 10px;
+    height: 69%;
+}
+
+.grid_item {
+    padding: 15px;
+    border: 1px solid var(--grayC);
+    text-align: center;
+}
+
+/* PATIENTS */
+.patients_short {
     justify-content: center;
     align-items: center;
-    width: 98%;
+    text-align: center;
+    display: flex;
+    gap: 130px;
+}
+
+.patient_buttons {
+    margin-top: 5px;
+    gap: 5px;
+    display: flex;
+}
+
+.add_patient_btn img {
+    width: 35px;
+    padding: 10px;
+    background-color: var(--darkBlue);
+    border-radius: 5px;
+}
+
+.see_more {
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 85px;
+    height: 35px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: white;
+    color: var(--darkBlue);
+    border: 1px solid var(--grayA);
+    font-weight: 900;
+}
+
+.patient_short_table {
+    position: relative;
+    font-size: 14px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.patient_short_table td {
+    padding: 11px;
+    width: 50px;
+    background-color: var(--blueC);
+}
+
+.patient_record img {
+    width: 30px;
+    cursor: pointer;
+}
+
+.notification-container {
+    position: relative;  
+    width: 100%;
     height: 360px; 
     overflow-y: auto;
     overflow-x: hidden;
@@ -26,16 +94,16 @@
 
 .request-header {
     font-weight: 900;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .notif-header {
     position: relative;
     display: flex;
-    top: 20px;
+    top: 10px;
     width: 50%;
     left: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .notif-box {
@@ -59,9 +127,10 @@
 .notif_card {
     position: relative;
     display: flex;
+    text-align: left;
     align-items: center;
-    padding: 1rem;
-    width: 1600px;  
+    padding: 20px;
+    width: 100%;
     height: 60px;
 }
 
@@ -81,9 +150,10 @@ strong:hover {
 }
 
 .unread {
+    position: relative;
     border-left: 3px solid var(--blueB) !important;
     box-shadow: 0 0 1px var(--blueB);
-    width: 1600px;   
+    width: 100%; 
     height: 60px;
 }
 

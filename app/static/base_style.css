@@ -93,11 +93,6 @@ main {
     width: 85%;
 }
 
-.icon-bg:hover img {
-    margin-left: 15px;
-    width: 23px;
-}
-
 /* selected icon */
 .selected-icon-bg {
     width: 85%;  
@@ -401,7 +396,7 @@ ul li p {
     background-color: white; 
     border-color:  var(--blueB); 
     outline: 0;
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
 }
 
 /* -------------------------------------------- SHOW [NUMBER] ENTRIES -------------------------------------------- */
@@ -475,27 +470,42 @@ ul li p {
 
 .btn-submit.bmi {
     background-color: var(--blueA);
-    width: 157px;
+    width: 131px;
+    font-size: 13px;
 }
 
 .btn-submit.order {
-    position: absolute;
-    background-color: var(--blueC);
+    position: relative;
+    background-color: white;
     font-weight: 900;
     color: var(--blueA);
-    z-index: 1;
-    right: 50px;
-    top: 15px;
-    height: 35px;
-    width: 210px;
-    font-size: 15px;
-    font-size: 14px;
+    border-bottom: 1px solid var(--blueC);
+    border-left: 2px solid var(--blueA);
+    border-radius: 0;
+    height: 45px;
+    width: 100%;
+    font-size: 13px;
+}
+
+.btn-submit.order:active {
+    box-shadow: none;
+    transform: none;
 }
 
 .btn-submit.add-edit {
     position: absolute;
-    top: 12px;
-    right: 60px;
+    background-color: white;
+    color: var(--blueA);
+    font-size: 14px;
+    font-weight: 900;
+    margin-top: -60px;
+    margin-right: -1920px;
+    box-shadow: 0 0 0.1rem 0 rgba(163, 213, 255, 1);
+}
+
+.btn-submit.add-edit:hover {
+    color: var(--blueD);
+    transform: scale(101%);
 }
 
 /* -------------------------------------------- ROW -------------------------------------------- */
@@ -537,13 +547,13 @@ ul li p {
     color: var(--darkBlue); 
     background-color: white; 
     outline: 0;
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
 } 
 
 /* text area */
 textarea {
     position: relative;
-    width: 1000px;
+    width: 960px;
     height: 200px;
     border: 1px solid var(--blueB);
     border-radius: 10px;

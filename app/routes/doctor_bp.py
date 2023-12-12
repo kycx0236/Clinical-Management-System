@@ -309,9 +309,19 @@ def add_clearance():
 @login_required
 @role_required('doctor')
 def add_certificate():
+    form = PatientForm()
     current_id = current_user.id 
     doctor_info = doctor.get_doctor_info(current_id)
     patient_id = request.args.get('patient_id')
+
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        assessment_id = request.args.get('assessment_id')
+        patient_info = doctor.get_patient_info(patient_id)
+        consultation_info = doctor.get_consultation_info(assessment_id, patient_id)
+        doctor_info = doctor.get_doctor_info(current_id)
+
+        return render_template('doctor/patient/add_certificate.html', info=doctor_info, patient=patient_info, consultation=consultation_info, patient_id=patient_id, PatientForm=form)
 
     return render_template("doctor/patient/add_certificate.html", patient_id=patient_id, info=doctor_info)
 

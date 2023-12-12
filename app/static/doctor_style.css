@@ -6,9 +6,18 @@
     display: grid;
     margin-top: 10px;
     grid-template-columns: auto 350px;
-    grid-template-rows: auto 5px;
+    grid-template-rows: 100% 5px;
     padding: 10px;
     height: 69%;
+}
+
+.grid_container.certificate {
+    grid-template-columns: 50% 50%;
+}
+
+.grid_container.history {
+    grid-template-columns: 85% 15%;
+    grid-template-rows: auto auto;
 }
 
 .grid_item {
@@ -261,6 +270,7 @@ input, select {
 /* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.history {
     height: 850px; 
+    width: 100%;
 }
 
 .patient-bg.assessment {
@@ -274,6 +284,16 @@ input, select {
 .patient-bg.prescription {
     height: 1650px;
 }
+
+.patient-bg.examination {
+    width: 100%;
+}
+
+.patient-bg.certificate {
+    width: 100%;
+    background-color: #bae1ff;
+}
+
 
 /* subheading */
 .subtext {
@@ -318,9 +338,16 @@ input, select {
     box-shadow: 0 0 0.3rem 0.1rem rgba(163, 213, 255, 1);
 }
 
+/* -------------------------------------------- HEADERS -------------------------------------------- */
+.med-header.history {
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+
 /* -------------------------------------------- MORE ROW ARRANGEMENTS -------------------------------------------- */
 .p_row.immunize {
-    gap: 20px;
+    gap: 125px;
 }
 
 .p_row.one {
@@ -328,7 +355,7 @@ input, select {
 }
 
 .p_row.two {
-    gap: 90px;
+    gap: 65px;
 }
 
 .p_row.three {
@@ -365,12 +392,12 @@ input, select {
 
 /* input box for past history */
 .inputBox.p_history {
-    width: 270px;
+    width: 255px;
 }
 
 /* input box for the date, the condition started */
 .inputBox.h_date {
-    width: 165px;
+    width: 163px;
 }
 
 /* dropdown for social history */
@@ -379,36 +406,38 @@ input, select {
 }
 
 .historyB {
-    width: 242px;
+    width: 225px;
 }
 
 .historyC {
-    width: 320px;
+    width: 282px;
 }
 
 .historyD {
-    width: 337px;
+    width: 310px;
 }
 
 .inputBox.longtext {
-    margin-top: 50px;
-    width: 1010px; 
+    margin-top: 40px;
+    margin-bottom: 35px;
+    width: 955px; 
     position: relative;
     font-size: 14px;
 }
 
 .inputBox.subject {
-    width: 1000px; 
+    width: 960px; 
     margin-top: 50px;
 }
 
 .t_surgery {
-    width: 400px;
+    width: 380px;
 }
 
 /* -------------------------------------------- MEDICAL ASSESSMENT -------------------------------------------- */
 .assessment-table {
     position: relative; 
+    width: 95%;
     margin-top: 10px;
     line-height: 1.5;
     color: var(--darkBlue);
@@ -418,7 +447,7 @@ input, select {
 
 /* assessment rows */
 .p_row.vitalRowA {
-    gap: 19px;
+    gap: 18px;
 }
 
 .p_row.vitalRowB {
@@ -447,7 +476,7 @@ input, select {
 
 /* Input boxes for assessment */
 .inputBox.vitalsA {
-    width: 320px;
+    width: 303px;
 }
 
 .inputBox.vitalsB {
@@ -455,11 +484,11 @@ input, select {
 }
 
 .inputBox.vitalsC {
-    width: 200px;
+    width: 195px;
 }
 
 .inputBox.vitalsD {
-    width: 700px;
+    width: 670px;
 }
 
 .inputBox.vitalsE {
@@ -487,7 +516,7 @@ input, select {
 }
 
 .inputBox.vitalsK {
-    width: 560px;
+    width: 530px;
 }
 
 .inputBox.vitalsL {
@@ -495,7 +524,7 @@ input, select {
 }
 
 .inputBox.vitalsM {
-    width: 655px;
+    width: 635px;
 }
 
 /* -------------------------------------------- PRESCRIPTION -------------------------------------------- */
@@ -503,10 +532,17 @@ input, select {
     position: relative;
     justify-content: center;
     margin-top: 50px;
-    margin-bottom: -70px;
+    margin-bottom: -80px;
     display: flex;
     font-size: 30px;
     border-bottom: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.prescription_logo img {
+    width: 45px;
+    margin-top: 20px;
 }
 
 .care {
@@ -554,7 +590,7 @@ input, select {
 
 .page-break {
     position: relative;
-    top: 1000px;
+    top: 900px;
     border: 1px solid var(--darkBlue);
     height: 1px;
     width: 1000px;
@@ -562,7 +598,7 @@ input, select {
 
 .doctor {
     position: relative;
-    top: 1020px;
+    top: 920px;
     text-decoration: underline;
 }
 
@@ -570,7 +606,7 @@ input, select {
     position: relative;
     justify-content: center;
     display: flex;
-    top: 1030px;
+    top: 925px;
     gap: 10px;
 }
 
@@ -708,23 +744,23 @@ input, select {
 }
 
 .inputBox.fullName {
-    width: 1040px;
+    width: 955px
 }
 
 .inputBox.labsubject {
-    width: 1040px;
+    width: 955px;
 }
 
 .inputBox.conduct {
-    width: 505px;
+    width: 470px;
 }
 
 .inputBox.doctorName {
-    width: 450px;
+    width: 395px;
 }
 
 .inputBox.dateofRequest {
-    width: 230px;
+    width: 200px;
 }
 
 .inputBox.specifyTest {
@@ -732,27 +768,28 @@ input, select {
 }
 
 .p_row.rowTen {
+    margin-bottom: 40px;
     gap: 30px;
 }
 
 .p_row.rowEleven {
-    gap: 90px;
+    gap: 65px;
 }
 
 .p_row.rowTwelve {
-    gap: 42px;
+    gap: 27px;
 }
 
 .p_row.rowThirteen {
-    gap: 72px;
+    gap: 57px;
 }
 
 .p_row.rowFourteen {
-    gap: 87px;
+    gap: 67px;
 }
 
 .p_row.rowfifteen {
-    gap: 25px;
+    gap: 30px;
 }
 
 .testRow {
@@ -761,7 +798,7 @@ input, select {
 
 .testRow.col2 {
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 .head {
@@ -776,14 +813,9 @@ input, select {
 
 .segmented-controls {
     position: relative;
-    display: flex;
-    overflow: hidden;
+    width: 150px;
     border-radius: 5px;
-    width: 1100px;
-    justify-content: center;
-    border: 2px solid var(--blueC);
-    top: 10px;
-    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .segmented-controls input[type="radio"] {
@@ -791,29 +823,27 @@ input, select {
 }
 
 .segmented-controls label {
-    flex: 1;
-    text-align: center;
-    padding: 10px 0;
+    display: block;
+    justify-content: left;
+    text-align: left;
+    padding: 10px;
     cursor: pointer;
-    border-right: 1px solid var(--blueC);
+    border-bottom: 1px solid var(--blueC);
+    border-left: 2px solid white;
     background-color: white;
-    font-size: 14px;
+    font-size: 13px;
     transition: 0.3s ease;
     color: var(--blueA);
 }
 
-.segmented-controls label:first-of-type {
-    border-radius: 5px 0 0 5px;
-}
-
 .segmented-controls label:last-of-type {
-    border-right: none;
-    border-radius: 0 5px 5px 0;
+    border-bottom: none;
 }
 
 .segmented-controls input[type="radio"]:checked + label {
-    background-color: var(--blueC);
     color: var(--blueA);
+    padding: 10px;
+    border-left: 2px solid var(--blueA);
     font-weight: 900;
 }
 
