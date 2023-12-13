@@ -33,6 +33,19 @@ class admin():
 
         return user_list
 
+    def check_existing_user(username):
+        cursor = mysql.connection.cursor()
+
+        check_duplicate_sql = "SELECT * FROM users WHERE username = %s"
+        cursor.execute(check_duplicate_sql, (username,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return True
+        
+        else:
+            return None
+
     def add_user(self):
         cursor = mysql.connection.cursor()
 

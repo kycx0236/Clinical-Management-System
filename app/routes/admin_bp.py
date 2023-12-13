@@ -65,17 +65,20 @@ def add_user():
         new_user.gender = gender
         new_user.user_role = user_role
 
-        result = new_user.add_user()
-        admin.send_message(email,password)
+        if admin.check_existing_user(username) == True:
+            return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
+        
+        else: 
+            result = new_user.add_user()
+            admin.send_message(email,password)
        
         if result:
-            # Render the template with the hashed password
             return render_template("admin/user_management/add_user.html", success=True, UserForm=form, password=hashed_password)
         else:
-            # Render the template with the hashed password
+            
             return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
   
-    # Render the template with the hashed password
+    
     return render_template("admin/user_management/add_user.html", UserForm=form, password=hashed_password)
 
 # DELETE USER
