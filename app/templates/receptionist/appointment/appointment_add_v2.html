@@ -18,6 +18,48 @@
                     <span class="title"> Appointment Details </span>
 
                     <div class="fields">
+                        <!-- Doctor Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom11" class="form-label"> Doctor Name </label>
+                            <select class="form-select" id="validationCustom11" name="doctorName" required aria-describedby="validationCustom11Feedback">
+                                <option value="" selected>Select your Doctor</option>
+                                {% if doctor_names %}
+                                    {% for doctor in doctor_names %}
+                                        <option value="{{ doctor.last_name }}" data-doctor-id="{{ doctor.id }}">{{ doctor.last_name }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No doctor available</option>
+                                {% endif %}
+                            </select>
+                            <div id="validationCustom11Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select <strong>your Doctor</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Doctor ID -->
+                        <div class="input-fields">
+                            <label for="validationCustom12" class="form-label"> Doctor ID </label>
+                            <select class="form-select" id="validationCustom12" name="doctorID" required aria-describedby="validationCustom12Feedback">
+                                <option value="" selected>Select the Doctor's ID</option>
+                                {% if doctor_id %}
+                                    {% for doctor_id in doctor_id %}
+                                        <option value="{{ doctor_id.id }}">{{ doctor_id.id }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No doctor available</option>
+                                {% endif %}
+                            </select>
+                            <div id="validationCustom12Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>Doctor ID</strong>.
+                            </div>
+                        </div>
+
                         <!-- Date Appointment -->
                         <div class="input-fields">
                             <label for="validationCustom01" class="form-label"> Date Appointment </label>
@@ -193,31 +235,70 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename="receptionist_add_v2_script.js") }}"></script>
 <script>
-    // Update the time_appointment dropdown based on the selected date
-    $('#validationCustom01').on('change', function() {
-        var selectedDate = $(this).val();
+    // Update the doctorID dropdown based on the selected doctorName
+    $('#validationCustom11').on('change', function() {
+        var selectedDoctor = $(this).val();
 
         // Get the CSRF token from the form
         var csrfToken = $('input[name="csrf_token"]').val();
 
-        // Make an AJAX request to fetch time schedules for the selected date
+        // Make an AJAX request to fetch the doctor ID for the selected doctorName
+        $.ajax({
+            url: '/receptionist/get-doctor-id/',
+            type: 'POST',
+            data: { doctorName: selectedDoctor, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Server Response for Doctor ID:', response);
+
+                if (response.success) {
+                    // Update the options of the Doctor ID dropdown
+                    var doctorIdDropdown = $('#validationCustom12');
+                    doctorIdDropdown.empty();
+
+                    if (response.doctor_id) {
+                        doctorIdDropdown.append('<option value="' + response.doctor_id.id + '">' + response.doctor_id.id + '</option>');
+                    } else {
+                        doctorIdDropdown.append('<option value="" disabled>No doctor available</option>');
+                    }
+
+                    // Optional: Trigger the change event on Doctor ID dropdown to update its validation state
+                    doctorIdDropdown.trigger('change');
+                } else {
+                    console.error('Error fetching Doctor ID:', response.message);
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching Doctor ID:', error);
+            }
+        });
+    });
+
+    // Update the time_appointment dropdown based on the selected date
+    $('#validationCustom01').on('change', function() {
+        var selectedDate = $(this).val();
+        var selectedDoctor = $('#validationCustom11').val(); // Get the selected doctorName
+
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
+
+        // Make an AJAX request to fetch time schedules for the selected date and doctor
         $.ajax({
             url: '/receptionist/get-time-schedules',
             type: 'POST',
-            data: { selected_date: selectedDate, csrf_token: csrfToken },
+            data: { selected_date: selectedDate, selected_doctor: selectedDoctor, csrf_token: csrfToken },
             success: function(response) {
                 console.log('Server Response:', response);
-            
+
                 // Update the options of the time_appointment dropdown
                 var timeDropdown = $('#validationCustom02');
                 timeDropdown.empty();
                 timeDropdown.append('<option value="" selected>Select your desired time</option>');
-            
+
                 // Add options based on the received time schedules
                 for (var i = 0; i < response.time_schedules.length; i++) {
                     var timeSlot = response.time_schedules[i];
                     console.log('Time Slot:', timeSlot); // Log each time slot
-            
+
                     // Check if the time slot has available slots
                     if (timeSlot[1] > 0) {
                         // Use the data attribute to store the slots information
@@ -231,12 +312,13 @@
         });
     });
 
+
     // Example: Retrieve the selected option's slots information
     $('#validationCustom02').on('change', function() {
         var selectedOption = $(this).find(':selected');
         var slots = selectedOption.data('slots');
         console.log('Available Slots:', slots);
     });
- 
+
 </script>
 {% endblock %}

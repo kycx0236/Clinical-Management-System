@@ -32,7 +32,8 @@
                     <label class="doccare-subheader"> PATIENT'S DETAILS </label>
                     
                     <label class="doccare-text"> NAME </label>
-                    <label class="doccare-detail"> {{ row.first_name }} {{ row.middle_name}} {{ row.last_name}} </label>
+                    <!-- Replace occurrences of row.first_name, row.middle_name, row.last_name -->
+                    <label class="doccare-detail"> {{ row.appointment_first_name }} {{ row.appointment_middle_name }} {{ row.appointment_last_name }} </label>
                     
                     <label class="doccare-text"> SEX </label>
                     <label class="doccare-detail"> {{ row.sex }} </label>
@@ -57,6 +58,10 @@
 
                     <label class="doccare-text"> STATUS </label>
                     <label class="doccare-detail status"> {{ row.status_ }} </label>
+
+                    <label class="doccare-text"> DOCTOR DETAILS </label>
+                    <!-- Replace occurrences of row.first_name -->
+                    <label class="doccare-detail"> {{ row.user_first_name }} {{ row.user_middle_name }} {{ row.user_last_name }}  </label>
                 </div>
             </div>
 

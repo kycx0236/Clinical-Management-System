@@ -8,6 +8,8 @@ const dateOfBirthInput = document.getElementById('validationCustom07');
 const contactNumberInput = document.getElementById('validationCustom08');
 const emailInput = document.getElementById('validationCustom09');
 const addressInput = document.getElementById('validationCustom10');
+const doctorNameInput = document.getElementById('validationCustom11');
+const doctorIDInput = document.getElementById('validationCustom12');
 const csrfTokenInput = document.querySelector('input[name="csrf_token"]').value;
 const formInput = document.getElementById('appointment-form');
 const arrowBackButton = document.getElementById('arrow');
@@ -61,12 +63,16 @@ async function handleFormSubmission() {
     console.log('Status: ' + isEmailValid);
     const isAddressValid = addressInput.checkValidity();
     console.log('Status: ' + isAddressValid);
+    const isDoctorNameValid = doctorNameInput.checkValidity();
+    console.log('Status: ' + isDoctorNameValid); 
+    const isDoctorID = doctorIDInput.checkValidity();
+    console.log('Status: ' + isDoctorID);
 
     // Define data variable to store the response data
     let data;
 
     // Check if all individual fields are valid
-    if (isDateAppointmentValid && isTimeAppointmentValid && isFirstNameValid && isMiddleNameValid && isLastNameValid && isSexValid && isDateOfBirthValid && isContactNumberValid && isEmailValid && isAddressValid) {
+    if (isDateAppointmentValid && isTimeAppointmentValid && isFirstNameValid && isMiddleNameValid && isLastNameValid && isSexValid && isDateOfBirthValid && isContactNumberValid && isEmailValid && isAddressValid && isDoctorID && isDoctorNameValid) {
         // Create a FormData object to handle the form data
         const formData = new FormData();
 
@@ -85,6 +91,8 @@ async function handleFormSubmission() {
         formData.append('contact_number', contactNumberInput.value);
         formData.append('email', emailInput.value);
         formData.append('address', addressInput.value);
+        formData.append('doctorID', doctorIDInput.value);
+        formData.append('doctorName', doctorNameInput.value)
         formData.append('csrf_token', csrfTokenInput);  // Use the csrfTokenInput directly
 
         try {
@@ -148,7 +156,7 @@ submitButton.addEventListener('click', async function() {
     setTimeout(function () {
         // Redirect to the /appointment/ route
         window.location.href = '/receptionist/appointment/';
-    }, 1000);
+    }, 700);
 });
 
 doneButton.addEventListener('click', function() {

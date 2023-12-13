@@ -38,6 +38,7 @@
                                 <option value="time_appointment">TIME</option>
                                 <option value="last_name">LAST NAME</option>
                                 <option value="status_">STATUS</option>
+                                <option value="doctorName">DOCTOR</option>
                             </select> 
                         </section>
                     </form>
@@ -67,13 +68,10 @@
                                                 </p>
                                             </div>
                                         </td>
-                                        <td> {{ row.last_name}} </td>
+                                        <td> {{ row.doctorName}} </td>
                                         <td class="table__cell">
                                             <a href="{{ url_for('receptionist.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appointment-icon">
                                                 <span class="material-symbols-outlined">info</span>
-                                            </a>
-                                            <a href="{{ url_for('receptionist.reschedule', reference_number=row.reference_number) }}" class="doccare-edit-appointment-icon">
-                                                <span class="material-symbols-outlined">edit</span>
                                             </a>
                                             <button type="button" class="edit-appointment-button"
                                                 data-id="{{ row.reference_number }}"
@@ -82,15 +80,22 @@
                                                 data-status="{{ row.status_ }}"
                                                 data-lastname="{{ row.last_name }}"
                                                 data-email="{{ row.email }}"
-                                                onclick="openEditModal('{{ row.reference_number }}')">
+                                                data-doctorName="{{ row.doctorName }}"
+                                                onclick="openEditModal('{{ row.reference_number }}', '{{ row.doctorName }}')">
                                                 <span class="material-symbols-outlined">edit</span>
                                             </button>
-                                            <button type="button" class="cancel-appointment-button" data-id="{{ row.reference_number }}" onclick="openCancelModal('{{ row.reference_number }}')">
+                                            <button type="button" class="cancel-appointment-button" 
+                                                data-id="{{ row.reference_number }}" 
+                                                data-doctorName="{{ row.doctorName }}" 
+                                                onclick="openCancelModal('{{ row.reference_number }}', '{{ row.doctorName }}')">
                                                 <span class="material-symbols-outlined cancel-icon">event_busy</span>
-                                            </button>
-                                            <button type="button" class="delete-appointment-button" data-id="{{ row.reference_number }}" onclick="openDeleteModal('{{ row.reference_number }}')">
-                                                <span class="material-symbols-outlined delete-icon">delete</span>
-                                            </button>
+                                            </button>                                                                                                                             
+                                            <button type="button" class="delete-appointment-button"
+                                                data-id="{{ row.reference_number }}"
+                                                data-doctorName="{{ row.doctorName }}"
+                                                onclick="openDeleteModal('{{ row.reference_number }}', '{{ row.doctorName }}')">
+                                            <span class="material-symbols-outlined delete-icon">delete</span>
+                                        </button>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -194,6 +199,12 @@
                                             <input type="email" class="form-control" id="validationCustom06" name="email" required readonly aria-describedby="validationCustom06Feedback">
                                         </div>
 
+                                        <!-- Doctor Name -->
+                                        <div class="input-fields">
+                                            <label for="validationCustom07" class="form-label">Doctor Name</label>
+                                            <input type="text" class="form-control" id="validationCustom07" name="doctor_name" required readonly aria-describedby="validationCustom06Feedback">
+                                        </div>
+
                                     </div>
 
                                     <div>
@@ -245,6 +256,8 @@
                         // Update the time_appointment dropdown based on the selected date
                         $('#validationCustom02').off('change').on('change', function() {
                             var selectedDate = $(this).val();
+                            var doctorName = $('#validationCustom07').val();
+                            console.log('Doctor Name in Time dropdown: ', doctorName);
                     
                             // Get the CSRF token from the form
                             csrfToken = $('input[name="csrf_token"]').val();
@@ -253,7 +266,7 @@
                             $.ajax({
                                 url: '/receptionist/get-time-schedules',
                                 type: 'POST',
-                                data: { selected_date: selectedDate, csrf_token: csrfToken },
+                                data: { selected_date: selectedDate, selected_doctor: doctorName, csrf_token: csrfToken },
                                 success: function(response) {
                                     console.log('Server Response:', response);
                     
@@ -290,12 +303,14 @@
                         // Additional code for the old time dropdown in the edit form
                         $('#validationCustom03').off('change').on('change', function() {
                             var oldSelectedDate = $(this).val();
+                            var doctorName = $('#validationCustom07').val();
+                            console.log('Doctor Name in Time dropdown: ', doctorName);
                     
                             // Make an AJAX request to fetch time schedules for the old selected date
                             $.ajax({
                                 url: '/receptionist/get-time-schedules',
                                 type: 'POST',
-                                data: { selected_date: oldSelectedDate, csrf_token: csrfToken },
+                                data: { selected_date: oldSelectedDate, selected_doctor: doctorName, csrf_token: csrfToken },
                                 success: function(response) {
                                     console.log('Old Time - Server Response:', response);
                     

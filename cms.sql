@@ -16,41 +16,36 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 );
 
-CREATE TABLE `appointment` (
-    `reference_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `date_appointment` DATE NULL DEFAULT NULL,
-    `time_appointment` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `status_` VARCHAR(20) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `book_date` DATE NOT NULL,
-    `first_name` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `middle_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `last_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `sex` VARCHAR(10) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `birth_date` DATE NULL DEFAULT NULL,
-    `contact_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `email` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `address` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
-    `doctorID` INT(10) NOT NULL,
-    `doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',	
-    `date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`reference_number`) USING BTREE,
-    UNIQUE INDEX `ref_number_uniq` (`reference_number`) USING BTREE,
-    INDEX `doctorID` (`doctorID`) USING BTREE,
-    CONSTRAINT `fk_appointment_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS `appointment` (
+	`reference_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`receptionistID` INT(10) NOT NULL,
+	`doctorID` INT(10) NOT NULL,
+	`doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`date_appointment` DATE NULL DEFAULT NULL,
+	`time_appointment` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`status_` VARCHAR(20) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`book_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`first_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`middle_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`last_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`sex` VARCHAR(10) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`birth_date` DATE NULL DEFAULT NULL,
+	`contact_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`email` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`address` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`reference_number`) USING BTREE,
+	UNIQUE INDEX `ref_number_uniq` (`reference_number`) USING BTREE,
+	INDEX `receptionistID` (`receptionistID`) USING BTREE,
+	INDEX `doctorID` (`doctorID`) USING BTREE,
+	CONSTRAINT `fk_appointment_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE,
+	CONSTRAINT `fk_appointment_receptionist` FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 COLLATE='utf8mb4_0900_ai_ci'
-ENGINE=InnoDB;
+ENGINE=InnoDB
+;
 
-CREATE TABLE IF NOT EXISTS `receptionist` (
-    `receptionistID` INT NOT NULL,
-    `first_name` VARCHAR(30) NOT NULL,
-    `middle_name` VARCHAR(20) NOT NULL,
-    `last_name` VARCHAR(20) NOT NULL,
-    `gender` VARCHAR(20) NOT NULL,
-    INDEX `receptionistID` (`receptionistID`) USING BTREE,
-    FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
-) COLLATE='utf8mb4_0900_ai_ci' ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `schedule` (
     `scheduleID` INT NOT NULL AUTO_INCREMENT,

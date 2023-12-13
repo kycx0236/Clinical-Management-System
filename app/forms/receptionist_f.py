@@ -1,12 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField, DateField, SelectField, EmailField
+from wtforms import StringField, validators, SubmitField, DateField, SelectField, EmailField, IntegerField
 
 class AppointmentForm(FlaskForm):
     reference_number = StringField('reference_number', [validators.DataRequired()])
+    doctorID = IntegerField('doctorID', [validators.DataRequired()])
+    doctorName = StringField('doctorName', [validators.DataRequired()])
     date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
     time_appointment = StringField('time_appointment', [validators.Length(min=1, max=50)])
     status_ = StringField('status_', [validators.Length(min=4, max=50)])
-    book_date = StringField('book_date', [validators.Length(min=4, max=50)])
     first_name = StringField('first_name', [validators.Length(min=2, max=50)])
     middle_name = StringField('middle_name', [validators.Length(min=2, max=50)])
     last_name = StringField('last_name', [validators.Length(min=2, max=50)])
@@ -16,7 +17,7 @@ class AppointmentForm(FlaskForm):
     email = StringField('email', [validators.Length(min=10, max=50)])
     address = StringField('address', [validators.Length(min=10, max=255)])
     submit = SubmitField("Submit")
-    
+
 
 class SearchForm(FlaskForm):
     searchTerm = StringField('Search Term')

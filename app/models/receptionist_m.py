@@ -1,12 +1,14 @@
 from app import mysql
 from datetime import date
 class Appointment:
-    def __init__(self, reference_number=None, date_appointment=None, time_appointment=None, status_=None, book_date=None, first_name=None, middle_name=None, last_name=None, sex=None, birth_date=None, contact_number=None, email=None, address=None):
+    def __init__(self, reference_number=None, receptionistID=None, doctorID=None, doctorName=None, date_appointment=None, time_appointment=None, status_=None, book_date=None, first_name=None, middle_name=None, last_name=None, sex=None, birth_date=None, contact_number=None, email=None, address=None):
         self.reference_number = reference_number
+        self.receptionistID = receptionistID
+        self.doctorID = doctorID
+        self.doctorName = doctorName
         self.date_appointment = date_appointment
         self.time_appointment = time_appointment
         self.status_ = status_
-        self.book_date = book_date
         self.first_name = first_name
         self.middle_name = middle_name
         self.last_name = last_name
@@ -19,25 +21,30 @@ class Appointment:
     def add(self):
         try:
             cursor = mysql.connection.cursor()
-            sql = "INSERT INTO appointment (reference_number, date_appointment, time_appointment, status_, book_date, first_name, middle_name, last_name, sex, birth_date, contact_number, email, address) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (self.reference_number, self.date_appointment, self.time_appointment, self.status_, self.book_date, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
+            sql = "INSERT INTO appointment (reference_number, receptionistID, doctorID, doctorName, date_appointment, time_appointment, status_, first_name, middle_name, last_name, sex, birth_date, contact_number, email, address) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql, (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
             mysql.connection.commit()
+            print("SQL Query:", sql)
+            print("Parameters:", (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
             return True
         except Exception as e:
             print(f"Error adding appointment: {e}")
+            print("SQL Query:", sql)
+            print("Parameters:", (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
             return False
 
     @classmethod
-    def all(cls):
+    def all(cls, receptionistID):
         try:
             cursor = mysql.connection.cursor()
-            sql = "SELECT * FROM appointment ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC;"
-            cursor.execute(sql)
+            sql = "SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_, appointment.doctorName FROM appointment WHERE receptionistID = %s ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC"
+            cursor.execute(sql, (receptionistID,))
             result = cursor.fetchall()
             return result
         except Exception as e:
-            print(f"Error fetching all appoinments: {e}")
+            print(f"Error fetching all appointments: {e}")
             return []
+
 
     @classmethod
     def delete(cls, reference_number):
@@ -99,7 +106,7 @@ class Appointment:
     def get_appointment_by_reference_version_two(cls, reference_number):
         print("Reference Number:", reference_number)
         cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
-        cursor.execute("SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.status_, appointment.last_name, appointment.email FROM appointment WHERE reference_number = %s", (reference_number,))
+        cursor.execute("SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.status_, appointment.last_name, appointment.email, appointment.doctorName FROM appointment WHERE reference_number = %s", (reference_number,))
         appointment_data = cursor.fetchone()
         print("Appointment Data:", appointment_data)
         cursor.close()
@@ -117,7 +124,22 @@ class Appointment:
     def view_appointment_by_reference(cls, reference_number):
         print("Reference Number:", reference_number)
         cursor = mysql.connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM appointment WHERE reference_number = %s", (reference_number,))
+        query = (
+            "SELECT "
+            "appointment.reference_number, appointment.date_appointment, appointment.time_appointment, "
+            "appointment.status_, appointment.book_date, "
+            "appointment.first_name AS appointment_first_name, "
+            "appointment.middle_name AS appointment_middle_name, "
+            "appointment.last_name AS appointment_last_name, "
+            "appointment.sex, appointment.birth_date, appointment.contact_number, "
+            "appointment.email, appointment.address, "
+            "users.first_name AS user_first_name, "
+            "users.middle_name AS user_middle_name, "
+            "users.last_name AS user_last_name "
+            "FROM appointment JOIN users ON appointment.doctorID = users.ID "
+            "WHERE appointment.reference_number = %s"
+        )
+        cursor.execute(query, (reference_number,))
         appointment_data = cursor.fetchone()
         print("Appointment Data:", appointment_data)
         cursor.close()
@@ -126,17 +148,19 @@ class Appointment:
     @classmethod
     def search_appointment(cls, query):
         try:
-            with mysql.connection.cursor() as cursor:
+            with mysql.connection.cursor(dictionary=True) as cursor:
                 sql = """
-                    SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
+                    SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_, appointment.doctorName
                     FROM appointment
                     WHERE LOWER(appointment.reference_number) = %s
                     OR LOWER(appointment.date_appointment) = %s
                     OR LOWER(appointment.time_appointment) = %s
                     OR LOWER(appointment.last_name) = %s
                     OR LOWER(appointment.status_) = %s
+                    OR LOWER(appointment.doctorName) = %s
+                    ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                 """
-                cursor.execute(sql, (query.lower(), query.lower(), query.lower(), query.lower(), query.lower()))
+                cursor.execute(sql, (query.lower(), query.lower(), query.lower(), query.lower(), query.lower(), query.lower()))
 
                 result = cursor.fetchall()
                 return result
@@ -148,27 +172,30 @@ class Appointment:
     @classmethod
     def filter_appointment(cls, filter_by, query):
         try:
-            with mysql.connection.cursor() as cursor:
-                columns = ["all", "reference_number", "date_appointment", "time_appointment", "last_name", "status_"]
+            with mysql.connection.cursor(dictionary=True) as cursor:
+                columns = ["all", "reference_number", "date_appointment", "time_appointment", "last_name", "status_", "doctorName"]
                 if filter_by not in columns:
                     raise ValueError("Invalid filter column")
                 
                 elif filter_by == "all":
                     sql = """
-                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
+                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_, appointment.doctorName
                         FROM appointment
+                        ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                     """
                 elif filter_by == "reference_number":
                     sql = """
-                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
+                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_, appointment.doctorName
                         FROM appointment
                         WHERE LOWER(appointment.reference_number) = %s
+                        ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                     """
                 else:
                     sql = f"""
-                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_
+                        SELECT appointment.reference_number, appointment.date_appointment, appointment.time_appointment, appointment.last_name, appointment.status_, appointment.doctorName
                         FROM appointment
                         WHERE LOWER(appointment.{filter_by}) = %s
+                        ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                     """
                 cursor.execute(sql, (query.lower(),))
                 result = cursor.fetchall()
@@ -178,11 +205,11 @@ class Appointment:
             return []
     
     @classmethod
-    def all_time_schedules(cls, selected_date):
+    def all_time_schedules(cls, selected_date, selected_doctor):
         try:
             cursor = mysql.connection.cursor()
-            sql = "SELECT time_appointment, slots FROM schedule WHERE date_appointment = %s ORDER BY date_appointment ASC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) ASC;"
-            cursor.execute(sql, (selected_date,))
+            sql = "SELECT time_appointment, slots FROM schedule WHERE date_appointment = %s and doctorName = %s ORDER BY date_appointment ASC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) ASC;"
+            cursor.execute(sql, (selected_date, selected_doctor))
             result = cursor.fetchall()
             return result
         except Exception as e:
@@ -191,16 +218,17 @@ class Appointment:
 
                 
     @classmethod
-    def update_slots(cls, selected_date, selected_time, increment=True):
+    def update_slots(cls, selected_date, selected_time, selected_doctor, increment=True):
         try:
             cursor = mysql.connection.cursor()
 
             # Determine whether to increment or decrement slots
             operator = "+" if increment else "-"
 
-            # Update slots based on the operation
-            sql = f"UPDATE schedule SET slots = slots {operator} 1 WHERE date_appointment = %s AND time_appointment = %s"
-            cursor.execute(sql, (selected_date, selected_time))
+            # Update slots based on the operation and doctorName
+            sql = f"UPDATE schedule SET slots = slots {operator} 1 WHERE date_appointment = %s AND time_appointment = %s AND doctorName = %s"
+            print("Data from the update slots", selected_date, selected_time, selected_doctor)
+            cursor.execute(sql, (selected_date, selected_time, selected_doctor))
             mysql.connection.commit()
 
             return True
@@ -208,38 +236,27 @@ class Appointment:
             print(f"Error updating slots: {e}")
             return False
 
+
     
     @classmethod
-    def update_time_slots(cls, date, old_time, new_time):
+    def update_time_slots(cls, date, old_time, new_time, doctor_name):
         try:
             cursor = mysql.connection.cursor()
 
             # Increment slots for the old time
-            sql_increment = "UPDATE schedule SET slots = slots + 1 WHERE date_appointment = %s AND time_appointment = %s"
-            cursor.execute(sql_increment, (date, old_time))
+            sql_increment = "UPDATE schedule SET slots = slots + 1 WHERE date_appointment = %s AND time_appointment = %s AND doctorName = %s"
+            cursor.execute(sql_increment, (date, old_time, doctor_name))
             mysql.connection.commit()
 
             # Decrement slots for the new time
-            sql_decrement = "UPDATE schedule SET slots = slots - 1 WHERE date_appointment = %s AND time_appointment = %s"
-            cursor.execute(sql_decrement, (date, new_time))
+            sql_decrement = "UPDATE schedule SET slots = slots - 1 WHERE date_appointment = %s AND time_appointment = %s AND doctorName = %s"
+            cursor.execute(sql_decrement, (date, new_time, doctor_name))
             mysql.connection.commit()
 
             return True
         except Exception as e:
             print(f"Error updating slots: {e}")
             return False
-    
-    @classmethod
-    def reference_authenticator(cls, reference_number, last_name):
-        try:
-            cursor = mysql.connection.cursor()
-            sql = "SELECT reference_number FROM appointment WHERE reference_number=%s AND last_name= %s"
-            cursor.execute(sql, (reference_number, last_name))
-            result = cursor.fetchone()
-            return result
-        except Exception as e:
-            print(f"Error fetching all appointments: {e}")
-            return []
         
     @classmethod
     def get_all_reference_numbers(cls):
@@ -254,7 +271,7 @@ class Appointment:
             return []
     
     @classmethod
-    def get_all_schedule(cls, date_appointment):
+    def get_all_available_schedules(cls, date_appointment):
         try:
             cursor = mysql.connection.cursor()
             sql = "SELECT time_appointment FROM schedule WHERE date_appointment = %s"
@@ -278,3 +295,29 @@ class Appointment:
         except Exception as e:
             print(f"Error deleting appointment: {e}")
             return False
+        
+    @classmethod
+    def get_all_doctor_names(cls):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            sql = "SELECT last_name FROM users WHERE user_role = 'doctor'"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error fetching all doctor names: {e}")
+            return []
+    
+    @classmethod
+    def get_doctor_id(cls, doctorName):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            sql = "SELECT id FROM users WHERE last_name = %s and user_role = 'doctor'"
+            cursor.execute(sql, (doctorName,))
+            result = cursor.fetchone()
+            return result
+        except Exception as e:
+            print(f"Error fetching doctor ID: {e}")
+            return []
+
+    

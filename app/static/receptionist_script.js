@@ -74,16 +74,16 @@ function updateTable(response) {
       // Create cells and content for each column
       var referenceNumberCell = document.createElement('td');
       referenceNumberCell.className = 'doccare-reference-number';
-      referenceNumberCell.textContent = row[0];
+      referenceNumberCell.textContent = row.reference_number;
 
       var dateAppointmentCell = document.createElement('td');
-      dateAppointmentCell.textContent = new Date(row[1]).toLocaleDateString('en-US', { timeZone: 'Asia/Manila' });
-      
+      dateAppointmentCell.textContent = new Date(row.date_appointment).toLocaleDateString('en-US', { timeZone: 'Asia/Manila' });
+
       var timeAppointmentCell = document.createElement('td');
-      timeAppointmentCell.textContent = row[2];
+      timeAppointmentCell.textContent = row.time_appointment;
 
       var lastNameCell = document.createElement('td');
-      lastNameCell.textContent = row[3];
+      lastNameCell.textContent = row.last_name;
 
       var statusCell = document.createElement('td');
       var statusDiv = document.createElement('div');
@@ -91,10 +91,13 @@ function updateTable(response) {
       var statusParagraph = document.createElement('p');
       statusParagraph.className = 'status';
       var strongStatus = document.createElement('strong');
-      strongStatus.textContent = row[4];
+      strongStatus.textContent = row.status_;
       statusParagraph.appendChild(strongStatus);
       statusDiv.appendChild(statusParagraph);
       statusCell.appendChild(statusDiv);
+
+      var doctorNameCell = document.createElement('td');
+      doctorNameCell.textContent = row.doctorName;
 
       var actionCell = document.createElement('td');
       actionCell.className = 'table__cell';
@@ -105,28 +108,38 @@ function updateTable(response) {
       viewButton.className = 'doccare-view-appointment-icon';
       viewButton.innerHTML = '<span class="material-symbols-outlined">info</span>';
 
-      var rescheduleButton = document.createElement('a');
-      rescheduleButton.href = '/receptionist/edit-appointment/?reference_number=' + row[0];
-      rescheduleButton.className = 'doccare-edit-appointment-icon';
-      rescheduleButton.innerHTML = '<span class="material-symbols-outlined">edit</span>';
+      var editButton = document.createElement('button');
+      editButton.type = 'button';
+      editButton.className = 'edit-appointment-button';
+      editButton.setAttribute('data-id', row.reference_number);
+      editButton.setAttribute('data-date', row.date_appointment);
+      editButton.setAttribute('data-time', row.time_appointment);
+      editButton.setAttribute('data-status', row.status_);
+      editButton.setAttribute('data-lastname', row.last_name);
+      editButton.setAttribute('data-email', row.email);
+      editButton.setAttribute('data-doctorName', row.doctorName);
+      editButton.onclick = function () { openEditModal(row.reference_number, row.doctorName); };
+      editButton.innerHTML = '<span class="material-symbols-outlined">edit</span>';
 
       var cancelModalButton = document.createElement('button');
       cancelModalButton.type = 'button';
       cancelModalButton.className = 'cancel-appointment-button';
-      cancelModalButton.setAttribute('data-id', row[0]);
-      cancelModalButton.onclick = function () { openCancelModal(row[0]); };
+      cancelModalButton.setAttribute('data-id', row.reference_number);
+      cancelModalButton.setAttribute('data-doctorName', row.doctorName);
+      cancelModalButton.onclick = function () { openCancelModal(row.reference_number, row.doctorName); };
       cancelModalButton.innerHTML = '<span class="material-symbols-outlined cancel-icon">event_busy</span>';
 
       var deleteModalButton = document.createElement('button');
       deleteModalButton.type = 'button';
       deleteModalButton.className = 'delete-appointment-button';
-      deleteModalButton.setAttribute('data-id', row[0]);
-      deleteModalButton.onclick = function () { openDeleteModal(row[0]); };
+      deleteModalButton.setAttribute('data-id', row.reference_number);
+      deleteModalButton.setAttribute('data-doctorName', row.doctorName);
+      deleteModalButton.onclick = function () { openDeleteModal(row.reference_number, row.doctorName); };
       deleteModalButton.innerHTML = '<span class="material-symbols-outlined delete-icon">delete</span>';
 
       // Append buttons to actionCell
       actionCell.appendChild(viewButton);
-      actionCell.appendChild(rescheduleButton);
+      actionCell.appendChild(editButton);
       actionCell.appendChild(cancelModalButton);
       actionCell.appendChild(deleteModalButton);
 
@@ -136,6 +149,7 @@ function updateTable(response) {
       newRow.appendChild(timeAppointmentCell);
       newRow.appendChild(lastNameCell);
       newRow.appendChild(statusCell);
+      newRow.appendChild(doctorNameCell);
       newRow.appendChild(actionCell);
 
       // Append the row to the tbody
@@ -147,9 +161,6 @@ function updateTable(response) {
     console.error('Error in response:', response);
   }
 }
-
-
-
 
 // Sorting functionality
 function handleSortClick(column) {
@@ -178,55 +189,35 @@ const editIcons = document.querySelectorAll('.edit-appointment-button');
 
 // Add a click event listener to each delete icon
 deleteIcons.forEach(deleteIcon => {
-    deleteIcon.addEventListener('click', function(event) {
-        // Prevent the default action of the delete icon
-        event.preventDefault();
+  deleteIcon.addEventListener('click', function(event) {
+    // Prevent the default action of the delete icon
+    event.preventDefault();
 
-        // Get the appointment ID from the data-id attribute
-        const appointmentId = this.getAttribute('data-id');
+    // Get the appointment ID and doctorName from data attributes
+    const appointmentId = this.getAttribute('data-id');
+    const doctorName = this.getAttribute('data-doctorName');
+    console.log(appointmentId, doctorName);
 
-        // Open the delete modal
-        openDeleteModal(appointmentId);
-    });
-});
-
-// Add a click event listener to each cancel icon
-cancelIcons.forEach(cancelIcon => {
-  cancelIcon.addEventListener('click', function(event) {
-      // Prevent the default action of the delete icon
-      event.preventDefault();
-
-      // Get the appointment ID from the data-id attribute
-      const appointmentId = this.getAttribute('data-id');
-
-      // Open the delete modal
-      openCancelModal(appointmentId);
+    // Open the delete modal with the correct data
+    openDeleteModal(appointmentId, doctorName);
   });
 });
 
-// Add a click event listener to each edit icon
-editIcons.forEach(editIcon => {
-  editIcon.addEventListener('click', function(event) {
-      // Prevent the default action of the delete icon
-      event.preventDefault();
-
-      // Get the appointment ID from the data-id attribute
-      const appointmentId = this.getAttribute('data-id');
-
-      // Open the delete modal
-      openEditModal(appointmentId);
-  });
-});
-
-// Delete functionality
-function openDeleteModal(appointmentId) {
+// Update the openDeleteModal function to accept doctorName as a parameter
+function openDeleteModal(appointmentId, doctorName) {
+  // Set data attributes for appointment ID and doctorName
   deleteModal.setAttribute('data-appointment-id', appointmentId);
+  deleteModal.setAttribute('data-doctor-name', doctorName);
+
+  // Display the delete modal
   deleteModal.style.display = 'flex';
   setTimeout(() => {
     deleteModal.style.opacity = '1';
   }, 10);
   toggleOverlayBackground(true);
 }
+
+
 
 function closeDeleteModal() {
   deleteModal.style.opacity = '0';
@@ -235,6 +226,7 @@ function closeDeleteModal() {
   }, 300); // Adjust the delay to match the transition duration
   toggleOverlayBackground(false);
 }
+
 
 
 // Function to toggle the overlay background
@@ -251,7 +243,7 @@ function deleteAppointment() {
   $.ajax({
       type: 'POST',
       url: '/receptionist/delete-appointment/',
-      data: { reference_number: appointmentId },
+      data: { reference_number: appointmentId, doctor_name: deleteModal.getAttribute('data-doctor-name') },
       headers: {
         "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
       },
@@ -292,9 +284,29 @@ window.addEventListener('click', event => {
 });
 
 
+// Add a click event listener to each cancel icon
+cancelIcons.forEach(cancelIcon => {
+  cancelIcon.addEventListener('click', function(event) {
+    // Prevent the default action of the delete icon
+    event.preventDefault();
+
+    // Get the appointment ID from the data-id attribute
+    const appointmentId = this.getAttribute('data-id');
+    const doctorName = this.getAttribute('data-doctorName');
+    console.log(appointmentId, doctorName);
+
+    // Open the delete modal
+    openCancelModal(appointmentId, doctorName);
+  });
+});
+
+
 // Cancel functionality
-function openCancelModal(appointmentId) {
+function openCancelModal(appointmentId, doctorName) {
   cancelModal.setAttribute('data-appointment-id', appointmentId);
+  cancelModal.setAttribute('data-doctor-name', doctorName);
+  console.log(appointmentId, doctorName)
+  
   cancelModal.style.display = 'flex';
   setTimeout(() => {
       cancelModal.style.opacity = '1';
@@ -313,12 +325,13 @@ function closeCancelModal() {
 function cancelAppointment() {
   // Assuming deleteModal is your modal element
   const appointmentId = cancelModal.getAttribute('data-appointment-id');
+  const doctorName = cancelModal.getAttribute('data-doctor-name');
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
   // Make an AJAX request to delete the appointment
   $.ajax({
       type: 'POST',
       url: '/receptionist/cancel-appointment/',
-      data: { reference_number: appointmentId },
+      data: { reference_number: appointmentId, doctor_name: doctorName },
       headers: {
         "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
       },
@@ -334,7 +347,6 @@ function cancelAppointment() {
                     editIcon.classList.add('disabled');
                     editIcon.removeAttribute('href'); // Remove the link functionality
                     console.log('appointmentId:', appointmentId);
-                    console.log('appointmentRow:', appointmentRow);
                     // Optionally, you can also change the icon color or add a tooltip to indicate it's disabled
                 }
             }
@@ -369,11 +381,22 @@ window.addEventListener('click', event => {
   }
 });
 
-// Edit functionality
-function openEditModal(referenceNumber) {
-  // Fetch appointment data asynchronously
-  fetchAppointmentData(referenceNumber);
-}
+
+// Add a click event listener to each edit icon
+editIcons.forEach(editIcon => {
+  editIcon.addEventListener('click', function(event) {
+    // Prevent the default action of the delete icon
+    event.preventDefault();
+
+    // Get the appointment ID from the data-id attribute
+    const appointmentId = this.getAttribute('data-id');
+    const doctorName = this.getAttribute('data-doctorName');
+    console.log(appointmentId, doctorName);
+
+    // Open the delete modal
+    openEditModal(appointmentId);
+  });
+});
 
 // Edit functionality
 function openEditModal(referenceNumber) {
@@ -418,6 +441,7 @@ async function fetchAppointmentData(referenceNumber) {
 function populateEditModal(appointmentData, timeOptions) {
   // Format the date received from the server into "yyyy-MM-dd"
   const formattedDate = new Date(appointmentData.date_appointment).toISOString().split('T')[0];
+  const doctorName = document.querySelector('.edit-appointment-button').getAttribute('data-doctorName');
 
   // Populate the time select options
   const timeSelect = document.getElementById("validationCustom03");
@@ -449,9 +473,12 @@ function populateEditModal(appointmentData, timeOptions) {
   document.getElementById("validationCustom04").value = appointmentData.status_;
   document.getElementById("validationCustom05").value = appointmentData.last_name;
   document.getElementById("validationCustom06").value = appointmentData.email;
+  document.getElementById("validationCustom07").value = doctorName;
 
   // Set the reference_number in the hidden input for updating
   document.getElementsByName("reference_number")[0].value = appointmentData.reference_number;
+  // Set the doctorName in the appropriate field
+  document.getElementById("validationCustom07").value = doctorName;
 
   // Open the edit modal
   editModal.style.display = 'block';
@@ -524,15 +551,6 @@ $(document).on("click", ".doccare-success-button", function (event) {
   editAppointment();
 });
 
-// Open the EditModal
-document.addEventListener('click', function (event) {
-  if (event.target.classList.contains('edit-appointment-button')) {
-      const referenceNumber = event.target.getAttribute('data-id');
-      
-      // Fetch and load appointment data
-      openEditModal(referenceNumber);
-  }
-});
 
 function editAppointment() {
   if (validateForm()) {
@@ -544,7 +562,7 @@ function editAppointment() {
           // Change the url to point to the desired route
           url: '/receptionist/edit-appointment-version-two/',
           method: "POST",
-          data: $("form").serialize(),
+          data: $("form").serialize() + "&doctor_name=" + $('#validationCustom07').val(),
           success: function (response) {
               if (response.success) {
                   // Show success modal
