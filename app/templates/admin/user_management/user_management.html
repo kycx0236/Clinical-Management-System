@@ -52,12 +52,11 @@
         <table id="userTable" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>USERNAME</th>
-                    <th>PASSWORD</th>
                     <th>FIRST NAME</th>
                     <th>MIDDLE NAME</th>
                     <th>LAST NAME</th>
+                    <th>EMAIL</th>
                     <th>GENDER</th>
                     <th>USER ROLE</th>
                     <th>ACTION</th>
@@ -66,18 +65,18 @@
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
-                    <td>{{ user.password }}</td>
                     <td>{{ user.first_name }}</td>
                     <td>{{ user.middle_name }}</td>
                     <td>{{ user.last_name }}</td>
+                    <td>{{ user.email }}</td>
                     <td>{{ user.gender }}</td>
                     <td>{{ user.user_role }}</td>
                     <td>
                         <div class="action-icon-container">
                             <!-- VIEW INFO -->
                             <form method="GET" action="/admin/user_info/">
+                                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                                 <div class="delete-icon">
                                     <input id="user_id" name="user_id" value="{{ user['id'] }}" type="hidden">
                                     <button type="submit" style="background: none; border: none;">
@@ -88,6 +87,7 @@
 
                             <!-- DELETE INFO-->
                             <form id="deleteForm_{{ user.id }}" method="POST" action="{{ url_for('admin.delete_user') }}">
+                                <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
                                 <div class="delete-icon">
                                     <input id="user_id" name="user_id" value="{{ user.id }}" type="hidden">
                                     <button type="button" onclick="confirmation('{{ user.id }}')" style="background: none; border: none;">

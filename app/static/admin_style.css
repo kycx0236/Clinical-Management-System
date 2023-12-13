@@ -182,14 +182,14 @@
 
 /* Input boxes */
 .inputBox.username, .inputBox.password{
-    width: 550px;
+    width: 475px;
 }
 
 .gender, .user_role {
-    width: 400px;
+    width: 300px;
 }
 
-.inputBox.fName, .inputBox.mName, .inputBox.lName{
+.inputBox.fName, .inputBox.mName, .inputBox.lName, .inputBox.email{
     width: 300px;
 }
 
@@ -231,7 +231,34 @@ input, select {
 .u_row.thirdRow {
 
     gap: 10px;
-    margin-bottom: 120px; 
+    margin-bottom: 50px; 
 
 }
 
+.btn-new-pass {
+    color: white;
+    background-color: var(--blueD);
+    border: none;
+    border-radius: 5px;
+    width: 230px;
+    height: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 20px;
+}
+
+.flash-message {
+    position: absolute;
+    top: 0;  
+    left: 0; 
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #4CAF50;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box; 
+    z-index: 1;
+}

@@ -62,32 +62,28 @@
             <div class="group-info">
                 <div class="u_row firstRow">
                     <div class="inputBox fName">
-                        <input type="text" required="required" name="first_name">
-                        <span>First Name</span>
+                        <input type="text" required="required" name="first_name" oninput="capitalizeFirstLetter(this)">
+                        <span>FIRST NAME</span>
                     </div>
                     <div class="inputBox mName">
-                        <input type="text" required="required" name="middle_name">
-                        <span>Middle Name</span>
+                        <input type="text" required="required" name="middle_name" oninput="capitalizeFirstLetter(this)">
+                        <span>MIDDLE NAME</span>
                     </div>
                     <div class="inputBox lName">
-                        <input type="text" required="required" name="last_name">
-                        <span>Last Name</span>
+                        <input type="text" required="required" name="last_name" oninput="capitalizeFirstLetter(this)">
+                        <span>LAST NAME</span>
                     </div>
                 </div>
 
                 <div class="u_row secondRow">
                     <div class="inputBox username">
-                        <input type="text" required="required" name="username" autocomplete="off">
-                        <span>Username</span>
+                        <input type="text" name="username" autocomplete="off">
+                        <span>USERNAME</span>
                     </div>
 
-                    <div class="inputBox gender">
-                        <span>Gender</span>
-                        <select class="gender" name="gender" required="required">
-                            <option value="" disabled selected></option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                    <div class="inputBox password">
+                        <input type="password" required="required" name="password" autocomplete="off" value="{{ password }}" readonly>
+                        <span>PASSWORD</span>
                     </div>
                     
                     
@@ -95,13 +91,22 @@
 
                 <div class="u_row thirdRow">
                     
-                    <div class="inputBox password">
-                        <input type="text" required="required" name="password" autocomplete="off">
-                        <span>Password</span>
+                    <div class="inputBox email">
+                        <input type="email" name="email" autocomplete="off">
+                        <span>EMAIL</span>
                     </div>
 
+                    <div class="inputBox gender">
+                        <span>GENDER</span>
+                        <select class="gender" name="gender" required="required">
+                            <option value="" disabled selected></option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
                     <div class="inputBox user_role">
-                        <span>User Role</span>
+                        <span>USER ROLE</span>
                         <select class="user_role" name="user_role" required="required">
                             <option value="" disabled selected></option>
                             <option value="doctor">Doctor</option>
@@ -119,6 +124,19 @@
         </div>
     </form>
     
+
+    <script>
+        function capitalizeFirstLetter(input) {
+
+            let inputValue = input.value;
+    
+            let capitalizedValue = inputValue.replace(/\b\w/g, function (match) {
+                return match.toUpperCase();
+            });
+    
+            input.value = capitalizedValue;
+        }
+    </script>
 
 
     {% if success %}
@@ -148,7 +166,7 @@
                         <h1 class="modal-title fs-5">Error</h1>
                     </div>
                     <div class="modal-body">
-                        Error in adding user! A user with the same username already exists.
+                        Unable to add user. An aaccount with the provided details already exists.
                     </div>
                     <a href="{{ url_for('admin.add_user') }}">
                         <div class="modal-footer">
