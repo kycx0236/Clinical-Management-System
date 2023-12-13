@@ -103,18 +103,15 @@ class admin():
     def update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role, new_password=None):
         cursor = mysql.connection.cursor()
 
-        # Check if a new password is provided
         if new_password:
-            # Send the new password to the user's email
-            email = admin.get_user_info(user_id)[6]  # Replace this with the actual column index for the email in your database
+            
+            email = admin.get_user_info(user_id)[6]  
             admin.send_message(email, new_password)
 
-            # Hash the new password
             hashed_password = generate_password_hash(new_password)
 
-            # Update the database with the hashed new password
-            sql = "UPDATE users SET password=%s WHERE id=%s"
-            cursor.execute(sql, (hashed_password, user_id))
+            sql = "UPDATE users SET username=%s, password=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
+            cursor.execute(sql, (username, hashed_password, first_name, middle_name, last_name, gender, user_role, user_id))
         else:
             # Update the database without changing the password
             sql = "UPDATE users SET username=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"

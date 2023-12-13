@@ -62,28 +62,28 @@
             <div class="group-info">
                 <div class="u_row firstRow">
                     <div class="inputBox fName">
-                        <input type="text" required="required" name="first_name">
-                        <span>First Name</span>
+                        <input type="text" required="required" name="first_name" oninput="capitalizeFirstLetter(this)">
+                        <span>FIRST NAME</span>
                     </div>
                     <div class="inputBox mName">
-                        <input type="text" required="required" name="middle_name">
-                        <span>Middle Name</span>
+                        <input type="text" required="required" name="middle_name" oninput="capitalizeFirstLetter(this)">
+                        <span>MIDDLE NAME</span>
                     </div>
                     <div class="inputBox lName">
-                        <input type="text" required="required" name="last_name">
-                        <span>Last Name</span>
+                        <input type="text" required="required" name="last_name" oninput="capitalizeFirstLetter(this)">
+                        <span>LAST NAME</span>
                     </div>
                 </div>
 
                 <div class="u_row secondRow">
                     <div class="inputBox username">
                         <input type="text" name="username" autocomplete="off">
-                        <span>Username</span>
+                        <span>USERNAME</span>
                     </div>
 
                     <div class="inputBox password">
                         <input type="password" required="required" name="password" autocomplete="off" value="{{ password }}" readonly>
-                        <span>Password</span>
+                        <span>PASSWORD</span>
                     </div>
                     
                     
@@ -93,11 +93,11 @@
                     
                     <div class="inputBox email">
                         <input type="email" name="email" autocomplete="off">
-                        <span>Email</span>
+                        <span>EMAIL</span>
                     </div>
 
                     <div class="inputBox gender">
-                        <span>Gender</span>
+                        <span>GENDER</span>
                         <select class="gender" name="gender" required="required">
                             <option value="" disabled selected></option>
                             <option value="male">Male</option>
@@ -106,7 +106,7 @@
                     </div>
                     
                     <div class="inputBox user_role">
-                        <span>User Role</span>
+                        <span>USER ROLE</span>
                         <select class="user_role" name="user_role" required="required">
                             <option value="" disabled selected></option>
                             <option value="doctor">Doctor</option>
@@ -124,6 +124,19 @@
         </div>
     </form>
     
+
+    <script>
+        function capitalizeFirstLetter(input) {
+
+            let inputValue = input.value;
+    
+            let capitalizedValue = inputValue.replace(/\b\w/g, function (match) {
+                return match.toUpperCase();
+            });
+    
+            input.value = capitalizedValue;
+        }
+    </script>
 
 
     {% if success %}
