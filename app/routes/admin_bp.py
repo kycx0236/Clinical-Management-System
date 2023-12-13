@@ -5,6 +5,7 @@ from app.models.admin_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
+from werkzeug.security import generate_password_hash
 
 
 admin_bp = Blueprint('admin', __name__)
@@ -48,41 +49,51 @@ def logout():
 
 # -------------------------------------------- USER -------------------------------------------- #
 # ADD USER
-@admin_bp.route('/add_user/',  methods=['GET', 'POST'])
+@admin_bp.route('/add_user/', methods=['GET', 'POST'])
 @login_required
 @role_required('admin')
 def add_user():
     form = UserForm()
     current_id = current_user.id 
     admin_info = admin.get_user(current_id)
+    password = admin.generate_password()
+    hashed_password = generate_password_hash(password)
 
     if request.method == 'POST':
         admin_info = admin.get_user(current_id)
         username = form.username.data
-        password = form.password.data
-        first_name = form.first_name.data.upper()
-        middle_name = form.middle_name.data.upper()
-        last_name = form.last_name.data.upper()
+        first_name = form.first_name.data
+        middle_name = form.middle_name.data
+        last_name = form.last_name.data
+        email = form.email.data
         gender = form.gender.data
         user_role = form.user_role.data
 
         new_user = admin()
         new_user.username = username
-        new_user.password = password
+        new_user.password = hashed_password
         new_user.first_name = first_name
         new_user.middle_name = middle_name
         new_user.last_name = last_name
+        new_user.email = email
         new_user.gender = gender
         new_user.user_role = user_role
 
-        result = new_user.add_user()
-
+        if admin.check_existing_user(username, first_name, middle_name, last_name, email) == True:
+            return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
+        
+        else: 
+            result = new_user.add_user()
+            admin.send_message(email,password)
+       
         if result:
-            return render_template("admin/user_management/add_user.html", success=True, UserForm=form, info=admin_info)
+            return render_template("admin/user_management/add_user.html", success=True, UserForm=form, info=admin_info, password=hashed_password)
         else:
-            return render_template("admin/user_management/add_user.html", error=True, UserForm=form, info=admin_info)
+            
+            return render_template("admin/user_management/add_user.html", error=True, UserForm=form, info=admin_info, password=hashed_password)
+  
     
-    return render_template("admin/user_management/add_user.html", UserForm=form, info=admin_info)
+    return render_template("admin/user_management/add_user.html", UserForm=form, info=admin_info, password=hashed_password)
 
 # DELETE USER
 @admin_bp.route('/delete_user/', methods=['GET', 'POST'])
@@ -128,7 +139,9 @@ def user_info():
         gender = request.form.get('gender')
         user_role = request.form.get('user_role')
 
-        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role)
+        new_password = request.form.get('new_password')  # Add this line
+
+        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role, new_password)
         user_info = admin.get_user_info(user_id)
         admin_info = admin.get_user(user_id)
 

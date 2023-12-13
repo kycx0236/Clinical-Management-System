@@ -71,18 +71,21 @@
             
             <!-- USER INFORMATION -->
             <div class="user-bg">
-                <div class="group-info">
+    
+                <div id="notification" class="flash-message" style="display: none;"></div>
+
+                <div class="group-info">               
                     <div class="u_row firstRow">
                         <div class="inputBox fName">
-                            <input type="text" required="required" name="first_name" value="{{ user[3] }}" disabled>
+                            <input type="text" required="required" name="first_name" value="{{ user[3] }}" oninput="capitalizeFirstLetter(this)" disabled>
                             <span>FIRST NAME</span>
                         </div>
                         <div class="inputBox mName">
-                            <input type="text" required="required" name="middle_name" value="{{ user[4] }}" disabled>
+                            <input type="text" required="required" name="middle_name" value="{{ user[4] }}" oninput="capitalizeFirstLetter(this)" disabled>
                             <span>MIDDLE NAME</span>
                         </div>
                         <div class="inputBox lName">
-                            <input type="text" required="required" name="last_name" value="{{ user[5] }}" disabled>
+                            <input type="text" required="required" name="last_name" value="{{ user[5] }}" oninput="capitalizeFirstLetter(this)" disabled>
                             <span>LAST NAME</span>
                         </div>
                     </div>
@@ -93,29 +96,35 @@
                             <span>USERNAME</span>
                         </div>
 
-                        <div class="inputBox gender">
-                            <select class="gender" name="gender" required="required" disabled>
-                                <option value="" disabled selected></option>
-                                <option value="MALE" {% if user[6] == "MALE" %} selected {% endif %}>MALE</option>
-                                <option value="FEMALE" {% if user[6] == "FEMALE" %} selected {% endif %}>FEMALE</option>
-                            </select>
-                            <span>GENDER</span>
+                        <div class="inputBox password">
+                            <input type="password" required="required" name="password" value="{{ user[2] }}" disabled readonly>
+                            <span>PASSWORD</span>
                         </div>
+                        <input type="hidden" id="newPassword" name="new_password">
                     </div>
 
                     <div class="u_row thirdRow">
-                        <div class="inputBox password">
-                            <input type="text" required="required" name="password" value="{{ user[2] }}" disabled>
-                            <span>PASSWORD</span>
+                        <div class="inputBox email">
+                            <input type="email" name="email" autocomplete="off" value="{{ user[6] }}" disabled>
+                            <span>EMAIL</span>
+                        </div>
+
+                        <div class="inputBox gender">
+                            <select class="gender" name="gender" required="required" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="male" {% if user[7] == "male" %} selected {% endif %}>Male</option>
+                                <option value="female" {% if user[7] == "female" %} selected {% endif %}>Female</option>
+                            </select>
+                            <span>GENDER</span>
                         </div>
 
                         <div class="inputBox user_role">
                             <select class="user_role" name="user_role" required="required" disabled>
                                 <option value="" disabled selected></option>
-                                <option value="doctor" {% if user[7] == "doctor" %} selected {% endif %}>doctor</option>
-                                <option value="receptionist" {% if user[7] == "receptionist" %} selected {% endif %}>receptionist</option>
-                                <option value="medtech" {% if user[7] == "medtech" %} selected {% endif %}>medtech</option>
-                                <option value="admin" {% if user[7] == "admin" %} selected {% endif %}>admin</option>
+                                <option value="doctor" {% if user[8] == "doctor" %} selected {% endif %}>Doctor</option>
+                                <option value="receptionist" {% if user[8] == "receptionist" %} selected {% endif %}>Receptionist</option>
+                                <option value="medtech" {% if user[8] == "medtech" %} selected {% endif %}>Medtech</option>
+                                <option value="admin" {% if user[8] == "admin" %} selected {% endif %}>Admin</option>
                             </select>
                             <span>USER ROLE</span>
                         </div>
@@ -123,7 +132,13 @@
                 </div>
 
                 <div class="btn-container">
-                    <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+                    <div class="btn-container">
+                        <button class="btn-new-pass" type="button" id="NewPassButton" onclick="generateNewPassword()" style="display: none;" >GENERATE NEW PASSWORD</button>
+                    </div>
+
+                    <div class="btn-container">
+                        <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -137,7 +152,7 @@
                         <h1 class="modal-title fs-5">Success</h1>
                     </div>
                     <div class="modal-body">
-                        Patient information updated successfully!
+                        User information updated successfully!
                     </div>
                     <a href="{{ url_for('admin.user_info', user_id=user[0]) }}">
                         <div class="modal-footer">
@@ -156,7 +171,7 @@
                         <h1 class="modal-title fs-5">Error</h1>
                     </div>
                     <div class="modal-body">
-                        Error in saving changes for patient information!
+                        Error in saving changes for user information!
                     </div>
                     <a href="{{ url_for('admin.user_info', user_id=user[0]) }}">
                         <div class="modal-footer">
@@ -169,28 +184,36 @@
     {% endif %}
 
     <script>
-        // EDIT BUTTON
+        // BUTTONS
+        let editEnabled = false;
+
         function enableEdit() {
             const inputFields = document.querySelectorAll('.group-info input, .group-info select');
-
             inputFields.forEach((input) => {
                 input.disabled = false;
             });
+
+            const NewPassButton = document.querySelector('#NewPassButton');
+            NewPassButton.style.display = 'block';
 
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'block';
 
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
-            editIcon.setAttribute('onclick', 'disableEdit()'); 
+            editIcon.setAttribute('onclick', 'disableEdit()');
+
+            editEnabled = true;
         }
 
         function disableEdit() {
             const inputFields = document.querySelectorAll('.group-info input, .group-info select');
-
             inputFields.forEach((input) => {
                 input.disabled = true;
             });
+
+            const NewPassButton = document.querySelector('#NewPassButton');
+            NewPassButton.style.display = 'none';
 
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'none';
@@ -198,8 +221,43 @@
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');
-        }
-    </script>
 
+            editEnabled = false;
+        }
+
+        // FOR GENERATING NEW PASSWORD
+        function generateNewPassword() {
+            if (editEnabled) {
+                const length = 12;
+                const specialCharacters = "!@#$%^&*-_+<>?";
+                const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' + specialCharacters;
+
+                const newPassword = Array.from({ length }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+
+                document.getElementById('newPassword').value = newPassword;
+
+                // Display the success Flash message and auto-hide after 8 seconds
+                const flashMessage = document.getElementById('notification');
+                flashMessage.innerHTML = 'New Password is Generated; Click The Update Button to Procceed With The New Password';
+                flashMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 8000);
+            }
+        }
+
+        function capitalizeFirstLetter(input) {
+
+            let inputValue = input.value;
+
+            let capitalizedValue = inputValue.replace(/\b\w/g, function (match) {
+                return match.toUpperCase();
+            });
+
+            input.value = capitalizedValue;
+            }
+            
+    </script>
 
 {% endblock %}

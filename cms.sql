@@ -6,10 +6,11 @@ USE `web_cms_database`;
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT NOT NULL,
     username VARCHAR(20) NOT NULL,
-    password VARCHAR(20) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
     middle_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
+    email varchar(50) NOT NULL,
     gender VARCHAR(20) NOT NULL,
     user_role VARCHAR(20) NOT NULL,
     PRIMARY KEY (id),
