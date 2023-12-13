@@ -4,6 +4,7 @@
 
 {% block content %}
     <form class="login-form" id="login-form" method="POST" action="{{ url_for('login') }}">
+        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
         <div class="container margin-tb">
             <span class="doc">Doc</span><span class="care">Care</span>
         </div>

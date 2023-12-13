@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysql_connector import MySQL
-from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY
+from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user
+from flask_mail import Mail
 
 mysql = MySQL()
 login_manager = LoginManager()
+mail = Mail()
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
@@ -15,8 +18,17 @@ def create_app():
     app.config['MYSQL_USER'] = DB_USERNAME
     app.config['MYSQL_PASSWORD'] = DB_PASSWORD
     app.config['MYSQL_DATABASE'] = DB_NAME
+    app.config['MAIL_SERVER']= MAIL_SERVER
+    app.config['MAIL_PORT'] = MAIL_PORT
+    app.config['MAIL_USERNAME'] = MAIL_USERNAME
+    app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
+    app.config['MAIL_USE_TLS'] = MAIL_USE_TLS
+    app.config['MAIL_USE_SSL'] = MAIL_USE_SSL
 
+    mail.init_app(app)
     mysql.init_app(app)
+    csrf.init_app(app)
+    
     login_manager = LoginManager(app)
  
     @login_manager.user_loader

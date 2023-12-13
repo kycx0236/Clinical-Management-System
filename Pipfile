@@ -10,6 +10,7 @@ werkzeug = "*"
 flask-wtf = "*"
 python-dotenv = "*"
 flask-login = "*"
+flask-mail = "*"
 
 [dev-packages]
 
