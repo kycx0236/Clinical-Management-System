@@ -540,7 +540,6 @@ ul li p {
     font-size: 0.75em;
     color: var(--blueA);
     font-weight: 900;
-    font-size: 14px;
 }
 
 .inputBox input:focus {

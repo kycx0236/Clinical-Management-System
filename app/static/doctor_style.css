@@ -828,7 +828,6 @@ input, select {
     text-align: left;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid var(--blueC);
     border-left: 2px solid white;
     background-color: white;
     font-size: 13px;

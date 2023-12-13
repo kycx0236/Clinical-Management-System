@@ -48,8 +48,10 @@ CREATE TABLE IF NOT EXISTS `patientinfo` (
   `occupation` varchar(50) NOT NULL,
   `p_email` varchar(50) NOT NULL,
   `p_contactNum` varchar(20) NOT NULL,
+  `userID` int NOT NULL,
   PRIMARY KEY (`patientID`),
   UNIQUE KEY `patient_id_UNIQUE` (`patientID`)
+  FOREIGN KEY (`userID`) REFERENCES users(`id`) ON DELETE CASCADE
 ) 
 
 -- MEDICAL HISTORY

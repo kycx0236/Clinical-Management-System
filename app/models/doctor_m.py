@@ -15,10 +15,10 @@ class doctor():
             return False
         
         sql = "INSERT INTO patientinfo(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, \
-            relationship, eContactNum, occupation, p_email, p_contactNum) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            relationship, eContactNum, occupation, p_email, p_contactNum, userID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (self.firstName, self.midName, self.lastName, self.age, self.civilStatus, self.gender, self.bloodType, self.birthPlace, self.birthDate, 
                              self.p_address, self.nationality, self.religion, self.eContactName, self.relationship, self.eContactNum, self.occupation, self.p_email, 
-                             self.p_contactNum))
+                             self.p_contactNum, self.userID))
         mysql.connection.commit()
 
         new_patient_id = cursor.lastrowid

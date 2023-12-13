@@ -101,6 +101,7 @@ def add_patient():
         new_patient.eContactName = e_person
         new_patient.relationship = relationship
         new_patient.eContactNum = e_number
+        new_patient.userID = current_id
 
         result = new_patient.add()
 
