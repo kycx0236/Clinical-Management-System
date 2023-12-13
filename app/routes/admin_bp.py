@@ -65,7 +65,7 @@ def add_user():
         new_user.gender = gender
         new_user.user_role = user_role
 
-        if admin.check_existing_user(username) == True:
+        if admin.check_existing_user(username, first_name, middle_name, last_name, email) == True:
             return render_template("admin/user_management/add_user.html", error=True, UserForm=form, password=hashed_password)
         
         else: 
