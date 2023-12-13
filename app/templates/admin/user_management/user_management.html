@@ -52,7 +52,6 @@
         <table id="userTable" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>USERNAME</th>
                     <th>FIRST NAME</th>
                     <th>MIDDLE NAME</th>
@@ -66,7 +65,6 @@
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.first_name }}</td>
                     <td>{{ user.middle_name }}</td>
