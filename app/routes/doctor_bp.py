@@ -829,6 +829,7 @@ def prescription():
 
             result = doctor.add_prescription(assessment_id=new_assessment_id, medication_name=medication_name, dosage=dosage, p_quantity=p_quantity, duration=duration, instructions=instructions)
         
+        doctor_info = doctor.get_doctor_info(user_id)
         patient_info = doctor.get_patient_info(new_patient_id)
         consultation_info = doctor.get_consultation_info(new_assessment_id, new_patient_id)
         prescription_info = doctor.get_prescription_info(new_assessment_id)
@@ -840,7 +841,7 @@ def prescription():
         else:
              return jsonify({'error': True}), 500  
 
-    return render_template("doctor/patient/prescription.html", consultation=consultation_info, patient=patient_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form, info=doctor_info)
+    return render_template("doctor/patient/prescription.html", consultation=consultation_info, patient=patient_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form, doctor=doctor_info)
 
 # DELETE PATIENT RECORD
 @doctor_bp.route('/delete_patient/', methods=['GET', 'POST'])

@@ -598,6 +598,7 @@ textarea:focus {
 }
   
 .modal-header {
+    text-align: left;
     padding: 10px;
     border-bottom: 1px solid var(--blueA);
     color: var(--blueA);
