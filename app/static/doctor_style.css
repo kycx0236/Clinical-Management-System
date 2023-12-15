@@ -26,6 +26,17 @@
     grid-template-rows: auto auto;
 }
 
+.grid_container.clearance {
+    grid-template-columns: 83% 17%;
+    grid-template-rows: auto auto;
+    height: 100%;
+}
+
+.grid_container.consultation {
+    grid-template-columns: 80% 20%;
+    grid-template-rows: auto auto;
+}
+
 .grid_item {
     padding: 15px;
     border: 1px solid var(--grayC);
@@ -222,11 +233,11 @@
 }
 
 .inputBox.e_person {
-    width: 420px;
+    width: 390px;
 }
 
 .inputBox.birth_place, .inputBox.p_address {
-    width: 665px;
+    width: 620px;
 }
 
 .status, .gender, .bloodType, .inputBox.status {
@@ -260,37 +271,37 @@ input, select {
 }
 
 .p_row.firstRow {
-    gap: 70px;
+    gap: 25px;
 }
 
 .p_row.secondRow {
-    gap: 55px;
+    gap: 32px;
 }
 
 .p_row.thirdRow {
-    gap: 75px;
+    gap: 26px;
 }
 
 .p_row.fourthRow {
-    gap: 70px;
+    gap: 22px;
 }
 
 .p_row.fifthRow {
-    gap: 75px;
+    gap: 20px;
 }
 
 .p_row.sixthRow {
-    gap: 55px;
+    gap: 20px;
 }
 
 /* -------------------------------------------- MEDICAL HISTORY, ASSESSMENT, LAB REQUEST, PRESCRIPTION AND REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.history {
-    height: 850px; 
+    height: 100%; 
     width: 100%;
 }
 
 .patient-bg.assessment {
-    height: 1730px; 
+    height: 100%; 
 }
 
 .patient-bg.request {
@@ -310,6 +321,10 @@ input, select {
     background-color: #bae1ff;
 }
 
+.patient-bg.clearance {
+    height: 100%; 
+    width: 100%;
+}
 
 /* subheading */
 .subtext {
@@ -359,6 +374,12 @@ input, select {
     position: relative;
     width: 100%;
     margin: 0;
+}
+
+.med-header.clearance {
+    position: relative;
+    width: 100%;
+    margin-top: 30px;
 }
 
 /* -------------------------------------------- MORE ROW ARRANGEMENTS -------------------------------------------- */
@@ -438,7 +459,7 @@ input, select {
     margin-bottom: 35px;
     width: 955px; 
     position: relative;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .inputBox.subject {
@@ -453,7 +474,6 @@ input, select {
 /* -------------------------------------------- MEDICAL ASSESSMENT -------------------------------------------- */
 .assessment-table {
     position: relative; 
-    width: 95%;
     margin-top: 10px;
     line-height: 1.5;
     color: var(--darkBlue);
@@ -829,8 +849,7 @@ input, select {
 
 .segmented-controls {
     position: relative;
-    width: 150px;
-    border-radius: 5px;
+    width: 100%;
     overflow: hidden;
 }
 
@@ -860,6 +879,53 @@ input, select {
     padding: 10px;
     border-left: 2px solid var(--blueA);
     font-weight: 900;
+}
+
+/* -------------------------------------------- MEDICAL CLEARANCE AND CERTIFICATE -------------------------------------------- */
+.lab_icon {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+    display: flex;
+    cursor: pointer;   
+    background-color: #f2f9ff;   
+    border-radius: 5px;
+    padding: 5px;  
+}
+
+.lab_icon img {
+    margin-right: 10px;
+    width: 25px;
+}
+
+.lab_icon img:active {
+    transform: translateY(1px);
+}
+
+.toggled_buttons {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--blueC);
+}
+
+.editor {
+    position: relative;  
+    border-radius: 0px; 
+    margin-top: 0px;
+    width: 100%; 
+    border: 1px solid var(--blueC);
+    outline: none;
+    height: 1000px;
+    padding: 30px;
+    text-align: left;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* APPOINTMENT */
