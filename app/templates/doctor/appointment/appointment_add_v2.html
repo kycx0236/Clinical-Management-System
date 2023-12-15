@@ -11,7 +11,7 @@
     <div class="doccare-edit-container">
         <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
         <header>NEW APPOINTMENT</header>
-        <form class="needs-validation" id="appointment-form" method="POST" action="/receptionist/add-appointment/" novalidate>
+        <form class="needs-validation" id="appointment-form" method="POST" action="/doctor/add-appointment/" novalidate>
             {{ form.csrf_token }}
             <div class="doccare-form-first">
                 <div class="doccare-appoinment-details">
@@ -60,6 +60,28 @@
                             </div>
                         </div>
 
+                        <div class="input-fields">
+                            <label for="validationCustom13" class="form-label"> Receptionist ID </label>
+                            <select class="form-select" id="validationCustom13" name="receptionistID" required aria-describedby="validationCustom11Feedback">
+                                <option value="" selected>Select your Receptionist</option>
+                                {% if receptionist_ids %}
+                                    {% if receptionist_ids.id %}
+                                        <option value="{{ receptionist_ids.id }}" data-doctor-id="{{ receptionist_ids.id }}">{{ receptionist_ids.id }}</option>
+                                    {% else %}
+                                        <option value="" disabled>No receptionist available</option>
+                                    {% endif %}
+                                {% else %}
+                                    <option value="" disabled>No receptionist available</option>
+                                {% endif %}
+                            </select>                                                                         
+                            <div id="validationCustom11Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select <strong>your Receptionist</strong>.
+                            </div>
+                        </div>
+                        
                         <!-- Date Appointment -->
                         <div class="input-fields">
                             <label for="validationCustom01" class="form-label"> Date Appointment </label>
@@ -233,7 +255,7 @@
 <!-- Include these script tags -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename="receptionist_add_v2_script.js") }}"></script>
+<script src="{{ url_for('static', filename="doctor_add_v2_script.js") }}"></script>
 <script>
     // Update the doctorID dropdown based on the selected doctorName
     $('#validationCustom11').on('change', function() {
@@ -244,7 +266,7 @@
 
         // Make an AJAX request to fetch the doctor ID for the selected doctorName
         $.ajax({
-            url: '/receptionist/get-doctor-id/',
+            url: '/doctor/get-doctor-id/',
             type: 'POST',
             data: { doctorName: selectedDoctor, csrf_token: csrfToken },
             success: function(response) {
@@ -283,7 +305,7 @@
 
         // Make an AJAX request to fetch time schedules for the selected date and doctor
         $.ajax({
-            url: '/receptionist/get-time-schedules',
+            url: '/doctor/get-time-schedules',
             type: 'POST',
             data: { selected_date: selectedDate, selected_doctor: selectedDoctor, csrf_token: csrfToken },
             success: function(response) {

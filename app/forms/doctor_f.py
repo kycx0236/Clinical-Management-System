@@ -281,6 +281,7 @@ class AppointmentForm(FlaskForm):
     reference_number = StringField('reference_number', [validators.DataRequired()])
     doctorID = IntegerField('doctorID', [validators.DataRequired()])
     doctorName = StringField('doctorName', [validators.DataRequired()])
+    receptionistID = IntegerField('doctorID', [validators.DataRequired()])
     date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
     time_appointment = StringField('time_appointment', [validators.Length(min=1, max=50)])
     status_ = StringField('status_', [validators.Length(min=4, max=50)])

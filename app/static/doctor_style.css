@@ -674,7 +674,722 @@ input, select {
 }
 
 /* APPOINTMENT */
-/* style here */
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+    font-family:  'Montserrat';
+}
+.appointment_body {
+    min-height: 100vh;
+    background-color:rgb(255, 255, 255);
+    display: flex;
+    justify-content:center;
+    align-items: center;
+
+}
+.table__header__appointment{
+    width: 100%;
+    height: 10%;
+    background-color: #fff4;
+    padding: .8rem 1rem;
+    border-radius: .6rem;
+    text-align: center;
+    font-family: 'Inter';
+    font-weight: bolder;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table__header__appointment .doccare-input-group{
+    width: 20%;
+    height: 100%;
+    padding: 0 0.8rem;
+    border-radius: 2rem;
+    background-color: rgba(223, 222, 222, 0.333);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s
+}
+
+.table__header__appointment .doccare-input-group input{
+    width: 100%;
+    padding: 0 0.5rem 0 0.3rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    
+}
+
+.table__header__appointment .doccare-input-group:hover{
+    width: 35%;
+    background-color: rgba(227, 225, 225, 0.333);
+    box-shadow: 0 0.1rem 0.3rem rgba(77, 77, 77, 0.133);
+    
+}
+
+.appointment_entries{
+    width: 100%;
+    height: 5%;
+    background-color: #fff4;
+    text-align: center;
+    font-family: 'Inter';
+    font-weight: bolder;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 1.25%;
+}
+
+.doccare-table-appointment-content{
+    width: 95%;
+    max-height: calc(95% - 1.6rem);
+    background-color: #fffb;
+    margin: .8rem auto;
+    border-radius: .6rem;
+    overflow: auto;
+    overflow-y: overlay; /* Keep vertical scrollbar */
+    overflow-x: overlay; /* Hide horizontal scrollbar */
+    transition: max-height 0.5s ease-in-out;
+
+}
+.doccare-table-appointment-content::-webkit-scrollbar{
+    width: 0.5rem;
+    height: 0.5rem;
+}
+.doccare-table-appointment-content::-webkit-scrollbar-thumb{
+    border-radius: 0.5rem;
+    background-color: #0004;
+    visibility: hidden;
+}
+
+.doccare-table-appointment-content:hover::-webkit-scrollbar-thumb{
+    visibility: visible;
+}
+
+table, th, td {
+    padding: 0.5rem;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table {
+    width:100%;
+}
+.doccare-reference-number{
+    color: #000;
+    font-family: 'Montserrat';
+    font-size: 20px !important;
+    font-style: normal;
+    font-weight: 700 !important;
+    line-height: normal;
+}
+thead th {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: aliceblue;
+    cursor: pointer;
+}
+
+thead th span.icon-arrow{
+    display: inline-block;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    border: 1.4px solid aliceblue; 
+    text-align: center;
+    font-size: 1rem;
+    
+    margin-left: .5rem;
+    transition: .2s ease-in-out;
+}
+
+thead th:hover span.icon-arrow {
+    border: 1.4px solid #0277BD;
+}
+
+thead th.active span.icon-arrow {
+    background-color: #0277BD;
+    color: white;
+}
+
+thead th.asc span.icon-arrow {
+    transform: rotate(180deg);
+}
+
+thead th.active, tbody td.active {
+    color: #0277BD;
+}
+
+.material-symbols-outlined {
+    color: #0277BD;
+    font-variation-settings:
+    'FILL' 10,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.material-symbols-outlined.search{
+    cursor: pointer;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.material-symbols-outlined.search:hover{
+    transform: scale(1.2);
+}
+
+/* Center the icon horizontally */
+.doccare-add-appointment-icon {
+    text-align: center;
+    position: fixed;
+    right: 20px; /* Adjust the distance from the right side of the screen */
+    bottom: 20px; /* Adjust the distance from the bottom of the screen */
+}
+
+/* Style the icon */
+.material-symbols-outlined.add-icon {
+    font-size: 72px; /* Initial size */
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+/* Enlarge the icon on hover */
+.material-symbols-outlined.add-icon:hover {
+    font-size: 96px; /* Larger size on hover */
+    transform: rotate(90deg); 
+    cursor: pointer;
+}
+
+.material-symbols-outlined.delete-icon  {
+    font-size: 24px;
+}
+
+.material-symbols-outlined.cancel-icon {
+    font-size: 24px;
+}
+
+
+.delete-appointment-button, .cancel-appointment-button, .edit-appointment-button {
+    background-color: transparent;
+    border: 1px solid rgb(16, 121, 137);
+    border-radius: 20%;
+    outline: none;
+    padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
+    margin-left: 0.2rem;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+    cursor: pointer;
+}
+
+.delete-appointment-button:hover {
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.cancel-appointment-button:hover {
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.edit-appointment-button:hover {
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.doccare-view-appointment-icon{
+    background-color: transparent;
+    border: 1px solid rgb(16, 121, 137);
+    border-radius: 20%;
+    outline: none;
+    padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
+    margin-left: 0.2rem;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.doccare-view-appointment-icon:hover {
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+.doccare-edit-appointment-icon {
+    background-color: transparent;
+    border: 1px solid rgb(16, 121, 137);
+    border-radius: 20%;
+    outline: none;
+    padding: 0.1rem 0.2rem; /* Add padding to create spacing around the icon */
+    margin-left: 0.2rem;
+    transition: transform 0.2s; /* Add a smooth transition effect for the hover animation */
+}
+
+.doccare-edit-appointment-icon:hover{
+    border: 1px solid rgb(16, 121, 137);
+    transform: scale(1.2);
+}
+
+
+.table__cell {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.table__cell .material-symbols-outlined {
+    display: inline-block;
+    vertical-align: middle; 
+}
+
+
+.table__cell .material-symbols-outlined + .material-symbols-outlined {
+    margin-left: 0.2rem; 
+    margin: 0.2 rem; 
+}
+
+  
+main.doccare-appointment-table {
+    width: 82vw;
+    height: 90vh;
+    background-color: #fff5;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 .4rem .8rem #0005;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    margin-left: 2%;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ecf6ff;
+}
+
+tbody tr{
+    --delay: .1s;
+    transition: .5s ease-in-out var(--delay), background-color 0s;
+}
+
+tbody tr:hover {
+    background-color:rgb(240, 254, 255) !important;
+}
+
+tbody tr td, 
+tbody tr td p, 
+tbody tr td button {
+    transition: .2s ease-in-out .5s;
+}
+
+tbody tr.hide td,
+tbody tr.hide td p, 
+tbody tr.hide td button {
+    padding: 0;
+    font: 0 / 0 'Montserrat';
+    transition: .2s ease-in-out .5s;
+    opacity: 0% !important;
+    transform: translateX(100%) !important;
+}
+
+tbody tr.hide {
+    visibility: hidden;
+    position: absolute;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.status-cell {
+    padding: 0.4rem 0;
+    border-radius: 2rem;
+    font-weight: 1000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    position: fixed; 
+    bottom: 0; 
+    left: 0;
+    right: 0; 
+    padding: 10px 0; /* Add padding for better spacing */
+    z-index: 1;
+    /*box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.1); Optional shadow for separation */
+}
+
+.pagination a, .pagination span {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #333;
+    background-color: #fff;
+    border-radius: 15%;
+    outline: none;
+    transition: transform 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+    transform: scale(1.2);
+}
+
+.pagination .current {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 15%;
+    outline: none;
+}
+
+.modal {
+    display: none;
+    z-index: 3;  /* Ensure the overlay is on top of other content */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+}
+.modal-content{
+    width: 620px;
+    height: 293px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    background: #FFF;
+    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.60);
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    padding: 30px, 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content p{
+    color: black;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: 15%;
+}
+
+.modal-content button {
+    width: 150px;
+    height: 48px;
+    border-radius: 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    outline: none;
+}
+
+.delete-modal-button, .cancellation-modal-button {
+    background: #0277BD;
+    color: #FFF;
+    border: 1px solid #0277BD;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 550;
+    line-height: normal;
+}
+
+.cancel-modal-button, .back-modal-button {
+    background: #DFF1FF;
+    color: #000;
+    border: 1px solid #DFF1FF;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 550;
+    line-height: normal;
+}
+
+.modal-content .modal-buttons {
+    margin-top: 50px;
+}
+
+.overlay-background-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Ensure the overlay is on top of other content */
+}
+
+.overlay-background {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5; /* You can adjust the opacity as needed */
+    pointer-events: none;
+    border: 2px solid rgba(110, 110, 110, 0.5);
+    background: rgba(110, 110, 110, 0.5);
+    backdrop-filter: blur(2.5px);
+}
+
+.filter-select {
+    border-radius: 5px;
+    width: 150px;
+    margin-left: 5px;
+}
+
+.search-icon {
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.doccare-edit-appointment-icon.disabled {
+    color: #888; /* Change the color to a visually muted one */
+    cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+}
+
+@media (max-width: 768px) {
+    td:not(:first-of-type){
+        min-width: 12.1rem;
+    }
+}
+
+/*--- EDIT MODAL ---*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat';
+}
+
+.doccare-edit-container {
+    display: none; /* Change to block in scripts */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 800px;
+    width: 100%;
+    border-radius: 10px;
+    background: #FFF;
+    padding: 30px;
+    box-shadow: 0px 0px 20px 0px rgba(2, 119, 189, 0.50);
+    z-index: 2; /* Increase the z-index to appear above the blurred overlay */
+}
+
+.doccare-edit-container header {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    text-align: center; /* Center the header text */
+    margin-bottom: 20px;
+}
+
+.doccare-edit-container form {
+    position: relative;
+    min-height: 550px;
+    background-color: #FFF;
+}
+
+.doccare-edit-container form .doccare-appointment-details {
+    margin-top: 30px;
+}
+
+.doccare-edit-container form .title {
+    display: block;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    color: #333;
+    margin: 0 0 28px 30px; /* Adjust the margin as needed */
+}
+
+.doccare-edit-container form .fields {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+form .fields .input-fields {
+    display: flex;
+    width: calc(100% / 2 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+.input-fields label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2e2e2e;
+}
+
+.input-fields input {
+    border-radius: 10px;
+    border: 3px solid #A3D5FF;
+    font-size: 16px;
+    font-weight: 400;
+    background: #FFF;
+    padding: 0 15px;
+    height: 42px;
+    margin: 8px 0;
+    color: #333;
+}
+
+.input-fields input:is(:focus, :valid) {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.10);
+}
+
+.input-fields input[type="date"] {
+    color: #707070;
+}
+
+.input-fields input[type="date"]:valid{
+    color: #333;
+}
+
+.input-fields select {
+    border-radius: 10px;
+    border: 3px solid #A3D5FF;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0 15px;
+    height: 42px;
+    margin: 8px 0;
+    color: #333;
+}
+
+.doccare-edit-container button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 120px;
+    width: 100%;
+    border: none;
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 5px;
+    background: #0277BD;
+    margin: 5% 84%;
+}
+
+.doccare-edit-container button:hover {
+    transform:scale(1.10);
+    background: #004f7a !important;
+}
+
+.doccare-success-confirmation-modal, .doccare-failed-confirmation-modal{
+    display: none; /* Initial display */ /* use flex after initialization */
+    align-items: center;
+    justify-content: center;
+    position: fixed; /* Use fixed position for overlay to cover the entire screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Maintain the semi-transparent overlay */
+    z-index: 2; 
+}
+
+.doccare-success-modal-content, .doccare-failed-modal-content {
+    width: 80%; /* Adjust the width as needed */
+    max-width: 800px; /* Set a maximum width if necessary */
+    height: 400px;
+    border-radius: 50px;
+    text-align: center;
+    background: #FFF;
+    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.80);
+    margin: 0 auto; /* Center the modal content horizontally */
+    z-index: 3;
+}
+
+  
+.doccare-success-modal-button, .doccare-failed-modal-button {
+    margin-right: 15%;
+    margin-top: 10%;
+}
+  
+.doccare-success-modal-content .material-symbols-outlined.check {
+    margin-top: 40px;
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+.doccare-failed-modal-content .material-symbols-outlined.error {
+    margin-top: 40px;
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+.doccare-success-modal-content h1,
+.doccare-success-modal-content p {
+    margin-bottom: 30px; /* Adjust the margin as needed */
+}
+
+.doccare-failed-modal-content h1,
+.doccare-failed-modal-content h6{
+    margin-bottom: 15px; /* Adjust the margin as needed */
+}
+.doccare-failed-confirmation-modal h6 {
+    font-weight: 600;
+}
+
+.doccare-success-confirmation-modal p {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+#doccare-done-modal-button {    
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#doccare-done-modal-button:hover {
+    background-color: #0056b3;
+}
+
+.material-symbols-outlined.check, .material-symbols-outlined.error {
+    color:#279eff;
+    font-size: 78px;
+    font-weight: 600;
+}
+
+.material-symbols-outlined.arrow{
+    cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .doccare-edit-container form {
+        overflow-y:scroll;
+    }
+    .doccare-edit-container form::-webkit-scrollbar {
+        display: none;
+    }
+    form .fields .input-fields {
+        width: calc(100% / 2 - 15px);
+    }
+}
+
+@media (max-width: 600px) {
+    form .fields .input-fields {
+        width: calc(100%);
+    }
+}
 
 /* CALENDAR */
 /* style here */

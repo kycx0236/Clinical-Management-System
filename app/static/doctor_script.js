@@ -26,7 +26,7 @@ function searchAppointments(event) {
 
   $.ajax({
       type: 'POST',
-      url: '/receptionist/search-appointments/',
+      url: '/doctor/search-appointments/',
       contentType: 'application/json;charset=UTF-8',
       data: JSON.stringify({
           searchTerm: searchTerm,
@@ -104,7 +104,7 @@ function updateTable(response) {
 
       // Add your action buttons/icons here
       var viewButton = document.createElement('a');
-      viewButton.href = '/receptionist/view-appointment/?reference_number=' + row[0];
+      viewButton.href = '/doctor/view-appointment/?reference_number=' + row[0];
       viewButton.className = 'doccare-view-appointment-icon';
       viewButton.innerHTML = '<span class="material-symbols-outlined">info</span>';
 
@@ -242,7 +242,7 @@ function deleteAppointment() {
   // Make an AJAX request to delete the appointment
   $.ajax({
       type: 'POST',
-      url: '/receptionist/delete-appointment/',
+      url: '/doctor/delete-appointment/',
       data: { reference_number: appointmentId, doctor_name: deleteModal.getAttribute('data-doctor-name') },
       headers: {
         "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
@@ -330,7 +330,7 @@ function cancelAppointment() {
   // Make an AJAX request to delete the appointment
   $.ajax({
       type: 'POST',
-      url: '/receptionist/cancel-appointment/',
+      url: '/doctor/cancel-appointment/',
       data: { reference_number: appointmentId, doctor_name: doctorName },
       headers: {
         "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
@@ -409,7 +409,7 @@ async function fetchAppointmentData(referenceNumber) {
       // Make an AJAX request to fetch appointment data and time options
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');  // Get CSRF token from meta tag
       const response = await $.ajax({
-          url: '/receptionist/get-appointment-data/',
+          url: '/doctor/get-appointment-data/',
           method: 'GET',
           data: { referenceNumber: referenceNumber },
           headers: {
@@ -529,7 +529,7 @@ function showSuccessModal() {
       });
 
       // Redirect to the /appointment/ route
-      window.location.href = '/receptionist/appointment/';
+      window.location.href = '/doctor/appointment/';
   });
 }
 
@@ -542,7 +542,7 @@ function showFailedModal() {
 const arrowBackButton = document.getElementById('arrow')
 arrowBackButton.addEventListener('click', function() {
   // Redirect to the /appointment/ route
-  window.location.href = '/receptionist/appointment/';
+  window.location.href = '/doctor/appointment/';
 });
 
 // Event delegation for the document
@@ -560,24 +560,22 @@ function editAppointment() {
       // Assuming you are using jQuery for AJAX
       $.ajax({
           // Change the url to point to the desired route
-          url: '/receptionist/edit-appointment-version-two/',
+          url: '/doctor/edit-appointment-version-two/',
           method: "POST",
           data: $("form").serialize() + "&doctor_name=" + $('#validationCustom07').val(),
           success: function (response) {
               if (response.success) {
                   // Show success modal
                   showSuccessModal();
+
+                  // Delay for 2 seconds (adjust as needed)
                   setTimeout(function () {
                       // Redirect to the /appointment/ route
-                      window.location.href = '/receptionist/appointment/';
-                  }, 500);
+                      window.location.href = '/doctor/appointment/';
+                  }, 1000);
               } else {
                   // Show failed modal
                   showFailedModal();
-                  setTimeout(function () {
-                    // Redirect to the /appointment/ route
-                    window.location.href = '/receptionist/appointment/';
-                }, 500);
               }
           },
           error: function () {

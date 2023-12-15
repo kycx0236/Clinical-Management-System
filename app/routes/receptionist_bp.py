@@ -4,7 +4,6 @@ from app.forms.receptionist_f import AppointmentForm, EditAppointmentForm
 from app.models.receptionist_m import Appointment
 import app.models.receptionist_m as models_receptionist
 from flask import Blueprint
-from datetime import datetime, date
 import secrets
 import string
 from flask_login import login_required, logout_user, current_user
@@ -325,7 +324,7 @@ def reschedule():
 def reschedule_version_two():
     reference_number = request.form.get('reference_number')
     doctor_name = request.form.get('doctor_name')
-    print(reference_number)
+    print('Doctor name in reschedule_version_two: ', doctor_name)
     form = EditAppointmentForm()
     appointment_data = models_receptionist.Appointment.get_appointment_by_reference_version_two(reference_number)
 
@@ -340,8 +339,6 @@ def reschedule_version_two():
             "doctorName": appointment_data['doctorName']
         }
         time_data = models_receptionist.Appointment.get_all_available_schedules(appointment_data['date_appointment'])
-        print(appointment_data_dict)
-        print(time_data)
     else:
         return jsonify(success=False, message="Appointment not found.")
 
@@ -354,12 +351,13 @@ def reschedule_version_two():
 
         old_date_appointment = appointment_data['date_appointment']
         old_time_appointment = appointment_data['time_appointment']
-        
+        print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
+        print('New Appointment Details: ', new_date_appointment, new_time_appointment)
         if models_receptionist.Appointment.update_second_version(
             reference_number, new_date_appointment, new_time_appointment, new_status_,
             new_last_name, new_email):
             # Update the slots for the old and new times
-            models_receptionist.Appointment.update_time_slots(old_date_appointment, old_time_appointment, new_time_appointment, doctor_name)
+            models_receptionist.Appointment.update_time_slots(old_date_appointment, new_date_appointment, old_time_appointment, new_time_appointment, doctor_name)
 
             return jsonify(success=True, message="Appointment updated successfully")
         else:
@@ -463,6 +461,8 @@ def get_appointment_data():
     
     
 @receptionist_bp.route('/get-doctor-id/', methods=['POST'])
+@login_required
+@role_required('receptionist')
 def get_doctor_id():
     try:
         selected_doctor = request.form['doctorName']

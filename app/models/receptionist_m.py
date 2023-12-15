@@ -1,5 +1,6 @@
 from app import mysql
-from datetime import date
+from flask_mail import Message
+from app import mail
 class Appointment:
     def __init__(self, reference_number=None, receptionistID=None, doctorID=None, doctorName=None, date_appointment=None, time_appointment=None, status_=None, book_date=None, first_name=None, middle_name=None, last_name=None, sex=None, birth_date=None, contact_number=None, email=None, address=None):
         self.reference_number = reference_number
@@ -78,11 +79,53 @@ class Appointment:
             sql = "UPDATE appointment SET date_appointment = %s, time_appointment = %s, status_ = %s, last_name = %s, email = %s WHERE reference_number = %s"
             cursor.execute(sql, (new_date_appointment, new_time_appointment, new_status_, new_last_name, new_email, reference_number))
             mysql.connection.commit()
+
+            # Fetch the existing appointment details
+            existing_appointment = cls.get_appointment_by_reference_version_two(reference_number)
+            print('Existing appointment details:', existing_appointment)
+            
+            # Check if date, time, or status has changed
+            if (new_date_appointment or new_time_appointment or new_status_):
+                # Send message if any of the conditions are true
+                cls.send_message(
+                    new_email,
+                    reference_number,
+                    new_date_appointment,
+                    new_time_appointment,
+                    new_status_,
+                    existing_appointment['last_name']
+                )
+            else:
+                print('There was an error sending...')
+
             print("Time Appointment:", new_time_appointment)
             return True
         except Exception as e:
             print(f"Error updating appointment: {e}")
             return False
+
+
+    # Add print statements for debugging
+    @staticmethod
+    def send_message(email, reference_number, date_appointment, time_appointment, status_, last_name):
+        print("Sending email to:", email)
+        message = Message(
+            subject='Appointment Information',
+            recipients=[email],
+            sender=('Receptionist', 'cms_receptionist@gmail.com')
+        )
+        
+        message.html = (
+            f"Dear {last_name},<br>"
+            f"Your appointment details have been updated:<br>"
+            f"Reference Number: {reference_number}<br>"
+            f"Date: {date_appointment}<br>"
+            f"Time: {time_appointment}<br>"
+            f"Status: {status_}<br>"
+            "<p>Additional message or instructions can be added here.</p>"
+        )
+        mail.send(message)
+        print("Email sent successfully.")
         
     @classmethod
     def unique_code(cls, reference_number):
@@ -239,10 +282,10 @@ class Appointment:
 
     
     @classmethod
-    def update_time_slots(cls, date, old_time, new_time, doctor_name):
+    def update_time_slots(cls, date, new_date, old_time, new_time, doctor_name):
         try:
             cursor = mysql.connection.cursor()
-
+            print('Update time slots data: ', date, new_date, old_time, new_time, doctor_name)
             # Increment slots for the old time
             sql_increment = "UPDATE schedule SET slots = slots + 1 WHERE date_appointment = %s AND time_appointment = %s AND doctorName = %s"
             cursor.execute(sql_increment, (date, old_time, doctor_name))
@@ -250,7 +293,7 @@ class Appointment:
 
             # Decrement slots for the new time
             sql_decrement = "UPDATE schedule SET slots = slots - 1 WHERE date_appointment = %s AND time_appointment = %s AND doctorName = %s"
-            cursor.execute(sql_decrement, (date, new_time, doctor_name))
+            cursor.execute(sql_decrement, (new_date, new_time, doctor_name))
             mysql.connection.commit()
 
             return True
@@ -320,4 +363,3 @@ class Appointment:
             print(f"Error fetching doctor ID: {e}")
             return []
 
-    
