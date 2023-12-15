@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Patient{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- NAVIGATION -->
+    <div class="sidenav-bg">
+        <div class="cms-logo">
+            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+        </div>
+        <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
+            <a href="{{ url_for('receptionist.dashboard') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                    <p>Dashboard</p>
+                </li>
+            </a>   
+            <a href="{{ url_for('receptionist.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
+            <a href="{{ url_for('receptionist.appointment') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                    <p>Appointment</p>
+                </li>
+            </a>
+            <a href="{{ url_for('receptionist.schedule') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
+                    <p>Schedule</p>
+                </li>
+            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+            <a href="{{ url_for('receptionist.profile') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                    <p>Profile</p>
+                </li>
+            </a>
+        </ul>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
+                <div>
+                    <h3>{{ info[0] }}</h3>
+                    <p>{{ info[1] }}</p>
+                </div>
+            </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <main>
+        <div class="navbar">
+            <!-- PATIENT RECORD -->
+            <div class="patient-header">
+                <p>PATIENTS</p>
+            </div>
+        </div>
+    
+        <div class="patient-table">
+            <table id="patientTable" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>FIRST NAME</th>
+                        <th>LAST NAME</th>
+                        <th>GENDER</th>
+                        <th>AGE</th>
+                        <th>CONTACT NUMBER</th>
+                        <th>RECORD</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient[1] }}</td>
+                        <td>{{ patient[3] }}</td>
+                        <td>{{ patient[6] }}</td>
+                        <td>{{ patient[4] }}</td>
+                        <td>{{ patient[18] }}</td>
+                        <td>
+                            <!-- VIEW RECORD -->
+                            <form method="GET" action="/receptionist/patient_record/">
+                                <div class="delete-icon">
+                                    <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                    <button type="submit" style="background: none; border: none;">
+                                        <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                    </button>
+                                </div>
+                            </form> 
+                        </td>
+                        <td>
+                            <!-- DELETE RECORD -->
+                            <form id="deleteForm_{{ patient[0] }}" method="POST" action="/receptionist/delete_patient/">
+                                <div class="delete-icon">
+                                    <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
+                                    <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">
+                                        <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Record">
+                                    </button>
+                                </div>
+                            </form> 
+                        </td>
+                    </tr>   
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="{{ url_for('receptionist.add_patient') }}">
+            <div class="add-icon">
+                <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
+            </div>
+        </a>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Delete Record</h1>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to permanently delete the patient record?
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
+                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient's medical record has been deleted successfully!
+                    </div>
+                    <a href="{{ url_for('receptionist.patient') }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in deleting patient record. Please try again.
+                    </div>
+                    <a href="{{ url_for('receptionist.patient') }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#patientTable');
+
+        // CONFIRMATION BEFORE DELETION
+        function confirmation(patientId){
+            const confirmationModal = document.getElementById("confirmationModal");
+            confirmationModal.style.display = "block";
+
+            const confirmDelete = document.getElementById("confirmDelete");
+            const cancelDelete = document.getElementById("cancelDelete");
+            
+            confirmDelete.addEventListener("click", function() {
+                document.getElementById("deleteForm_" + patientId).submit();
+            });
+    
+            cancelDelete.addEventListener("click", function() {
+                confirmationModal.style.display = "none";
+            });
+        }
+    </script>
+
+{% endblock %}

@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Dashboard{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
+
 {% block content %}
+
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -48,12 +50,12 @@
     </div>
     <main>
         <p class="date-time" id="demo"></p>
-        <a href="{{ url_for('receptionist.add_appointment') }}">
+        <a href="#">
             <div class="add-icon">
                 <img src="{{ url_for('static', filename='images/Add Appointment.png') }}">
             </div>
         </a>
-        <a href="{{ url_for('receptionist.appointment') }}">
+        <a href="#">
             <div class="reschedule-icon">
                 <img src="{{ url_for('static', filename='images/Reschedule Appointment.png') }}">
             </div>
@@ -82,4 +84,5 @@
         }
         displayDateAndTime();   
     </script>
+    
 {% endblock %}

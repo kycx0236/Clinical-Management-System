@@ -1,12 +1,13 @@
 from flask import render_template, redirect, request, url_for, flash, jsonify, session
 import math
-from app.forms.receptionist_f import AppointmentForm, EditAppointmentForm
-from app.models.receptionist_m import Appointment
-import app.models.receptionist_m as models_receptionist
+from app.forms.receptionist_f import *
+import app.models as models
+from app.models.receptionist_m import *
+
 from flask import Blueprint
 import secrets
 import string
-from flask_login import login_required, logout_user, current_user
+from flask_login import login_required, logout_user, current_user, current_user
 from app.routes.utils import role_required
 
 receptionist_bp = Blueprint('receptionist', __name__)
@@ -18,18 +19,27 @@ headings = ("Reference Number", "Date", "Time", "Last Name", "Status", "Doctor",
 @login_required
 @role_required('receptionist')
 def dashboard():
-    return render_template("receptionist/dashboard/dashboard.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    patients_data = receptionist.get_patients()
+    limited_patient = patients_data[:5]
+
+    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient)
 
 @receptionist_bp.route('/calendar/')
 @login_required
 @role_required('receptionist')
 def calendar():
-    return render_template("receptionist/calendar/calendar.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/calendar/calendar.html", info=receptionist_info)
 
 @receptionist_bp.route('/appointment/')
 @login_required
 @role_required('receptionist')
 def appointment():
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
     user_id = current_user.id
     form = EditAppointmentForm()
     # Get the page number from the query string, default to 1 if not specified
@@ -64,14 +74,16 @@ def appointment():
         for appointment in data
     ]
 
-    return render_template("receptionist/appointment/appointment.html", headings=headings, data=data_dict, page=page, total_pages=total_pages, form=form)
+    return render_template("receptionist/appointment/appointment.html", headings=headings, data=data_dict, page=page, total_pages=total_pages, form=form, info=receptionist_info)
 
 
 @receptionist_bp.route('/profile/')
 @login_required
 @role_required('receptionist')
 def profile():
-    return render_template("receptionist/profile/profile.html")
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
+    return render_template("receptionist/profile/profile.html", info=receptionist_info)
 
 @receptionist_bp.route('/logout/')
 @login_required

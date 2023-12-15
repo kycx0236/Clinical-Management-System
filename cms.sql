@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `hematology` (
   PRIMARY KEY (`hematologyID`),
   UNIQUE KEY `hematology_id_UNIQUE` (`hematologyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-);
+); 
 
 -- BACTERIOLOGY
 CREATE TABLE IF NOT EXISTS `bacteriology` (
@@ -302,8 +302,7 @@ CREATE TABLE IF NOT EXISTS `bacteriology` (
   PRIMARY KEY (`bacteriologyID`),
   UNIQUE KEY `bacteriology_id_UNIQUE` (`bacteriologyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-);
-
+); 
 
 -- HISTOPATHOLOGY
 CREATE TABLE IF NOT EXISTS `histopathology` (
@@ -331,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `microscopy` (
   PRIMARY KEY (`microscopyID`),
   UNIQUE KEY `microscopy_id_UNIQUE` (`microscopyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-);
+); 
 
 -- SEROLOGY
 CREATE TABLE IF NOT EXISTS `serology` (
@@ -438,16 +437,3 @@ CREATE TABLE IF NOT EXISTS `labreport` (
   UNIQUE KEY `report_id_UNIQUE` (`reportID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
 ); 
-
--- LABORATORY TEST RESULTS
-CREATE TABLE IF NOT EXISTS `labtest` (
-  `testID` int NOT NULL AUTO_INCREMENT,
-  `reportID` int NOT NULL,
-  `processName` varchar(255) NOT NULL,
-  `testResult` varchar(255) NOT NULL,
-  `refValue` varchar(255) NOT NULL,
-  `diagnosisReport` varchar(255) NOT NULL,
-  PRIMARY KEY (`testID`),
-  UNIQUE KEY `test_id_UNIQUE` (`testID`),
-  FOREIGN KEY (`reportID`) REFERENCES labreport(`reportID`) ON DELETE CASCADE
-);

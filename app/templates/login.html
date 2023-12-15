@@ -3,43 +3,57 @@
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}"> {% endblock %}
 
 {% block content %}
-    <form class="login-form" id="login-form" method="POST" action="{{ url_for('login') }}">
-        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />
-        <div class="container margin-tb">
-            <span class="doc">Doc</span><span class="care">Care</span>
-        </div>
 
-        <div class="container padding">
-            <div class="form-group">
-                <label class="title" for="username">USERNAME</label>
-                <input type="text" name="username" id="username" class="form-input" autocomplete="off" required>
-            </div>
+    <form id="login-form" method="POST" action="{{ url_for('login') }}">
+        <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}">
+
+        <img class="login_bg" src="{{ url_for('static', filename='/images/DocCare Login.png') }}">  
         
-            <div class="form-group">
-                <label class="title" for="password">PASSWORD</label>
-                <input type="password" name="password" id="password" class="form-input" autocomplete="off" required>
-            </div>
-        </div>
-
-        <div class="flash-messages">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        {{ message }}<br>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
+        <div class="grid_container">
             
-        <div class="container margin-t">
-            <button type="submit" class="login-button" name="login-button" id="login-button">LOG IN</button>
-        </div>
+            <div class="grid_item">
+                <div class="login_form">
+                    <div class="margin-tb">
+                        <div style="display: flex;">
+                            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}"> 
+                            <span class="doc">Doc</span><span class="care">Care</span>
+                        </div>
+                    </div>
+            
+                    <center>
+                        <div class="form_input login">
+                            <input type="text" name="username" id="username" class="form-input" autocomplete="off" required>
+                            <span>Username</span>
+                        </div>
+                        
+                        <div class="form_input login">
+                            <input type="password" name="password" id="password" class="form-input" autocomplete="off" required>
+                            <span>Password</span>
+                        </div>
+                    </center>
 
+                    <div class="flash-messages">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {{ message }}<br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                        
+                    <div class="container margin-t">
+                        <button type="submit" class="login-button" name="login-button" id="login-button">LOG IN</button>
+                    </div>
+
+                    <div class="container-2">
+                        <span class="app-info">Version 1.0</span>
+                        <span class="app-info" >Copyright © 2023 by DocCare All rights reserved.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </form>
 
-    <div class="container-2">
-        <span class="app-info">Version 1.0</span>
-        <span class="app-info" >Copyright © 2023 by DocCare All rights reserved.</span>
-    </div>
-    
 {% endblock %}

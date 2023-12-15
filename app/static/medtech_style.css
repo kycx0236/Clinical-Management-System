@@ -1,30 +1,109 @@
 @import "base_style.css";
 
-/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
-.sidenav-user-bg {
-    margin-top: 205px !important; 
-} 
-
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
+.grid_container {
+    position: relative;
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: auto 350px;
+    grid-template-rows: 100% 5px;
+    padding: 10px;
+    height: 69%;
+}
+
+.grid_item {
+    padding: 15px;
+    border: 1px solid var(--grayC);
+    text-align: center;
+}
+
+/* PATIENTS */
+.patients_short {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    gap: 170px;
+}
+
+.patient_buttons {
+    margin-top: 5px;
+    gap: 5px;
+    display: flex;
+}
+
+.add_patient_btn img {
+    width: 35px;
+    padding: 10px;
+    background-color: var(--darkBlue);
+    border-radius: 5px;
+}
+
+.see_more {
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 85px;
+    height: 35px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: white;
+    color: var(--darkBlue);
+    border: 1px solid var(--grayA);
+    font-weight: 900;
+}
+
+.patient_short_table {
+    position: relative;
+    font-size: 14px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.patient_short_table td {
+    padding: 11px;
+    width: 50px;
+    background-color: var(--blueC);
+}
+
+.patient_record img {
+    width: 30px;
+    cursor: pointer;
+}
+
 .notification-container {
-    max-width: 100%;  
-    height: 100vh; 
-    position: absolute;  
-    top: 50px;
-    left: 110px;
+    position: relative;  
+    width: 100%;
+    height: 360px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.notification-container::-webkit-scrollbar {
+    width: 10px; 
+}
+
+.notification-container::-webkit-scrollbar-thumb {
+    background-color: var(--blueB); 
+    border-radius: 5px;
+}
+
+.notification-container::-webkit-scrollbar-track {
+    background-color: none; 
 }
 
 .request-header {
     font-weight: 900;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .notif-header {
+    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 985px;
-    margin-bottom: 25px;
+    top: 10px;
+    width: 50%;
+    left: 20px;
+    margin-bottom: 30px;
 }
 
 .notif-box {
@@ -45,41 +124,13 @@
     border-radius: 100%;
 }
 
-#new-notifs {
-    position: absolute;
-    background-color: var(--blueD);
-    width: 15px;
-    height: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    border-radius: 100%;
-    margin-left: 40px;
-    margin-top: 12px;
-    box-shadow: 0 0 1px 3px var(--blueC); 
-}
-
-#mark-all {
-    cursor: pointer;
-}
-
-#mark-all:hover {
-    color: var(--blueD);
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
 .notif_card {
+    position: relative;
     display: flex;
+    text-align: left;
     align-items: center;
-    padding: 1rem;
-    width: 1400px;  
-    margin-left: 0px;
+    padding: 20px;
+    width: 100%;
     height: 60px;
 }
 
@@ -99,10 +150,10 @@ strong:hover {
 }
 
 .unread {
+    position: relative;
     border-left: 3px solid var(--blueB) !important;
-    box-shadow: 0 0 5px var(--blueC);
-    width: 1400px;  
-    margin-left: 0px;
+    box-shadow: 0 0 1px var(--blueB);
+    width: 100%; 
     height: 60px;
 }
 
@@ -124,6 +175,12 @@ strong:hover {
     .container {
         margin: 0;
     }
+}
+
+/* -------------------------------------------- LABORATORY TEST -------------------------------------------- */
+.upload_file {
+    position: relative;
+    border: none;
 }
 
 /* -------------------------------------------- PATIENT -------------------------------------------- */
