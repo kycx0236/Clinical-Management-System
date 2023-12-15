@@ -71,7 +71,7 @@
 .logs_container {
     position: relative;  
     height: 310px; 
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .logs_list p {
@@ -79,17 +79,7 @@
 }
 
 .logs_container::-webkit-scrollbar {
-    width: 10px; 
-}
-
-.logs_container::-webkit-scrollbar-thumb {
-    background-color: var(--blueB); 
-    border-radius: 5px;
-}
-
-.logs_container::-webkit-scrollbar-track {
-    background-color: none; 
-    margin-top: 35px;
+    width: 0; 
 }
 
 .logs_table thead {

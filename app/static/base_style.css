@@ -455,13 +455,6 @@ ul li p {
     transform: translateY(1px);
 }
 
-.btn-submit.remove {
-    background-color: #EE4B2B;
-    margin-top: 0px;
-    position: static;
-    width: 120px;
-}
-
 .btn-submit.test {
     background-color: var(--blueA);
     width: 100px;

@@ -4,11 +4,13 @@ from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user
 from flask_mail import Mail
+from flask_socketio import SocketIO
 
 mysql = MySQL()
 login_manager = LoginManager()
 mail = Mail()
 csrf = CSRFProtect()
+socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__)
@@ -57,7 +59,6 @@ def create_app():
                 flash("The username or password you've entered is incorrect", 'error')
 
         return render_template('login.html')
-
 
     from app.routes.admin_bp import admin_bp
     from app.routes.doctor_bp import doctor_bp

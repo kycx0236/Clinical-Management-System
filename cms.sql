@@ -17,17 +17,6 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 ) AUTO_INCREMENT = 1000;
 
--- DOCTOR-PATIENT RELATION
-CREATE TABLE docpatient_relation (
-    relationID int NOT NULL AUTO_INCREMENT,
-    doctorID int NOT NULL,
-    patientID int NOT NULL,
-    PRIMARY KEY (`relationID`),
-    UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
-    FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
-);
-
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
   `patientID` int NOT NULL AUTO_INCREMENT,
@@ -53,7 +42,18 @@ CREATE TABLE IF NOT EXISTS `patientinfo` (
   PRIMARY KEY (`patientID`),
   UNIQUE KEY `patient_id_UNIQUE` (`patientID`)
   FOREIGN KEY (`userID`) REFERENCES users(`id`) ON DELETE CASCADE
-) 
+);
+
+-- DOCTOR-PATIENT RELATION
+CREATE TABLE docpatient_relation (
+    relationID int NOT NULL AUTO_INCREMENT,
+    doctorID int NOT NULL,
+    patientID int NOT NULL,
+    PRIMARY KEY (`relationID`),
+    UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
+    FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+);
 
 -- MEDICAL HISTORY
 CREATE TABLE IF NOT EXISTS medicalhistory (
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `assessment` (
   PRIMARY KEY (`assessmentID`),
   UNIQUE KEY `assessment_id_UNIQUE` (`assessmentID`),
   FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
-) 
+);
 
 -- PRESCRIPTION 
 CREATE TABLE IF NOT EXISTS `prescription` (
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `prescriptiondetails` (
   PRIMARY KEY (`detail_id`),
   UNIQUE KEY `detail_id_UNIQUE` (`detail_id`),
   FOREIGN KEY (`prescriptionID`) REFERENCES prescription(`prescriptionID`) ON DELETE CASCADE
-) 
+);
 
 -- LABORATORY JOB ORDER
 CREATE TABLE IF NOT EXISTS `labrequest` (
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `labrequest` (
   PRIMARY KEY (`orderID`),
   UNIQUE KEY `order_id_UNIQUE` (`orderID`),
   FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
-) 
+);
 
 -- HEMATOLOGY
 CREATE TABLE IF NOT EXISTS `hematology` (
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `hematology` (
   PRIMARY KEY (`hematologyID`),
   UNIQUE KEY `hematology_id_UNIQUE` (`hematologyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+); 
 
 -- BACTERIOLOGY
 CREATE TABLE IF NOT EXISTS `bacteriology` (
@@ -258,8 +258,7 @@ CREATE TABLE IF NOT EXISTS `bacteriology` (
   PRIMARY KEY (`bacteriologyID`),
   UNIQUE KEY `bacteriology_id_UNIQUE` (`bacteriologyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
-
+); 
 
 -- HISTOPATHOLOGY
 CREATE TABLE IF NOT EXISTS `histopathology` (
@@ -273,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `histopathology` (
   PRIMARY KEY (`histopathologyID`),
   UNIQUE KEY `histopathology_id_UNIQUE` (`histopathologyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+);
 
 -- CLINICAL MIRCROSCOPY & PARASITOLOGY
 CREATE TABLE IF NOT EXISTS `microscopy` (
@@ -287,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `microscopy` (
   PRIMARY KEY (`microscopyID`),
   UNIQUE KEY `microscopy_id_UNIQUE` (`microscopyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+); 
 
 -- SEROLOGY
 CREATE TABLE IF NOT EXISTS `serology` (
@@ -312,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `serology` (
   PRIMARY KEY (`serologyID`),
   UNIQUE KEY `serology_id_UNIQUE` (`serologyID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+); 
 
 -- IMMUNOCHEMISTRY
 CREATE TABLE IF NOT EXISTS `immunochem` (
@@ -342,7 +341,7 @@ CREATE TABLE IF NOT EXISTS `immunochem` (
   PRIMARY KEY (`immunochemID`),
   UNIQUE KEY `immunochem_id_UNIQUE` (`immunochemID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+);
 
 -- CLINICAL CHEMISTRY
 CREATE TABLE IF NOT EXISTS `clinicalchem` (
@@ -381,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `clinicalchem` (
   PRIMARY KEY (`clinicalchemID`),
   UNIQUE KEY `clinicalchem_id_UNIQUE` (`clinicalchemID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+);
 
 -- LABORATORY REPORT
 CREATE TABLE IF NOT EXISTS `labreport` (
@@ -392,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `labreport` (
   PRIMARY KEY (`reportID`),
   UNIQUE KEY `report_id_UNIQUE` (`reportID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
-) 
+); 
 
 -- LABORATORY TEST RESULTS
 CREATE TABLE IF NOT EXISTS `labtest` (
@@ -405,4 +404,4 @@ CREATE TABLE IF NOT EXISTS `labtest` (
   PRIMARY KEY (`testID`),
   UNIQUE KEY `test_id_UNIQUE` (`testID`),
   FOREIGN KEY (`reportID`) REFERENCES labreport(`reportID`) ON DELETE CASCADE
-) 
+);

@@ -15,6 +15,12 @@
     grid-template-columns: 50% 50%;
 }
 
+.grid_container.prescription {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    height: 1400px;
+}
+
 .grid_container.history {
     grid-template-columns: 85% 15%;
     grid-template-rows: auto auto;
@@ -24,6 +30,16 @@
     padding: 15px;
     border: 1px solid var(--grayC);
     text-align: center;
+}
+
+.grid_item.prescription {
+    padding: 15px;
+    border: 1px solid white;
+    text-align: center;
+}
+
+.grid_item.prescription.grid1 {
+    height: 1110px;
 }
 
 /* PATIENTS */
@@ -586,19 +602,20 @@ input, select {
 
 .foot {
     position: relative;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
-.page-break {
+.page_break {
     position: relative;
-    top: 900px;
     border: 1px solid var(--darkBlue);
+    width: 80%;
     height: 1px;
-    width: 1000px;
+    margin-bottom: 20px;
 }
 
 .doctor {
     position: relative;
-    top: 920px;
     text-decoration: underline;
 }
 
@@ -606,7 +623,6 @@ input, select {
     position: relative;
     justify-content: center;
     display: flex;
-    top: 925px;
     gap: 10px;
 }
 
@@ -629,7 +645,7 @@ input, select {
 }
 
 .inputBox.p_instructions {
-    width: 900px;
+    width: 1040px;
 }
 
 .inputBox.dosage, .inputBox.quantity {
@@ -714,15 +730,15 @@ input, select {
     transform: translateY(1px);
 }
 
-.prescription-table {
+.prescription_table {
     position: relative; 
-    margin-top: 50px;
-    width: 1020px; 
+    width: 80%; 
+    height: 100%;
     font-size: 20px;
 }
 
-.prescription-table td {
-    padding: 0.50rem;
+.prescription_table td {
+    padding: 10px;
 }
 
 /* -------------------------------------------- LABORATORY TEST REQUEST AND REPORT -------------------------------------------- */

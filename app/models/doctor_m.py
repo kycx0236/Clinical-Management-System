@@ -78,17 +78,21 @@ class doctor():
 # ADD PRESCRIPTION
     @classmethod
     def add_prescription(cls, assessment_id, medication_name, dosage, p_quantity, duration, instructions):
-        cursor = mysql.connection.cursor()
+        try:
+            cursor = mysql.connection.cursor()
 
-        add_prescription = "INSERT INTO prescription (assessmentID) VALUES (%s)"
-        cursor.execute(add_prescription, (assessment_id,))
-        prescriptionID = cursor.lastrowid  
+            add_prescription = "INSERT INTO prescription (assessmentID) VALUES (%s)"
+            cursor.execute(add_prescription, (assessment_id,))
+            prescriptionID = cursor.lastrowid  
 
-        add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
-        mysql.connection.commit()
+            add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
+            cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
+            mysql.connection.commit()
 
-        return True
+            return True
+        except Exception as e:
+            print("Error occurred during prescription addition:", e)
+            return False
 
     @classmethod 
     def add_laboratory_request(cls, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 

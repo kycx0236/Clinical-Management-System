@@ -810,24 +810,21 @@ def prescription():
         patient_info = doctor.get_patient_info(patient_id)
         consultation_info = doctor.get_consultation_info(assessment_id, patient_id)
         prescription_info = doctor.get_prescription_info(assessment_id)
+        print('prescription:', prescription_info)
         doctor_info = doctor.get_doctor_info(user_id)
 
         return render_template('doctor/patient/prescription.html', doctor=doctor_info, patient=patient_info, consultation=consultation_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
     
     elif request.method == 'POST':
-        prescription_data = request.get_json()
-        new_assessment_id = prescription_data.get('assessment_id')
-        new_patient_id = prescription_data.get('patient_id')
-        prescriptions = prescription_data.get('prescriptions')
-    
-        for prescription in prescriptions:
-            medication_name = prescription['medicationName'].capitalize()
-            dosage = prescription['dosage'].upper()
-            p_quantity = prescription['quantity'].capitalize()
-            duration = prescription['duration'].capitalize()
-            instructions = prescription['instructions'].capitalize()
+        new_assessment_id = request.form.get('assessment_id')
+        new_patient_id = request.form.get('patient_id')
+        medication_name = request.form.get('medication_name').capitalize()
+        dosage = request.form.get('dosage').upper()
+        p_quantity = request.form.get('quantity')
+        duration = request.form.get('duration').capitalize()
+        instructions = request.form.get('instructions').capitalize()
 
-            result = doctor.add_prescription(assessment_id=new_assessment_id, medication_name=medication_name, dosage=dosage, p_quantity=p_quantity, duration=duration, instructions=instructions)
+        result = doctor.add_prescription(assessment_id=new_assessment_id, medication_name=medication_name, dosage=dosage, p_quantity=p_quantity, duration=duration, instructions=instructions)
         
         doctor_info = doctor.get_doctor_info(user_id)
         patient_info = doctor.get_patient_info(new_patient_id)
@@ -837,9 +834,9 @@ def prescription():
         print('RESULT:', result)
 
         if result:
-            return jsonify({'success': True})
+            return render_template("doctor/patient/prescription.html", success=True, doctor=doctor_info, patient=patient_info, consultation=consultation_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
         else:
-             return jsonify({'error': True}), 500  
+            return render_template("doctor/patient/prescription.html", error=True, doctor=doctor_info, patient=patient_info, consultation=consultation_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form)
 
     return render_template("doctor/patient/prescription.html", consultation=consultation_info, patient=patient_info, prescriptions=prescription_info, patient_id=patient_id, PatientForm=form, doctor=doctor_info)
 
