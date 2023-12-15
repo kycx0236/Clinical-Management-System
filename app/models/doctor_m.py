@@ -290,14 +290,6 @@ class doctor():
         return clinicalchem_data
     
     @staticmethod
-    def get_lab_report(reportID):
-        cursor = mysql.connection.cursor()
-        query = "SELECT * FROM labtest WHERE reportID = %s"
-        cursor.execute(query, (reportID,))
-        labreport = cursor.fetchall()
-        return labreport
-    
-    @staticmethod
     def get_lab_reports(patientID):
         cursor = mysql.connection.cursor()
         query = "SELECT labrequest.labSubject, labreport.reportDate, labrequest.orderID, labrequest.patientID , labreport.reportID \
@@ -310,7 +302,7 @@ class doctor():
     @staticmethod
     def get_labreport_info(reportID):
         cursor = mysql.connection.cursor()
-        query = ("SELECT medtech, reportDate FROM labreport WHERE reportID = %s")
+        query = ("SELECT medtech, pdfFile, reportDate FROM labreport WHERE reportID = %s")
         cursor.execute(query, (reportID,))
         reportInfo = cursor.fetchone()
         return reportInfo

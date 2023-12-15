@@ -5,6 +5,9 @@ from app.models.medtech_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
+from cloudinary import uploader
+from cloudinary.uploader import upload
+from cloudinary.uploader import destroy
 
 medtech_bp = Blueprint('medtech', __name__)
 
@@ -49,33 +52,38 @@ def laboratory_test():
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info)
     
     elif request.method == 'POST':
-        data = request.get_json()
-        new_order_id = data.get('order_id')
-        new_patient_id = data.get('patient_id')
-        new_medtech_name = data.get('medtech_name')
-        extracted_values = data.get('data')
+        new_order_id = request.form.get('order_id')
+        new_medtech_name = request.form.get('medtech_name')
+        uploaded_file = request.files['pdfFile']
 
-        print('THIS IS THE ORDER ID:', new_order_id)
-        print('THIS IS THE NEW PATIENT ID:', new_patient_id)
-        print('THIS IS THE NEW MEDTECH NAME:', new_medtech_name)
-        print('Received data:', extracted_values)
-        
-        success = True
-        for item in extracted_values:
-            process_name = item['processName']
-            test_result = item['testResult']
-            ref_value = item['referenceValue']
-            diagnosis_report = item['diagnosisSummary']
+        if uploaded_file.filename != '' and uploaded_file.filename.endswith('.pdf'):
+           
+            uploaded_result = uploader.upload(uploaded_file)
+            pdf_url = uploaded_result['url']
+            print('pdf_url:', pdf_url)
 
-            report = medtech.add_laboratory_report(orderID=new_order_id, medtech=new_medtech_name, processName=process_name, testResult=test_result, refValue=ref_value, diagnosisReport=diagnosis_report)
-            print('REPORT:', report)
-            if not report:
-                success = False
+            report = medtech.add_laboratory_report(orderID=new_order_id, medtech=new_medtech_name, pdfFile=pdf_url)
 
-        if success:
-            return jsonify({'success': True})
-        else:
-            return jsonify({'error': True}), 500  
+            labreq_info = medtech.get_labrequest_data(new_order_id)
+            hematology_info = medtech.get_hematology_data(new_order_id)
+            bacteriology_info = medtech.get_bacteriology_data(new_order_id)
+            histopathology_info = medtech.get_histopathology_data(new_order_id)
+            microscopy_info = medtech.get_microscopy_data(new_order_id)
+            serology_info = medtech.get_serology_data(new_order_id)
+            immunochem_info = medtech.get_immunochem_data(new_order_id)
+            clinicalchem_info = medtech.get_clinicalchem_data(new_order_id)
+            user_info = medtech.get_user_info(user_id)
+
+            if report:
+                return render_template("medtech/laboratory_test.html", success=True, labreq=labreq_info, PatientForm=form, 
+                               patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
+                               histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info)
+            else:
+                return render_template("medtech/laboratory_test.html", error=True, labreq=labreq_info, PatientForm=form, 
+                               patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
+                               histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info)
         
     return render_template("medtech/laboratory_test.html", patient_id=patient_id, medtech=user_info)
 
@@ -97,14 +105,11 @@ def laboratory_report():
     patient_id = None
 
     order_id = request.args.get('order_id')
-    patient_id = request.args.get('patient_id')
     report_id = request.args.get('report_id')
     user_id = current_user.id
     medtech_info = medtech.get_user_info(user_id)
-
     labreq_info = medtech.get_labrequest_data(order_id)
     labrep_info = medtech.get_labreport_info(report_id)
-    lab_report = medtech.get_lab_report(report_id)
     hematology_info = medtech.get_hematology_data(order_id)
     bacteriology_info = medtech.get_bacteriology_data(order_id)
     histopathology_info = medtech.get_histopathology_data(order_id)
@@ -112,11 +117,12 @@ def laboratory_report():
     serology_info = medtech.get_serology_data(order_id)
     immunochem_info = medtech.get_immunochem_data(order_id)
     clinicalchem_info = medtech.get_clinicalchem_data(order_id)
+    print('labrep_info:', labrep_info)
     
     return render_template("medtech/laboratory_report.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info, info=medtech_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, report=labrep_info, info=medtech_info)
 
 @medtech_bp.route('/profile/')
 @login_required

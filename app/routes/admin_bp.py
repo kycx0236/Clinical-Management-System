@@ -7,7 +7,6 @@ from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 from werkzeug.security import generate_password_hash
 
-
 admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/')

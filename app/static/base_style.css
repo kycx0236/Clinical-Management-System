@@ -467,6 +467,13 @@ ul li p {
     font-size: 13px;
 }
 
+.btn-submit.file {
+    width: 100px;
+    height: 35px;
+    background-color: var(--blueA);
+    margin-left: 420px;
+}
+
 .btn-submit.order {
     position: relative;
     background-color: white;

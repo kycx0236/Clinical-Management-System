@@ -5,6 +5,9 @@ from app.models.doctor_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
+from cloudinary import uploader
+from cloudinary.uploader import upload
+from cloudinary.uploader import destroy
 
 doctor_bp = Blueprint('doctor', __name__)
 
@@ -615,7 +618,6 @@ def results():
     print("report id:", report_id)
     labreq_info = doctor.get_labrequest_data(order_id)
     labrep_info = doctor.get_labreport_info(report_id)
-    lab_report = doctor.get_lab_report(report_id)
     hematology_info = doctor.get_hematology_data(order_id)
     bacteriology_info = doctor.get_bacteriology_data(order_id)
     histopathology_info = doctor.get_histopathology_data(order_id)
@@ -627,7 +629,7 @@ def results():
     return render_template("doctor/patient/results.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, reports=lab_report, report=labrep_info, info=doctor_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, report=labrep_info, info=doctor_info)
 
 # REQUEST TO RUN LABORATORY TESTS
 @doctor_bp.route('/labtest_request/', methods=['GET', 'POST'])

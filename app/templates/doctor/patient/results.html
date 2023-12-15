@@ -614,33 +614,22 @@
                                     <span>CARRIED OUT BY:</span>
                                 </div>
                                 <div class="inputBox conduct">
-                                    <input type="text" value="{{ report[1] }}" name="dateConducted" disabled>
+                                    <input type="text" value="{{ report[2] }}" name="dateConducted" disabled>
                                     <span>DATE CARRIED OUT:</span>
                                 </div>
                             </div>
                             
                             <center>
-                                <div class="lab-result">
-                                    <table cellpadding="5" id="resultTable" class="table table-striped" style="width: 1020px;"> 
-                                        <thead>
-                                            <tr> 
-                                                <th>PROCESS NAME</th> 
-                                                <th>TEST RESULT</th> 
-                                                <th>REFERENCE VALUE</th> 
-                                                <th>DIAGNOSIS</th> 
-                                            </tr> 
-                                        </thead>
-                                        <tbody>
-                                            {% for report in reports %}
-                                            <tr>
-                                                <td>{{ report[2] }}</td> 
-                                                <td>{{ report[3] }}</td> 
-                                                <td>{{ report[4] }}</td> 
-                                                <td>{{ report[5] }}</td> 
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table> 
+                                <div style="border: 1px solid #868686; width: 300px; height: 50px; margin-top:30px; padding: 10px; border-radius: 5px; display: flex;">
+                                    {% if report[1] %}
+                                        <div style="margin-right: 10px; margin-left:15px">
+                                            <img src="{{ url_for('static', filename='/images/Download.png') }}" width="20">
+                                        </div>
+            
+                                        <div>
+                                            <a href="{{ report[1] }}">Download Laboratory Report</a>
+                                        </div>  
+                                    {% endif %}
                                 </div>
                             </center>
                         </div>

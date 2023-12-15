@@ -387,21 +387,9 @@ CREATE TABLE IF NOT EXISTS `labreport` (
   `reportID` int NOT NULL AUTO_INCREMENT,
   `orderID` int NOT NULL,
   `medtech` varchar(255) NOT NULL,
+  `pdfFile` varchar(255) NOT NULL,
   `reportDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`reportID`),
   UNIQUE KEY `report_id_UNIQUE` (`reportID`),
   FOREIGN KEY (`orderID`) REFERENCES labrequest(`orderID`) ON DELETE CASCADE
 ); 
-
--- LABORATORY TEST RESULTS
-CREATE TABLE IF NOT EXISTS `labtest` (
-  `testID` int NOT NULL AUTO_INCREMENT,
-  `reportID` int NOT NULL,
-  `processName` varchar(255) NOT NULL,
-  `testResult` varchar(255) NOT NULL,
-  `refValue` varchar(255) NOT NULL,
-  `diagnosisReport` varchar(255) NOT NULL,
-  PRIMARY KEY (`testID`),
-  UNIQUE KEY `test_id_UNIQUE` (`testID`),
-  FOREIGN KEY (`reportID`) REFERENCES labreport(`reportID`) ON DELETE CASCADE
-);
