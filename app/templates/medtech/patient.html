@@ -7,6 +7,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <a href="{{ url_for('medtech.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -24,157 +27,79 @@
                 </li>
             </a>
         </ul>
-        <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
-            <div>
-                <h3>Eda Grace P.</h3>
-                <p>Medtech</p>
-            </div>
-        </div>
-        <ul>
-            <li class="logout" id="logoutButton">
-                <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                <p>Logout</p>
-            </li>
-        </ul>
-    </div>
-    
-    <!-- PATIENT RECORD -->
-    <div class="patient-header">
-        <p>LABORATORY REPORTS</p>
-    </div>
-
-    <div class="patient-table">
-        <table id="patientTable" class="table table-striped" style="width:100%">
-            <thead>
-                <tr>
-                    <th>SUBJECT</th>
-                    <th>PATIENT NAME</th>
-                    <th>GENDER</th>
-                    <th>PHYSICIAN</th>
-                    <th>DATE</th>
-                    <th>LAB REPORT</th>
-                    <th>ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for labrequest in labrequests %}
-                <tr>
-                    <td>{{ labrequest[2] }}</td>
-                    <td>{{ labrequest[3] }}</td>
-                    <td>{{ labrequest[4] }}</td>
-                    <td>{{ labrequest[5] }}</td>
-                    <td>{{ labrequest[7] }}</td>
-                    <td>
-                        <!-- VIEW RECORD -->
-                        <form method="GET" action="/medtech/laboratory_report/">
-                            <div class="delete-icon">
-                                <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
-                                <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
-                                <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
-                                <button type="submit" style="background: none; border: none;">
-                                    <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Lab Report">
-                                </button>
-                            </div>
-                        </form> 
-                    </td>
-                    <td>
-                        <!-- DELETE RECORD -->
-                        <form id="deleteForm_{{ labrequest[6] }}_{{ labrequest[0] }}" method="POST" action="/medtech/delete_laboratory_report/">
-                            <div class="delete-icon">
-                                <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
-                                <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
-                                <button type="button" onclick="confirmation('{{ labrequest[6] }}', '{{ labrequest[0] }}')" style="background: none; border: none;">
-                                    <img src="{{ url_for('static', filename='images/Delete.png') }}" title="Delete Report">
-                                </button>
-                            </div>
-                        </form> 
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5">Delete Report</h1>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to permanently delete the laboratory report?
-                </div>
-                <div class="modal-footer">
-                    <button id="confirmDelete" class="btn-done">CONFIRM</button>
-                    <button id="cancelDelete" class="btn-done cancel">CANCEL</button>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
+                <div>
+                    <h3>{{ info[0] }}</h3>
+                    <p>{{ info[2] }}</p>
                 </div>
             </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
         </div>
     </div>
 
-    {% if success %}
-        <div id="successModal" class="modal" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5">Success</h1>
-                    </div>
-                    <div class="modal-body">
-                        Patient's laboratory report has been deleted successfully!
-                    </div>
-                    <a href="{{ url_for('medtech.patient') }}"> 
-                        <div class="modal-footer">
-                            <button id="successSave" type="button" class="btn-done">DONE</button>
-                        </div>
-                    </a>
-                </div>
-            </div>
+    <main>
+        <div class="navbar">
+            <!-- PATIENT RECORD -->
+            <div class="patient-header">
+                <p>LABORATORY REPORTS</p>
+            </div>  
         </div>
-    {% elif error %}
-        <div id="errorModal" class="modal" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5">Error</h1>
-                    </div>
-                    <div class="modal-body">
-                        Error in deleting patient laboratory report. Please try again.
-                    </div>
-                    <a href="{{ url_for('medtech.patient') }}">
-                        <div class="modal-footer">
-                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
-                        </div>
-                    </a>
-                </div>
+        
+        <center>
+            <div class="patient-table">
+                <table id="patientTable" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>SUBJECT</th>
+                            <th>PATIENT NAME</th>
+                            <th>GENDER</th>
+                            <th>PHYSICIAN</th>
+                            <th>DATE</th>
+                            <th>LAB REPORT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for labrequest in labrequests %}
+                        <tr>
+                            <td>{{ labrequest[2] }}</td>
+                            <td>{{ labrequest[3] }}</td>
+                            <td>{{ labrequest[4] }}</td>
+                            <td>{{ labrequest[5] }}</td>
+                            <td>{{ labrequest[7] }}</td>
+                            <td>
+                                <!-- VIEW RECORD -->
+                                <form method="GET" action="/medtech/laboratory_report/">
+                                    <div class="delete-icon">
+                                        <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
+                                        <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
+                                        <input id="report_id" name="report_id" value="{{ labrequest[6] }}" hidden>
+                                        <button type="submit" style="background: none; border: none;">
+                                            <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Lab Report">
+                                        </button>
+                                    </div>
+                                </form> 
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </div>
-    {% endif %}
+        </center>
+        
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         new DataTable('#patientTable');
-
-        // CONFIRMATION BEFORE DELETION
-        function confirmation(reportId, orderId){
-            const confirmationModal = document.getElementById("confirmationModal");
-            confirmationModal.style.display = "block";
-
-            const confirmDelete = document.getElementById("confirmDelete");
-            const cancelDelete = document.getElementById("cancelDelete");
-            console.log(reportId)
-            console.log(orderId)
-            confirmDelete.addEventListener("click", function() {
-                document.getElementById("deleteForm_" + reportId + "_" + orderId).submit();
-            });
-    
-            cancelDelete.addEventListener("click", function() {
-                confirmationModal.style.display = "none";
-            });
-        }
 
         // LAB REQUEST NOTIFICATION
         const unreadMessages = document.querySelectorAll(".unread");
@@ -191,13 +116,6 @@
 
         function markAsRead(message) {
             message.classList.remove("unread");
-            updateUnreadCount();
-        }
-
-        function markAllAsRead() {
-            unreadMessages.forEach(message => {
-                message.classList.remove("unread");
-            });
             updateUnreadCount();
         }
     </script>

@@ -13,7 +13,9 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <span class="new-notif" id="new-notifs" style="display: none;"></span>
+            <li class="notifications">
+                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -31,79 +33,121 @@
                 </li>
             </a>
         </ul>
-        <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
-            <div>
-                <h3>Eda Grace P.</h3>
-                <p>Medtech</p>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
+                <div>
+                    <h3>{{ info[0] }}</h3>
+                    <p>{{ info[2] }}</p>
+                </div>
             </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
         </div>
-        <ul>
-            <li class="logout" id="logoutButton">
-                <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                <p>Logout</p>
-            </li>
-        </ul>
     </div>
-    <!-- DASHBOARD -->
-    <div class="notification-container">
-        <div class="notif-header">
-            <div class="notif-box">
-              <p class="request-header">LABORATORY TEST REQUEST</p>
-              <span id="notifs"></span>
+
+    <main>
+        <!-- DASHBOARD -->
+        <div class="doctor-bg">
+            <img src="{{ url_for('static', filename='images/DocCare BG.png') }}">
+            <div class="greetings-name">
+                <p>Welcome,</p>
+                <h2>{{ info[0] }}</h2>
             </div>
-            <p id="mark-all">Mark all as read</p>
+            <div class="greetings">
+                <p>Have a nice day at work!</p>
+            </div>
         </div>
 
-        <main id="notificationList">
-            {% for labrequest in labrequests %}
-                <form method="GET" action="/medtech/laboratory_test/">
-                    <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
-                    <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
-                    <button style="background: none; border: none; font-size: 16px;">
-                        <div class="notif_card unread" data-id="{{ labrequest[0] }}">
-                            <div class="description">
-                                <p class="user_activity">
-                                    <strong>DR. {{ labrequest[2] }}</strong> sent you a laboratory job order for patient
-                                    <b>{{ labrequest[3] }}</b>
-                                </p>
-                                <p class="time" id="time"></p>
-                            </div>
+        <div class="grid_container">
+            <div class="grid_item">
+                <div class="notif-header">
+                    <div class="notif-box">
+                    <p class="request-header">Laboratory Test Request</p>
+                    <span id="notifs"></span>
+                    </div>
+                </div>
+                <center>
+                    <div class="notification-container">
+                        <div id="notificationList">
+                            {% for labrequest in labrequests %}
+                                <form method="GET" action="/medtech/laboratory_test/">
+                                    <input id="order_id" name="order_id" value="{{ labrequest[0] }}" hidden>
+                                    <input id="patient_id" name="patient_id" value="{{ labrequest[1] }}" hidden>
+                                    <button style="background: none; border: none; font-size: 14px; width: 100%;">
+                                        <div class="notif_card unread" data-id="{{ labrequest[0] }}">
+                                            <div class="description">
+                                                <p class="user_activity">
+                                                    <strong>DR. {{ labrequest[2] }}</strong> sent you a laboratory job order for patient <br>
+                                                    <b>{{ labrequest[3] }}</b>
+                                                </p>
+                                                <p class="time" id="time"></p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </form>
+                            {% endfor %}
                         </div>
-                    </button>
-                </form>
-            {% endfor %}
-        </main>
-    </div>
+                    </div>
+                </center>
+            </div>
+
+            <div class="grid_item">
+                <div class="short_patient_list">
+                    <div class="patients_short">
+                        <p><b>Reports</b></p>
+                        <div class="patient_buttons">
+                            <a href="{{ url_for('medtech.patient') }}">
+                                <div>
+                                    <button class="see_more">SEE MORE</button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% for patient in patients %}
+                        <table class="patient_short_table">
+                            <tr>
+                                <td rowspan="3">
+                                    <strong>{{ patient[2] }}</strong> <br>
+                                    <em style="color: var(--grayA);">{{ patient[3] }}</em>
+                                </td>
+                                <td>
+                                    <!-- VIEW RECORD -->
+                                    <form method="GET" action="/medtech/laboratory_report/">
+                                        <div class="patient_record">
+                                            <input id="order_id" name="order_id" value="{{ patient[0] }}" hidden>
+                                            <input id="patient_id" name="patient_id" value="{{ patient[1] }}" hidden>
+                                            <input id="report_id" name="report_id" value="{{ patient[6] }}" hidden>
+                                            <button type="submit" style="background: none; border: none;">
+                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                            </button>
+                                        </div>
+                                    </form> 
+                                </td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+            </div>
+        </div>
+        
+    </main>
 
     <script>
         // LAB REQUEST NOTIFICATION
-        const markAll = document.getElementById("mark-all");
         const unreadMessages = document.querySelectorAll(".unread");
 
         function updateUnreadCount() {
-            const unread = document.getElementById("notifs");
-            unread.innerText = unreadMessages.length;
-
             const unreadCount = document.querySelectorAll(".unread").length;
-            const newNotifs = document.getElementById('new-notifs');
-            
-            if (unreadCount > 0) {
-                newNotifs.style.display = 'block';
-            } else {
-                newNotifs.style.display = 'none';
-            }
+            const unread = document.getElementById("notifs");
+            unread.innerText = unreadCount;
         }
 
         function markAsRead(message) {
             message.classList.remove("unread");
-            updateUnreadCount();
-        }
-
-        function markAllAsRead() {
-            unreadMessages.forEach(message => {
-                message.classList.remove("unread");
-            });
             updateUnreadCount();
         }
 
@@ -127,16 +171,6 @@
                 }
             });
             updateUnreadCount();
-
-            markAll.addEventListener("click", () => {
-                markAllAsRead();
-         
-                unreadMessages.forEach(message => {
-                    const messageId = message.getAttribute('data-id');
-                    readState[messageId] = true;
-                });
-                localStorage.setItem('readState', JSON.stringify(readState));
-            });
         });
     </script>
 

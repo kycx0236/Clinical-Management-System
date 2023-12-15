@@ -15,10 +15,10 @@ class doctor():
             return False
         
         sql = "INSERT INTO patientinfo(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, \
-            relationship, eContactNum, occupation, p_email, p_contactNum) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            relationship, eContactNum, occupation, p_email, p_contactNum, userID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (self.firstName, self.midName, self.lastName, self.age, self.civilStatus, self.gender, self.bloodType, self.birthPlace, self.birthDate, 
                              self.p_address, self.nationality, self.religion, self.eContactName, self.relationship, self.eContactNum, self.occupation, self.p_email, 
-                             self.p_contactNum))
+                             self.p_contactNum, self.userID))
         mysql.connection.commit()
 
         new_patient_id = cursor.lastrowid
@@ -78,17 +78,21 @@ class doctor():
 # ADD PRESCRIPTION
     @classmethod
     def add_prescription(cls, assessment_id, medication_name, dosage, p_quantity, duration, instructions):
-        cursor = mysql.connection.cursor()
+        try:
+            cursor = mysql.connection.cursor()
 
-        add_prescription = "INSERT INTO prescription (assessmentID) VALUES (%s)"
-        cursor.execute(add_prescription, (assessment_id,))
-        prescriptionID = cursor.lastrowid  
+            add_prescription = "INSERT INTO prescription (assessmentID) VALUES (%s)"
+            cursor.execute(add_prescription, (assessment_id,))
+            prescriptionID = cursor.lastrowid  
 
-        add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
-        mysql.connection.commit()
+            add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
+            cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
+            mysql.connection.commit()
 
-        return True
+            return True
+        except Exception as e:
+            print("Error occurred during prescription addition:", e)
+            return False
 
     @classmethod 
     def add_laboratory_request(cls, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
@@ -147,7 +151,7 @@ class doctor():
     @staticmethod
     def get_doctor_info(doctor_id):
         cursor = mysql.connection.cursor()
-        query = "SELECT first_name, last_name FROM users WHERE id = %s"
+        query = "SELECT first_name, last_name, user_role FROM users WHERE id = %s"
         cursor.execute(query, (doctor_id,))
         doctor = cursor.fetchone()
         cursor.close()
@@ -175,7 +179,7 @@ class doctor():
     @staticmethod
     def get_consultations(patientID):
         cursor = mysql.connection.cursor()
-        query = "SELECT * FROM assessment WHERE patientID = %s"
+        query = "SELECT * FROM assessment WHERE patientID = %s ORDER BY consultationDate DESC"
         cursor.execute(query, (patientID,))
         consultations = cursor.fetchall()
         cursor.close()
@@ -286,14 +290,6 @@ class doctor():
         return clinicalchem_data
     
     @staticmethod
-    def get_lab_report(reportID):
-        cursor = mysql.connection.cursor()
-        query = "SELECT * FROM labtest WHERE reportID = %s"
-        cursor.execute(query, (reportID,))
-        labreport = cursor.fetchall()
-        return labreport
-    
-    @staticmethod
     def get_lab_reports(patientID):
         cursor = mysql.connection.cursor()
         query = "SELECT labrequest.labSubject, labreport.reportDate, labrequest.orderID, labrequest.patientID , labreport.reportID \
@@ -306,7 +302,7 @@ class doctor():
     @staticmethod
     def get_labreport_info(reportID):
         cursor = mysql.connection.cursor()
-        query = ("SELECT medtech, reportDate FROM labreport WHERE reportID = %s")
+        query = ("SELECT medtech, pdfFile, reportDate FROM labreport WHERE reportID = %s")
         cursor.execute(query, (reportID,))
         reportInfo = cursor.fetchone()
         return reportInfo
@@ -377,18 +373,6 @@ class doctor():
         try:
             query = "DELETE FROM patientinfo WHERE patientID = %s"
             cursor.execute(query, (patientID,))
-            mysql.connection.commit()
-            return True
-        except:
-            return False
-
-# DELETE MEDICAL ASSESSMENT
-    @classmethod 
-    def delete_medical_assessment(cls, assessmentID, patientID):
-        cursor = mysql.connection.cursor()
-        try:
-            query = "DELETE FROM assessment WHERE assessmentID = %s AND patientID = %s"
-            cursor.execute(query, (assessmentID, patientID,))
             mysql.connection.commit()
             return True
         except:

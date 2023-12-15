@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Dashboard{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}"> {% endblock %}
+
 {% block content %}
+
     <!-- SIDE NAV -->
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-            <p class="doc">Doc</p>
-            <h4 class="care">Care</h4>
         </div>
         <ul>
             <li class="selected-icon-bg">
@@ -27,39 +27,185 @@
                 </li>
             </a>
         </ul>
-
-        <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
-            <div>
-                <h3>Eda Grace P.</h3>
-                <p>Admin</p>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
+                <div>
+                    <h3>{{ info[0] }}</h3>
+                    <p>{{ info[1] }}</p>
+                </div>
             </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
         </div>
-        <!-- admin logout -->
-        <ul>
-            <li class="logout" id="logoutButton">
-                <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                <p>Logout</p>
-            </li>
-        </ul>
     </div>
 
     <!-- DASHBOARD -->
     <main>
-        <a href="#">
-            <div class="doctors-icon">
-                <img src="{{ url_for('static', filename='images/Doctors.png') }}">
+        <div class="doctor-bg">
+            <img src="{{ url_for('static', filename='images/DocCare BG.png') }}">
+            <div class="greetings-name">
+                <p>Welcome,</p>
+                <h2>{{ info[0] }}</h2>
             </div>
-        </a>
-        <a href="#">
-            <div class="medtech-icon">
-                <img src="{{ url_for('static', filename='images/Medtech.png') }}">
+            <div class="greetings">
+                <p>Have a nice day at work!</p>
             </div>
-        </a>
-        <a href="#">
-            <div class="receptionist-icon">
-                <img src="{{ url_for('static', filename='images/Receptionist.png') }}">
+            <p class="date-time" id="demo"></p>
+        </div>
+
+        <div class="grid_container">
+            <!-- LOGS -->
+            <div class="grid_item">
+                <div class="logs_list">
+                    <p style="margin-top: 15px; text-align:left;"><strong>Logs</strong></p>
+                    <div class="logs_container">
+                        <table class="logs_table">
+                            <thead>
+                                <th>DATE & TIME</th>
+                                <th>PATIENT</th>
+                                <th>ACTION/EVENT</th>
+                                <th>DETAILS</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                                <tr>
+                                    <td>2023-12-08 12:31:16</td>
+                                    <td>@doctor</td>
+                                    <td>Added a new patient</td>
+                                    <td>Patient added successfully</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </a>
+
+            <!-- USERS -->
+            <div class="grid_item">
+                <div class="short_user_list">
+                    <div class="users_short">
+                        <p><strong>Users</strong></p>
+                        <div class="user_buttons">
+                            <a href="{{ url_for('admin.add_user') }}">
+                                <div class="add_user_btn">
+                                    <img src="{{ url_for('static', filename='images/Add User.png') }}" title="Add User">
+                                </div>
+                            </a>
+                            <a href="{{ url_for('admin.user_management') }}">
+                                <div>
+                                    <button class="see_more">SEE MORE</button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% for user in users %}
+                        <table class="user_short_table">
+                            <tr>
+                                <td rowspan="3">
+                                    <strong>{{ user.first_name }} {{ user.last_name }}</strong> <br>
+                                    <em style="color: var(--grayA);">@{{ user.username }}</em> <br>
+                                    <p style="font-size: 13px;">{{ user.user_role }}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </main>
+
+    <script>
+        // TO DISPLAY THE DATE
+        function displayDateAndTime() {
+        const demoElement = document.getElementById('demo');
+
+            function updateDateAndTime() {
+                const currentDateAndTime = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
+
+                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}`;
+            }
+            updateDateAndTime();
+            setInterval(updateDateAndTime);
+        }
+        displayDateAndTime();   
+    </script>
+
 {% endblock %}  

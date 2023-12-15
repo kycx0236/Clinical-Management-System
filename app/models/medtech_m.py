@@ -3,22 +3,19 @@ from app import mysql
 class medtech():
 # ADD LABORATORY REPORT
     @classmethod 
-    def add_laboratory_report(cls, orderID, medtech, processName, testResult, refValue, diagnosisReport):
+    def add_laboratory_report(cls, orderID, medtech, pdfFile):
         cursor = mysql.connection.cursor()
 
-        add_report = "INSERT INTO labreport (orderID, medtech) VALUES (%s, %s)"
-        cursor.execute(add_report, (orderID, medtech))
-        reportID = cursor.lastrowid  
-
-        add_test = "INSERT INTO labtest (reportID, processName, testResult, refValue, diagnosisReport) VALUES  (%s, %s, %s, %s, %s)"
-        cursor.execute(add_test, (reportID, processName, testResult, refValue, diagnosisReport))
+        add_report = "INSERT INTO labreport (orderID, medtech, pdfFile) VALUES (%s, %s, %s)"
+        cursor.execute(add_report, (orderID, medtech, pdfFile))
+        
         mysql.connection.commit()
         return True
     
     @staticmethod
     def get_user_info(current_user):
         cursor = mysql.connection.cursor()
-        query = ("SELECT first_name, last_name FROM users WHERE id = %s")
+        query = ("SELECT first_name, last_name, user_role FROM users WHERE id = %s")
         cursor.execute(query, (current_user,))
         userInfo = cursor.fetchone()
         return userInfo
@@ -26,7 +23,7 @@ class medtech():
     @staticmethod
     def get_labreport_info(reportID):
         cursor = mysql.connection.cursor()
-        query = ("SELECT medtech, reportDate FROM labreport WHERE reportID = %s")
+        query = ("SELECT medtech, pdfFile, reportDate FROM labreport WHERE reportID = %s")
         cursor.execute(query, (reportID,))
         reportInfo = cursor.fetchone()
         return reportInfo
@@ -120,27 +117,3 @@ class medtech():
         clinicalchem_data = cursor.fetchone()
         cursor.close()
         return clinicalchem_data
-    
-    @staticmethod
-    def get_lab_report(reportID):
-        cursor = mysql.connection.cursor()
-        query = "SELECT * FROM labtest WHERE reportID = %s"
-        cursor.execute(query, (reportID,))
-        labreport = cursor.fetchall()
-        return labreport
-    
-# DELETE LABORATORY REPORT
-    @classmethod 
-    def delete_laboratory_report(cls, reportID, orderID):
-        cursor = mysql.connection.cursor()
-        try:
-            reportQuery = "DELETE FROM labreport WHERE reportID = %s"
-            cursor.execute(reportQuery, (reportID,))
-
-            requestQuery = "DELETE FROM labrequest WHERE orderID = %s"
-            cursor.execute(requestQuery, (orderID,))
-
-            mysql.connection.commit()
-            return True
-        except:
-            return False

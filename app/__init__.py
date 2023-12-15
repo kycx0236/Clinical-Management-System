@@ -1,14 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysql_connector import MySQL
-from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL
+from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL, cloud_name, api_key, api_secret
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user
 from flask_mail import Mail
+# from flask_socketio import SocketIO
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 mysql = MySQL()
 login_manager = LoginManager()
 mail = Mail()
 csrf = CSRFProtect()
+# socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__)
@@ -24,10 +29,17 @@ def create_app():
     app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
     app.config['MAIL_USE_TLS'] = MAIL_USE_TLS
     app.config['MAIL_USE_SSL'] = MAIL_USE_SSL
+    
+    cloudinary.config (
+        cloud_name=cloud_name,
+        api_key=api_key,
+        api_secret=api_secret,
+        secure = True
+    )
 
-    mail.init_app(app)
     mysql.init_app(app)
     csrf.init_app(app)
+    mail.init_app(app)
     
     login_manager = LoginManager(app)
  
@@ -57,7 +69,6 @@ def create_app():
                 flash("The username or password you've entered is incorrect", 'error')
 
         return render_template('login.html')
-
 
     from app.routes.admin_bp import admin_bp
     from app.routes.doctor_bp import doctor_bp
