@@ -29,128 +29,122 @@
                 </li>
             </a>
         </ul>
-        <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
-            <div>
-                <h3>Eda Grace P.</h3>
-                <p>Admin</p>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
+                <div>
+                    <h3>{{ info[0] }}</h3>
+                    <p>{{ info[1] }}</p>
+                </div>
             </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
         </div>
-        <ul>
-            <li class="logout" id="logoutButton">
-                <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                <p>Logout</p>
-            </li>
-        </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR USER INFORMATION -->
-    <a class="back-icon" href="{{ url_for('admin.user_management') }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
-
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">USER INFORMATION</a>
-        </li>
-    </ul>
-
-    < <form action="{{ url_for('admin.user_info') }}" method="POST">
-        {{ UserForm.csrf_token }}
-
-        <!-- USER ID -->
-        <div class="inputBox code" style="display: none;">
-            <input type="hidden" name="user_id" value="{{ user_id }}">
+    <main>
+        <!-- NAVBAR AND TABS FOR USER INFORMATION -->
+        <div class="navbar">
+            <ul class="nav nav-underline">
+                <a class="back-icon" href="{{ url_for('admin.user_management') }}">
+                    <img src="{{ url_for('static', filename='images/Back.png') }}">
+                </a>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">USER INFORMATION</a>
+                </li>
+            </ul>
         </div>
-        
-        <!-- USER INFORMATION -->
 
-        <div class="user-bg">
+        <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
 
-            <div id="notification" class="flash-message" style="display: none;"></div>
+        <form action="{{ url_for('admin.user_info') }}" method="POST">
+            {{ UserForm.csrf_token }}
 
-            <div class="group-info">               
-
-                <div class="u_row firstRow">
-
-                    <div class="inputBox fName">
-                        <input type="text" required="required" name="first_name" value="{{ user[3] }}" oninput="capitalizeFirstLetter(this)" disabled>
-                        <span>FIRST NAME</span>
-                    </div>
-                    <div class="inputBox mName">
-                        <input type="text" required="required" name="middle_name" value="{{ user[4] }}" oninput="capitalizeFirstLetter(this)" disabled>
-                        <span>MIDDLE NAME</span>
-                    </div>
-                    <div class="inputBox lName">
-                        <input type="text" required="required" name="last_name" value="{{ user[5] }}" oninput="capitalizeFirstLetter(this)" disabled>
-                        <span>LAST NAME</span>
-                    </div>
-                    
-                </div>
-
-                <div class="u_row secondRow">
-
-                    <div class="inputBox username">
-                        <input type="text" required="required" name="username" value="{{ user[1] }}" disabled>
-                        <span>USERNAME</span>
-                    </div>
-
-                    <div class="inputBox password">
-                        <input type="password" required="required" name="password" value="{{ user[2] }}" disabled readonly>
-                        <span>PASSWORD</span>
-                    </div>
-
-                    <input type="hidden" id="newPassword" name="new_password">
-                    
-                </div>
-
-                <div class="u_row thirdRow">
-
-                    <div class="inputBox email">
-                        <input type="email" name="email" autocomplete="off" value="{{ user[6] }}" disabled>
-                        <span>EMAIL</span>
-                    </div>
-                    
-                    <div class="inputBox gender">
-                        <select class="gender" name="gender" required="required" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="male" {% if user[7] == "male" %} selected {% endif %}>Male</option>
-                            <option value="female" {% if user[7] == "female" %} selected {% endif %}>Female</option>
-                        </select>
-                        <span>GENDER</span>
-                    </div>
-
-                    <div class="inputBox user_role">
-                        <select class="user_role" name="user_role" required="required" disabled>
-                            <option value="" disabled selected></option>
-                            <option value="doctor" {% if user[8] == "doctor" %} selected {% endif %}>Doctor</option>
-                            <option value="receptionist" {% if user[8] == "receptionist" %} selected {% endif %}>Receptionist</option>
-                            <option value="medtech" {% if user[8] == "medtech" %} selected {% endif %}>Medtech</option>
-                            <option value="admin" {% if user[8] == "admin" %} selected {% endif %}>Admin</option>
-                        </select>
-                        <span>USER ROLE</span>
-                    </div>
-
-                </div>
-
+            <!-- USER ID -->
+            <div class="inputBox code" style="display: none;">
+                <input type="hidden" name="user_id" value="{{ user_id }}">
             </div>
+            
+            <!-- USER INFORMATION -->
+            <div class="user-bg">
+                <center>
+                    <div id="notification" class="flash-message" style="display: none;"></div>
+                </center>
 
-            <div class="btn-container">
-                <div class="btn-container">
-                    <button class="btn-new-pass" type="button" id="NewPassButton" onclick="generateNewPassword()" style="display: none;" >GENERATE NEW PASSWORD</button>
+                <div class="group-info">               
+                    <div class="u_row firstRow">
+                        <div class="inputBox fName">
+                            <input type="text" required="required" name="first_name" value="{{ user[3] }}" oninput="capitalizeFirstLetter(this)" disabled>
+                            <span>FIRST NAME</span>
+                        </div>
+                        <div class="inputBox mName">
+                            <input type="text" required="required" name="middle_name" value="{{ user[4] }}" oninput="capitalizeFirstLetter(this)" disabled>
+                            <span>MIDDLE NAME</span>
+                        </div>
+                        <div class="inputBox lName">
+                            <input type="text" required="required" name="last_name" value="{{ user[5] }}" oninput="capitalizeFirstLetter(this)" disabled>
+                            <span>LAST NAME</span>
+                        </div>
+                    </div>
 
+                    <div class="u_row secondRow">
+                        <div class="inputBox username">
+                            <input type="text" required="required" name="username" value="{{ user[1] }}" disabled>
+                            <span>USERNAME</span>
+                        </div>
+
+                        <div class="inputBox edit_email">
+                            <input type="email" name="email" autocomplete="off" value="{{ user[6] }}" disabled>
+                            <span>EMAIL</span>
+                        </div>
+                    </div>
+
+                    <div class="u_row thirdRow">
+                        <div class="inputBox edit_user_role">
+                            <select class="edit_user_role" name="user_role" required="required" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="doctor" {% if user[8] == "doctor" %} selected {% endif %}>Doctor</option>
+                                <option value="receptionist" {% if user[8] == "receptionist" %} selected {% endif %}>Receptionist</option>
+                                <option value="medtech" {% if user[8] == "medtech" %} selected {% endif %}>Medtech</option>
+                                <option value="admin" {% if user[8] == "admin" %} selected {% endif %}>Admin</option>
+                            </select>
+                            <span>USER ROLE</span>
+                        </div>
+
+                        <div class="inputBox edit_gender">
+                            <select class="edit_gender" name="gender" required="required" disabled>
+                                <option value="" disabled selected></option>
+                                <option value="male" {% if user[7] == "male" %} selected {% endif %}>Male</option>
+                                <option value="female" {% if user[7] == "female" %} selected {% endif %}>Female</option>
+                            </select>
+                            <span>GENDER</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="btn-container">
                     <button class="btn-submit" type="submit" id="updateButton" style="display: none;">UPDATE</button>
                 </div>
+
+                <center>
+                    <div class="reset_pass">
+                        <div class="inputBox edit_password">
+                            <input type="password" required="required" name="password" value="{{ user[2] }}" disabled readonly>
+                            <span>PASSWORD</span>
+                        </div>
+                        
+                        <input type="hidden" id="newPassword" name="new_password">
+
+                        <button class="btn-new-pass" type="button" onclick="generateNewPassword()">CHANGE PASSWORD</button>
+                    </div>
+                </center>
             </div>
-
-            <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
-
-        </div>
-    </form>
-    
+        </form>
+    </main>
 
     {% if success %}
         <div id="successModal" class="modal" style="display: block;">
@@ -192,18 +186,12 @@
     {% endif %}
 
     <script>
-        
         // BUTTONS
-        let editEnabled = false;
-
         function enableEdit() {
             const inputFields = document.querySelectorAll('.group-info input, .group-info select');
             inputFields.forEach((input) => {
                 input.disabled = false;
             });
-
-            const NewPassButton = document.querySelector('#NewPassButton');
-            NewPassButton.style.display = 'block';
 
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'block';
@@ -211,8 +199,6 @@
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Cancel-icon.png') }}";
             editIcon.setAttribute('onclick', 'disableEdit()');
-
-            editEnabled = true;
         }
 
         function disableEdit() {
@@ -221,39 +207,42 @@
                 input.disabled = true;
             });
 
-            const NewPassButton = document.querySelector('#NewPassButton');
-            NewPassButton.style.display = 'none';
-
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'none';
 
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');
-
-            editEnabled = false;
         }
 
         // FOR GENERATING NEW PASSWORD
         function generateNewPassword() {
-            if (editEnabled) {
-                const length = 12;
-                const specialCharacters = "!@#$%^&*-_+<>?";
-                const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' + specialCharacters;
+            const length = 12;
+            const specialCharacters = "!@#$%^&*-_+<>?";
+            const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' + specialCharacters;
 
-                const newPassword = Array.from({ length }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
-
-                document.getElementById('newPassword').value = newPassword;
-
-                // Display the success Flash message and auto-hide after 8 seconds
-                const flashMessage = document.getElementById('notification');
-                flashMessage.innerHTML = 'New Password is Generated; Click The Update Button to Procceed With The New Password';
-                flashMessage.style.display = 'block';
-
-                setTimeout(() => {
-                    flashMessage.style.display = 'none';
-                }, 8000);
+            const confirmed = confirm("Are you sure you want to generate a new password?");
+            if (!confirmed) {
+                return; 
             }
+            
+            const newPassword = Array.from({ length }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+
+            document.getElementById('newPassword').value = newPassword;
+
+            // Display the success Flash message and auto-hide after 5 seconds
+            const flashMessage = document.getElementById('notification');
+            flashMessage.innerHTML = 'Password changed successfully. A new password has been generated.';
+            flashMessage.style.display = 'block';
+
+            setTimeout(() => {
+                flashMessage.style.display = 'none';
+                const inputFields = document.querySelectorAll('.group-info input, .group-info select');
+                inputFields.forEach((input) => {
+                    input.disabled = false;
+                });
+                document.getElementById('updateButton').click();
+            }, 5000);
         }
 
         function capitalizeFirstLetter(input) {

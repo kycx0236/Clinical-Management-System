@@ -6,6 +6,7 @@
     --darkBlue: #2B394C;
     --grayA: #6C757D;  /* Disabled Text */
     --grayB: #E9ECEF; /* Disabled Background */
+    --grayC: #F0F0F2;
 }
 
 *,
@@ -17,87 +18,101 @@
     padding: 0;
 }
 
-/* -------------------------------------------- SIDEBAR DOCCARE LOGO -------------------------------------------- */
-.cms-logo {
-    display: flex;
-    margin-top: 35px;
-    margin-bottom: 25px;
+main {
+    margin-left: 80px;
+    justify-content: center;
     align-items: center;
-    font-size: 32px;
-    width: 100%;  
-    height: 62px; 
-    border-radius: 30px; 
-    transition: width 0.2s;
+    text-align: center;
+    height: 100vh;
+}
+
+/* -------------------------------------------- SIDEBAR DOCCARE LOGO -------------------------------------------- */
+.cms-logo { 
+    margin-top: 5px;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-bottom: 1px solid var(--blueB);
 }
 
 .cms-logo img {
-    width: 55px;
-    margin-left: 5px;
-    margin-right: 55px;
-}
-
-.cms-logo h4 {
-    font-weight: 900;
-    color: var(--blueA);
-}
-
-.cms-logo p {
-    font-weight: 400;
-    margin-left: 15px;
-    color: var(--darkBlue);
+    width: 35px;
+    justify-content: center;
+    margin-left: 13px;
+    margin-bottom: 11px;
 }
 
 /* -------------------------------------------- SIDEBAR -------------------------------------------- */
 .sidenav-bg {
     width: 80px;  
-    height: 100vh;
+    height: 100vh;  
     background-color: var(--blueC);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
     position: fixed;  
     padding: 8px;
     z-index: 1;
+    transition: width 0.3s ease;
 }
 
 /* logout */
-.logout:hover img {
-    transform: translateY(0%);
+.logout {
+    margin-left: 3px;
+}
+
+.logout:active {
+    transform: translateY(2%);
+}
+
+/* notifications */
+.notifications {  
+    margin-left: 5px;
+    margin-bottom: 20px;
+}
+
+.notifications:active {
+    transform: translateY(2%);
 }
 
 /* icon */
 .icon-bg {
-    width: 100%;  
-    height: 62px; 
-    border-radius: 30px; 
-    padding: 4px;
-    transition: width 0.3s;
+    width: 85%;  
+    height: 40px; 
+    border-radius: 20%; 
+    transition: width 0.5s;
+    margin-left: 5px;
+}
+
+.icon-bg img {
+    filter: hue-rotate(5deg) brightness(150%);
 }
 
 .icon-bg:hover {
     transition: 0.5s;
-    background-color: white;
-    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.775);
+    border-radius: 20%;
+    width: 85%;
 }
 
 /* selected icon */
 .selected-icon-bg {
-    width: 100%;  
-    height: 62px; 
+    width: 85%;  
+    height: 40px;   
     background-color: white; 
-    border-radius: 100%; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    padding: 4px;
+    border-radius: 20%; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+    margin-left: 5px;
 }
 
 /* icon text styles */
 .icon-bg p, .logout p, .selected-icon-bg p {
     display: flex;
     position: relative;
-    transition: all 0.3s ease-out; 
+    transition: all 0.3s ease-in; 
     opacity: 0;
     visibility: hidden;
     transform: translateY(-50%);
     top: 18px;
-    left: 50px;
+    left: 25px;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--darkBlue);
@@ -105,24 +120,8 @@
     font-weight: 100;
 }
 
-.icon-bg p::after, .logout p::after, .selected-icon-bg p::after {
-    content: "";
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    border-radius: 2px;
-    background-color: var(--darkBlue);
-    transform: rotate(45deg);
-    z-index: -1;
-}
-
-.icon-bg p::after, .logout p::after, .selected-icon-bg p::after {
-    left: -6px;
-    top: 5px;
-}
-
 .icon-bg:hover p, .logout:hover p, .selected-icon-bg:hover p {
-    left: 35px;
+    left: 30px;
     opacity: 1;
     visibility: visible;
     z-index: 99;
@@ -133,14 +132,12 @@ ul {
 }
 
 ul li {
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     cursor: pointer;
     font-size: 14px;
     font-weight: 900;
-    transition: 1ms;
 }
 
 a {
@@ -149,9 +146,8 @@ a {
 }
 
 ul li img {
-    margin-right: 0px;
-    margin-left: 15px;
-    width: 26px;
+    margin-left: 16px;
+    width: 21px; 
 }
 
 ul li p {
@@ -159,65 +155,136 @@ ul li p {
     display: none;
 }
 
+.navbar {
+    position: relative;
+    width: 100%;
+    height: 62px;
+    background-color: white;
+    border-bottom: 1px solid var(--blueC);
+}
+
 /* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
 .sidenav-user-bg {
     font-size: 12px;
     display: flex;
     align-items: center;
-    height: 60px; 
-    background-color: white;
-    border-radius: 360px; 
+    height: 50px; 
     overflow: hidden;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    width: 500px;
 }
 
 .sidenav-user-bg:hover {
     display: flex;
-    width: 200px;
+    width: 500px;
 }
 
 .sidenav-user-bg div {
-    display: none;
-    margin-left: 20px;
+    position: relative;
+    transition: all 0.3s ease-in;
+    opacity: 0;
+    visibility: hidden;
+    background-color: var(--darkBlue);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    left: 15px;
 }
 
 .sidenav-user-bg:hover div {
-    display: block;
+    left: 25px;
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
 }
 
 .user-img {
-    width: 50px;
+    width: 45px;
     border-radius: 100%;
-    margin-left: 7px;
+    margin-left: 10px;
+}
+
+.foot-nav {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
 }
 
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
 .date-time {
     font-weight: 900;
+    position: relative;
+    display: flex;
+    margin-top: 1%;
+    margin-left: 1%;
+    color: var(--darkBlue);
+}
+
+.doctor-bg img {
+    position: relative;
+    margin-top: 10px;
+    width: 98%; 
+    /* border-radius: 20px; */
+} 
+
+.greetings-name {
     position: absolute;
     display: flex;
-    top: 70px;
-    left: 1140px;
+    gap: 5px;
+    top: 45px;
+    left: 170px;
+    color: var(--darkBlue);
+}
+
+.greetings-name p {
+    font-size: 25px;
+}
+
+.greetings {
+    position: absolute;
+    top: 80px;
+    left: 170px;
+    color: var(--darkBlue);   
+}
+
+
+/* -------------------------------------------- ADD ICONS -------------------------------------------- */
+.add-icon img {
+    position: fixed;
+    top: 10px;
+    left: 95%;
+    width: 40px;
+    right: 50px;
+    border-radius: 100%;
+    z-index: 99;
+    z-index: 99;
+    position: fixed;
+    z-index: 99;    
+    position: fixed;
+}
+
+.add-icon img:active {
+    transform: translateY(1px);
 }
 
 /* -------------------------------------------- PATIENT TABLE -------------------------------------------- */
 .patient-header p {
-    position: absolute;
-    top: 45px;
-    left: 110px;
+    position: relative;
+    top: 20px;
+    text-align: left;
+    padding: 0px 25px;
     font-weight: 900;
     font-size: 18px;
 }
 
 .patient-table {
     position: relative; 
-    width: 1400px; 
-    top: 85px; 
-    left: 110px;
-    line-height: 1.5;
+    margin-top: 15px;
+    width: 95%;
+    line-height: 1;
     color: var(--darkBlue);
     background-color: white;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .patient-table.request {
@@ -231,40 +298,30 @@ ul li p {
 
 .table th,
 .table td {
-    padding: 0.30rem;
+    padding: 0.50rem;
 }
 
 .table thead {
-    background-color: var(--blueB);
+    background-color: var(--blueC);
     color: var(--darkBlue);
 }
 
-.table-striped tbody tr:nth-of-type(even) {
+/* .table-striped tbody tr:nth-of-type(even) {
     background-color: var(--blueC)
+} */
+
+.table-striped tbody td {
+    border-bottom: 1px solid var(--blueC); 
 }
 
-.view-btn {
-    background-color: var(--blueA); 
-    color: white; 
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 15px;
-}
-
-.view-btn:hover {
-    background-color: #0881c7;
-}
-  
-.view-btn:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-    transform: translateY(1px);
+.action-icon-container {
+    display: flex; 
+    justify-content: center;
+    gap: 10px;
 }
 
 .delete-icon img {
-    width: 40px;
-    border-radius: 100%;
+    width: 35px;
     cursor: pointer;
 }
 
@@ -276,6 +333,9 @@ ul li p {
 .dataTables_info {
     margin-bottom: 0px;
     position: absolute;
+    font-style: italic;
+    color: var(--grayA);
+    font-size: 14px;
 }
 
 /* -------------------------------------------- PAGINATION -------------------------------------------- */
@@ -283,8 +343,8 @@ ul li p {
     display: flex;
     padding-left: 0;
     list-style: none;
-    left: 560px;
-    position: absolute;
+    justify-content: center;
+    position: relative;
 }
   
 .page-link {
@@ -322,13 +382,13 @@ ul li p {
     background-color: white; 
     border: 1px solid var(--blueB); 
     border-radius: 0.25rem; 
-    margin-left: 10px;
-    width: 196px;
+    margin-left: 15px;
+    height: 35px;
+    width: 500px;  
 }
 
 .dataTables_wrapper .dataTables_filter {
-    margin-left: 1135px;
-    margin-top: 0px;
+    position: relative;
 }
   
 .dataTables_wrapper .dataTables_filter input:focus {
@@ -336,7 +396,7 @@ ul li p {
     background-color: white; 
     border-color:  var(--blueB); 
     outline: 0;
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
 }
 
 /* -------------------------------------------- SHOW [NUMBER] ENTRIES -------------------------------------------- */
@@ -371,6 +431,7 @@ ul li p {
 
 /* -------------------------------------------- BUTTONS -------------------------------------------- */
 .btn-container {
+    position: relative;
     display: flex;
     justify-content: center; 
     align-items: center; 
@@ -378,6 +439,7 @@ ul li p {
 }
 
 .btn-submit {
+    position: relative;
     color: white;
     background-color: var(--blueD);
     border: none;
@@ -393,13 +455,6 @@ ul li p {
     transform: translateY(1px);
 }
 
-.btn-submit.remove {
-    background-color: #EE4B2B;
-    margin-top: 0px;
-    position: static;
-    width: 120px;
-}
-
 .btn-submit.test {
     background-color: var(--blueA);
     width: 100px;
@@ -408,20 +463,49 @@ ul li p {
 
 .btn-submit.bmi {
     background-color: var(--blueA);
-    width: 157px;
+    width: 131px;
+    font-size: 13px;
+}
+
+.btn-submit.file {
+    width: 100px;
+    height: 35px;
+    background-color: var(--blueA);
+    margin-left: 420px;
 }
 
 .btn-submit.order {
-    position: absolute;
-    background-color: var(--blueC);
+    position: relative;
+    background-color: white;
     font-weight: 900;
     color: var(--blueA);
-    z-index: 1;
-    right: 90px;
-    top: 40px;
-    height: 35px;
-    width: 220px;
-    font-size: 15px;
+    border-bottom: 1px solid var(--blueC);
+    border-left: 2px solid var(--blueA);
+    border-radius: 0;
+    height: 45px;
+    width: 100%;
+    font-size: 13px;
+}
+
+.btn-submit.order:active {
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-submit.add-edit {
+    position: absolute;
+    background-color: white;
+    color: var(--blueA);
+    font-size: 14px;
+    font-weight: 900;
+    margin-top: -60px;
+    margin-right: -1920px;
+    box-shadow: 0 0 0.1rem 0 rgba(163, 213, 255, 1);
+}
+
+.btn-submit.add-edit:hover {
+    color: var(--blueD);
+    transform: scale(101%);
 }
 
 /* -------------------------------------------- ROW -------------------------------------------- */
@@ -456,20 +540,19 @@ ul li p {
     font-size: 0.75em;
     color: var(--blueA);
     font-weight: 900;
-    font-size: 14px;
 }
 
 .inputBox input:focus {
     color: var(--darkBlue); 
     background-color: white; 
     outline: 0;
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1) 
+    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
 } 
 
 /* text area */
 textarea {
     position: relative;
-    width: 1000px;
+    width: 960px;
     height: 200px;
     border: 1px solid var(--blueB);
     border-radius: 10px;
@@ -515,15 +598,23 @@ textarea:focus {
 }
   
 .modal-header {
+    text-align: left;
     padding: 10px;
     border-bottom: 1px solid var(--blueA);
     color: var(--blueA);
-    font-size: 12px;
+    font-size: 10px;
 }
   
 .modal-body {
-    padding: 20px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 17px;
+    justify-content: center;
+    text-align: center;
+}
+
+.modal-body button {
+    margin-right: 15px;
+    margin-left: 15px;
 }
   
 .modal-footer {
@@ -563,6 +654,15 @@ textarea:focus {
     color: var(--grayA);
 }
 
+.btn-done.option {
+    width: 180px;
+    height: 43px;
+}
+
+.btn-done.option:hover {
+    transform: scale(101%);
+}
+
 /* -------------------------------------------- FORM HEADER -------------------------------------------- */
 .med-header {
     position: relative;
@@ -583,7 +683,6 @@ textarea:focus {
 }
 
 .patient-bg.test {
-    width: 1230px;  
     height: 2800px; 
 }
 

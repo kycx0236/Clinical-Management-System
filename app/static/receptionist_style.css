@@ -1,44 +1,138 @@
 @import "base_style.css";
 
-/* -------------------------------------------- SIDEBAR USER -------------------------------------------- */
-.sidenav-user-bg {
-    margin-top: 138px;
-}
-
 /* -------------------------------------------- DASHBOARD -------------------------------------------- */
-.add-icon img {
-    width: 345px;
-    top: 150px;
-    left: 260px;
-    border-radius: 20px;
-} 
-
-.reschedule-icon img {
-    width: 345px;
-    top: 150px;
-    left: 635px;
-    border-radius: 20px;
+.grid_container {
+    position: relative;
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: auto 350px;
+    grid-template-rows: auto 5px;
+    padding: 10px;
+    height: 69%;
 }
 
-.cancel-icon img {
-    width: 345px;
-    top: 150px;
-    left: 1010px;
-    border-radius: 20px;
+.grid_item {
+    padding: 15px;
+    border: 1px solid var(--grayC);
+    text-align: center;
 }
 
-.add-icon img, .reschedule-icon img, .cancel-icon img {
-    position: fixed;
+/* PATIENTS */
+.patients_short {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    gap: 130px;
 }
 
-.add-icon img:hover, .reschedule-icon img:hover, .cancel-icon img:hover {
-    transform: scale(101%);
-    z-index: 1;
+.patient_buttons {
+    margin-top: 5px;
+    gap: 5px;
+    display: flex;
 }
 
-.add-icon img:active, .reschedule-icon img:active, .cancel-icon img:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-    transform: translateY(1px);
+.add_patient_btn img {
+    width: 35px;
+    padding: 10px;
+    background-color: var(--darkBlue);
+    border-radius: 5px;
+}
+
+.see_more {
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 85px;
+    height: 35px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: white;
+    color: var(--darkBlue);
+    border: 1px solid var(--grayA);
+    font-weight: 900;
+}
+
+.patient_short_table, .appointment_short_table {
+    position: relative;
+    font-size: 14px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.patient_short_table td {
+    padding: 11px;
+    width: 50px;
+    background-color: var(--blueC);
+}
+
+.patient_record img {
+    width: 30px;
+    cursor: pointer;
+}
+
+/* APPOINTMENT */
+.appointement_short_container {
+    position: relative;  
+    height: 310px; 
+    overflow: auto;
+}
+
+.appoint_list p {
+    margin-bottom: 10px;
+}
+
+.appointement_short_container::-webkit-scrollbar {
+    width: 10px; 
+}
+
+.appointement_short_container::-webkit-scrollbar-thumb {
+    background-color: var(--blueB); 
+    border-radius: 5px;
+}
+
+.appointement_short_container::-webkit-scrollbar-track {
+    background-color: none; 
+    margin-top: 35px;
+}
+
+.appointment_short_table thead {
+    position: sticky;
+    top: 0;
+    font-size: 14px;
+    height: 30px;
+}
+
+.appointment_short_table th {
+    border-bottom: 1px solid var(--blueC);
+}
+
+.appointment_short_table td {
+    padding: 10px;
+    border: 5px solid white;
+}
+
+.status_short {
+    border-radius: 70px;
+    width: 130px;
+    color: var(--darkBlue);
+}
+
+.status_short.cancelled {
+    background-color: #ffb3ba;
+    color: var(--darkBlue);
+}
+
+.status_short.done {
+    background-color: #baffc9;
+}
+
+.status_short.pending {
+    background-color: #ffffba;
+}
+
+.status_short.inprogress {
+    background-color: #bae1ff;
 }
 
 /* -------------------------------------------- APPOINTMENT -------------------------------------------- */

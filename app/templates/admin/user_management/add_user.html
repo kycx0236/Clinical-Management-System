@@ -29,34 +29,36 @@
                 </li>
             </a>
         </ul>
-        <div class="sidenav-user-bg">
-            <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
-            <div>
-                <h3>Eda Grace P.</h3>
-                <p>Admin</p>
+        <div class="foot-nav">
+            <div class="sidenav-user-bg">
+                <img src="{{ url_for('static', filename='images/Xerxes.png') }}" class="user-img">
+                <div>
+                    <h3>{{ info[0] }}</h3>
+                    <p>{{ info[1] }}</p>
+                </div>
             </div>
+            <ul>
+                <li class="logout" id="logoutButton">
+                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                    <p>Logout</p>
+                </li>
+            </ul>
         </div>
-        <ul>
-            <li class="logout" id="logoutButton">
-                <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                <p>Logout</p>
-            </li>
-        </ul>
     </div>
 
-    <!-- NAVBAR AND TABS FOR USER INFORMATION -->
-    <a class="back-icon" href="{{ url_for('admin.user_management') }}">
-        <img src="{{ url_for('static', filename='images/Back.png') }}">
-    </a>
+    <main>
+        <!-- NAVBAR AND TABS FOR USER INFORMATION -->
+        <ul class="nav nav-underline">
+            <a class="back-icon" href="{{ url_for('admin.user_management') }}">
+                <img src="{{ url_for('static', filename='images/Back.png') }}">
+            </a>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page">USER INFORMATION</a>
+            </li>
+        </ul>
 
-    <ul class="nav nav-underline">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page">USER INFORMATION</a>
-        </li>
-    </ul>
-
-    <form action="{{ url_for('admin.add_user') }}" method="POST">
-        {{ UserForm.csrf_token }}
+        <form action="{{ url_for('admin.add_user') }}" method="POST">
+            {{ UserForm.csrf_token }}
 
         <div class="user-bg">
             <div class="group-info">
@@ -85,8 +87,6 @@
                         <input type="password" required="required" name="password" autocomplete="off" value="{{ password }}" readonly>
                         <span>PASSWORD</span>
                     </div>
-                    
-                    
                 </div>
 
                 <div class="u_row thirdRow">
@@ -115,7 +115,6 @@
                             <option value="admin">Admin</option>
                         </select>
                     </div>
-                    
                 </div>
             </div>
             <div class="btn-container">
@@ -124,7 +123,6 @@
         </div>
     </form>
     
-
     <script>
         function capitalizeFirstLetter(input) {
 
@@ -137,7 +135,6 @@
             input.value = capitalizedValue;
         }
     </script>
-
 
     {% if success %}
         <div id="successModal" class="modal" style="display: block;">
