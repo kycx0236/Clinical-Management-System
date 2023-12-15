@@ -770,3 +770,149 @@ class Appointment:
         except Exception as e:
             print(f"Error fetching doctor ID: {e}")
             return []
+
+    class Schedule():
+        def __init__(self, date_appointment=None, time_appointment=None, slots=None, doctorID=None, doctorName=None, receptionistID=None):
+            self.date_appointment = date_appointment
+            self.time_appointment = time_appointment
+            self.slots = slots
+            self.doctorID = doctorID
+            self.doctorName = doctorName
+            self.receptionistID = receptionistID
+            
+        def add(self):
+            try:
+                cursor = mysql.connection.cursor()
+
+                check_duplicate_sql = "SELECT date_appointment, time_appointment FROM schedule WHERE date_appointment = %s AND time_appointment = %s"
+                cursor.execute(check_duplicate_sql, (self.date_appointment, self.time_appointment))
+                existing_schedule = cursor.fetchone()
+
+                if existing_schedule:
+                    return False
+                
+                sql = "INSERT INTO schedule(date_appointment, time_appointment, slots, doctorID, doctorName,  receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
+                cursor.execute(sql, (self.date_appointment, self.time_appointment, self.slots, self.doctorID, self.doctorName, self.receptionistID))
+                mysql.connection.commit()
+
+                return True
+            except Exception as e:
+                print(f"Error adding a schedule: {e}")
+                return False
+        
+        @classmethod
+        def all(cls, receptionistID):
+            try:
+                cursor = mysql.connection.cursor()
+                sql = "SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName FROM schedule WHERE doctorID = %s ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC"
+                cursor.execute(sql, (receptionistID,))
+                result = cursor.fetchall()
+                return result
+            except Exception as e:
+                print(f"Error fetching all appointments: {e}")
+                return []
+
+            
+        @classmethod
+        def delete(cls, doctorName):
+            try:
+                cursor = mysql.connection.cursor()
+                sql = "DELETE FROM schedule WHERE doctorName = %s"
+                cursor.execute(sql, (doctorName,))
+                mysql.connection.commit()
+                return True
+            except Exception as e:
+                print(f"Error deleting schedule: {e}")
+                return False
+
+        @classmethod
+        def view_schedule_by_scheduleID(cls, scheduleID):
+            cursor = mysql.connection.cursor(dictionary=True)
+            query = (
+                "SELECT "
+                "schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, "
+                "users.first_name AS user_first_name, "
+                "users.middle_name AS user_middle_name, "
+                "users.last_name AS user_last_name "
+                "FROM schedule JOIN users ON schedule.doctorID = users.ID "
+                "WHERE schedule.scheduleID = %s"
+            )
+            cursor.execute(query, (scheduleID,))
+            schedule_data = cursor.fetchone()
+            print("Schedule Data:", schedule_data)
+            cursor.close()
+            return schedule_data
+        
+        @classmethod
+        def update_schedule(cls, scheduleID, new_date_appointment, new_time_appointment, new_slots):
+            try:
+                cursor = mysql.connection.cursor()
+                sql = "UPDATE schedule SET date_appointment = %s, time_appointment = %s, slots = %s WHERE scheduleID = %s"
+                cursor.execute(sql, (new_date_appointment, new_time_appointment, new_slots, scheduleID))
+                mysql.connection.commit()
+                
+                return True
+            except Exception as e:
+                print(f"Error updating appointment: {e}")
+                return False
+        
+        @classmethod
+        def search_schedule(cls, query, doctorID):
+            try:
+                with mysql.connection.cursor(dictionary=True) as cursor:
+                    sql = """
+                        SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
+                        FROM schedule
+                        WHERE (LOWER(schedule.scheduleID) = %s
+                            OR LOWER(schedule.date_appointment) = %s
+                            OR LOWER(schedule.time_appointment) = %s
+                            OR LOWER(schedule.slots) = %s
+                            OR LOWER(schedule.doctorName) = %s)
+                            AND schedule.doctorID = %s
+                        ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
+                    """
+                    cursor.execute(sql, (query.lower(), query.lower(), query.lower(), query.lower(), query.lower(), doctorID))
+
+                    result = cursor.fetchall()
+                    return result
+            except Exception as e:
+                print(f"Error: {e}")
+                return []
+
+        @classmethod
+        def filter_schedule(cls, filter_by, query, doctorID):
+            try:
+                with mysql.connection.cursor(dictionary=True) as cursor:
+                    columns = ["all", "scheduleID", "date_appointment", "time_appointment", "slots", "doctorName"]
+                    if filter_by not in columns:
+                        raise ValueError("Invalid filter column")
+                    
+                    elif filter_by == "all":
+                        sql = """
+                            SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
+                            FROM schedule
+                            WHERE schedule.doctorID = %s
+                            ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
+                        """
+                    elif filter_by == "scheduleID":
+                        sql = """
+                            SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
+                            FROM appointment
+                            WHERE LOWER(schedule.scheduleID) = %s
+                                AND schedule.doctorID = %s
+                            ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
+                        """
+                    else:
+                        sql = f"""
+                            SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
+                            FROM schedule
+                            WHERE LOWER(schedule.{filter_by}) = %s
+                                AND schedule.doctorID = %s
+                            ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
+                        """
+                    cursor.execute(sql, (query.lower(), doctorID))
+                    result = cursor.fetchall()
+                    return result
+            except Exception as e:
+                print(f"Error: {e}")
+                return []

@@ -3,6 +3,9 @@
         <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
     </div>
     <ul>
+        <li class="notifications">
+            <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
+        </li>
         <a href="{{ url_for('receptionist.dashboard') }}">
             <li class="icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -19,6 +22,18 @@
             <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
             <p>Appointment</p>
         </li>
+        <a href="{{ url_for('receptionist.schedule') }}">
+            <li class="icon-bg">
+                <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
+                <p>Schedule</p>
+            </li>
+        </a>
+        <a href="{{ url_for('receptionist.patient') }}">
+            <li class="icon-bg">
+                <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+                <p>Patient</p>
+            </li>
+        </a>
         <a href="{{ url_for('receptionist.profile') }}">
             <li class="icon-bg">
                 <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
@@ -26,17 +41,19 @@
             </li>
         </a>
     </ul>
-    <div class="sidenav-user-bg">
-        <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
-        <div>
-            <h3>Eda Grace P.</h3>
-            <p>Receptionist</p>
+    <div class="foot-nav">
+        <div class="sidenav-user-bg">
+            <img src="{{ url_for('static', filename='images/Kurt.png') }}" class="user-img">
+            <div>
+                <h3>{{ info[0] }}</h3>
+                <p>{{ info[1] }}</p>
+            </div>
         </div>
+        <ul>
+            <li class="logout" id="logoutButton">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </ul>
     </div>
-    <ul>
-        <li class="logout" id="logoutButton">
-            <img src="{{ url_for('static', filename='images/Logout.png') }}">
-            <p>Logout</p>
-        </li>
-    </ul>
 </div>

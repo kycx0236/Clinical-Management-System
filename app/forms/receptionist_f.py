@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField, DateField, SelectField, EmailField, IntegerField, BooleanField, TextAreaField, DateTimeField
+from wtforms import StringField, validators, SubmitField, DateField, SelectField, EmailField, IntegerField, BooleanField, TextAreaField, DateTimeField, TimeField
 from wtforms.validators import DataRequired, Length
-
+from datetime import datetime, timedelta
 class AppointmentForm(FlaskForm):
     reference_number = StringField('reference_number', [validators.DataRequired()])
     doctorID = IntegerField('doctorID', [validators.DataRequired()])
@@ -58,4 +58,28 @@ class PatientForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(max=50)])
     contact_num = StringField('Contact Number', validators=[DataRequired(), Length(max=20)])
 
-    submit = SubmitField('Submi
+    submit = SubmitField('Submit')
+    
+class ScheduleForm(FlaskForm):
+    date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
+    time_appointment = TimeField('time_appointment', validators=[validators.InputRequired()])
+    slots = IntegerField('slots', [validators.DataRequired()])
+    doctorID = IntegerField('doctorID', [validators.DataRequired()])
+    doctorName = StringField('doctorName', [validators.DataRequired()])
+    receptionistID = IntegerField('doctorID', [validators.DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        super(ScheduleForm, self).__init__(*args, **kwargs)
+        self.time_appointment.choices = self.generate_time_options()
+
+    @staticmethod
+    def generate_time_options():
+        start_time = datetime.strptime('08:00', '%H:%M')
+        end_time = datetime.strptime('17:00', '%H:%M')
+        time_options = []
+
+        while start_time <= end_time:
+            time_options.append((start_time.strftime('%H:%M'), start_time.strftime('%I:%M %p')))
+            start_time += timedelta(minutes=30)
+
+        return time_options
