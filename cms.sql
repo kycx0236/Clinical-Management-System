@@ -17,6 +17,57 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 ) AUTO_INCREMENT = 1000;
 
+-- -- LOGS
+CREATE TABLE IF NOT EXISTS user_logs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    log_date DATE,
+    log_time TIME,
+    role VARCHAR(20),
+    username VARCHAR(40),
+    action VARCHAR(20),
+    details VARCHAR(60) 
+);
+
+--PROCEDURES
+DELIMITER //
+CREATE PROCEDURE rec_admin_add(IN admin_username VARCHAR(40), IN new_username VARCHAR(40))
+BEGIN
+  INSERT INTO user_logs (
+      log_date, log_time, role, username, action, details
+  ) VALUES (
+      CURDATE(), CURTIME(), 'ADMIN', admin_username,
+      'ADD', CONCAT('Username: ', new_username)
+  );
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE rec_admin_delete(IN admin_username VARCHAR(40), IN new_username VARCHAR(40))
+BEGIN
+  INSERT INTO user_logs (
+      log_date, log_time, role, username, action, details
+  ) VALUES (
+      CURDATE(), CURTIME(), 'ADMIN', admin_username,
+      'DELETE', CONCAT('Username: ', new_username)
+  );
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE rec_admin_edit(IN admin_username VARCHAR(40), IN new_username VARCHAR(40))
+BEGIN
+  INSERT INTO user_logs (
+      log_date, log_time, role, username, action, details
+  ) VALUES (
+      CURDATE(), CURTIME(), 'ADMIN', admin_username,
+      'EDIT', CONCAT('Username: ', new_username)
+  );
+END;
+//
+DELIMITER ;
+
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
   `patientID` int NOT NULL AUTO_INCREMENT,
