@@ -55,7 +55,7 @@ class admin():
         else:
             return None
 
-    def add_user(self):
+    def add_user(self, admin_username):
         cursor = mysql.connection.cursor()
 
         check_duplicate_sql = "SELECT * FROM users WHERE username = %s"
@@ -64,11 +64,20 @@ class admin():
 
         if existing_user:
             return False
-               
-        sql = "INSERT INTO users (username, password, first_name, middle_name, last_name, email, gender, user_role) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (self.username, self.password, self.first_name, self.middle_name, self.last_name, self.email, self.gender, self.user_role))
-        mysql.connection.commit()
 
+        sql1 = """
+        INSERT INTO users (username, password, first_name, middle_name, last_name, email, gender, user_role) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+        """
+        cursor.execute(sql1, (self.username, self.password, self.first_name, self.middle_name, self.last_name, self.email, self.gender, self.user_role))
+
+        sql_record = """
+        CALL rec_admin_add(%s, %s);
+        """
+        cursor.execute(sql_record, (admin_username, self.username))
+
+        mysql.connection.commit()
+        
         return True
     
     def generate_password(length=12):
@@ -90,12 +99,25 @@ class admin():
         return None
 
 
-    def delete_user_record(user_id):
+    def delete_user_record(user_id,admin_username):
         cursor = mysql.connection.cursor()
 
+        fetch_username_query = "SELECT username FROM users WHERE id = %s"
+        cursor.execute(fetch_username_query, (user_id,))
+        username_tuple = cursor.fetchone()
+        username = username_tuple[0]
+
+        # Delete the user record
         delete_query = "DELETE FROM users WHERE id = %s"
         cursor.execute(delete_query, (user_id,))
+
+        sql_record = """
+        CALL rec_admin_delete(%s, %s);
+        """
+        cursor.execute(sql_record, (admin_username, username))
+
         mysql.connection.commit()
+        cursor.close()
 
         return True
     
@@ -109,7 +131,7 @@ class admin():
         return user
     
     @staticmethod
-    def update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role, new_password=None):
+    def update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role,admin_username, new_password=None,):
         cursor = mysql.connection.cursor()
 
         if new_password:
@@ -121,12 +143,31 @@ class admin():
 
             sql = "UPDATE users SET username=%s, password=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
             cursor.execute(sql, (username, hashed_password, first_name, middle_name, last_name, gender, user_role, user_id))
+
+            sql_record = """
+            CALL rec_admin_edit(%s, %s);
+            """
+            cursor.execute(sql_record, (admin_username, username))
+
         else:
             # Update the database without changing the password
             sql = "UPDATE users SET username=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
             cursor.execute(sql, (username, first_name, middle_name, last_name, gender, user_role, user_id))
-
+            sql_record = """
+            CALL rec_admin_edit(%s, %s);
+            """
+            cursor.execute(sql_record, (admin_username, username))
+            
         mysql.connection.commit()
         cursor.close()
 
         return True
+    
+    @staticmethod
+    def get_all_logs():
+        cursor = mysql.connection.cursor(dictionary=True)
+        query = "SELECT * FROM user_logs ORDER BY log_date DESC, log_time DESC"
+        cursor.execute(query)
+        logs = cursor.fetchall()
+        cursor.close()
+        return logs
