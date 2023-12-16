@@ -19,7 +19,7 @@ body {
     border-radius: 10px;
     background: #FFF;
     padding: 30px;
-    margin: 0 20px;
+    margin: 0 auto; /* Center the container horizontally */
     box-shadow: 0px 0px 20px 0px rgba(2, 119, 189, 0.50);
 }
 
@@ -27,7 +27,7 @@ body {
     font-size: 20px;
     font-weight: 600;
     color: #333;
-    margin-left: calc(100% / 2.2);
+    text-align: center; /* Center the header text */
 }
 
 .doccare-edit-container form {
@@ -39,14 +39,14 @@ body {
 .doccare-edit-container form .doccare-appoinment-details {
     margin-top: 30px;
 }
-
 .doccare-edit-container form .title {
     display: block;
     font-size: 32px;
     font-weight: 600;
-    margin: 0 0 28px 39%;
-    color:#333;
-}
+    text-align: center; /* Center the contents within the form */
+    margin: 0 auto 28px; /* Center the title horizontally */
+    color: #333;
+}z
 
 .doccare-edit-container form .fields {
     display: flex;

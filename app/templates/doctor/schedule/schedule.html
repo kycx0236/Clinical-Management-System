@@ -62,8 +62,8 @@
         </div>
     </div>
 
-    <!--Content start!-->
-    <div class="content">
+     <!--Content start!-->
+     <div class="content">
         <body class="appointment_body">
             <div class="container"> 
                 <main class="doccare-appointment-table">
@@ -72,28 +72,10 @@
                             <h1> 
                                 <strong> SCHEDULES </strong> 
                             </h1>
-                            <div class="doccare-input-group">
-                                <input type="search" class="search-input" id="search-input" placeholder="Search" aria-label="Search">
-                                <button type="search" class="search-icon" id="search-icon">
-                                    <span class="material-symbols-outlined search">search</span>
-                                </button>
-                            </div>
-                        </section>
-                        <section class="appointment_entries">
-                            </br>  
-                            <label for="filter-select">Filter Status by: </label>
-                            <select id="filter-select" name="filter-select" class="filter-select">
-                                <option value="all">ALL</option>
-                                <option value="scheduleID">REFERENCE NUMBER</option>
-                                <option value="date_appointment">DATE</option>
-                                <option value="time_appointment">TIME</option>
-                                <option value="slots">STATUS</option>
-                                <option value="doctorName">DOCTOR</option>
-                            </select> 
                         </section>
                     </form>
                     <section class="doccare-table-appointment-content">
-                        <table>
+                        <table id="scheduleTable" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
                                     {% for header in headings %}
@@ -113,24 +95,22 @@
                                         <td> {{ row.slots }}</td>
                                         <td> {{ row.doctorName }} </td>
                                         <td class="table__cell">
-                                            <a href="{{ url_for('doctor.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appointment-icon">
+                                            <a href="{{ url_for('doctor.view_schedule', scheduleID=row.scheduleID) }}" class="doccare-view-appointment-icon">
                                                 <span class="material-symbols-outlined">info</span>
                                             </a>
                                             <button type="button" class="edit-appointment-button"
-                                                data-id="{{ row.reference_number }}"
+                                                data-id="{{ row.scheduleID }}"
                                                 data-date="{{ row.date_appointment }}"
                                                 data-time="{{ row.time_appointment }}"
-                                                data-status="{{ row.status_ }}"
-                                                data-lastname="{{ row.last_name }}"
-                                                data-email="{{ row.email }}"
+                                                data-slots="{{ row.slots }}"
                                                 data-doctorName="{{ row.doctorName }}"
-                                                onclick="openEditModal('{{ row.reference_number }}', '{{ row.doctorName }}')">
+                                                onclick="openEditModal('{{ row.scheduleID }}', '{{ row.doctorName }}')">
                                                 <span class="material-symbols-outlined">edit</span>
                                             </button>                                                                                                                          
                                             <button type="button" class="delete-appointment-button"
-                                                data-id="{{ row.reference_number }}"
+                                                data-id="{{ row.scheduleID }}"
                                                 data-doctorName="{{ row.doctorName }}"
-                                                onclick="openDeleteModal('{{ row.reference_number }}', '{{ row.doctorName }}')">
+                                                onclick="openDeleteModal('{{ row.scheduleID }}', '{{ row.doctorName }}')">
                                             <span class="material-symbols-outlined delete-icon">delete</span>
                                         </button>
                                         </td>
@@ -146,7 +126,7 @@
                     <!-- Modal for Delete Confirmation -->
                     <div id="deleteModal" class="modal">
                         <div class="modal-content">
-                            <p>Are you sure you want to delete this appointment?</p>
+                            <p>Are you sure you want to delete this schedule?</p>
                             <div class="modal-buttons">
                                 <button class="delete-modal-button" onclick="deleteAppointment()">Yes, delete it!</button>
                                 <button class="cancel-modal-button">Cancel</button>
@@ -154,20 +134,20 @@
                         </div>
                     </div>
                     
-                    <!-- Modal for Edit Appointment -->
+                    <!-- Modal for Edit Schedule -->
                     <div class="doccare-edit-container" id="editModal">
                         <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
-                        <header>RESCHEDULE</header>
-                        <form class="needs-validation" method="POST" action="/doctor/edit-appointment-version-two/" novalidate>
+                        <header>UPDATE SCHEDULE</header>
+                        <form class="needs-validation" method="POST" action="/doctor/update-schedule/" novalidate>
                             {{ form.hidden_tag()}}
                             <div class="doccare-form-first">
                                 <div class="doccare-appoinment-details">
-                                    <span class="title"> Appointment Details </span>
+                                    <span class="title"> Schedule Details </span>
                                     <div class="fields">
                                         <!-- Booking Reference Number -->
                                         <div class="input-fields">
-                                            <label for="validationCustom01" class="form-label"> Reference Number </label>
-                                            <input type="text" class="form-control" id="validationCustom01" name="reference_number" required readonly aria-describedby="validationCustom01Feedback">
+                                            <label for="validationCustom01" class="form-label"> Schedule ID </label>
+                                            <input type="text" class="form-control" id="validationCustom01" name="scheduleID" required readonly aria-describedby="validationCustom01Feedback">
                                         </div>
 
                                         <!-- Date Appointment -->
@@ -186,33 +166,19 @@
 
                                         <!-- Status -->
                                         <div class="input-fields">
-                                            <label for="validationCustom04" class="form-label">Status</label>
-                                            <select class="form-select" id="validationCustom04" name="status_" required aria-describedby="validationCustom04Feedback">
+                                            <label for="validationCustom04" class="form-label">Slots</label>
+                                            <select class="form-select" id="validationCustom04" name="slots" required aria-describedby="validationCustom04Feedback">
                                                 <option selected disabled value="">Choose...</option>
-                                                <option value="DONE"> DONE </option>
-                                                <option value="CANCELLED"> CANCELLED </option>
-                                                <option value="PENDING"> PENDING </option>
-                                                <option value="SCHEDULED"> SCHEDULED </option>
-                                                <option value="RESCHEDULED"> RESCHEDULED </option>
+                                                <option value="1"> 1 </option>
+                                                <option value="2"> 2 <option>
+                                                <option value="3"> 3 <option>
                                             </select>
-                                        </div>
-
-                                        <!-- Last Name -->
-                                        <div class="input-fields">
-                                            <label for="validationCustom05" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" id="validationCustom05" name="last_name" required readonly aria-describedby="validationCustom05Feedback">
-                                        </div>
-                                        
-                                        <!-- Email -->
-                                        <div class="input-fields">
-                                            <label for="validationCustom06" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="validationCustom06" name="email" required readonly aria-describedby="validationCustom06Feedback">
                                         </div>
 
                                         <!-- Doctor Name -->
                                         <div class="input-fields">
-                                            <label for="validationCustom07" class="form-label">Doctor Name</label>
-                                            <input type="text" class="form-control" id="validationCustom07" name="doctor_name" required readonly aria-describedby="validationCustom06Feedback">
+                                            <label for="validationCustom05" class="form-label">Doctor Name</label>
+                                            <input type="text" class="form-control" id="validationCustom05" name="doctor_name" required readonly aria-describedby="validationCustom05Feedback">
                                         </div>
 
                                     </div>
@@ -251,121 +217,63 @@
                         </form>
                     </div>
 
-                    <a href="{{ url_for('doctor.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
+                    <a href="{{ url_for('doctor.add_schedule') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
                         <span class="material-symbols-outlined add-icon">&#xe147;</span>
                     </a>
                     <!-- Include these script tags at the end of the body content -->
-                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+                    <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-                    <script src="{{ url_for('static', filename='doctor_script.js') }}" defer></script>
-                    <script src="{{ url_for('static', filename='logout.js') }}"></script>
+                    <script src="{{ url_for('static', filename='doctor_schedule_script.js') }}"> </script>
+                    <script src="{{ url_for('static', filename='logout.js') }}"></script>  
                     <script>
-                        // Define csrfToken in a higher scope
-                        var csrfToken;
-                    
+                        $(document).ready( function () {
+                            $('#scheduleTable').DataTable();
+                        } );
                         // Update the time_appointment dropdown based on the selected date
-                        $('#validationCustom02').off('change').on('change', function() {
+                        $('#validationCustom01').on('change', function () {
                             var selectedDate = $(this).val();
-                            var doctorName = $('#validationCustom07').val();
-                            console.log('Doctor Name in Time dropdown: ', doctorName);
-                    
-                            // Get the CSRF token from the form
-                            csrfToken = $('input[name="csrf_token"]').val();
-                    
-                            // Make an AJAX request to fetch time schedules for the selected date
-                            $.ajax({
-                                url: '/doctor/get-time-schedules',
-                                type: 'POST',
-                                data: { selected_date: selectedDate, selected_doctor: doctorName, csrf_token: csrfToken },
-                                success: function(response) {
-                                    console.log('Server Response:', response);
-                    
-                                    // Update the options of the time_appointment dropdown
-                                    var timeDropdown = $('#validationCustom03');
-                                    timeDropdown.empty();
-                                    timeDropdown.append('<option value="" selected>Select your desired time</option>');
-                    
-                                    // Add options based on the received time schedules
-                                    for (var i = 0; i < response.time_schedules.length; i++) {
-                                        var timeSlot = response.time_schedules[i];
-                                        console.log('Time Slot:', timeSlot); // Log each time slot
-                    
-                                        // Check if the time slot has available slots
-                                        if (timeSlot[1] > 0) {
-                                            // Use the data attribute to store the slots information
-                                            timeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
-                                        }
-                                    }
-                                },
-                                error: function(error) {
-                                    console.error('Error fetching time schedules:', error);
-                                }
-                            });
-                    
-                            // Example: Retrieve the selected option's slots information
-                            $('#validationCustom03').off('change').on('change', function() {
-                                var selectedOption = $(this).find(':selected');
-                                var slots = selectedOption.data('slots');
-                                console.log('Available Slots:', slots);
-                            });
+                            var selectedDoctor = $('#validationCustom11').val(); // Get the selected doctorName
+
+                            // Generate time schedules with 30-minute intervals
+                            var timeSchedules = generateTimeSchedules();
+
+                            // Update the options of the time_appointment dropdown
+                            var timeDropdown = $('#validationCustom02');
+                            timeDropdown.empty();
+                            timeDropdown.append('<option value="" selected>Select your desired time</option>');
+
+                            // Add options based on the generated time schedules
+                            for (var i = 0; i < timeSchedules.length; i++) {
+                                var timeSlot = timeSchedules[i];
+                                timeDropdown.append('<option value="' + timeSlot + '">' + timeSlot + '</option>');
+                            }
                         });
-                    
-                        // Additional code for the old time dropdown in the edit form
-                        $('#validationCustom03').off('change').on('change', function() {
-                            var oldSelectedDate = $(this).val();
-                            var doctorName = $('#validationCustom07').val();
-                            console.log('Doctor Name in Time dropdown: ', doctorName);
-                    
-                            // Make an AJAX request to fetch time schedules for the old selected date
-                            $.ajax({
-                                url: '/doctor/get-time-schedules',
-                                type: 'POST',
-                                data: { selected_date: oldSelectedDate, selected_doctor: doctorName, csrf_token: csrfToken },
-                                success: function(response) {
-                                    console.log('Old Time - Server Response:', response);
-                    
-                                    // Update the options of the old time_appointment dropdown
-                                    var oldTimeDropdown = $('#validationCustom03');
-                                    oldTimeDropdown.empty();
-                                    oldTimeDropdown.append('<option value="" selected>Select your desired time</option>');
-                    
-                                    // Add options based on the received time schedules
-                                    for (var i = 0; i < response.time_schedules.length; i++) {
-                                        var timeSlot = response.time_schedules[i];
-                                        console.log('Old Time - Time Slot:', timeSlot); // Log each time slot
-                    
-                                        // Check if the time slot has available slots
-                                        if (timeSlot[1] > 0) {
-                                            // Use the data attribute to store the slots information
-                                            oldTimeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
-                                        }
-                                    }
-                                },
-                                error: function(error) {
-                                    console.error('Old Time - Error fetching time schedules:', error);
-                                }
-                            });
+
+                        // Function to generate time schedules with 30-minute intervals
+                        function generateTimeSchedules() {
+                            var timeSchedules = [];
+                            var startTime = moment('08:00 AM', 'hh:mm A');
+                            var endTime = moment('05:00 PM', 'hh:mm A');
+
+                            while (startTime.isBefore(endTime)) {
+                                var timeSlot = startTime.format('hh:mm A') + ' - ' + startTime.add(30, 'minutes').format('hh:mm A');
+                                timeSchedules.push(timeSlot);
+                            }
+
+                            return timeSchedules;
+                        }
+
+                        // Example: Retrieve the selected option's time information
+                        $('#validationCustom02').on('change', function () {
+                            var selectedOption = $(this).find(':selected');
+                            var timeSlot = selectedOption.val();
+                            console.log('Selected Time Slot:', timeSlot);
                         });
-                    </script>                    
+                    </script>                  
                 </main>
             </div>
         </body>
-    </div>
-    <div class="pagination">
-            {% if page > 1 %}
-                <a href="{{ url_for('receptionist.schedule', page=page-1) }}">Previous</a>
-            {% endif %}
-            
-            {% for p in range(1, total_pages + 1) %}
-                {% if p == page %}
-                    <span class="current">{{ p }}</span>
-                {% else %}
-                    <a href="{{ url_for('receptionist.schedule', page=p) }}">{{ p }}</a>
-                {% endif %}
-            {% endfor %}
-            
-            {% if page < total_pages %}
-                <a href="{{ url_for('receptionist.schedule', page=page+1) }}">Next</a>
-            {% endif %}
-    </div>
+</div>
 {% endblock %}

@@ -10,42 +10,6 @@ const editModal = document.getElementById('editModal');
 // searchInput.addEventListener('input', searchTable);
 tableHeadings.forEach((head, i) => head.addEventListener('click', () => handleSortClick(i)));
 
-function performSearch() {
-    var searchTerm = $("#search-input").val();
-    var filterBy = $("#filter-select").val();
-
-    // Get the CSRF token from the meta tag
-    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-    $.ajax({
-        type: 'POST',
-        url: '/receptionist/search-schedules/',
-        contentType: 'application/json;charset=UTF-8',
-        data: JSON.stringify({
-            searchTerm: searchTerm,
-            filterBy: filterBy
-        }),
-        headers: {
-            "X-CSRFToken": csrfToken
-        },
-        success: function (data) {
-            // Check if the data array is empty
-            if (data && data.data && data.data.length > 0) {
-                // Update your table with the new data
-                showAlert('Data has been found.');
-                updateTable(data);
-            } else {
-                showAlert('No data has been found.');
-            }
-        },
-        error: function (error) {
-            console.error('Error:', error.responseText);
-            showAlert('An error occurred while searching for data.');
-        }
-    });
-}
-
-
 function showAlert(message) {
   // You can customize this alert to use a modal or any other UI element
   alert(message);
@@ -212,7 +176,7 @@ function deleteAppointment() {
   // Make an AJAX request to delete the appointment
   $.ajax({
       type: 'POST',
-      url: '/receptionist/delete-schedule/',
+      url: '/doctor/delete-schedule/',
       data: { scheduleID: scheduleID, doctor_name: deleteModal.getAttribute('data-doctor-name') },
       headers: {
         "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
@@ -281,7 +245,7 @@ async function fetchAppointmentData(scheduleID) {
       // Make an AJAX request to fetch appointment data and time options
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');  // Get CSRF token from meta tag
       const response = await $.ajax({
-          url: '/receptionist/get-schedule-data/',
+          url: '/doctor/get-schedule-data/',
           method: 'GET',
           data: { scheduleID: scheduleID },
           headers: {
@@ -298,7 +262,7 @@ async function fetchAppointmentData(scheduleID) {
               // Call openEditModal with the fetched data and time options
               populateEditModal(scheduleData, timeOptions);
           } else {
-              console.error('Error: Appointment data is missing in the response.');
+              console.error('Error: Schedule data is missing in the response.');
           }
       } else {
           console.error('Error: Server response indicates failure.');
@@ -404,7 +368,7 @@ function showSuccessModal() {
       });
 
       // Redirect to the /appointment/ route
-      window.location.href = '/receptionist/schedule/';
+      window.location.href = '/doctor/schedule/';
   });
 }
 
@@ -416,7 +380,7 @@ function showFailedModal() {
 
 const arrowBackButton = document.getElementById('arrow')
 arrowBackButton.addEventListener('click', function() {
-  window.location.href = '/receptionist/schedule/';
+  window.location.href = '/doctor/schedule/';
 });
 
 // Event delegation for the document
@@ -434,9 +398,9 @@ function editAppointment() {
       // Assuming you are using jQuery for AJAX
       $.ajax({
           // Change the url to point to the desired route
-          url: '/receptionist/update-schedule/',
+          url: '/doctor/update-schedule/',
           method: "POST",
-          data: $("form").serialize() + "&doctor_name=" + $('#validationCustom07').val(),
+          data: $("form").serialize() + "&doctor_name=" + $('#validationCustom05').val(),
           success: function (response) {
               if (response.success) {
                   // Show success modal
@@ -445,7 +409,7 @@ function editAppointment() {
                   // Delay for 2 seconds (adjust as needed)
                   setTimeout(function () {
                       // Redirect to the /appointment/ route
-                      window.location.href = '/receptionist/schedule/';
+                      window.location.href = '/doctor/schedule/';
                   }, 1000);
               } else {
                   // Show failed modal
@@ -458,7 +422,7 @@ function editAppointment() {
               // Delay for 2 seconds (adjust as needed)
               setTimeout(function () {
                 // Redirect to the /appointment/ route
-                window.location.href = '/receptionist/schedule/';
+                window.location.href = '/doctor/schedule/';
             }, 1000);
           }
       });
@@ -470,22 +434,3 @@ function editAppointment() {
 // Add event listener to cancel button
 const cancelModalButton = document.querySelector('.cancel-modal-button');
 cancelModalButton.addEventListener('click', closeDeleteModal);
-
-// Add event listener to back in cancellation modal
-const backModalButton = document.getElementById('back-modal-button');
-backModalButton.addEventListener('click', closeCancelModal);
-
-// Add event listener to the search form
-$("#search-form").submit(function (event) {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-
-    // Call the performSearch function
-    performSearch();
-});
-
-// Add event listener to the filter select
-$("#filter-select").change(function () {
-    // Call the performSearch function
-    performSearch();
-});

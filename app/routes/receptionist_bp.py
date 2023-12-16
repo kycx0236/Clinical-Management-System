@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash, jsonify, session
+from flask import render_template, redirect, request, url_for, jsonify, session
 import math
 from app.forms.receptionist_f import *
 import app.models as models
@@ -12,7 +12,7 @@ from app.routes.utils import role_required
 receptionist_bp = Blueprint('receptionist', __name__)
 
 headings = ("Reference Number", "Date", "Time", "Last Name", "Status", "Doctor", "Actions")
-headings_schedeule = ("Schedule ID", "Date", "Time", "Slots", "Doctor", "Actions")
+headings_schedule = ("Schedule ID", "Date", "Time", "Slots", "Doctor", "Actions")
 
 # Main routes
 @receptionist_bp.route('/')
@@ -86,7 +86,7 @@ def schedule():
     
     page = int(request.args.get('page', 1))
 
-    items_per_page = 100  
+    items_per_page = 1000  
 
     all_schedules = Schedule.all_doctor_schedules(current_id)
 
@@ -109,7 +109,7 @@ def schedule():
         }
         for schedule in data
     ]
-    return render_template("receptionist/schedule/schedule.html", headings=headings_schedeule, data=data_dict, page=page, total_pages=total_pages, form=form, info=receptionist_info)
+    return render_template("receptionist/schedule/schedule.html", headings=headings_schedule, data=data_dict, page=page, total_pages=total_pages, form=form, info=receptionist_info)
 
 @receptionist_bp.route('/patient/')
 @login_required
@@ -334,7 +334,7 @@ def add_appointment():
                 reference_exists = Appointment.unique_code(check_reference)
                 
                 if reference_exists:
-                    flash("Appointment already exists. Please enter a new appointment.")
+                    print('Reference already exists')
                 else:
                     new_appointment = Appointment(
                         reference_number=form.reference_number.data,
@@ -354,7 +354,7 @@ def add_appointment():
                         address=form.address.data
                     )
                     new_appointment.add()
-                    flash('New appointment added!', 'success')
+                    print('New appointment added!', 'success')
                     
                     # Fetch booking details after adding the appointment
                     booking_details = Appointment.get_booking_reference_details(form.reference_number.data)
@@ -364,10 +364,10 @@ def add_appointment():
                     return jsonify(success=True, message="Appointment added successfully", booking_details=booking_details)
             else:
                 print(form.errors)  # Add this line to print form errors for debugging
-                flash('Failed to add appointment. Please check the form for errors.', 'danger')
+                print('Failed to add appointment. Please check the form for errors.', 'danger')
         except Exception as e:
             print(f"An error occurred: {str(e)}")
-            flash('An error occurred while processing the appointment.', 'danger')
+            print('An error occurred while processing the appointment.', 'danger')
             # Set time_schedules to an empty list in case of an error
             time_schedules = []
             return jsonify(success=False, message="Internal Server Error"), 500
@@ -430,7 +430,7 @@ def view_appointment():
         }
         print(appointment_data_dict)
     else:
-        flash("Appointment not found.", "error")
+        print("Appointment not found.", "error")
         return jsonify(success=False, message="Appointment not found.")
     
     return render_template("receptionist/appointment/appointment_view.html", row=appointment_data_dict)
@@ -649,7 +649,7 @@ def add_schedule():
                 return jsonify(success=False, message="Form validation failed"), 400
         except Exception as e:
             print(f"An error occurred: {str(e)}")
-            flash('An error occurred while processing the appointment.', 'danger')
+            print('An error occurred while processing the appointment.')
             return jsonify(success=False, message="Internal Server Error"), 500
 
     return render_template("receptionist/schedule/schedule_add.html", form=form, doctor_names=doctor_names, doctor_id=doctor_id)
@@ -699,7 +699,7 @@ def view_schedule():
         }
         print('Scheduled data: ', schedule_data_dict)
     else:
-        flash("Appointment not found.", "error")
+        print("Appointment not found.")
         return jsonify(success=False, message="Appointment not found.")
     
     return render_template("receptionist/schedule/schedule_view.html", row=schedule_data_dict)
@@ -741,7 +741,9 @@ def get_schedule_data():
         if schedule_data:
             # Fetch time options based on the appointment's date
             scheduled_date = schedule_data.get('date_appointment')  # Adjust accordingly
-            time_options = Schedule.get_schedule_by_schedule_id(scheduled_date)
+            time_options = Appointment.get_all_available_schedules(scheduled_date)
+            
+            print('Time options: ', time_options)
 
             return jsonify(success=True, scheduleData=schedule_data, timeOptions=time_options)
         else:
@@ -755,48 +757,42 @@ def get_schedule_data():
 @login_required
 @role_required('receptionist')
 def update_schedule():
+    current_id = current_user.id 
+    receptionist_info = receptionist.get_user(current_id)
     scheduleID = request.form.get('scheduleID')
+    print(scheduleID)
     doctor_name = request.form.get('doctor_name')
     print('Doctor name in reschedule_version_two: ', doctor_name)
-    form = EditAppointmentForm()
+    form = EditScheduleForm()
     schedule_data = Schedule.get_schedule_by_schedule_id(scheduleID)
 
     if schedule_data:
         appointment_data_dict = {
-            "reference_number": schedule_data['reference_number'],
+            "scheduleID": schedule_data['scheduleID'],
             "date_appointment": schedule_data['date_appointment'],
             "time_appointment": schedule_data['time_appointment'],
-            "status_": schedule_data['status_'],
-            "last_name": schedule_data['last_name'],
-            "email": schedule_data['email'],
+            "slots": schedule_data['slots'],
             "doctorName": schedule_data['doctorName']
         }
-        time_data = Appointment.get_all_available_schedules(schedule_data['date_appointment'])
     else:
         return jsonify(success=False, message="Appointment not found.")
 
     if request.method == "POST" and form.validate():
         new_date_appointment = form.date_appointment.data
         new_time_appointment = form.time_appointment.data
-        new_status_ = form.status_.data
-        new_last_name = form.last_name.data
-        new_email = form.email.data
+        new__slots = form.slots.data
 
         old_date_appointment = schedule_data['date_appointment']
         old_time_appointment = schedule_data['time_appointment']
         print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
         print('New Appointment Details: ', new_date_appointment, new_time_appointment)
-        if Appointment.update_second_version(
-            schedule_data, new_date_appointment, new_time_appointment, new_status_,
-            new_last_name, new_email):
-            # Update the slots for the old and new times
-            Appointment.update_time_slots(old_date_appointment, new_date_appointment, old_time_appointment, new_time_appointment, doctor_name)
-
+        if Schedule.update_schedule(
+            scheduleID, new_date_appointment, new_time_appointment, new__slots):
             return jsonify(success=True, message="Appointment updated successfully")
         else:
             return jsonify(success=False, message="Failed to update appointment.")
     else:
         print ("Failed to update appointment")
         print("Form validation failed:", form.errors)
-    return render_template("receptionist/schedule/schedule.html", form=form, data=appointment_data_dict, time_data=time_data)
+    return render_template("receptionist/schedule/schedule.html", form=form, data=appointment_data_dict, info=receptionist_info)
     

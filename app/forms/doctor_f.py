@@ -312,3 +312,17 @@ class EditAppointmentForm(FlaskForm):
     last_name = StringField('last_name', [validators.Length(min=2, max=50)])
     email = EmailField('email', [validators.Length(min=10, max=50)])
     submit = SubmitField("Submit")
+    
+class ScheduleForm(FlaskForm):
+    date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
+    time_appointment = StringField('time_appointment', [validators.Length(min=1, max=50)])
+    slots = IntegerField('slots', [validators.DataRequired()])
+    doctorID = IntegerField('doctorID', [validators.DataRequired()])
+    doctorName = StringField('doctorName', [validators.DataRequired()])
+    receptionistID = IntegerField('doctorID', [validators.DataRequired()])
+    
+    
+class EditScheduleForm(FlaskForm):
+    date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
+    time_appointment = StringField('time_appointment', [validators.Length(min=1, max=50)])
+    slots = IntegerField('slots', [validators.DataRequired()])
