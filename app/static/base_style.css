@@ -521,6 +521,13 @@ ul li p {
     transform: scale(101%);
 }
 
+.btn-submit.add-edit.clearance {
+    margin-right: -1800px;
+    height: 35px;
+    width: 80px;
+    display: none;
+}
+
 /* -------------------------------------------- ROW -------------------------------------------- */
 .p_row {
     position: relative;
@@ -573,6 +580,11 @@ textarea {
     font-size: 16px;
     margin-top: -15px;
     text-align: justify;
+}
+
+.clearance_textarea {
+    margin-top: 30px;
+    height: 350px;
 }
 
 /* text area */

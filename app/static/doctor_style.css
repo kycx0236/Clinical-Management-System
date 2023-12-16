@@ -174,7 +174,7 @@
 /* -------------------------------------------- ADD/UPDATE PATIENT, ADD ASSESSMENT, REQUEST LAB TEST ICON -------------------------------------------- */
 .update-icon {
     position: absolute;
-    top: 18px;
+    top: 13px;
     right: 25px;
     width: 23px;
     border-radius: 5px;
@@ -733,7 +733,7 @@ input, select {
 
 .print-icon {
     position: absolute;
-    top: 18px;
+    top: 13px;
     right: 75px;
     background-color: transparent;
     outline: none;
@@ -749,6 +749,25 @@ input, select {
 .print-icon img:active {
     transform: translateY(1px);
 }
+
+@media print {
+    /* Hide everything except the clearance_textarea */
+    body *:not(.clearance_textarea) {
+        display: none !important;
+    }
+
+    /* Adjust textarea for printing */
+    .clearance_textarea {
+        display: block !important;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+}
+
 
 .prescription_table {
     position: relative; 

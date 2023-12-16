@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Assessment{% endblock title %}
+{% block title %}DocCare | Clearance{% endblock title %}
 {% block link %} 
     <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
 {% endblock %}
@@ -67,28 +67,843 @@
         </div>
     </div>
 
-    <main>
-        <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
-        <div class="navbar">
-            <ul class="nav nav-underline">
-                <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
-                    <img src="{{ url_for('static', filename='images/Back.png') }}">
-                </a>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page">MEDICAL CLEARANCE</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="grid_container history">
-            <div class="grid_item">
-
+    <form id="clearanceForm" action="{{ url_for('doctor.add_clearance') }}" method="POST">
+        <main>
+            <!-- NAVBAR AND TABS FOR PATIENT RECORDS -->
+            <div class="navbar">
+                <ul class="nav nav-underline">
+                    <a class="back-icon" href="{{ url_for('doctor.consultation', patient_id=patient_id) }}">
+                        <img src="{{ url_for('static', filename='images/Back.png') }}">
+                    </a>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page">MEDICAL CLEARANCE</a>
+                    </li>
+                    <div class="btn-container">
+                        <button class="btn-submit add-edit" type="submit">SUBMIT</button>
+                    </div>
+                </ul>
             </div>
 
-            <div class="grid_item">
+            {{ PatientForm.csrf_token }}
+
+            <!-- PATIENT ID -->
+            <div class="inputBox code" style="display: none;">
+                <input disabled name="patient_id" value="{{ patient_id }}">
+                <input hidden name="patient_id" value="{{ patient_id }}">
+            </div>
+
+            <!-- HISTORY ID -->
+            <div class="inputBox code" style="display: none;">
+                <input disabled name="history_id" value="{{ patient[0] }}">
+                <input hidden name="history_id" value="{{ patient[0] }}" >
+            </div>
+    
+            <div class="patient-bg clearance">
+                <div class="grid_container clearance">
+                    <div class="grid_item">
+    
+                        <div id="toggleContent1">
+                            <div class="med-header history">PATIENT INFORMATION</div>
+                            <div class="group-info">
+                                <div class="p_row firstRow">
+                                    <div class="inputBox fName">
+                                        <input type="text" required="required" name="first_name" value="{{ profile[1] }}">
+                                        <span>FIRST NAME</span>
+                                    </div>
+                                    <div class="inputBox mName">
+                                        <input type="text" required="required" name="middle_name" value="{{ profile[2] }}">
+                                        <span>MIDDLE NAME</span>
+                                    </div>
+                                    <div class="inputBox lName">
+                                        <input type="text" required="required" name="last_name" value="{{ profile[3] }}">
+                                        <span>LAST NAME</span>
+                                    </div>
+                                </div>
+                            
+                                <div class="p_row secondRow">
+                                    <div class="inputBox age">
+                                        <input type="number" required="required" name="age" value="{{ profile[4] }}">
+                                        <span>AGE</span>
+                                    </div>
+                                    <div class="inputBox status">
+                                        <select class="status" name="civil_status">
+                                            <option value="" disabled selected></option>
+                                            <option value="SINGLE" {% if profile[5] == "SINGLE" %} selected {% endif %}>SINGLE</option>
+                                            <option value="MARRIED" {% if profile[5] == "MARRIED" %} selected {% endif %}>MARRIED</option>
+                                            <option value="SEPARATED" {% if profile[5] == "SEPARATED" %} selected {% endif %}>SEPARATED</option>
+                                            <option value="WIDOW/ER" {% if profile[5] == "WIDOW/ER" %} selected {% endif %}>WIDOW/ER</option>
+                                        </select>
+                                        <span>CIVIL STATUS</span>
+                                    </div>
+                                    <div class="inputBox gender">
+                                        <select class="gender" name="gender">
+                                            <option value="" disabled selected></option>
+                                            <option value="FEMALE" {% if profile[6] == "FEMALE" %} selected {% endif %}>FEMALE</option>
+                                            <option value="MALE" {% if profile[6] == "MALE" %} selected {% endif %}>MALE</option>
+                                        </select>
+                                        <span>GENDER</span>
+                                    </div>
+                                    <div class="inputBox bloodType">
+                                        <select class="bloodType" name="bloodType">
+                                            <option value="" disabled selected></option>
+                                            <option value="A+" {% if profile[7] == "A+" %} selected {% endif %}>A+</option>
+                                            <option value="A-" {% if profile[7] == "A-" %} selected {% endif %}>A-</option>
+                                            <option value="B+" {% if profile[7] == "B+" %} selected {% endif %}>B+</option>
+                                            <option value="B-" {% if profile[7] == "B-" %} selected {% endif %}>B-</option>
+                                            <option value="AB+" {% if profile[7] == "AB+" %} selected {% endif %}>AB+</option>
+                                            <option value="AB-" {% if profile[7] == "AB-" %} selected {% endif %}>AB-</option>
+                                            <option value="O+" {% if profile[7] == "O+" %} selected {% endif %}>O+</option>
+                                            <option value="O-" {% if profile[7] == "O-" %} selected {% endif %}>O-</option>
+                                        </select>
+                                        <span>BLOOD TYPE</span>
+                                    </div>
+                                    <div class="inputBox religion">
+                                        <select class="religion" name="religion">
+                                            <option value="" disabled selected></option>
+                                            <option value="BAPTIST" {% if profile[12] == "BAPTIST" %} selected {% endif %}>BAPTIST</option>
+                                            <option value="BORN AGAIN" {% if profile[12] == "BORN AGAIN" %} selected {% endif %}>BORN AGAIN</option>
+                                            <option value="IGLESIA NI KRISTO" {% if profile[12] == "IGLESIA NI KRISTO" %} selected {% endif %}>IGLESIA NI KRISTO</option>
+                                            <option value="ISLAM" {% if profile[12] == "ISLAM" %} selected {% endif %}>ISLAM</option>
+                                            <option value="JEHOVAH'S WITNESS" {% if profile[12] == "JEHOVAH'S WITNESS" %} selected {% endif %}>JEHOVAH'S WITNESS</option>
+                                            <option value="METHODIST" {% if profile[12] == "METHODIST" %} selected {% endif %}>METHODIST</option>
+                                            <option value="PENTECOSTAL" {% if profile[12] == "PENTECOSTAL" %} selected {% endif %}>PENTECOSTAL</option>
+                                            <option value="PROTESTANT" {% if profile[12] == "PROTESTANT" %} selected {% endif %}>PROTESTANT</option>
+                                            <option value="ROMAN CATHOLIC" {% if profile[12] == "ROMAN CATHOLIC" %} selected {% endif %}>ROMAN CATHOLIC</option>
+                                            <option value="SEVENTH-DAY ADVENTIST" {% if profile[12] == "SEVENTH-DAY ADVENTIST" %} selected {% endif %}>SEVENTH-DAY ADVENTIST</option>
+                                            <option value="OTHER" {% if profile[12] == "OTHER" %} selected {% endif %}>OTHER</option>
+                                        </select>
+                                        <span>RELIGION</span>
+                                    </div>
+                                </div>
+                            
+                                <div class="p_row thirdRow">
+                                    <div class="inputBox birth_place">
+                                        <input type="text" required="required" name="birth_place" value="{{ profile[8] }}">
+                                        <span>PLACE OF BIRTH</span>
+                                    </div>
+                                    <div class="inputBox dob">
+                                        <input type="date" class="text" name="birth_date" autocomplete="bDate" spellcheck="false" value="{{ profile[9] }}">
+                                        <span>DATE OF BIRTH</span>
+                                    </div>
+                                </div>
+                            
+                                <div class="p_row fourthRow">
+                                    <div class="inputBox job">
+                                        <input type="text" required="required" name="occupation" value="{{ profile[16] }}">
+                                        <span>OCCUPATION</span>
+                                    </div>
+                                    <div class="inputBox email">
+                                        <input type="email" required="required" name="email" value="{{ profile[17] }}">
+                                        <span>EMAIL</span>
+                                    </div>
+                                    <div class="inputBox c_number">
+                                        <input type="text" required="required" name="contact_num" value="{{ profile[18] }}">
+                                        <span>PATIENT CONTACT NUMBER</span>
+                                    </div>
+                                </div>
+                            
+                                <div class="p_row fifthRow">
+                                    <div class="inputBox p_address">
+                                        <input type="text" required="required" name="p_address" value="{{ profile[10] }}">
+                                        <span>CURRENT ADDRESS</span>
+                                    </div>
+                                    <div class="inputBox nationality">
+                                        <select class="nationality" name="nationality">
+                                            <option value="" disabled selected></option>
+                                            <option value="AMERICAN" {% if profile[11] == "AMERICAN" %} selected {% endif %}>AMERICAN</option>
+                                            <option value="BRITISH" {% if profile[11] == "BRITISH" %} selected {% endif %}>BRITISH</option>
+                                            <option value="CANADIAN" {% if profile[11] == "CANADIAN" %} selected {% endif %}>CANADIAN</option>
+                                            <option value="AUSTRALIAN" {% if profile[11] == "AUSTRALIAN" %} selected {% endif %}>AUSTRALIAN</option>
+                                            <option value="FRENCH" {% if profile[11] == "FRENCH" %} selected {% endif %}>FRENCH</option>
+                                            <option value="GERMAN" {% if profile[11] == "GERMAN" %} selected {% endif %}>GERMAN</option>
+                                            <option value="JAPANESE" {% if profile[11] == "JAPANESE" %} selected {% endif %}>JAPANESE</option>
+                                            <option value="CHINESE" {% if profile[11] == "CHINESE" %} selected {% endif %}>CHINESE</option>
+                                            <option value="RUSSIAN" {% if profile[11] == "RUSSIAN" %} selected {% endif %}>RUSSIAN</option>
+                                            <option value="BRAZILIAN" {% if profile[11] == "BRAZILIAN" %} selected {% endif %}>BRAZILIAN</option>
+                                            <option value="INDIAN" {% if profile[11] == "INDIAN" %} selected {% endif %}>INDIAN</option>
+                                            <option value="SPANISH" {% if profile[11] == "SPANISH" %} selected {% endif %}>SPANISH</option>
+                                            <option value="ITALIAN" {% if profile[11] == "ITALIAN" %} selected {% endif %}>ITALIAN</option>
+                                            <option value="MEXICAN" {% if profile[11] == "MEXICAN" %} selected {% endif %}>MEXICAN</option>
+                                            <option value="SOUTH AFRICAN" {% if profile[11] == "SOUTH AFRICAN" %} selected {% endif %}>SOUTH AFRICAN</option>
+                                            <option value="NIGERIAN" {% if profile[11] == "NIGERIAN" %} selected {% endif %}>NIGERIAN</option>
+                                            <option value="EGYPTIAN" {% if profile[11] == "EGYPTIAN" %} selected {% endif %}>EGYPTIAN</option>
+                                            <option value="SWEDISH" {% if profile[11] == "SWEDISH" %} selected {% endif %}>SWEDISH</option>
+                                            <option value="TURKISH" {% if profile[11] == "TURKISH" %} selected {% endif %}>TURKISH</option>
+                                            <option value="ARGENTINIAN" {% if profile[11] == "ARGENTINIAN" %} selected {% endif %}>ARGENTINIAN</option>
+                                            <option value="KOREAN" {% if profile[11] == "KOREAN" %} selected {% endif %}>KOREAN</option>
+                                            <option value="GREEK" {% if profile[11] == "GREEK" %} selected {% endif %}>GREEK</option>
+                                            <option value="NORWEGIAN" {% if profile[11] == "NORWEGIAN" %} selected {% endif %}>NORWEGIAN</option>
+                                            <option value="DUTCH" {% if profile[11] == "DUTCH" %} selected {% endif %}>DUTCH</option>
+                                            <option value="SWISS" {% if profile[11] == "SWISS" %} selected {% endif %}>SWISS</option>
+                                            <option value="POLISH" {% if profile[11] == "POLISH" %} selected {% endif %}>POLISH</option>
+                                            <option value="FILIPINO" {% if profile[11] == "FILIPINO" %} selected {% endif %}>FILIPINO</option>
+                                            <option value="VIETNAMESE" {% if profile[11] == "VIETNAMESE" %} selected {% endif %}>VIETNAMESE</option>
+                                            <option value="MALAYSIAN" {% if profile[11] == "MALAYSIAN" %} selected {% endif %}>MALAYSIAN</option>
+                                            <option value="THAI" {% if profile[11] == "THAI" %} selected {% endif %}>THAI</option>
+                                        </select>
+                                        <span>NATIONALITY</span>
+                                    </div>
+                                </div>
+                            
+                                <div class="p_row sixthRow"> 
+                                    <div class="inputBox e_person">
+                                        <input type="text" required="required" name="e_person" value="{{ profile[13] }}">
+                                        <span>EMERGENCY CONTACT PERSON</span>
+                                    </div>
+                                    <div class="inputBox relationship">
+                                        <select class="relationship" name="relationship">
+                                            <option value="" disabled selected></option>
+                                            <option value="MOTHER" {% if profile[14] == "MOTHER" %} selected {% endif %}>MOTHER</option>
+                                            <option value="FATHER" {% if profile[14] == "FATHER" %} selected {% endif %}>FATHER</option>
+                                            <option value="DAUGHTER" {% if profile[14] == "DAUGHTER" %} selected {% endif %}>DAUGHTER</option>
+                                            <option value="SON" {% if profile[14] == "SON" %} selected {% endif %}>SON</option>
+                                            <option value="SISTER" {% if profile[14] == "SISTER" %} selected {% endif %}>SISTER</option>
+                                            <option value="BROTHER" {% if profile[14] == "BROTHER" %} selected {% endif %}>BROTHER</option>
+                                            <option value="GRANDMOTHER" {% if profile[14] == "GRANDMOTHER" %} selected {% endif %}>GRANDMOTHER</option>
+                                            <option value="GRANDFATHER" {% if profile[14] == "GRANDFATHER" %} selected {% endif %}>GRANDFATHER </option>
+                                            <option value="GRANDSON" {% if profile[14] == "GRANDSON" %} selected {% endif %}>GRANDSON</option>
+                                            <option value="GRANDDAUGHTER" {% if profile[14] == "GRANDDAUGHTER" %} selected {% endif %}>GRANDDAUGHTER </option>
+                                            <option value="AUNT" {% if profile[14] == "AUNT" %} selected {% endif %}>AUNT</option>
+                                            <option value="UNCLE" {% if profile[14] == "UNCLE" %} selected {% endif %}>UNCLE </option>
+                                            <option value="NIECE" {% if profile[14] == "NIECE" %} selected {% endif %}>NIECE</option>
+                                            <option value="NEPHEW" {% if profile[14] == "NEPHEW" %} selected {% endif %}>NEPHEW </option>
+                                            <option value="COUSIN" {% if profile[14] == "COUSIN" %} selected {% endif %}>COUSIN </option>
+                                            <option value="GUARDIAN" {% if profile[14] == "GUARDIAN" %} selected {% endif %}>GUARDIAN </option>
+                                        </select>
+                                        <span>RELATIONSHIP TO PATIENT</span>
+                                    </div>
+                                    <div class="inputBox e_number">
+                                        <input type="text" required="required" name="e_number" value="{{ profile[15] }}">
+                                        <span>CONTACT NUMBER</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div id="toggleContent2" style="display: none;">
+                            <div class="med-header history">IMMUNIZATION</div>
+                            <div class="p_row immunize">
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="bcgCheckbox" name="bcgCheckbox" value="checked" {% if patient[2] == 1 %}checked{% endif %}>
+                                        <label for="bcgCheckbox">BCG Vaccine</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="dtpCheckbox" name="dtpCheckbox" value="checked" {% if patient[3] == 1 %}checked{% endif %}>
+                                        <label for="dtpCheckbox">DTP Vaccine</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="influenzaCheckbox" name="influenzaCheckbox" value="checked" {% if patient[5] == 1 %}checked{% endif %}> 
+                                        <label for="influenzaCheckbox">Influenza Vaccine</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="pcvCheckbox" name="pcvCheckbox" value="checked" {% if patient[4] == 1 %}checked{% endif %}>
+                                        <label for="pcvCheckbox">PCV</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="hepaCheckbox" name="hepaCheckbox" value="checked" {% if patient[6] == 1 %}checked{% endif %}>
+                                        <label for="hepaCheckbox">Hepa B Vaccine</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="ipvCheckbox" name="ipvCheckbox" value="checked" {% if patient[7] == 1 %}checked{% endif %}>
+                                        <label for="ipvCheckbox">IPV/OPV</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="mmrCheckbox" name="mmrCheckbox" value="checked" {% if patient[8] == 1 %}checked{% endif %}>
+                                        <label for="mmrCheckbox">MMR Vaccine</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="hpvCheckbox" name="hpvCheckbox" value="checked" {% if patient[9] == 1 %}checked{% endif %}>
+                                        <label for="hpvCheckbox">HPV</label>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="med-header clearance">MEDICATIONS</div>
+                            <div class="p_row nine">
+                                <div class="inputBox medications">
+                                    <textarea class="medications" rows="2" id="medications" name="medications" placeholder="Current prescription, maintenance, over-the-counter medicine and herbal supplements">{{ patient[72] }}</textarea>
+                                </div>
+                            </div>
+        
+                            <div class="med-header clearance">ALLERGIES</div>
+                            <div class="p_row seven">
+                                <div class="inputBox medications">
+                                    <textarea class="medications" rows="2" id="allergies" name="allergies">{{ patient[73] }}</textarea>
+                                </div>
+                            </div>  
+                        </div>
+    
+                        <div id="toggleContent3" style="display: none;">
+                            <div class="med-header history">FAMILY HISTORY</div>
+                            <p class="subtext"><em>(check the box if the family has a history of)</em></p>
+                            
+                            <div class="p_row two">
+                                <div>   
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="asthmaCheckbox" name="asthmaCheckbox" value="checked" {% if patient[10] == 1 %}checked{% endif %}>
+                                        <label for="asthmaCheckbox">Asthma</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="diabetesCheckbox" name="diabetesCheckbox" value="checked" {% if patient[11] == 1 %}checked{% endif %}>
+                                        <label for="diabetesCheckbox">Diabetes</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="heartCheckbox" name="heartCheckbox" value="checked" {% if patient[12] == 1 %}checked{% endif %}>
+                                        <label for="heartCheckbox">Heart Disease</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="birthCheckbox" name="birthCheckbox" value="checked" {% if patient[13] == 1 %}checked{% endif %}>
+                                        <label for="birthCheckbox">Birth Defects</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="boneCheckbox" name="boneCheckbox" value="checked" {% if patient[14] == 1 %}checked{% endif %}>
+                                        <label for="boneCheckbox">Bone/Joint Disorders</label>
+                                    </div>
+                                </div>
+    
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="alzheimerCheckbox" name="alzheimerCheckbox" value="checked" {% if patient[15] == 1 %}checked{% endif %}>
+                                        <label for="alzheimerCheckbox">Alzheimer's</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="cancerCheckbox" name="cancerCheckbox" value="checked" {% if patient[16] == 1 %}checked{% endif %}>
+                                        <label for="cancerCheckbox">Cancer</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="thyroidCheckbox" name="thyroidCheckbox" value="checked" {% if patient[17] == 1 %}checked{% endif %}>
+                                        <label for="thyroidCheckbox">Thyroid Disease</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="tuberculosisCheckbox" name="tuberculosisCheckbox" value="checked" {% if patient[18] == 1 %}checked{% endif %}>
+                                        <label for="tuberculosisCheckbox">Tuberculosis</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="eyeCheckbox" name="eyeCheckbox" value="checked" {% if patient[19] == 1 %}checked{% endif %}>
+                                        <label for="eyeCheckbox">Eye/Ear Disorders</label>
+                                    </div>
+                                </div>
+    
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="clotsCheckbox" name="clotsCheckbox" value="checked" {% if patient[20] == 1 %}checked{% endif %}>
+                                        <label for="clotsCheckbox">Blood Clots/Stroke</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="mentalCheckbox" name="mentalCheckbox" value="checked" {% if patient[21] == 1 %}checked{% endif %}>
+                                        <label for="mentalCheckbox">Mental Illness</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="kidneyCheckbox" name="kidneyCheckbox" value="checked" {% if patient[22] == 1 %}checked{% endif %}>
+                                        <label for="kidneyCheckbox">Kidney Problems</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="anemiaCheckbox" name="anemiaCheckbox" value="checked" {% if patient[23] == 1 %}checked{% endif %}>
+                                        <label for="anemiaCheckbox">Anemia/Blood Disorders</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="muscleCheckbox" name="muscleCheckbox" value="checked" {% if patient[24] == 1 %}checked{% endif %}>
+                                        <label for="muscleCheckbox">Muscle Disorders</label>
+                                    </div>
+                                </div>
+    
+                                <div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="highbloodCheckbox" name="highbloodCheckbox" value="checked" {% if patient[25] == 1 %}checked{% endif %}>
+                                        <label for="highbloodCheckbox">High Blood Pressure</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="epilepsyCheckbox" name="epilepsyCheckbox" value="checked" {% if patient[26] == 1 %}checked{% endif %}>
+                                        <label for="epilepsyCheckbox">Epilepsy/Seizure</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="skinCheckbox" name="skinCheckbox" value="checked" {% if patient[27] == 1 %}checked{% endif %}>
+                                        <label for="skinCheckbox">Skin Diseases</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="hivCheckbox" name="hivCheckbox" value="checked" {% if patient[28] == 1 %}checked{% endif %}>
+                                        <label for="hivCheckbox">HIV/AIDS</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="pulmonaryCheckbox" name="pulmonaryCheckbox" value="checked" {% if patient[29] == 1 %}checked{% endif %}>
+                                        <label for="pulmonaryCheckbox">Pulmonary Disease</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <center>
+                                <div class="inputBox longtext">
+                                    <input type="text" name="specifications" value="{{ patient[30] }}">
+                                    <span>SPECIFICATIONS</span>
+                                </div>
+    
+                                <div class="inputBox longtext">
+                                    <input type="text" name="others" value="{{ patient[31] }}">
+                                    <span>OTHERS <em>(specify)</em></span>
+                                </div>
+                            </center>
+    
+                            <div class="med-header clearance">PAST HISTORY</div>
+                            <div class="p_row three">
+                                <div class="inputBox p_history">
+                                    <input type="text" name="past_c1" value="{{ patient[32] }}">
+                                    <span>PAST CONDITIONS</span>
+                                </div>
+                                <div class="inputBox p_history">
+                                    <input type="text" name="medication1" value="{{ patient[33] }}">
+                                    <span>MEDICATIONS</span>
+                                </div>
+                                <div class="inputBox p_history">
+                                    <input type="text" name="dosage1" value="{{ patient[34] }}">
+                                    <span>DOSAGE</span>
+                                </div>
+                                <div class="inputBox h_date">
+                                    <input type="date" name="h_date1" value="{{ patient[35] }}">
+                                    <span>DATE STARTED</span>
+                                </div>
+                            </div>
+                            <div class="p_row four">
+                                <div class="inputBox p_history">
+                                    <input type="text" name="past_c2" value="{{ patient[36] }}">
+                                    <span>PAST CONDITIONS</span>
+                                </div>
+                                <div class="inputBox p_history">
+                                    <input type="text" name="medication2" value="{{ patient[37] }}">
+                                    <span>MEDICATIONS</span>
+                                </div>
+                                <div class="inputBox p_history">
+                                    <input type="text" name="dosage2" value="{{ patient[38] }}">
+                                    <span>DOSAGE</span>
+                                </div>
+                                <div class="inputBox h_date">
+                                    <input type="date" name="h_date2" value="{{ patient[39] }}">
+                                    <span>DATE STARTED</span>
+                                </div>
+                            </div>
+                            <div class="p_row four">
+                                <div class="inputBox p_history">
+                                    <input type="text" name="past_c3" value="{{ patient[40] }}">
+                                    <span>PAST CONDITIONS</span>
+                                </div>
+                                <div class="inputBox p_history">
+                                    <input type="text" name="medication3" value="{{ patient[41] }}">
+                                    <span>MEDICATIONS</span>
+                                </div>
+                                <div class="inputBox p_history">
+                                    <input type="text" name="dosage3" value="{{ patient[42] }}">
+                                    <span>DOSAGE</span>
+                                </div>
+                                <div class="inputBox h_date">
+                                    <input type="date" name="h_date3" value="{{ patient[43] }}">
+                                    <span>DATE STARTED</span>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div id="toggleContent4" style="display: none;">
+                            <div class="med-header history">SOCIAL HISTORY</div>
+                            <div class="p_row five">
+                                <p>Alcohol</p> 
+                                <div class="inputBox historyA">
+                                    <select class="historyA" name="habitually">
+                                        <option value="" disabled selected></option>
+                                        <option value="YES" {% if patient[44] == "YES" %} selected {% endif %}>YES</option>
+                                        <option value="NO" {% if patient[44] == "NO" %} selected {% endif %}>NO</option>
+                                        <option value="QUIT" {% if patient[44] == "QUIT" %} selected {% endif %}>QUIT</option>
+                                    </select>
+                                    <span>HABITUALLY?</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="number" name="yearsDrunk" value="{{ patient[45] }}">
+                                    <span>YEARS DRANK</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="text" name="frequencyDrink" value="{{ patient[46] }}">
+                                    <span><em>(if <strong>yes</strong>)</em> FREQUENCY</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="number" name="quitDrinking" value="{{ patient[47] }}">
+                                    <span><em>(if <strong>quit</strong>)</em> YEAR</span>
+                                </div>
+                            </div>
+    
+                            <div class="p_row six">
+                                <p>Smoking</p>
+                                <div class="inputBox historyA">
+                                    <select class="historyA" name="frequently">
+                                        <option value="" disabled selected></option>
+                                        <option value="YES" {% if patient[48] == "YES" %} selected {% endif %}>YES</option>
+                                        <option value="NO" {% if patient[48] == "NO" %} selected {% endif %}>NO</option>
+                                        <option value="QUIT" {% if patient[48] == "QUIT" %} selected {% endif %}>QUIT</option>
+                                    </select>
+                                    <span>FREQUENTLY?</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="number" name="yearsSmoked" value="{{ patient[49] }}">
+                                    <span>YEARS SMOKED</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="text" name="frequencySmoke" value="{{ patient[50] }}">
+                                    <span><em>(if <strong>yes</strong>)</em> FREQUENCY</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="number" name="quitSmoking" value="{{ patient[51] }}">
+                                    <span><em>(if <strong>quit</strong>)</em> YEAR</span>
+                                </div>
+                            </div>
+    
+                            <div class="p_row six">
+                                <p>Exercise</p>
+                                <div class="inputBox historyA">
+                                    <select class="historyA" name="often">
+                                        <option value="" disabled selected></option>
+                                        <option value="YES" {% if patient[52] == "YES" %} selected {% endif %}>YES</option>
+                                        <option value="NO" {% if patient[52] == "NO" %} selected {% endif %}>NO</option>
+                                    </select>
+                                    <span>OFTEN?</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="text" name="exerciseType" value="{{ patient[53] }}">
+                                    <span>TYPE OF EXERCISE</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="text" name="frequencyExercise" value="{{ patient[54] }}">
+                                    <span><em>(if <strong>yes</strong>)</em> FREQUENCY</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="text" name="durationActivity" value="{{ patient[55] }}">
+                                    <span>DURATION/ACTIVITY</span>
+                                </div>
+                            </div>
+    
+                            <div class="p_row six">
+                                <p>Sexual Activity</p>
+                                <div class="inputBox historyA">
+                                    <select class="historyA" name="sexActive">
+                                        <option value="" disabled selected></option>
+                                        <option value="YES" {% if patient[56] == "YES" %} selected {% endif %}>YES</option>
+                                        <option value="NO" {% if patient[56] == "NO" %} selected {% endif %}>NO</option>
+                                    </select>
+                                    <span>ACTIVE?</span>
+                                </div>
+                                <div class="inputBox historyA">
+                                    <select class="historyA" name="sexPartner">
+                                        <option value="" disabled selected></option>
+                                        <option value="MEN" {% if patient[57] == "MEN" %} selected {% endif %}>MEN</option>
+                                        <option value="WOMEN" {% if patient[57] == "WOMEN" %} selected {% endif %}>WOMEN</option>
+                                    </select>
+                                    <span>PARTNER?</span>
+                                </div>
+                                <div class="inputBox historyB">
+                                    <input type="number" name="numSexPartner" value="{{ patient[58] }}">
+                                    <span>NO. OF SEXUAL PARTNERS</span>
+                                </div>
+                                <div class="inputBox historyC">
+                                    <input type="text" red" name="contraception" value="{{ patient[59] }}">
+                                    <span>CONTRACEPTIONS</span>
+                                </div>
+                            </div>
+    
+                            <div class="p_row six">
+                                <p>Recreational Drugs</p>
+                                <div class="inputBox historyA">
+                                    <select class="historyA" name="useDrugs">
+                                        <option value="" disabled selected></option>
+                                        <option value="YES" {% if patient[60] == "YES" %} selected {% endif %}>YES</option>
+                                        <option value="NO" {% if patient[60] == "NO" %} selected {% endif %}>NO</option>
+                                    </select>
+                                    <span>USE?</span>
+                                </div>
+                                <div class="inputBox historyD">
+                                    <input type="text" name="specifyDrugs" value="{{ patient[61] }}">
+                                    <span>SPECIFY</span>
+                                </div>
+                                <div class="inputBox historyD">
+                                    <input type="text" name="frequencyDrugs" value="{{ patient[62] }}">
+                                    <span><em>(if <strong>yes</strong>)</em> FREQUENCY</span>
+                                </div>
+                            </div>
+                            <center>
+                                <div class="inputBox longtext">
+                                    <input type="text" name="diet" value="{{ patient[74] }}">
+                                    <span>DIET</span>
+                                </div>
+                            </center>
+    
+                            <div class="med-header clearance">SURGICAL HISTORY</div>
+                            <div class="p_row seven">
+                                <div class="inputBox h_date">
+                                    <input type="date" name="surgeryDate1" value="{{ patient[63] }}">
+                                    <span>DATE</span>
+                                </div>
+                                <div class="inputBox t_surgery">
+                                    <input type="text" name="surgeryProcedure1" value="{{ patient[64] }}">
+                                    <span>TYPE OF SURGERY/PROCEDURE</span>
+                                </div>
+                                <div class="inputBox t_surgery">
+                                    <input type="text" name="hospital1" value="{{ patient[65] }}">
+                                    <span>HOSPITAL</span>
+                                </div>
+                            </div>
+                            <div class="p_row eight">
+                                <div class="inputBox h_date">
+                                    <input type="date" name="surgeryDate2" value="{{ patient[66] }}">
+                                    <span>DATE</span>
+                                </div>
+                                <div class="inputBox t_surgery">
+                                    <input type="text" name="surgeryProcedure2" value="{{ patient[67] }}">
+                                    <span>TYPE OF SURGERY/PROCEDURE</span>
+                                </div>
+                                <div class="inputBox t_surgery">
+                                    <input type="text" name="hospital2" value="{{ patient[68] }}">
+                                    <span>HOSPITAL</span>
+                                </div>
+                            </div>
+                            <div class="p_row eight">
+                                <div class="inputBox h_date">
+                                    <input type="date" name="surgeryDate3" value="{{ patient[69] }}">
+                                    <span>DATE</span>
+                                </div>
+                                <div class="inputBox t_surgery">
+                                    <input type="text" name="surgeryProcedure3" value="{{ patient[70] }}">
+                                    <span>TYPE OF SURGERY/PROCEDURE</span>
+                                </div>
+                                <div class="inputBox t_surgery">
+                                    <input type="text" name="hospital3" value="{{ patient[71] }}">
+                                    <span>HOSPITAL</span>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div id="toggleContent5" style="display: none;">
+                            <div class="med-header history">VITAL SIGNS</div>
+                            <div class="p_row vitalRowA">
+                                <div class="inputBox vitalsA">
+                                    <input type="text" name="blood_p">
+                                    <span>BLOOD PRESSURE</span>
+                                </div>
+                                <div class="inputBox vitalsB">
+                                    <input type="text" name="pulse_r">
+                                    <span>PULSE RATE</span>
+                                </div>
+                                <div class="inputBox vitalsB">
+                                    <input type="text" name="temp">
+                                    <span>TEMPERATURE</span>
+                                </div>
+                                <div class="inputBox vitalsA">
+                                    <input type="text" name="respiratory_r">
+                                    <span>RESPIRATORY RATE</span>
+                                </div>
+                            </div>
+                    
+                            <div class="p_row vitalRowB">
+                                <div class="inputBox vitalsC">
+                                    <input type="text" name="height" id="height">
+                                    <span>HEIGHT <em>(cm)</em></span>
+                                </div>
+                                <div class="inputBox vitalsC">
+                                    <input type="text" name="weight" id="weight">
+                                    <span>WEIGHT <em>(kg)</em></span>
+                                </div>
+                                <button class="btn-submit bmi" type="button" id="calculateBmi">CALCULATE BMI</button>
+                                <div class="inputBox vitalsL">
+                                    <input type="text" name="body_mass" id="bmiResult">
+                                    <span>BODY MASS INDEX</span>
+                                </div>
+                            </div>
                 
+                            <div class="p_row vitalRowB">
+                                <div class="inputBox vitalsA">
+                                    <input type="text" name="oxygenSaturation">
+                                    <span>SpO<sub>2</sub></span>
+                                </div>
+                                <div class="inputBox vitalsM">
+                                    <input type="text" name="painSection">
+                                    <span>PAIN</span>
+                                </div>
+                            </div>
+    
+                            <div class="med-header clearance">PHYSICAL EXAMINATIONS</div>
+                            <div class="p_row vitalRowF">
+                                <textarea class="complaints" name="examinations" rows="2" placeholder="Enter observations of the patient's health status"></textarea>
+                            </div>
+                        </div>
+    
+                        <div id="toggleContent6" style="display: none;">
+                            <div class="med-header history">REASON FOR MEDICAL CLEARANCE</div>
+                            <center>
+                                <div class="inputBox subject">
+                                    <input type="text" name="subject" id="subject">
+                                    <span>SUBJECT</span>
+                                </div>
+                            </center>
+                            <div class="p_row vitalRowF">
+                                <textarea class="complaints" name="reasons" rows="2" placeholder="Specify any procedures, activities, or events for which the clearance is needed"></textarea>
+                            </div>
+    
+                            <div class="med-header clearance">ASSESSMENT & RECOMMENDATIONS</div>
+                            <div class="p_row vitalRowF">
+                                <textarea class="complaints" name="recommendations" rows="2" placeholder="Provide an assessment of the patient's fitness for the requested activity"></textarea>
+                            </div>
+                        </div>
+    
+                        <div id="toggleContent7" style="display: none;">
+                            <div class="med-header history">MEDICAL CLEARANCE</div>
+                            <textarea class="clearance_textarea" name="clearance_textarea" rows="2" placeholder="Enter the medical clearance"></textarea>
+                        </div>
+    
+                    </div>
+        
+                    <div class="grid_item">
+                        <div class="segmented-controls">
+                            <input type="radio" id="option1Toggle" name="segment" checked>
+                            <label for="option1Toggle">PATIENT DETAILS</label>
+                        
+                            <input type="radio" id="option2Toggle" name="segment" >
+                            <label for="option2Toggle">HEALTH PROFILE</label>
+        
+                            <input type="radio" id="option3Toggle" name="segment" >
+                            <label for="option3Toggle">HEALTH HISTORY</label>
+        
+                            <input type="radio" id="option4Toggle" name="segment" >
+                            <label for="option4Toggle">SOCIAL & SURGERY</label>
+        
+                            <input type="radio" id="option5Toggle" name="segment" >
+                            <label for="option5Toggle">PHYSICAL TESTS</label>
+        
+                            <input type="radio" id="option6Toggle" name="segment" >
+                            <label for="option6Toggle">ASSESSMENT</label>
+    
+                            <input type="radio" id="option7Toggle" name="segment" >
+                            <label for="option7Toggle">CLEARANCE</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </form>
+
+    {% if success %}
+        <div id="successModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Success</h1>
+                    </div>
+                    <div class="modal-body">
+                        Patient's medical clearance added successfully!
+                    </div>
+                    <a href="{{ url_for('doctor.consultation', patient_id=profile[0]) }}"> 
+                        <div class="modal-footer">
+                            <button id="successSave" type="button" class="btn-done">DONE</button>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </main>
+    {% elif error %}
+        <div id="errorModal" class="modal" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Error</h1>
+                    </div>
+                    <div class="modal-body">
+                        Error in adding patient's medical clearance.
+                    </div>
+                    <a href="{{ url_for('doctor.consultation', patient_id=profile[0]) }}">
+                        <div class="modal-footer">
+                            <button id="errorDismiss" type="button" class="btn-done">OKAY</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- ERROR MESSAGE IF THERE IS NO SUBJECT INPUT -->
+    <div id="subjectError" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Error</h1>
+                </div>
+                <div class="modal-body">
+                    Error in submitting medical clearance. Please enter a subject to proceed.
+                </div>
+                <div class="modal-footer">
+                    <button id="successSave" type="button" class="btn-done">OKAY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const optionToggles = document.querySelectorAll('[id^="option"]');
+        const toggleContents = document.querySelectorAll('[id^="toggleContent"]');
+
+        optionToggles.forEach((toggle, index) => {
+            toggle.addEventListener('click', function() {
+                toggleContents.forEach((content, contentIndex) => {
+                    if (index === contentIndex) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // CALCULATE BMI
+        let button = document.querySelector("#calculateBmi");
+        button.addEventListener("click", calculateBMI);
+
+        function calculateBMI() {
+ 
+            let height = parseInt(document.querySelector("#height").value);
+            let weight = parseInt(document.querySelector("#weight").value);
+            let result = document.querySelector("#bmiResult");
+         
+            if (isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0) {
+                result.value = "Provide valid Height and Weight";
+            } else {
+                let bmi = (weight / ((height * height) / 10000)).toFixed(2);
+        
+                if (bmi < 18.6) {
+                    result.value = `Underweight: ${bmi}`;
+                } else if (bmi >= 18.6 && bmi < 24.9) {
+                    result.value = `Normal: ${bmi}`;
+                } else {
+                    result.value = `Overweight: ${bmi}`;
+                }
+            }
+        }
+
+        // ERROR IN FORM SUBMISSION WITHOUT SUBJECT
+        document.getElementById("clearanceForm").addEventListener("submit", function(event) {
+            const subjectValue = document.getElementById("subject").value.trim();
+            const errorMessage = document.getElementById("subjectError");
+        
+            if (subjectValue === "") {
+                errorMessage.style.display = "block";
+                event.preventDefault(); 
+            } else {
+                errorMessage.style.display = "none";
+            }
+        });
+        
+        // CLOSE THE SUBJECT ERROR MESSAGE
+        document.getElementById("successSave").addEventListener("click", function(event) {
+            document.getElementById("subjectError").style.display = "none";
+        });
+        
+    </script>
 
 {% endblock %}

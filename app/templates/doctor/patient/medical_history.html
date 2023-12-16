@@ -626,6 +626,10 @@
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'none';
 
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');
