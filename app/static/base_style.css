@@ -51,6 +51,8 @@ main {
     position: fixed;  
     padding: 8px;
     z-index: 1;
+    top: 0;
+    left: 0;
     transition: width 0.3s ease;
 }
 

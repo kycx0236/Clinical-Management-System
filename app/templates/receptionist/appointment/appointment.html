@@ -1,66 +1,14 @@
 {% extends "base.html" %}
 {% block title %}DocCare | Appointment{% endblock title %}
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}"> {% endblock %}
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}">
+{% endblock link %}
+
+
 {% block content %}
-    <div class="sidenav-bg">
-        <div class="cms-logo">
-            <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-        </div>
-        <ul>
-            <li class="notifications">
-                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
-            </li>
-            <a href="{{ url_for('doctor.dashboard') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
-                    <p>Dashboard</p>
-                </li>
-            </a>
-            <a href="{{ url_for('doctor.calendar') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
-                    <p>Calendar</p>
-                </li>
-            </a>
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
-                <p>Appointment</p>
-            </li>
-            <a href="{{ url_for('doctor.schedule') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Schedule.png') }}"> 
-                    <p>Schedule</p>
-                </li>
-            </a>
-            <a href="{{ url_for('doctor.patient') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
-                    <p>Patient</p>
-                </li>
-            </a>
-            <a href="{{ url_for('doctor.profile') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
-                    <p>Profile</p>
-                </li>
-            </a>
-        </ul>
-        <div class="foot-nav">
-            <div class="sidenav-user-bg">
-                <img src="{{ url_for('static', filename='images/Eda.png') }}" class="user-img">
-                <div>
-                    <h3>{{ info[0] }}</h3>
-                    <p>{{ info[2] }}</p>
-                </div>
-            </div>
-            <ul>
-                <li class="logout" id="logoutButton">
-                    <img src="{{ url_for('static', filename='images/Logout.png') }}">
-                    <p>Logout</p>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <!-- Sidebar -->
+    {% include "receptionist/appointment/appointment_sidebar.html" %}
 
     <!--Content start!-->
     <div class="content">
@@ -120,9 +68,9 @@
                                                 </p>
                                             </div>
                                         </td>
-                                        <td> {{ row.doctorName }} </td>
+                                        <td> {{ row.doctorName}} </td>
                                         <td class="table__cell">
-                                            <a href="{{ url_for('doctor.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appointment-icon">
+                                            <a href="{{ url_for('receptionist.view_appointment', reference_number=row.reference_number) }}" class="doccare-view-appointment-icon">
                                                 <span class="material-symbols-outlined">info</span>
                                             </a>
                                             <button type="button" class="edit-appointment-button"
@@ -156,19 +104,19 @@
                     </section>
                     <div class="pagination">
                         {% if page > 1 %}
-                            <a href="{{ url_for('doctor.appointment', page=page-1) }}">Previous</a>
+                            <a href="{{ url_for('receptionist.appointment', page=page-1) }}">Previous</a>
                         {% endif %}
                         
                         {% for p in range(1, total_pages + 1) %}
                             {% if p == page %}
                                 <span class="current">{{ p }}</span>
                             {% else %}
-                                <a href="{{ url_for('doctor.appointment', page=p) }}">{{ p }}</a>
+                                <a href="{{ url_for('receptionist.appointment', page=p) }}">{{ p }}</a>
                             {% endif %}
                         {% endfor %}
                         
                         {% if page < total_pages %}
-                            <a href="{{ url_for('doctor.appointment', page=page+1) }}">Next</a>
+                            <a href="{{ url_for('receptionist.appointment', page=page+1) }}">Next</a>
                         {% endif %}
                     </div>
                     <div class="overlay-background-container" id="overlayBackgroundContainer">
@@ -200,7 +148,7 @@
                     <div class="doccare-edit-container" id="editModal">
                         <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
                         <header>RESCHEDULE</header>
-                        <form class="needs-validation" method="POST" action="/doctor/edit-appointment-version-two/" novalidate>
+                        <form class="needs-validation" method="POST" action="/receptionist/edit-appointment-version-two/" novalidate>
                             {{ form.hidden_tag()}}
                             <div class="doccare-form-first">
                                 <div class="doccare-appoinment-details">
@@ -293,13 +241,13 @@
                         </form>
                     </div>
 
-                    <a href="{{ url_for('doctor.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
+                    <a href="{{ url_for('receptionist.add_appointment') }}" class="doccare-add-appointment-icon" type="button" id="add-appointment-button">
                         <span class="material-symbols-outlined add-icon">&#xe147;</span>
                     </a>
                     <!-- Include these script tags at the end of the body content -->
                     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-                    <script src="{{ url_for('static', filename='doctor_script.js') }}" defer></script>
+                    <script src="{{ url_for('static', filename='receptionist_script.js') }}" defer></script>
                     <script src="{{ url_for('static', filename='logout.js') }}"></script>
                     <script>
                         // Define csrfToken in a higher scope
@@ -316,7 +264,7 @@
                     
                             // Make an AJAX request to fetch time schedules for the selected date
                             $.ajax({
-                                url: '/doctor/get-time-schedules',
+                                url: '/receptionist/get-time-schedules',
                                 type: 'POST',
                                 data: { selected_date: selectedDate, selected_doctor: doctorName, csrf_token: csrfToken },
                                 success: function(response) {
@@ -360,7 +308,7 @@
                     
                             // Make an AJAX request to fetch time schedules for the old selected date
                             $.ajax({
-                                url: '/doctor/get-time-schedules',
+                                url: '/receptionist/get-time-schedules',
                                 type: 'POST',
                                 data: { selected_date: oldSelectedDate, selected_doctor: doctorName, csrf_token: csrfToken },
                                 success: function(response) {
@@ -393,5 +341,4 @@
             </div>
         </body>
     </div>
-
 {% endblock %}

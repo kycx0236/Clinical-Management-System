@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% block title %}DocCare | Reschedule Appointment{% endblock title %}
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='schedule_add_style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{% endblock link %}
+
+{% block content %}
+</body>
+    <div class="doccare-edit-container">
+        <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
+        <header>NEW SCHEDULE</header>
+        <form class="needs-validation" id="appointment-form" method="POST" action="/receptionist/add-appointment/" novalidate>
+            {{ form.csrf_token }}
+            <div class="doccare-form-first">
+                <div class="doccare-appoinment-details">
+                    <span class="title"> SCHEDULE DETAILS </span>
+
+                    <div class="fields">
+                        <!-- Doctor Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom11" class="form-label"> Doctor Name </label>
+                            <select class="form-select" id="validationCustom11" name="doctorName" required aria-describedby="validationCustom11Feedback">
+                                <option value="" selected>Select your Doctor</option>
+                                {% if doctor_names %}
+                                    {% for doctor in doctor_names %}
+                                        <option value="{{ doctor.last_name }}" data-doctor-id="{{ doctor.id }}">{{ doctor.last_name }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No doctor available</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <!-- Doctor ID -->
+                        <div class="input-fields">
+                            <label for="validationCustom12" class="form-label"> Doctor ID </label>
+                            <select class="form-select" id="validationCustom12" name="doctorID" required aria-describedby="validationCustom12Feedback">
+                                <option value="" selected>Select the Doctor's ID</option>
+                                {% if doctor_id %}
+                                    {% for doctor_id in doctor_id %}
+                                        <option value="{{ doctor_id.id }}">{{ doctor_id.id }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No doctor available</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <!-- Date Appointment -->
+                        <div class="input-fields">
+                            <label for="validationCustom01" class="form-label"> Date Appointment </label>
+                            <input type="date" class="form-control" id="validationCustom01" name="date_appointment" required aria-describedby="validationCustom01Feedback">
+                            <div id="validationCustom01Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+
+                        <!-- Time Appointment -->
+                        <div class="input-fields">
+                            <label for="validationCustom02" class="form-label"> Time Appointment </label>
+                            <select class="form-select" id="validationCustom02" name="time_appointment" required aria-describedby="validationCustom02Feedback">
+                                <option value="" selected>Select your desired time</option>
+                                {% if time_schedules %}
+                                    {% for time_schedule in time_schedules %}
+                                        <option value="{{ time_schedule[0] }}">{{ time_schedule[0] }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No available time schedules</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <!-- Slots -->
+                        <div class="input-fields">
+                            <label for="validationCustom03" class="form-label">Slots</label>
+                            <select class="form-select" id="validationCustom03" name="slots" required aria-describedby="validationCustom03Feedback">
+                                <option selected disabled value="">Choose...</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <button type="button" class="doccare-success-button" id="doccare-submit-button">Submit</button>
+                    </div>
+                </div>
+
+                <div class="overlay-container">
+                    <div class="overlay"><label class="doccare-circle"></label></div>
+                    <div class="doccare-other-things">
+                        <label class="doccare-rectangle"></label>
+                    </div>
+                </div>
+    
+                <!-- Modal for Success Confirmation -->
+                <div id="doccare-success-modal" class="doccare-success-modal">
+                    <div class="doccare-success-modal-content">
+                        <h1>Well Done!</h1>
+                        <p>The scheduled is confirmed!.</p>
+                        <div class="doccare-success-modal-buttons">
+                            <button class="doccare-done-modal-button">DONE</button>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        <form>
+    </div>
+</body>
+<!-- Include these script tags -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename="schedule_add_script.js") }}"></script>
+<script>
+    // Update the doctorID dropdown based on the selected doctorName
+    $('#validationCustom11').on('change', function() {
+        var selectedDoctor = $(this).val();
+
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
+
+        // Make an AJAX request to fetch the doctor ID for the selected doctorName
+        $.ajax({
+            url: '/receptionist/get-doctor-id/',
+            type: 'POST',
+            data: { doctorName: selectedDoctor, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Server Response for Doctor ID:', response);
+
+                if (response.success) {
+                    // Update the options of the Doctor ID dropdown
+                    var doctorIdDropdown = $('#validationCustom12');
+                    doctorIdDropdown.empty();
+
+                    if (response.doctor_id) {
+                        doctorIdDropdown.append('<option value="' + response.doctor_id.id + '">' + response.doctor_id.id + '</option>');
+                    } else {
+                        doctorIdDropdown.append('<option value="" disabled>No doctor available</option>');
+                    }
+
+                    // Optional: Trigger the change event on Doctor ID dropdown to update its validation state
+                    doctorIdDropdown.trigger('change');
+                } else {
+                    console.error('Error fetching Doctor ID:', response.message);
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching Doctor ID:', error);
+            }
+        });
+    });
+
+    // Update the time_appointment dropdown based on the selected date
+    $('#validationCustom01').on('change', function () {
+        var selectedDate = $(this).val();
+        var selectedDoctor = $('#validationCustom11').val(); // Get the selected doctorName
+
+        // Generate time schedules with 30-minute intervals
+        var timeSchedules = generateTimeSchedules();
+
+        // Update the options of the time_appointment dropdown
+        var timeDropdown = $('#validationCustom02');
+        timeDropdown.empty();
+        timeDropdown.append('<option value="" selected>Select your desired time</option>');
+
+        // Add options based on the generated time schedules
+        for (var i = 0; i < timeSchedules.length; i++) {
+            var timeSlot = timeSchedules[i];
+            timeDropdown.append('<option value="' + timeSlot + '">' + timeSlot + '</option>');
+        }
+    });
+
+    // Function to generate time schedules with 30-minute intervals
+    function generateTimeSchedules() {
+        var timeSchedules = [];
+        var startTime = moment('08:00 AM', 'hh:mm A');
+        var endTime = moment('05:00 PM', 'hh:mm A');
+
+        while (startTime.isBefore(endTime)) {
+            var timeSlot = startTime.format('hh:mm A') + ' - ' + startTime.add(30, 'minutes').format('hh:mm A');
+            timeSchedules.push(timeSlot);
+        }
+
+        return timeSchedules;
+    }
+
+    // Example: Retrieve the selected option's time information
+    $('#validationCustom02').on('change', function () {
+        var selectedOption = $(this).find(':selected');
+        var timeSlot = selectedOption.val();
+        console.log('Selected Time Slot:', timeSlot);
+    });
+
+
+</script>
+{% endblock %}

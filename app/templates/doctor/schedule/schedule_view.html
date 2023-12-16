@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}DocCare | View Appointment{% endblock title %}
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='schedule_view_style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{% endblock link %}
+
+{% block content %}
+<body>
+    <div class="doccare-view-container">
+        <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
+        <div class="doccare-view-content">
+            <div class="doccare-first">
+                <span class="material-symbols-outlined info">info</span> 
+                <label class="doccare-header"> DETAILS </label>
+                <span class="line"> </span>
+            </div>
+            
+            <div class="fields" id="fields">
+                <div class="doccare-fourth">
+                    <label class="doccare-subheader"> SCHEDULE DETAILS </label>
+
+                    <label class="doccare-text">SCHEDULE ID </label>
+                    <label class="doccare-detail"> {{ row.scheduleID }} </label>
+
+                    <label class="doccare-text">SCHEDULE DATE AND TIME: </label>
+                    <label class="doccare-detail"> {{ row.date_appointment }} : {{ row.time_appointment }} </label>
+
+                    <label class="doccare-text"> DOCTOR DETAILS </label>
+                    <!-- Replace occurrences of row.first_name -->
+                    <label class="doccare-detail"> {{ row.user_first_name }} {{ row.user_middle_name }} {{ row.user_last_name }}  </label>
+                </div>
+            </div>
+
+            <div>
+                <!-- Include a hidden input for student id_number to view the details -->
+                <input type="hidden" name="reference_number" value="{{ row.reference_number }}">
+                <button type=" button" class="doccare-done-button" id="doccare-done-button">Done</button>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- Include these script tags -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename="doctor_schedule_view_script.js") }}"></script>
+{% endblock %}
