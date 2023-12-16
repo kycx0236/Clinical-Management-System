@@ -138,9 +138,9 @@ def medical_history():
         return render_template('doctor/patient/medical_history.html', patient=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info)
 
     elif request.method == 'POST':
-        new_history_id = request.form.get('history_id')
-        new_patient_id = request.form.get('patient_id')
         doctor_info = doctor.get_doctor_info(user_id)
+        new_patient_id = request.form.get('patient_id')
+        new_history_id = request.form.get('history_id')
 
     # IMMUNIZATION
         bcg_checkbox_value = form.bcgCheckbox.data
@@ -173,8 +173,8 @@ def medical_history():
         skin_checkbox_value = form.skinCheckbox.data
         hiv_checkbox_value = form.hivCheckbox.data
         pulmonary_checkbox_value = form.pulmonaryCheckbox.data
-        new_specifications = form.specifications.data.upper()
-        new_others = form.others.data.upper()
+        new_specifications = form.specifications.data.capitalize()
+        new_others = form.others.data.capitalize()
 
     # PAST HISTORY
         new_past1 = form.past_c1.data.upper()
@@ -216,7 +216,7 @@ def medical_history():
         use = form.useDrugs.data
         sDrugs = form.specifyDrugs.data.upper()
         fDrugs = form.frequencyDrugs.data.upper()
-        diet = form.diet.data.upper()
+        diet = form.diet.data.capitalize()
 
     # SURGICAL HISTORY  
         sDate1 = form.surgeryDate1.data
@@ -230,10 +230,10 @@ def medical_history():
         shospital3 = form.hospital3.data.upper()
 
     # MEDICATIONS
-        meds = form.medications.data.upper()
+        meds = form.medications.data.capitalize()
 
     # ALLERGIES
-        allergy = form.allergies.data.upper()
+        allergy = form.allergies.data.capitalize()
 
         existing_history = doctor.get_patient_history(new_patient_id)
         
@@ -297,37 +297,400 @@ def medical_history():
 
     return render_template("doctor/patient/medical_history.html", patient_id=patient_id, PatientForm=form, info=doctor_info)
 
-# ADD MEDICAL CLEARANCE FOR EACH APPOINTMENT
-@doctor_bp.route('/add_clearance/')
+# ADD MEDICAL CLEARANCE 
+@doctor_bp.route('/add_clearance/', methods=['GET', 'POST'])
 @login_required
 @role_required('doctor')
 def add_clearance():
+    form = PatientForm()
     current_id = current_user.id 
     doctor_info = doctor.get_doctor_info(current_id)
-    patient_id = request.args.get('patient_id')
 
-    return render_template("doctor/patient/add_clearance.html", patient_id=patient_id, info=doctor_info)
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        patient_info = doctor.get_patient_info(patient_id)
+        patient_history = doctor.get_patient_history (patient_id)
+        doctor_info = doctor.get_doctor_info(current_id)
 
-# ADD MEDICAL CERTIFICATE FOR EACH APPOINTMENT
-@doctor_bp.route('/add_certificate/')
+        return render_template('doctor/patient/add_clearance.html', profile=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info, patient=patient_history)
+    
+    elif request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(current_id)
+        new_patient_id = request.form.get('patient_id')
+        new_first_name = form.first_name.data.upper()
+        new_middle_name = form.middle_name.data.upper()
+        new_last_name = form.last_name.data.upper()
+        new_age = form.age.data
+        new_civil_status = form.civil_status.data 
+        new_gender = form.gender.data
+        new_bloodType = form.bloodType.data  
+        new_religion = form.religion.data
+        new_birth_place = form.birth_place.data.upper()  
+        new_birth_date = form.birth_date.data
+        new_occupation = form.occupation.data.upper() 
+        new_email = form.email.data
+        new_contact_num = form.contact_num.data
+        new_p_address = form.p_address.data.upper()
+        new_nationality = form.nationality.data
+        new_e_person = form.e_person.data.upper()
+        new_relationship = form.relationship.data  
+        new_e_number = form.e_number.data
+
+        new_history_id = request.form.get('history_id')
+
+    # IMMUNIZATION
+        bcg_checkbox_value = form.bcgCheckbox.data
+        dtp_checkbox_value = form.dtpCheckbox.data
+        pcv_checkbox_value = form.pcvCheckbox.data
+        influenza_checkbox_value = form.influenzaCheckbox.data
+        hepa_checkbox_value = form.hepaCheckbox.data
+        ipv_checkbox_value = form.ipvCheckbox.data
+        mmr_checkbox_value = form.mmrCheckbox.data
+        hpv_checkbox_value = form.hpvCheckbox.data
+
+    # FAMILY HISTORY
+        asthma_checkbox_value = form.asthmaCheckbox.data
+        diabetes_checkbox_value = form.diabetesCheckbox.data
+        heart_checkbox_value = form.heartCheckbox.data
+        birth_checkbox_value = form.birthCheckbox.data
+        bone_checkbox_value = form.boneCheckbox.data
+        alzheimer_checkbox_value = form.alzheimerCheckbox.data
+        cancer_checkbox_value = form.cancerCheckbox.data
+        thyroid_checkbox_value = form.thyroidCheckbox.data
+        tuberculosis_checkbox_value = form.tuberculosisCheckbox.data
+        eye_checkbox_value = form.eyeCheckbox.data
+        clots_checkbox_value = form.clotsCheckbox.data
+        mental_checkbox_value = form.mentalCheckbox.data
+        kidney_checkbox_value = form.kidneyCheckbox.data
+        anemia_checkbox_value = form.anemiaCheckbox.data
+        muscle_checkbox_value = form.muscleCheckbox.data
+        highblood_checkbox_value = form.highbloodCheckbox.data
+        epilepsy_checkbox_value = form.epilepsyCheckbox.data
+        skin_checkbox_value = form.skinCheckbox.data
+        hiv_checkbox_value = form.hivCheckbox.data
+        pulmonary_checkbox_value = form.pulmonaryCheckbox.data
+        new_specifications = form.specifications.data.capitalize()
+        new_others = form.others.data.capitalize()
+
+    # PAST HISTORY
+        new_past1 = form.past_c1.data.upper()
+        new_medication1 = form.medication1.data.upper()
+        new_dosage1 = form.dosage1.data.upper()
+        new_hdate1 = form.h_date1.data
+        if not new_hdate1:
+            new_hdate1 = None
+        new_past2 = form.past_c2.data.upper()
+        new_medication2 = form.medication2.data.upper()
+        new_dosage2 = form.dosage2.data.upper()
+        new_hdate2 = form.h_date2.data
+        if not new_hdate2:
+            new_hdate2 = None
+        new_past3 = form.past_c3.data.upper()
+        new_medication3 = form.medication3.data.upper()
+        new_dosage3 = form.dosage3.data.upper()
+        new_hdate3 = form.h_date3.data
+        if not new_hdate3:
+            new_hdate3 = None
+
+    # SOCIAL HISTORY 
+        habit = form.habitually.data
+        yDrunk = form.yearsDrunk.data
+        fDrink = form.frequencyDrink.data.upper()
+        qDrink = form.quitDrinking.data
+        frequent = form.frequently.data
+        ySmoked = form.yearsSmoked.data
+        fSmoke = form.frequencySmoke.data.upper()
+        qSmoke = form.quitSmoking.data
+        often = form.often.data
+        eType = form.exerciseType.data.upper()
+        fExercise = form.frequencyExercise.data.upper()
+        dActivity = form.durationActivity.data.upper()
+        sActive = form.sexActive.data
+        sPartner = form.sexPartner.data
+        nSPartner = form.numSexPartner.data
+        contraceptions = form.contraception.data.upper()
+        use = form.useDrugs.data
+        sDrugs = form.specifyDrugs.data.upper()
+        fDrugs = form.frequencyDrugs.data.upper()
+        diet = form.diet.data.capitalize()
+
+    # SURGICAL HISTORY  
+        sDate1 = form.surgeryDate1.data
+        sProcedure1 = form.surgeryProcedure1.data.upper()
+        shospital1 = form.hospital1.data.upper()
+        sDate2 = form.surgeryDate2.data
+        sProcedure2 = form.surgeryProcedure2.data.upper()
+        shospital2 = form.hospital2.data.upper()
+        sDate3 = form.surgeryDate3.data
+        sProcedure3 = form.surgeryProcedure3.data.upper()
+        shospital3 = form.hospital3.data.upper()
+
+    # MEDICATIONS
+        meds = form.medications.data.capitalize()
+
+    # ALLERGIES
+        allergy = form.allergies.data.capitalize()
+
+    # VITAL SIGNS
+        blood_p = request.form.get('blood_p').upper()
+        pulse_r = request.form.get('pulse_r').upper()
+        temp = request.form.get('temp').upper()
+        respiratory_r = request.form.get('respiratory_r').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
+        examinations = request.form.get('examinations').capitalize()
+
+    # CLEARANCE
+        subject = request.form.get('subject').upper()
+        reason = request.form.get('reasons').capitalize()
+        recommendations = request.form.get('recommendations').capitalize()
+        clearance = request.form.get('clearance_textarea').capitalize()
+
+        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+                                             civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
+                                             occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
+                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
+        
+        updated_info = doctor.get_patient_info(new_patient_id)
+
+        existing_history = doctor.get_patient_history(new_patient_id)
+
+        if existing_history:
+            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+                                                dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
+                                                hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
+                                                hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
+                                                heartCheckbox = heart_checkbox_value, birthCheckbox = birth_checkbox_value, boneCheckbox = bone_checkbox_value,
+                                                alzheimerCheckbox = alzheimer_checkbox_value, cancerCheckbox = cancer_checkbox_value, thyroidCheckbox = thyroid_checkbox_value,
+                                                tuberculosisCheckbox = tuberculosis_checkbox_value, eyeCheckbox = eye_checkbox_value, clotsCheckbox = clots_checkbox_value,
+                                                mentalCheckbox = mental_checkbox_value, kidneyCheckbox = kidney_checkbox_value,anemiaCheckbox = anemia_checkbox_value,
+                                                muscleCheckbox = muscle_checkbox_value, highbloodCheckbox = highblood_checkbox_value, epilepsyCheckbox = epilepsy_checkbox_value,
+                                                skinCheckbox = skin_checkbox_value, hivCheckbox = hiv_checkbox_value, pulmonaryCheckbox = pulmonary_checkbox_value,
+                                                specifications = new_specifications, others = new_others, past_c1 = new_past1, medication1 = new_medication1,
+                                                dosage1 = new_dosage1, h_date1 = new_hdate1, past_c2 = new_past2, medication2 = new_medication2, dosage2 = new_dosage2,
+                                                h_date2 = new_hdate2, past_c3 = new_past3, medication3 = new_medication3, dosage3 = new_dosage3, h_date3 = new_hdate3,
+                                                habitually = habit, yearsDrunk = yDrunk, frequencyDrink = fDrink, quitDrinking = qDrink, frequently = frequent,
+                                                yearsSmoked = ySmoked, frequencySmoke = fSmoke, quitSmoking = qSmoke, often = often, exerciseType = eType,
+                                                frequencyExercise = fExercise, durationActivity = dActivity, sexActive = sActive, sexPartner = sPartner,
+                                                numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
+                                                surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
+                                                surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
+
+            updated_history = doctor.get_patient_history(new_patient_id)
+        
+        
+        clearance_result = doctor.add_medical_clearance(patientID=new_patient_id, subjectClearance=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+                                               pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
+                                               painSection=painSection, physicalExam=examinations, clearance=clearance)
+
+        if info_update and history_update and clearance_result:
+            return render_template("doctor/patient/add_clearance.html", patient_id=new_patient_id, success=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info)
+        else:
+            return render_template("doctor/patient/add_clearance.html", patient_id=new_patient_id, error=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info)
+
+    return render_template("doctor/patient/add_clearance.html", profile=patient_info, patient=patient_history, PatientForm=form, patient_id=patient_id, info=doctor_info)
+
+# ADD MEDICAL CERTIFICATE 
+@doctor_bp.route('/add_certificate/', methods=['GET', 'POST'])
 @login_required
 @role_required('doctor')
 def add_certificate():
     form = PatientForm()
     current_id = current_user.id 
     doctor_info = doctor.get_doctor_info(current_id)
-    patient_id = request.args.get('patient_id')
 
     if request.method == 'GET':
         patient_id = request.args.get('patient_id')
-        assessment_id = request.args.get('assessment_id')
         patient_info = doctor.get_patient_info(patient_id)
-        consultation_info = doctor.get_consultation_info(assessment_id, patient_id)
+        patient_history = doctor.get_patient_history (patient_id)
         doctor_info = doctor.get_doctor_info(current_id)
 
-        return render_template('doctor/patient/add_certificate.html', info=doctor_info, patient=patient_info, consultation=consultation_info, patient_id=patient_id, PatientForm=form)
+        return render_template('doctor/patient/add_certificate.html', profile=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info, patient=patient_history)
+    
+    elif request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(current_id)
+        new_patient_id = request.form.get('patient_id')
+        new_first_name = form.first_name.data.upper()
+        new_middle_name = form.middle_name.data.upper()
+        new_last_name = form.last_name.data.upper()
+        new_age = form.age.data
+        new_civil_status = form.civil_status.data 
+        new_gender = form.gender.data
+        new_bloodType = form.bloodType.data  
+        new_religion = form.religion.data
+        new_birth_place = form.birth_place.data.upper()  
+        new_birth_date = form.birth_date.data
+        new_occupation = form.occupation.data.upper() 
+        new_email = form.email.data
+        new_contact_num = form.contact_num.data
+        new_p_address = form.p_address.data.upper()
+        new_nationality = form.nationality.data
+        new_e_person = form.e_person.data.upper()
+        new_relationship = form.relationship.data  
+        new_e_number = form.e_number.data
 
-    return render_template("doctor/patient/add_certificate.html", patient_id=patient_id, info=doctor_info)
+        new_history_id = request.form.get('history_id')
+
+    # IMMUNIZATION
+        bcg_checkbox_value = form.bcgCheckbox.data
+        dtp_checkbox_value = form.dtpCheckbox.data
+        pcv_checkbox_value = form.pcvCheckbox.data
+        influenza_checkbox_value = form.influenzaCheckbox.data
+        hepa_checkbox_value = form.hepaCheckbox.data
+        ipv_checkbox_value = form.ipvCheckbox.data
+        mmr_checkbox_value = form.mmrCheckbox.data
+        hpv_checkbox_value = form.hpvCheckbox.data
+
+    # FAMILY HISTORY
+        asthma_checkbox_value = form.asthmaCheckbox.data
+        diabetes_checkbox_value = form.diabetesCheckbox.data
+        heart_checkbox_value = form.heartCheckbox.data
+        birth_checkbox_value = form.birthCheckbox.data
+        bone_checkbox_value = form.boneCheckbox.data
+        alzheimer_checkbox_value = form.alzheimerCheckbox.data
+        cancer_checkbox_value = form.cancerCheckbox.data
+        thyroid_checkbox_value = form.thyroidCheckbox.data
+        tuberculosis_checkbox_value = form.tuberculosisCheckbox.data
+        eye_checkbox_value = form.eyeCheckbox.data
+        clots_checkbox_value = form.clotsCheckbox.data
+        mental_checkbox_value = form.mentalCheckbox.data
+        kidney_checkbox_value = form.kidneyCheckbox.data
+        anemia_checkbox_value = form.anemiaCheckbox.data
+        muscle_checkbox_value = form.muscleCheckbox.data
+        highblood_checkbox_value = form.highbloodCheckbox.data
+        epilepsy_checkbox_value = form.epilepsyCheckbox.data
+        skin_checkbox_value = form.skinCheckbox.data
+        hiv_checkbox_value = form.hivCheckbox.data
+        pulmonary_checkbox_value = form.pulmonaryCheckbox.data
+        new_specifications = form.specifications.data.capitalize()
+        new_others = form.others.data.capitalize()
+
+    # PAST HISTORY
+        new_past1 = form.past_c1.data.upper()
+        new_medication1 = form.medication1.data.upper()
+        new_dosage1 = form.dosage1.data.upper()
+        new_hdate1 = form.h_date1.data
+        if not new_hdate1:
+            new_hdate1 = None
+        new_past2 = form.past_c2.data.upper()
+        new_medication2 = form.medication2.data.upper()
+        new_dosage2 = form.dosage2.data.upper()
+        new_hdate2 = form.h_date2.data
+        if not new_hdate2:
+            new_hdate2 = None
+        new_past3 = form.past_c3.data.upper()
+        new_medication3 = form.medication3.data.upper()
+        new_dosage3 = form.dosage3.data.upper()
+        new_hdate3 = form.h_date3.data
+        if not new_hdate3:
+            new_hdate3 = None
+
+    # SOCIAL HISTORY 
+        habit = form.habitually.data
+        yDrunk = form.yearsDrunk.data
+        fDrink = form.frequencyDrink.data.upper()
+        qDrink = form.quitDrinking.data
+        frequent = form.frequently.data
+        ySmoked = form.yearsSmoked.data
+        fSmoke = form.frequencySmoke.data.upper()
+        qSmoke = form.quitSmoking.data
+        often = form.often.data
+        eType = form.exerciseType.data.upper()
+        fExercise = form.frequencyExercise.data.upper()
+        dActivity = form.durationActivity.data.upper()
+        sActive = form.sexActive.data
+        sPartner = form.sexPartner.data
+        nSPartner = form.numSexPartner.data
+        contraceptions = form.contraception.data.upper()
+        use = form.useDrugs.data
+        sDrugs = form.specifyDrugs.data.upper()
+        fDrugs = form.frequencyDrugs.data.upper()
+        diet = form.diet.data.capitalize()
+
+    # SURGICAL HISTORY  
+        sDate1 = form.surgeryDate1.data
+        sProcedure1 = form.surgeryProcedure1.data.upper()
+        shospital1 = form.hospital1.data.upper()
+        sDate2 = form.surgeryDate2.data
+        sProcedure2 = form.surgeryProcedure2.data.upper()
+        shospital2 = form.hospital2.data.upper()
+        sDate3 = form.surgeryDate3.data
+        sProcedure3 = form.surgeryProcedure3.data.upper()
+        shospital3 = form.hospital3.data.upper()
+
+    # MEDICATIONS
+        meds = form.medications.data.capitalize()
+
+    # ALLERGIES
+        allergy = form.allergies.data.capitalize()
+
+    # VITAL SIGNS
+        blood_p = request.form.get('blood_p').upper()
+        pulse_r = request.form.get('pulse_r').upper()
+        temp = request.form.get('temp').upper()
+        respiratory_r = request.form.get('respiratory_r').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
+        examinations = request.form.get('examinations').capitalize()
+
+    # CERTIFICATE
+        subject = request.form.get('subject').upper()
+        reason = request.form.get('reasons').capitalize()
+        recommendations = request.form.get('recommendations').capitalize()
+        certificate = request.form.get('certificate_textarea').capitalize()
+
+        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+                                             civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
+                                             occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
+                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
+        
+        updated_info = doctor.get_patient_info(new_patient_id)
+
+        existing_history = doctor.get_patient_history(new_patient_id)
+
+        if existing_history:
+            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+                                                dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
+                                                hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
+                                                hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
+                                                heartCheckbox = heart_checkbox_value, birthCheckbox = birth_checkbox_value, boneCheckbox = bone_checkbox_value,
+                                                alzheimerCheckbox = alzheimer_checkbox_value, cancerCheckbox = cancer_checkbox_value, thyroidCheckbox = thyroid_checkbox_value,
+                                                tuberculosisCheckbox = tuberculosis_checkbox_value, eyeCheckbox = eye_checkbox_value, clotsCheckbox = clots_checkbox_value,
+                                                mentalCheckbox = mental_checkbox_value, kidneyCheckbox = kidney_checkbox_value,anemiaCheckbox = anemia_checkbox_value,
+                                                muscleCheckbox = muscle_checkbox_value, highbloodCheckbox = highblood_checkbox_value, epilepsyCheckbox = epilepsy_checkbox_value,
+                                                skinCheckbox = skin_checkbox_value, hivCheckbox = hiv_checkbox_value, pulmonaryCheckbox = pulmonary_checkbox_value,
+                                                specifications = new_specifications, others = new_others, past_c1 = new_past1, medication1 = new_medication1,
+                                                dosage1 = new_dosage1, h_date1 = new_hdate1, past_c2 = new_past2, medication2 = new_medication2, dosage2 = new_dosage2,
+                                                h_date2 = new_hdate2, past_c3 = new_past3, medication3 = new_medication3, dosage3 = new_dosage3, h_date3 = new_hdate3,
+                                                habitually = habit, yearsDrunk = yDrunk, frequencyDrink = fDrink, quitDrinking = qDrink, frequently = frequent,
+                                                yearsSmoked = ySmoked, frequencySmoke = fSmoke, quitSmoking = qSmoke, often = often, exerciseType = eType,
+                                                frequencyExercise = fExercise, durationActivity = dActivity, sexActive = sActive, sexPartner = sPartner,
+                                                numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
+                                                surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
+                                                surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
+
+            updated_history = doctor.get_patient_history(new_patient_id)
+        
+        
+        clearance_result = doctor.add_medical_certificate(patientID=new_patient_id, subjectCertificate=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+                                               pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
+                                               painSection=painSection, physicalExam=examinations, certificate=certificate)
+
+        if info_update and history_update and clearance_result:
+            return render_template("doctor/patient/add_certificate.html", patient_id=new_patient_id, success=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info)
+        else:
+            return render_template("doctor/patient/add_certificate.html", patient_id=new_patient_id, error=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info)
+
+    return render_template("doctor/patient/add_certificate.html", profile=patient_info, patient=patient_history, PatientForm=form, patient_id=patient_id, info=doctor_info)
+
 
 # ADD MEDICAL ASSESSMENT FOR EACH APPOINTMENT
 @doctor_bp.route('/add_assessment/', methods=['GET', 'POST'])
@@ -351,10 +714,10 @@ def add_assessment():
 
     # COMPLAINT
         sub = form.subject.data.upper()
-        complain = form.complaints.data.upper()
+        complain = form.complaints.data.capitalize()
 
     # HISTORY OF PRESENT ILLNESS
-        p_illness = form.h_illness.data.upper()
+        p_illness = form.h_illness.data.capitalize()
 
     # VITAL SIGNS
         blood_p = form.blood_p.data.upper()
@@ -369,35 +732,35 @@ def add_assessment():
 
     # PHYSICAL EXAMINATIONS
         normal_head = form.normal_head.data.upper()
-        abnormalities_head = form.abnormalities_head.data.upper()
+        abnormalities_head = form.abnormalities_head.data.capitalize()
         normal_ears = form.normal_ears.data.upper()
-        abnormalities_ears = form.abnormalities_ears.data.upper()
+        abnormalities_ears = form.abnormalities_ears.data.capitalize()
         normal_eyes = form.normal_eyes.data.upper()
-        abnormalities_eyes = form.abnormalities_eyes.data.upper()
+        abnormalities_eyes = form.abnormalities_eyes.data.capitalize()
         normal_nose = form.normal_nose.data.upper()
-        abnormalities_nose = form.abnormalities_nose.data.upper()
+        abnormalities_nose = form.abnormalities_nose.data.capitalize()
         normal_skin = form.normal_skin.data.upper()
-        abnormalities_skin = form.abnormalities_skin.data.upper()
+        abnormalities_skin = form.abnormalities_skin.data.capitalize()
         normal_back = form.normal_back.data.upper()
-        abnormalities_back = form.abnormalities_back.data.upper()
+        abnormalities_back = form.abnormalities_back.data.capitalize()
         normal_neck = form.normal_neck.data.upper()
-        abnormalities_neck = form.abnormalities_neck.data.upper()
+        abnormalities_neck = form.abnormalities_neck.data.capitalize()
         normal_throat = form.normal_throat.data.upper()
-        abnormalities_throat = form.abnormalities_throat.data.upper()
+        abnormalities_throat = form.abnormalities_throat.data.capitalize()
         normal_chest = form.normal_chest.data.upper()
-        abnormalities_chest = form.abnormalities_chest.data.upper()
+        abnormalities_chest = form.abnormalities_chest.data.capitalize()
         normal_abdomen = form.normal_abdomen.data.upper()
-        abnormalities_abdomen = form.abnormalities_abdomen.data.upper()
+        abnormalities_abdomen = form.abnormalities_abdomen.data.capitalize()
         normal_upper = form.normal_upper.data.upper()
-        abnormalities_upper = form.abnormalities_upper.data.upper()
+        abnormalities_upper = form.abnormalities_upper.data.capitalize()
         normal_lower = form.normal_lower.data.upper()
-        abnormalities_lower = form.abnormalities_lower.data.upper()
+        abnormalities_lower = form.abnormalities_lower.data.capitalize()
         normal_tract = form.normal_tract.data.upper()
-        abnormalities_tract = form.abnormalities_tract.data.upper()
-        comments = form.comments.data.upper()
+        abnormalities_tract = form.abnormalities_tract.data.capitalize()
+        comments = form.comments.data.capitalize()
 
     # DIAGNOSIS
-        diagnosis = form.diagnosis.data.upper()
+        diagnosis = form.diagnosis.data.capitalize()
 
         result = doctor.add_medical_assessment(patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
@@ -438,10 +801,12 @@ def consultation():
     patient_id = request.args.get('patient_id')
     patient_info = doctor.get_patient_info(patient_id)
     consultation_data = doctor.get_consultations(patient_id)
+    clearance_data = doctor.get_clearances(patient_id)
+    certificate_data = doctor.get_certificates(patient_id)
     user_id = current_user.id
     doctor_info = doctor.get_doctor_info(user_id)
 
-    return render_template("doctor/patient/consultation.html", consultations=consultation_data,patient=patient_info, patient_id=patient_id, info=doctor_info)
+    return render_template("doctor/patient/consultation.html", certificates=certificate_data, consultations=consultation_data, clearances=clearance_data, patient=patient_info, patient_id=patient_id, info=doctor_info)
 
 # LAB RESULTS TABLE
 @doctor_bp.route('/lab_results/')
@@ -534,10 +899,10 @@ def assessment():
         
     # COMPLAINT
         sub = form.subject.data.upper()
-        complain = form.complaints.data.upper()
+        complain = form.complaints.data.capitalize()
 
     # HISTORY OF PRESENT ILLNESS
-        p_illness = form.h_illness.data.upper()
+        p_illness = form.h_illness.data.capitalize()
 
     # VITAL SIGNS
         blood_p = form.blood_p.data.upper()
@@ -552,35 +917,35 @@ def assessment():
 
     # PHYSICAL EXAMINATIONS
         normal_head = form.normal_head.data.upper()
-        abnormalities_head = form.abnormalities_head.data.upper()
+        abnormalities_head = form.abnormalities_head.data.capitalize()
         normal_ears = form.normal_ears.data.upper()
-        abnormalities_ears = form.abnormalities_ears.data.upper()
+        abnormalities_ears = form.abnormalities_ears.data.capitalize()
         normal_eyes = form.normal_eyes.data.upper()
-        abnormalities_eyes = form.abnormalities_eyes.data.upper()
+        abnormalities_eyes = form.abnormalities_eyes.data.capitalize()
         normal_nose = form.normal_nose.data.upper()
-        abnormalities_nose = form.abnormalities_nose.data.upper()
+        abnormalities_nose = form.abnormalities_nose.data.capitalize()
         normal_skin = form.normal_skin.data.upper()
-        abnormalities_skin = form.abnormalities_skin.data.upper()
+        abnormalities_skin = form.abnormalities_skin.data.capitalize()
         normal_back = form.normal_back.data.upper()
-        abnormalities_back = form.abnormalities_back.data.upper()
+        abnormalities_back = form.abnormalities_back.data.capitalize()
         normal_neck = form.normal_neck.data.upper()
-        abnormalities_neck = form.abnormalities_neck.data.upper()
+        abnormalities_neck = form.abnormalities_neck.data.capitalize()
         normal_throat = form.normal_throat.data.upper()
-        abnormalities_throat = form.abnormalities_throat.data.upper()
+        abnormalities_throat = form.abnormalities_throat.data.capitalize()
         normal_chest = form.normal_chest.data.upper()
-        abnormalities_chest = form.abnormalities_chest.data.upper()
+        abnormalities_chest = form.abnormalities_chest.data.capitalize()
         normal_abdomen = form.normal_abdomen.data.upper()
-        abnormalities_abdomen = form.abnormalities_abdomen.data.upper()
+        abnormalities_abdomen = form.abnormalities_abdomen.data.capitalize()
         normal_upper = form.normal_upper.data.upper()
-        abnormalities_upper = form.abnormalities_upper.data.upper()
+        abnormalities_upper = form.abnormalities_upper.data.capitalize()
         normal_lower = form.normal_lower.data.upper()
-        abnormalities_lower = form.abnormalities_lower.data.upper()
+        abnormalities_lower = form.abnormalities_lower.data.capitalize()
         normal_tract = form.normal_tract.data.upper()
-        abnormalities_tract = form.abnormalities_tract.data.upper()
-        comments = form.comments.data.upper()
+        abnormalities_tract = form.abnormalities_tract.data.capitalize()
+        comments = form.comments.data.capitalize()
 
     # DIAGNOSIS
-        diagnosis = form.diagnosis.data.upper()
+        diagnosis = form.diagnosis.data.capitalize()
 
         update = doctor.update_medical_assessment(assessmentID=new_assessment_id, patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
@@ -601,7 +966,413 @@ def assessment():
             return render_template("doctor/patient/assessment.html", new_patient_id=new_patient_id, error=True, patient=new_consultation, PatientForm=form, info=doctor_info)
 
     return render_template("doctor/patient/assessment.html", patient_id=patient_id, PatientForm=form, info=doctor_info)
-  
+
+
+# UPDATE MEDICAL CLEARANCE
+@doctor_bp.route('/clearance/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
+def clearance():
+    form = PatientForm()
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        clearance_id = request.args.get('clearance_id')
+        patient_info = doctor.get_patient_info(patient_id)
+        patient_history = doctor.get_patient_history (patient_id)
+        patient_clearance = doctor.get_clearance_info(clearance_id, patient_id)
+        doctor_info = doctor.get_doctor_info(current_id)
+        
+        return render_template('doctor/patient/clearance.html', patient=patient_history, clearance=patient_clearance, profile=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info)
+    
+    elif request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(current_id)
+        new_clearance_id = request.form.get('clearance_id')
+        new_patient_id = request.form.get('patient_id')
+        
+        new_patient_id = request.form.get('patient_id')
+        new_first_name = form.first_name.data.upper()
+        new_middle_name = form.middle_name.data.upper()
+        new_last_name = form.last_name.data.upper()
+        new_age = form.age.data
+        new_civil_status = form.civil_status.data 
+        new_gender = form.gender.data
+        new_bloodType = form.bloodType.data  
+        new_religion = form.religion.data
+        new_birth_place = form.birth_place.data.upper()  
+        new_birth_date = form.birth_date.data
+        new_occupation = form.occupation.data.upper() 
+        new_email = form.email.data
+        new_contact_num = form.contact_num.data
+        new_p_address = form.p_address.data.upper()
+        new_nationality = form.nationality.data
+        new_e_person = form.e_person.data.upper()
+        new_relationship = form.relationship.data  
+        new_e_number = form.e_number.data
+
+        new_history_id = request.form.get('history_id')
+
+    # IMMUNIZATION
+        bcg_checkbox_value = form.bcgCheckbox.data
+        dtp_checkbox_value = form.dtpCheckbox.data
+        pcv_checkbox_value = form.pcvCheckbox.data
+        influenza_checkbox_value = form.influenzaCheckbox.data
+        hepa_checkbox_value = form.hepaCheckbox.data
+        ipv_checkbox_value = form.ipvCheckbox.data
+        mmr_checkbox_value = form.mmrCheckbox.data
+        hpv_checkbox_value = form.hpvCheckbox.data
+
+    # FAMILY HISTORY
+        asthma_checkbox_value = form.asthmaCheckbox.data
+        diabetes_checkbox_value = form.diabetesCheckbox.data
+        heart_checkbox_value = form.heartCheckbox.data
+        birth_checkbox_value = form.birthCheckbox.data
+        bone_checkbox_value = form.boneCheckbox.data
+        alzheimer_checkbox_value = form.alzheimerCheckbox.data
+        cancer_checkbox_value = form.cancerCheckbox.data
+        thyroid_checkbox_value = form.thyroidCheckbox.data
+        tuberculosis_checkbox_value = form.tuberculosisCheckbox.data
+        eye_checkbox_value = form.eyeCheckbox.data
+        clots_checkbox_value = form.clotsCheckbox.data
+        mental_checkbox_value = form.mentalCheckbox.data
+        kidney_checkbox_value = form.kidneyCheckbox.data
+        anemia_checkbox_value = form.anemiaCheckbox.data
+        muscle_checkbox_value = form.muscleCheckbox.data
+        highblood_checkbox_value = form.highbloodCheckbox.data
+        epilepsy_checkbox_value = form.epilepsyCheckbox.data
+        skin_checkbox_value = form.skinCheckbox.data
+        hiv_checkbox_value = form.hivCheckbox.data
+        pulmonary_checkbox_value = form.pulmonaryCheckbox.data
+        new_specifications = form.specifications.data.capitalize()
+        new_others = form.others.data.capitalize()
+
+    # PAST HISTORY
+        new_past1 = form.past_c1.data.upper()
+        new_medication1 = form.medication1.data.upper()
+        new_dosage1 = form.dosage1.data.upper()
+        new_hdate1 = form.h_date1.data
+        if not new_hdate1:
+            new_hdate1 = None 
+        new_past2 = form.past_c2.data.upper()
+        new_medication2 = form.medication2.data.upper()
+        new_dosage2 = form.dosage2.data.upper()
+        new_hdate2 = form.h_date2.data
+        if not new_hdate2:
+            new_hdate2 = None
+        new_past3 = form.past_c3.data.upper()
+        new_medication3 = form.medication3.data.upper()
+        new_dosage3 = form.dosage3.data.upper()
+        new_hdate3 = form.h_date3.data
+        if not new_hdate3:
+            new_hdate3 = None
+
+    # SOCIAL HISTORY 
+        habit = form.habitually.data
+        yDrunk = form.yearsDrunk.data
+        fDrink = form.frequencyDrink.data.upper()
+        qDrink = form.quitDrinking.data
+        frequent = form.frequently.data
+        ySmoked = form.yearsSmoked.data
+        fSmoke = form.frequencySmoke.data.upper()
+        qSmoke = form.quitSmoking.data
+        often = form.often.data
+        eType = form.exerciseType.data.upper()
+        fExercise = form.frequencyExercise.data.upper()
+        dActivity = form.durationActivity.data.upper()
+        sActive = form.sexActive.data
+        sPartner = form.sexPartner.data
+        nSPartner = form.numSexPartner.data
+        contraceptions = form.contraception.data.upper()
+        use = form.useDrugs.data
+        sDrugs = form.specifyDrugs.data.upper()
+        fDrugs = form.frequencyDrugs.data.upper()
+        diet = form.diet.data.capitalize()
+
+    # SURGICAL HISTORY  
+        sDate1 = form.surgeryDate1.data
+        sProcedure1 = form.surgeryProcedure1.data.upper()
+        shospital1 = form.hospital1.data.upper()
+        sDate2 = form.surgeryDate2.data
+        sProcedure2 = form.surgeryProcedure2.data.upper()
+        shospital2 = form.hospital2.data.upper()
+        sDate3 = form.surgeryDate3.data
+        sProcedure3 = form.surgeryProcedure3.data.upper()
+        shospital3 = form.hospital3.data.upper()
+
+    # MEDICATIONS
+        meds = form.medications.data.capitalize()
+
+    # ALLERGIES
+        allergy = form.allergies.data.capitalize()
+
+    # VITAL SIGNS
+        blood_p = request.form.get('blood_p').upper()
+        pulse_r = request.form.get('pulse_r').upper()
+        temp = request.form.get('temp').upper()
+        respiratory_r = request.form.get('respiratory_r').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
+        examinations = request.form.get('examinations').capitalize()
+    
+    # CLEARANCE
+        subject = request.form.get('subject').upper()
+        reason = request.form.get('reasons').capitalize()
+        recommendations = request.form.get('recommendations').capitalize()
+        clearance = request.form.get('clearance_textarea').capitalize()
+
+        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+                                             civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
+                                             occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
+                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
+        
+        updated_info = doctor.get_patient_info(new_patient_id)
+
+        existing_history = doctor.get_patient_history(new_patient_id)
+
+        if existing_history:
+            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+                                                dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
+                                                hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
+                                                hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
+                                                heartCheckbox = heart_checkbox_value, birthCheckbox = birth_checkbox_value, boneCheckbox = bone_checkbox_value,
+                                                alzheimerCheckbox = alzheimer_checkbox_value, cancerCheckbox = cancer_checkbox_value, thyroidCheckbox = thyroid_checkbox_value,
+                                                tuberculosisCheckbox = tuberculosis_checkbox_value, eyeCheckbox = eye_checkbox_value, clotsCheckbox = clots_checkbox_value,
+                                                mentalCheckbox = mental_checkbox_value, kidneyCheckbox = kidney_checkbox_value,anemiaCheckbox = anemia_checkbox_value,
+                                                muscleCheckbox = muscle_checkbox_value, highbloodCheckbox = highblood_checkbox_value, epilepsyCheckbox = epilepsy_checkbox_value,
+                                                skinCheckbox = skin_checkbox_value, hivCheckbox = hiv_checkbox_value, pulmonaryCheckbox = pulmonary_checkbox_value,
+                                                specifications = new_specifications, others = new_others, past_c1 = new_past1, medication1 = new_medication1,
+                                                dosage1 = new_dosage1, h_date1 = new_hdate1, past_c2 = new_past2, medication2 = new_medication2, dosage2 = new_dosage2,
+                                                h_date2 = new_hdate2, past_c3 = new_past3, medication3 = new_medication3, dosage3 = new_dosage3, h_date3 = new_hdate3,
+                                                habitually = habit, yearsDrunk = yDrunk, frequencyDrink = fDrink, quitDrinking = qDrink, frequently = frequent,
+                                                yearsSmoked = ySmoked, frequencySmoke = fSmoke, quitSmoking = qSmoke, often = often, exerciseType = eType,
+                                                frequencyExercise = fExercise, durationActivity = dActivity, sexActive = sActive, sexPartner = sPartner,
+                                                numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
+                                                surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
+                                                surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
+
+            updated_history = doctor.get_patient_history(new_patient_id)
+
+            clearance_update = doctor.update_medical_clearance(clearanceID=new_clearance_id, patientID=new_patient_id, subjectClearance=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+                                               pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
+                                               painSection=painSection, physicalExam=examinations, clearance=clearance)
+            updated_clearance = doctor.get_clearance_info(new_clearance_id, new_patient_id)
+
+            if info_update and history_update and clearance_update:
+                    return render_template("doctor/patient/clearance.html", patient_id=new_patient_id, success=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info, clearance=updated_clearance)
+            else:
+                return render_template("doctor/patient/clearance.html", patient_id=new_patient_id, error=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info, clearance=updated_clearance)
+
+        return render_template("doctor/patient/clearance.html", profile=patient_info, patient=patient_history, PatientForm=form, patient_id=patient_id, info=doctor_info)
+
+# UPDATE MEDICAL CERTIFICATE
+@doctor_bp.route('/certificate/', methods=['GET', 'POST'])
+@login_required
+@role_required('doctor')
+def certificate():
+    form = PatientForm()
+    current_id = current_user.id 
+    doctor_info = doctor.get_doctor_info(current_id)
+
+    if request.method == 'GET':
+        patient_id = request.args.get('patient_id')
+        certificate_id = request.args.get('certificate_id')
+        patient_info = doctor.get_patient_info(patient_id)
+        patient_history = doctor.get_patient_history (patient_id)
+        patient_certificate = doctor.get_certificate_info(certificate_id, patient_id)
+        doctor_info = doctor.get_doctor_info(current_id)
+        
+        return render_template('doctor/patient/certificate.html', patient=patient_history, certificate=patient_certificate, profile=patient_info, PatientForm=form, patient_id=patient_id, info=doctor_info)
+    
+    elif request.method == 'POST':
+        doctor_info = doctor.get_doctor_info(current_id)
+        new_certificate_id = request.form.get('certificate_id')
+        new_patient_id = request.form.get('patient_id')
+        
+        new_patient_id = request.form.get('patient_id')
+        new_first_name = form.first_name.data.upper()
+        new_middle_name = form.middle_name.data.upper()
+        new_last_name = form.last_name.data.upper()
+        new_age = form.age.data
+        new_civil_status = form.civil_status.data 
+        new_gender = form.gender.data
+        new_bloodType = form.bloodType.data  
+        new_religion = form.religion.data
+        new_birth_place = form.birth_place.data.upper()  
+        new_birth_date = form.birth_date.data
+        new_occupation = form.occupation.data.upper() 
+        new_email = form.email.data
+        new_contact_num = form.contact_num.data
+        new_p_address = form.p_address.data.upper()
+        new_nationality = form.nationality.data
+        new_e_person = form.e_person.data.upper()
+        new_relationship = form.relationship.data  
+        new_e_number = form.e_number.data
+
+        new_history_id = request.form.get('history_id')
+
+    # IMMUNIZATION
+        bcg_checkbox_value = form.bcgCheckbox.data
+        dtp_checkbox_value = form.dtpCheckbox.data
+        pcv_checkbox_value = form.pcvCheckbox.data
+        influenza_checkbox_value = form.influenzaCheckbox.data
+        hepa_checkbox_value = form.hepaCheckbox.data
+        ipv_checkbox_value = form.ipvCheckbox.data
+        mmr_checkbox_value = form.mmrCheckbox.data
+        hpv_checkbox_value = form.hpvCheckbox.data
+
+    # FAMILY HISTORY
+        asthma_checkbox_value = form.asthmaCheckbox.data
+        diabetes_checkbox_value = form.diabetesCheckbox.data
+        heart_checkbox_value = form.heartCheckbox.data
+        birth_checkbox_value = form.birthCheckbox.data
+        bone_checkbox_value = form.boneCheckbox.data
+        alzheimer_checkbox_value = form.alzheimerCheckbox.data
+        cancer_checkbox_value = form.cancerCheckbox.data
+        thyroid_checkbox_value = form.thyroidCheckbox.data
+        tuberculosis_checkbox_value = form.tuberculosisCheckbox.data
+        eye_checkbox_value = form.eyeCheckbox.data
+        clots_checkbox_value = form.clotsCheckbox.data
+        mental_checkbox_value = form.mentalCheckbox.data
+        kidney_checkbox_value = form.kidneyCheckbox.data
+        anemia_checkbox_value = form.anemiaCheckbox.data
+        muscle_checkbox_value = form.muscleCheckbox.data
+        highblood_checkbox_value = form.highbloodCheckbox.data
+        epilepsy_checkbox_value = form.epilepsyCheckbox.data
+        skin_checkbox_value = form.skinCheckbox.data
+        hiv_checkbox_value = form.hivCheckbox.data
+        pulmonary_checkbox_value = form.pulmonaryCheckbox.data
+        new_specifications = form.specifications.data.capitalize()
+        new_others = form.others.data.capitalize()
+
+    # PAST HISTORY
+        new_past1 = form.past_c1.data.upper()
+        new_medication1 = form.medication1.data.upper()
+        new_dosage1 = form.dosage1.data.upper()
+        new_hdate1 = form.h_date1.data
+        if not new_hdate1:
+            new_hdate1 = None 
+        new_past2 = form.past_c2.data.upper()
+        new_medication2 = form.medication2.data.upper()
+        new_dosage2 = form.dosage2.data.upper()
+        new_hdate2 = form.h_date2.data
+        if not new_hdate2:
+            new_hdate2 = None
+        new_past3 = form.past_c3.data.upper()
+        new_medication3 = form.medication3.data.upper()
+        new_dosage3 = form.dosage3.data.upper()
+        new_hdate3 = form.h_date3.data
+        if not new_hdate3:
+            new_hdate3 = None
+
+    # SOCIAL HISTORY 
+        habit = form.habitually.data
+        yDrunk = form.yearsDrunk.data
+        fDrink = form.frequencyDrink.data.upper()
+        qDrink = form.quitDrinking.data
+        frequent = form.frequently.data
+        ySmoked = form.yearsSmoked.data
+        fSmoke = form.frequencySmoke.data.upper()
+        qSmoke = form.quitSmoking.data
+        often = form.often.data
+        eType = form.exerciseType.data.upper()
+        fExercise = form.frequencyExercise.data.upper()
+        dActivity = form.durationActivity.data.upper()
+        sActive = form.sexActive.data
+        sPartner = form.sexPartner.data
+        nSPartner = form.numSexPartner.data
+        contraceptions = form.contraception.data.upper()
+        use = form.useDrugs.data
+        sDrugs = form.specifyDrugs.data.upper()
+        fDrugs = form.frequencyDrugs.data.upper()
+        diet = form.diet.data.capitalize()
+
+    # SURGICAL HISTORY  
+        sDate1 = form.surgeryDate1.data
+        sProcedure1 = form.surgeryProcedure1.data.upper()
+        shospital1 = form.hospital1.data.upper()
+        sDate2 = form.surgeryDate2.data
+        sProcedure2 = form.surgeryProcedure2.data.upper()
+        shospital2 = form.hospital2.data.upper()
+        sDate3 = form.surgeryDate3.data
+        sProcedure3 = form.surgeryProcedure3.data.upper()
+        shospital3 = form.hospital3.data.upper()
+
+    # MEDICATIONS
+        meds = form.medications.data.capitalize()
+
+    # ALLERGIES
+        allergy = form.allergies.data.capitalize()
+
+    # VITAL SIGNS
+        blood_p = request.form.get('blood_p').upper()
+        pulse_r = request.form.get('pulse_r').upper()
+        temp = request.form.get('temp').upper()
+        respiratory_r = request.form.get('respiratory_r').upper()
+        height = request.form.get('height')
+        weight = request.form.get('weight')
+        body_mass = request.form.get('body_mass')
+        oxygenSaturation = request.form.get('oxygenSaturation').upper()
+        painSection = request.form.get('painSection').upper()
+        examinations = request.form.get('examinations').capitalize()
+    
+    # CERTIFICATE
+        subject = request.form.get('subject').upper()
+        reason = request.form.get('reasons').capitalize()
+        recommendations = request.form.get('recommendations').capitalize()
+        certificate = request.form.get('certificate_textarea').capitalize()
+
+        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+                                             civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
+                                             occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
+                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
+        
+        updated_info = doctor.get_patient_info(new_patient_id)
+
+        existing_history = doctor.get_patient_history(new_patient_id)
+
+        if existing_history:
+            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+                                                dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
+                                                hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
+                                                hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
+                                                heartCheckbox = heart_checkbox_value, birthCheckbox = birth_checkbox_value, boneCheckbox = bone_checkbox_value,
+                                                alzheimerCheckbox = alzheimer_checkbox_value, cancerCheckbox = cancer_checkbox_value, thyroidCheckbox = thyroid_checkbox_value,
+                                                tuberculosisCheckbox = tuberculosis_checkbox_value, eyeCheckbox = eye_checkbox_value, clotsCheckbox = clots_checkbox_value,
+                                                mentalCheckbox = mental_checkbox_value, kidneyCheckbox = kidney_checkbox_value,anemiaCheckbox = anemia_checkbox_value,
+                                                muscleCheckbox = muscle_checkbox_value, highbloodCheckbox = highblood_checkbox_value, epilepsyCheckbox = epilepsy_checkbox_value,
+                                                skinCheckbox = skin_checkbox_value, hivCheckbox = hiv_checkbox_value, pulmonaryCheckbox = pulmonary_checkbox_value,
+                                                specifications = new_specifications, others = new_others, past_c1 = new_past1, medication1 = new_medication1,
+                                                dosage1 = new_dosage1, h_date1 = new_hdate1, past_c2 = new_past2, medication2 = new_medication2, dosage2 = new_dosage2,
+                                                h_date2 = new_hdate2, past_c3 = new_past3, medication3 = new_medication3, dosage3 = new_dosage3, h_date3 = new_hdate3,
+                                                habitually = habit, yearsDrunk = yDrunk, frequencyDrink = fDrink, quitDrinking = qDrink, frequently = frequent,
+                                                yearsSmoked = ySmoked, frequencySmoke = fSmoke, quitSmoking = qSmoke, often = often, exerciseType = eType,
+                                                frequencyExercise = fExercise, durationActivity = dActivity, sexActive = sActive, sexPartner = sPartner,
+                                                numSexPartner = nSPartner, contraception = contraceptions, useDrugs = use, specifyDrugs = sDrugs, frequencyDrugs = fDrugs,
+                                                surgeryDate1 = sDate1, surgeryProcedure1 = sProcedure1, hospital1 = shospital1, surgeryDate2 = sDate2,
+                                                surgeryProcedure2 = sProcedure2, hospital2 = shospital2, surgeryDate3 = sDate3, surgeryProcedure3 = sProcedure3,
+                                                hospital3 = shospital3, medications = meds, allergies = allergy, diet=diet)  
+
+            updated_history = doctor.get_patient_history(new_patient_id)
+
+            certificate_update = doctor.update_medical_certificate(certificateID=new_certificate_id, patientID=new_patient_id, subjectCertificate=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+                                               pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
+                                               painSection=painSection, physicalExam=examinations, certificate=certificate)
+            updated_certificate = doctor.get_certificate_info(new_certificate_id, new_patient_id)
+
+            if info_update and history_update and certificate_update:
+                    return render_template("doctor/patient/certificate.html", patient_id=new_patient_id, success=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info, certificate=updated_certificate)
+            else:
+                return render_template("doctor/patient/certificate.html", patient_id=new_patient_id, error=True, profile=updated_info, patient=updated_history, PatientForm=form, info=doctor_info, certificate=updated_certificate)
+
+        return render_template("doctor/patient/certificate.html", profile=patient_info, patient=patient_history, PatientForm=form, patient_id=patient_id, info=doctor_info)
+
+
 # LABORATORY RESULT
 @doctor_bp.route('/results/')
 @login_required
