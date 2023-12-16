@@ -40,6 +40,34 @@ function successModal(booking_details) {
     }
 }
 
+// Function to validate a field and add highlighting for empty fields
+function validateField(inputField) {
+    const isValid = inputField.checkValidity();
+
+    if (inputField.value.trim() === '') {
+        // Add highlighting for empty fields
+        inputField.classList.add('highlight-empty');
+    } else {
+        // Remove highlighting for non-empty fields
+        inputField.classList.remove('highlight-empty');
+    }
+
+    return isValid;
+}
+
+// Function to display "Looks good!" message for non-empty valid fields
+function displayValidationMessage(inputField, isValid) {
+    const validationMessageContainer = inputField.nextElementSibling;
+
+    if (inputField.value.trim() !== '' && isValid) {
+        validationMessageContainer.textContent = 'Looks good!';
+        validationMessageContainer.classList.add('looks-good-message');
+    } else {
+        validationMessageContainer.textContent = '';
+        validationMessageContainer.classList.remove('looks-good-message');
+    }
+}
+
 // Add the function to handle the form submission
 async function handleFormSubmission() {
     // Check individual field validity
@@ -65,14 +93,28 @@ async function handleFormSubmission() {
     console.log('Status: ' + isAddressValid);
     const isDoctorNameValid = doctorNameInput.checkValidity();
     console.log('Status: ' + isDoctorNameValid); 
-    const isDoctorID = doctorIDInput.checkValidity();
-    console.log('Status: ' + isDoctorID);
+    const isDoctorIDValid = doctorIDInput.checkValidity();
+    console.log('Status: ' + isDoctorIDValid);
+
+     // Display "Looks good!" message for non-empty valid fields
+     displayValidationMessage(dateAppointmentInput, isDateAppointmentValid);
+     displayValidationMessage(timeAppointmentInput, isTimeAppointmentValid);
+     displayValidationMessage(firstNameInput, isFirstNameValid);
+     displayValidationMessage(middleNameInput, isMiddleNameValid);
+     displayValidationMessage(lastNameInput, isLastNameValid);
+     displayValidationMessage(sexInput, isSexValid);
+     displayValidationMessage(dateOfBirthInput, isDateOfBirthValid);
+     displayValidationMessage(contactNumberInput, isContactNumberValid);
+     displayValidationMessage(emailInput, isEmailValid);
+     displayValidationMessage(addressInput, isAddressValid);
+     displayValidationMessage(doctorNameInput, isDoctorNameValid);
+     displayValidationMessage(doctorIDInput, isDoctorIDValid);
 
     // Define data variable to store the response data
     let data;
 
     // Check if all individual fields are valid
-    if (isDateAppointmentValid && isTimeAppointmentValid && isFirstNameValid && isMiddleNameValid && isLastNameValid && isSexValid && isDateOfBirthValid && isContactNumberValid && isEmailValid && isAddressValid && isDoctorID && isDoctorNameValid) {
+    if (isDateAppointmentValid && isTimeAppointmentValid && isFirstNameValid && isMiddleNameValid && isLastNameValid && isSexValid && isDateOfBirthValid && isContactNumberValid && isEmailValid && isAddressValid && isDoctorIDValid && isDoctorNameValid) {
         // Create a FormData object to handle the form data
         const formData = new FormData();
 

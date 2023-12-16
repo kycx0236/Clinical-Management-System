@@ -109,7 +109,6 @@ def schedule():
         }
         for schedule in data
     ]
-    print('Data in Schedules:', data_dict)
     return render_template("receptionist/schedule/schedule.html", headings=headings_schedeule, data=data_dict, page=page, total_pages=total_pages, form=form, info=receptionist_info)
 
 @receptionist_bp.route('/patient/')
@@ -613,6 +612,7 @@ def add_schedule():
     form = ScheduleForm(request.form)
     user_id = current_user.id
     print("User ID:", user_id)
+    form.receptionistID.data = user_id
     doctor_id = None
     doctor_names = Appointment.get_all_doctor_names()
 
@@ -627,26 +627,29 @@ def add_schedule():
             doctor_id = doctor_id_dict['id']
             print('In the add route, doctor ID is:', doctor_id)
             
+            print('Data added: ', form.date_appointment.data, form.time_appointment.data, form.slots.data, form.doctorID.data, form.doctorName.data, form.receptionistID.data)
             if form.validate_on_submit():
                 
                 new_appointment = Schedule(
                         date_appointment=form.date_appointment.data,
                         time_appointment=form.time_appointment.data,
+                        slots=form.slots.data,
                         doctorID=form.doctorID.data,
-                        doctorName=form.doctorName,
-                        receptionistID=user_id,
+                        doctorName=form.doctorName.data,  # Use the 'data' attribute to access form data
+                        receptionistID=form.receptionistID.data
                     )
-                new_appointment.add_schedule()
-                flash('New appointment added!', 'success')
-                    
-                return jsonify(success=True, message="Appointment added successfully")
+                added_successfully = new_appointment.add_schedule()
+
+                if added_successfully:
+                    return jsonify(success=True, message="Appointment added successfully")
+                else:
+                    return jsonify(success=False, message="Appointment already exists"), 400
             else:
                 print(form.errors)  # Add this line to print form errors for debugging
-                flash('Failed to add appointment. Please check the form for errors.', 'danger')
+                return jsonify(success=False, message="Form validation failed"), 400
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             flash('An error occurred while processing the appointment.', 'danger')
-            # Set time_schedules to an empty list in case of an error
             return jsonify(success=False, message="Internal Server Error"), 500
 
     return render_template("receptionist/schedule/schedule_add.html", form=form, doctor_names=doctor_names, doctor_id=doctor_id)
@@ -700,3 +703,100 @@ def view_schedule():
         return jsonify(success=False, message="Appointment not found.")
     
     return render_template("receptionist/schedule/schedule_view.html", row=schedule_data_dict)
+
+
+@receptionist_bp.route('/delete-schedule/', methods=['POST'])
+@login_required
+@role_required('receptionist')
+def delete_schedule():
+    try:
+        schedule_id = request.form.get('reference_number')
+        doctor_name = request.form.get('doctor_name')
+        print('Doctor Name: ', doctor_name)
+
+        if Appointment.delete(schedule_id):
+            return jsonify(success=True, message="Successfully deleted")
+        else:
+            return jsonify(success=False, message="Failed to delete appointment")
+    except Exception as e:
+        # Log the error for debugging purposes
+        receptionist_bp.logger.error("An error occurred: %s" % str(e))
+        return jsonify(success=False, message="Internal Server Error"), 500
+    
+
+@receptionist_bp.route('/get-schedule-data/', methods=['GET'])
+@login_required
+@role_required('receptionist')
+def get_schedule_data():
+    try:
+        scheduleID = request.args.get('scheduleID')
+
+        # Ensure the reference number is provided
+        if not scheduleID:
+            return jsonify(success=False, message="Reference number is required.")
+
+        # Fetch appointment data using the provided reference number
+        schedule_data = Schedule.get_schedule_by_schedule_id(scheduleID)
+
+        if schedule_data:
+            # Fetch time options based on the appointment's date
+            scheduled_date = schedule_data.get('date_appointment')  # Adjust accordingly
+            time_options = Schedule.get_schedule_by_schedule_id(scheduled_date)
+
+            return jsonify(success=True, scheduleData=schedule_data, timeOptions=time_options)
+        else:
+            return jsonify(success=False, message="Appointment not found.")
+
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify(success=False, message="An error occurred.")
+
+@receptionist_bp.route('/update-schedule/', methods=["GET", "POST"])
+@login_required
+@role_required('receptionist')
+def update_schedule():
+    scheduleID = request.form.get('scheduleID')
+    doctor_name = request.form.get('doctor_name')
+    print('Doctor name in reschedule_version_two: ', doctor_name)
+    form = EditAppointmentForm()
+    schedule_data = Schedule.get_schedule_by_schedule_id(scheduleID)
+
+    if schedule_data:
+        appointment_data_dict = {
+            "reference_number": schedule_data['reference_number'],
+            "date_appointment": schedule_data['date_appointment'],
+            "time_appointment": schedule_data['time_appointment'],
+            "status_": schedule_data['status_'],
+            "last_name": schedule_data['last_name'],
+            "email": schedule_data['email'],
+            "doctorName": schedule_data['doctorName']
+        }
+        time_data = Appointment.get_all_available_schedules(schedule_data['date_appointment'])
+    else:
+        return jsonify(success=False, message="Appointment not found.")
+
+    if request.method == "POST" and form.validate():
+        new_date_appointment = form.date_appointment.data
+        new_time_appointment = form.time_appointment.data
+        new_status_ = form.status_.data
+        new_last_name = form.last_name.data
+        new_email = form.email.data
+
+        old_date_appointment = schedule_data['date_appointment']
+        old_time_appointment = schedule_data['time_appointment']
+        print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
+        print('New Appointment Details: ', new_date_appointment, new_time_appointment)
+        if Appointment.update_second_version(
+            schedule_data, new_date_appointment, new_time_appointment, new_status_,
+            new_last_name, new_email):
+            # Update the slots for the old and new times
+            Appointment.update_time_slots(old_date_appointment, new_date_appointment, old_time_appointment, new_time_appointment, doctor_name)
+
+            return jsonify(success=True, message="Appointment updated successfully")
+        else:
+            return jsonify(success=False, message="Failed to update appointment.")
+    else:
+        print ("Failed to update appointment")
+        print("Form validation failed:", form.errors)
+    return render_template("receptionist/schedule/schedule.html", form=form, data=appointment_data_dict, time_data=time_data)
+    

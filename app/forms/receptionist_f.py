@@ -62,24 +62,8 @@ class PatientForm(FlaskForm):
     
 class ScheduleForm(FlaskForm):
     date_appointment = DateField('date_appointment', format='%Y-%m-%d', validators=[validators.InputRequired()])
-    time_appointment = TimeField('time_appointment', validators=[validators.InputRequired()])
+    time_appointment = StringField('time_appointment', [validators.Length(min=1, max=50)])
     slots = IntegerField('slots', [validators.DataRequired()])
     doctorID = IntegerField('doctorID', [validators.DataRequired()])
     doctorName = StringField('doctorName', [validators.DataRequired()])
     receptionistID = IntegerField('doctorID', [validators.DataRequired()])
-
-    def __init__(self, *args, **kwargs):
-        super(ScheduleForm, self).__init__(*args, **kwargs)
-        self.time_appointment.choices = self.generate_time_options()
-
-    @staticmethod
-    def generate_time_options():
-        start_time = datetime.strptime('08:00', '%H:%M')
-        end_time = datetime.strptime('17:00', '%H:%M')
-        time_options = []
-
-        while start_time <= end_time:
-            time_options.append((start_time.strftime('%H:%M'), start_time.strftime('%I:%M %p')))
-            start_time += timedelta(minutes=30)
-
-        return time_options

@@ -96,14 +96,14 @@ class Appointment:
         self.contact_number = contact_number
         self.email = email
         self.address = address
-
+        
     def add(self):
         try:
             cursor = mysql.connection.cursor()
             sql = "INSERT INTO appointment (reference_number, receptionistID, doctorID, doctorName, date_appointment, time_appointment, status_, first_name, middle_name, last_name, sex, birth_date, contact_number, email, address) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
             mysql.connection.commit()
-            print("SQL Query:", sql)
+            self.send_add_message(self.email, self.reference_number, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name)
             print("Parameters:", (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
             return True
         except Exception as e:
@@ -112,6 +112,27 @@ class Appointment:
             print("Parameters:", (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
             return False
 
+    @classmethod
+    def send_add_message(cls, email, reference_number, date_appointment, time_appointment, status_, first_name, middle_name, last_name):
+        print("Sending email to:", email)
+        message = Message(
+            subject='Appointment Confirmation',
+            recipients=[email],
+            sender=('Receptionist', 'cms_receptionist@gmail.com')
+        )
+
+        message.html = (
+            f"Dear {first_name} {middle_name} {last_name},<br>"
+            f"You have an appointment! Here are your details:<br>"
+            f"Reference Number: {reference_number}<br>"
+            f"Date: {date_appointment}<br>"
+            f"Time: {time_appointment}<br>"
+            f"Status: {status_}<br>"
+            "<p>Thank you for choosing DocCare!</p>"
+        )
+        mail.send(message)  
+        print("Email sent successfully.")
+        
     @classmethod
     def all(cls, receptionistID):
         try:
@@ -165,7 +186,7 @@ class Appointment:
             # Check if date, time, or status has changed
             if (new_date_appointment or new_time_appointment or new_status_):
                 # Send message if any of the conditions are true
-                cls.send_message(
+                cls.send_update_message(
                     new_email,
                     reference_number,
                     new_date_appointment,
@@ -182,10 +203,8 @@ class Appointment:
             print(f"Error updating appointment: {e}")
             return False
 
-
-    # Add print statements for debugging
     @staticmethod
-    def send_message(email, reference_number, date_appointment, time_appointment, status_, last_name):
+    def send_update_message(email, reference_number, date_appointment, time_appointment, status_, last_name):
         print("Sending email to:", email)
         message = Message(
             subject='Appointment Information',
@@ -200,7 +219,7 @@ class Appointment:
             f"Date: {date_appointment}<br>"
             f"Time: {time_appointment}<br>"
             f"Status: {status_}<br>"
-            "<p>Additional message or instructions can be added here.</p>"
+            "<p>Please take note of your schedule.</p>"
         )
         mail.send(message)
         print("Email sent successfully.")
@@ -357,7 +376,6 @@ class Appointment:
             print(f"Error updating slots: {e}")
             return False
 
-
     
     @classmethod
     def update_time_slots(cls, date, new_date, old_time, new_time, doctor_name):
@@ -410,13 +428,53 @@ class Appointment:
             cursor = mysql.connection.cursor()
             sql = "UPDATE appointment SET status_ = %s WHERE reference_number = %s"
             cursor.execute(sql, (new_status, reference_number))
+            
             mysql.connection.commit()
+             # Fetch the existing appointment details
+            existing_appointment = cls.get_appointment_by_reference_version_two(reference_number)
+            print('Existing appointment details:', existing_appointment)
+            email = existing_appointment['email']
+            date = existing_appointment['date_appointment']
+            time = existing_appointment['time_appointment']
+            status = existing_appointment['status_']
+            last_name = existing_appointment['last_name']
+                # Send message if any of the conditions are true
+            cls.send_cancel_message(
+                    email,
+                    reference_number,
+                    date,
+                    time,
+                    status,
+                    last_name
+                )
+            
+            print("Time Appointment:", time)
             print("Appointment updated to cancelled!")
             return True
         except Exception as e:
-            print(f"Error deleting appointment: {e}")
+            print(f"Error cancelling appointment: {e}")
             return False
+    
+    @staticmethod
+    def send_cancel_message(email, reference_number, date_appointment, time_appointment, status_, last_name):
+        print("Sending email to:", email)
+        message = Message(
+            subject='Appointment Cancellation',
+            recipients=[email],
+            sender=('Receptionist', 'cms_receptionist@gmail.com')
+        )
         
+        message.html = (
+            f"Dear {last_name},<br>"
+            f"Your appointment has been cancelled. Here are your details:<br>"
+            f"Reference Number: {reference_number}<br>"
+            f"Date: {date_appointment}<br>"
+            f"Time: {time_appointment}<br>"
+            f"Status: {status_}<br>"
+            "<p>Please call if you have concerns with your appointment.</p>"
+        )
+        mail.send(message)
+        print("Email sent successfully.")    
     @classmethod
     def get_all_doctor_names(cls):
         try:
@@ -461,13 +519,14 @@ class Schedule():
             if existing_schedule:
                 return False
             
-            sql = "INSERT INTO schedule(date_appointment, time_appointment, slots, doctorID, doctorName,  receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO schedule(date_appointment, time_appointment, slots, doctorID, doctorName, receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.date_appointment, self.time_appointment, self.slots, self.doctorID, self.doctorName, self.receptionistID))
             mysql.connection.commit()
 
             return True
         except Exception as e:
             print(f"Error adding a schedule: {e}")
+            print('Data from the user: ', self.date_appointment, self.time_appointment, self.slots, self.doctorID, self.doctorName, self.receptionistID)
             return False
     
     @classmethod
@@ -530,18 +589,17 @@ class Schedule():
     def search_schedule(cls, query, receptionistID):
         try:
             with mysql.connection.cursor(dictionary=True) as cursor:
-                sql = """
+                columns = ["scheduleID", "date_appointment", "time_appointment", "slots", "doctorName"]
+                conditions = " OR ".join(f"LOWER({column}) = %s" for column in columns)
+
+                sql = f"""
                     SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
                     FROM schedule
-                    WHERE (LOWER(schedule.scheduleID) = %s
-                        OR LOWER(schedule.date_appointment) = %s
-                        OR LOWER(schedule.time_appointment) = %s
-                        OR LOWER(schedule.slots) = %s
-                        OR LOWER(schedule.doctorName) = %s)
+                    WHERE ({conditions})
                         AND schedule.receptionistID = %s
                     ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                 """
-                cursor.execute(sql, (query.lower(), query.lower(), query.lower(), query.lower(), query.lower(), receptionistID))
+                cursor.execute(sql, tuple([query.lower()] * len(columns)) + (receptionistID,))
 
                 result = cursor.fetchall()
                 return result
@@ -549,29 +607,31 @@ class Schedule():
             print(f"Error: {e}")
             return []
 
+
     @classmethod
     def filter_schedule(cls, filter_by, query, receptionistID):
         try:
             with mysql.connection.cursor(dictionary=True) as cursor:
-                columns = ["all", "scheduleID", "date_appointment", "time_appointment", "slots", "doctorName"]
-                if filter_by not in columns:
-                    raise ValueError("Invalid filter column")
-                
-                elif filter_by == "all":
-                    sql = """
+                columns = ["scheduleID", "date_appointment", "time_appointment", "slots", "doctorName"]
+                conditions = " OR ".join(f"LOWER({column}) = %s" for column in columns)
+
+                if filter_by == "all":
+                    sql = f"""
                         SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
                         FROM schedule
                         WHERE schedule.receptionistID = %s
                         ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                     """
+                    cursor.execute(sql, (receptionistID,))
                 elif filter_by == "scheduleID":
-                    sql = """
+                    sql = f"""
                         SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
                         FROM appointment
                         WHERE LOWER(schedule.scheduleID) = %s
                             AND schedule.receptionistID = %s
                         ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                     """
+                    cursor.execute(sql, (query.lower(), receptionistID))
                 else:
                     sql = f"""
                         SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName
@@ -580,12 +640,20 @@ class Schedule():
                             AND schedule.receptionistID = %s
                         ORDER BY date_appointment DESC, TIME(STR_TO_DATE(time_appointment, '%h:%i %p')) DESC
                     """
-                cursor.execute(sql, (query.lower(), receptionistID))
+                    cursor.execute(sql, (query.lower(), receptionistID))
+
                 result = cursor.fetchall()
                 return result
         except Exception as e:
             print(f"Error: {e}")
             return []
-        
     
-    
+    @classmethod
+    def get_schedule_by_schedule_id(cls, schedule_id):
+        print("Reference Number:", schedule_id)
+        cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
+        cursor.execute("SELECT schedule.scheduleID, schedule.date_appointment, schedule.time_appointment, schedule.slots, schedule.doctorName FROM schedule WHERE scheduleID = %s", (schedule_id,))
+        schedule_data = cursor.fetchone()
+        print("Schedule Data:", schedule_data)
+        cursor.close()
+        return schedule_data

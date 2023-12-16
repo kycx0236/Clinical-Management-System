@@ -48,18 +48,27 @@ ENGINE=InnoDB
 ;
 
 
-CREATE TABLE IF NOT EXISTS `schedule` (
-    `scheduleID` INT NOT NULL AUTO_INCREMENT,
-    `date_appointment` DATE,
-    `time_appointment`  VARCHAR(30) NOT NULL,
-    `slots` INT NOT NULL,
-    `doctorID` INT(10) NOT NULL,
-    `doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',	
-    UNIQUE INDEX `schedule_id_UNIQUE` (`scheduleID`) USING BTREE,
-    PRIMARY KEY (`scheduleID`) USING BTREE,
-    INDEX `doctorID` (`doctorID`) USING BTREE,
-    CONSTRAINT `fk_schedule_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
-) COLLATE='utf8mb4_0900_ai_ci' ENGINE=InnoDB;
+CREATE TABLE `schedule` (
+	`scheduleID` INT(10) NOT NULL AUTO_INCREMENT,
+	`date_appointment` DATE NULL DEFAULT NULL,
+	`time_appointment` VARCHAR(30) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`slots` INT(10) NOT NULL,
+	`doctorID` INT(10) NOT NULL,
+	`doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`receptionistID` INT(10) NOT NULL,
+	`date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	`date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (`scheduleID`) USING BTREE,
+	UNIQUE INDEX `schedule_id_UNIQUE` (`scheduleID`) USING BTREE,
+	INDEX `doctorID` (`doctorID`) USING BTREE,
+	INDEX `fk_schedule_receptionist` (`receptionistID`) USING BTREE,
+	CONSTRAINT `fk_schedule_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `fk_schedule_receptionist` FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
 
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (

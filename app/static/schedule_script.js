@@ -10,44 +10,41 @@ const editModal = document.getElementById('editModal');
 // searchInput.addEventListener('input', searchTable);
 tableHeadings.forEach((head, i) => head.addEventListener('click', () => handleSortClick(i)));
 
-function searchAppointments(event) {
-  // Prevent the default form submission behavior
-  event.preventDefault();
+function performSearch() {
+    var searchTerm = $("#search-input").val();
+    var filterBy = $("#filter-select").val();
 
-  var searchTerm = $("#search-input").val();
-  var filterBy = $("#filter-select").val();
+    // Get the CSRF token from the meta tag
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-  // Get the CSRF token from the meta tag
-  var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-  $.ajax({
-      type: 'POST',
-      url: '/receptionist/search-schedules/',
-      contentType: 'application/json;charset=UTF-8',
-      data: JSON.stringify({
-          searchTerm: searchTerm,
-          filterBy: filterBy
-      }),
-      headers: {
-          "X-CSRFToken": csrfToken  // Include the CSRF token in the headers
-      },
-      success: function (data) {
-          // Check if the data array is empty
-          if (data && data.data && data.data.length > 0) {
-              // Update your table with the new data
-              showAlert('Data has been found.');
-              updateTable(data);
-
-          } else {
-              showAlert('No data has been found.');
-          }
-      },
-      error: function (error) {
-          console.error('Error:', error.responseText);
-          showAlert('An error occurred while searching for data.');
-      }
-  });
+    $.ajax({
+        type: 'POST',
+        url: '/receptionist/search-schedules/',
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify({
+            searchTerm: searchTerm,
+            filterBy: filterBy
+        }),
+        headers: {
+            "X-CSRFToken": csrfToken
+        },
+        success: function (data) {
+            // Check if the data array is empty
+            if (data && data.data && data.data.length > 0) {
+                // Update your table with the new data
+                showAlert('Data has been found.');
+                updateTable(data);
+            } else {
+                showAlert('No data has been found.');
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error.responseText);
+            showAlert('An error occurred while searching for data.');
+        }
+    });
 }
+
 
 function showAlert(message) {
   // You can customize this alert to use a modal or any other UI element
@@ -55,105 +52,93 @@ function showAlert(message) {
 }
 
 function updateTable(response) {
-  // Check if the response is successful
-  if (response.success) {
-    var data = response.data;
-
-    var tbody = document.querySelector('.doccare-table-appointment-content tbody');
-    tbody.innerHTML = ''; // Clear existing rows
-
-    data.forEach(function (row) {
-      // Create a new row
-      var newRow = document.createElement('tr');
-
-      // Create cells and content for each column
-      var referenceNumberCell = document.createElement('td');
-      referenceNumberCell.className = 'doccare-reference-number';
-      referenceNumberCell.textContent = row.reference_number;
-
-      var dateAppointmentCell = document.createElement('td');
-      dateAppointmentCell.textContent = new Date(row.date_appointment).toLocaleDateString('en-US', { timeZone: 'Asia/Manila' });
-
-      var timeAppointmentCell = document.createElement('td');
-      timeAppointmentCell.textContent = row.time_appointment;
-
-      var lastNameCell = document.createElement('td');
-      lastNameCell.textContent = row.last_name;
-
-      var statusCell = document.createElement('td');
-      var statusDiv = document.createElement('div');
-      statusDiv.className = 'status-cell';
-      var statusParagraph = document.createElement('p');
-      statusParagraph.className = 'status';
-      var strongStatus = document.createElement('strong');
-      strongStatus.textContent = row.status_;
-      statusParagraph.appendChild(strongStatus);
-      statusDiv.appendChild(statusParagraph);
-      statusCell.appendChild(statusDiv);
-
-      var doctorNameCell = document.createElement('td');
-      doctorNameCell.textContent = row.doctorName;
-
-      var actionCell = document.createElement('td');
-      actionCell.className = 'table__cell';
-
-      // Add your action buttons/icons here
-      var viewButton = document.createElement('a');
-      viewButton.href = '/doctor/view-appointment/?reference_number=' + row[0];
-      viewButton.className = 'doccare-view-appointment-icon';
-      viewButton.innerHTML = '<span class="material-symbols-outlined">info</span>';
-
-      var editButton = document.createElement('button');
-      editButton.type = 'button';
-      editButton.className = 'edit-appointment-button';
-      editButton.setAttribute('data-id', row.reference_number);
-      editButton.setAttribute('data-date', row.date_appointment);
-      editButton.setAttribute('data-time', row.time_appointment);
-      editButton.setAttribute('data-status', row.status_);
-      editButton.setAttribute('data-lastname', row.last_name);
-      editButton.setAttribute('data-email', row.email);
-      editButton.setAttribute('data-doctorName', row.doctorName);
-      editButton.onclick = function () { openEditModal(row.reference_number, row.doctorName); };
-      editButton.innerHTML = '<span class="material-symbols-outlined">edit</span>';
-
-      var cancelModalButton = document.createElement('button');
-      cancelModalButton.type = 'button';
-      cancelModalButton.className = 'cancel-appointment-button';
-      cancelModalButton.setAttribute('data-id', row.reference_number);
-      cancelModalButton.setAttribute('data-doctorName', row.doctorName);
-      cancelModalButton.onclick = function () { openCancelModal(row.reference_number, row.doctorName); };
-      cancelModalButton.innerHTML = '<span class="material-symbols-outlined cancel-icon">event_busy</span>';
-
-      var deleteModalButton = document.createElement('button');
-      deleteModalButton.type = 'button';
-      deleteModalButton.className = 'delete-appointment-button';
-      deleteModalButton.setAttribute('data-id', row.reference_number);
-      deleteModalButton.setAttribute('data-doctorName', row.doctorName);
-      deleteModalButton.onclick = function () { openDeleteModal(row.reference_number, row.doctorName); };
-      deleteModalButton.innerHTML = '<span class="material-symbols-outlined delete-icon">delete</span>';
-
-      // Append buttons to actionCell
-      actionCell.appendChild(viewButton);
-      actionCell.appendChild(editButton);
-      actionCell.appendChild(cancelModalButton);
-      actionCell.appendChild(deleteModalButton);
-
-      // Append cells to the row
-      newRow.appendChild(referenceNumberCell);
-      newRow.appendChild(dateAppointmentCell);
-      newRow.appendChild(timeAppointmentCell);
-      newRow.appendChild(lastNameCell);
-      newRow.appendChild(statusCell);
-      newRow.appendChild(doctorNameCell);
-      newRow.appendChild(actionCell);
-
-      // Append the row to the tbody
-      tbody.appendChild(newRow);
-    });
-  } else {
-    console.error('Error in response:', response);
+    // Check if the response is successful
+    if (response.success) {
+      var data = response.data;
+  
+      var tbody = document.querySelector('.doccare-table-appointment-content tbody');
+      tbody.innerHTML = ''; // Clear existing rows
+  
+      data.forEach(function (row) {
+        // Create a new row
+        var newRow = document.createElement('tr');
+  
+        // Create cells and content for each column
+        var referenceNumberCell = createTableCell('td', 'doccare-reference-number', row.scheduleID);
+  
+        var dateAppointmentCell = createTableCell('td', '', new Date(row.date_appointment).toLocaleDateString('en-US', { timeZone: 'Asia/Manila' }));
+  
+        var timeAppointmentCell = createTableCell('td', '', row.time_appointment);
+  
+        var slotsCell = createTableCell('td', '', row.slots);
+  
+        var doctorNameCell = createTableCell('td', '', row.doctorName);
+  
+        var actionCell = createTableCell('td', 'table__cell');
+  
+        // Add your action buttons/icons here
+        var viewButton = createActionButton('a', 'doccare-view-appointment-icon', '/doctor/view-appointment/?reference_number=' + row.scheduleID, 'info');
+  
+        var editButton = createActionButton('button', 'edit-appointment-button', '', 'edit');
+        editButton.setAttribute('data-id', row.scheduleID);
+        editButton.setAttribute('data-date', row.date_appointment);
+        editButton.setAttribute('data-time', row.time_appointment);
+        editButton.setAttribute('data-slots', row.slots);
+        editButton.setAttribute('data-doctorName', row.doctorName);
+        editButton.onclick = function () { openEditModal(row.scheduleID, row.doctorName); };
+  
+        var deleteButton = createActionButton('button', 'delete-appointment-button', '', 'delete');
+        deleteButton.setAttribute('data-id', row.scheduleID);
+        deleteButton.setAttribute('data-doctorName', row.doctorName);
+        deleteButton.onclick = function () { openDeleteModal(row.scheduleID, row.doctorName); };
+  
+        // Append buttons to actionCell
+        actionCell.appendChild(viewButton);
+        actionCell.appendChild(editButton);
+        actionCell.appendChild(deleteButton);
+  
+        // Append cells to the row
+        newRow.appendChild(referenceNumberCell);
+        newRow.appendChild(dateAppointmentCell);
+        newRow.appendChild(timeAppointmentCell);
+        newRow.appendChild(slotsCell);
+        newRow.appendChild(doctorNameCell);
+        newRow.appendChild(actionCell);
+  
+        // Append the row to the tbody
+        tbody.appendChild(newRow);
+      });
+    } else {
+      console.error('Error in response:', response);
+    }
   }
+  
+// Helper function to create a table cell with a specified class and content
+function createTableCell(elementType, className, content) {
+    var cell = document.createElement(elementType);
+    if (className) {
+      cell.className = className;
+    }
+    cell.textContent = content;
+    return cell;
 }
+  
+// Helper function to create an action button with a specified class, href (for anchor), and icon
+function createActionButton(elementType, className, href, icon) {
+    var button = document.createElement(elementType);
+    button.className = className;
+    if (elementType === 'a') {
+      button.href = href;
+    } else {
+      button.type = 'button';
+    }
+    var span = document.createElement('span');
+    span.className = 'material-symbols-outlined';
+    span.textContent = icon;
+    button.appendChild(span);
+    return button;
+}
+  
 
 // Sorting functionality
 function handleSortClick(column) {
@@ -175,30 +160,27 @@ function sortTable(column, sortAsc) {
   }).forEach(sortedRow => document.querySelector('tbody').appendChild(sortedRow));
 }
 
-// Select the delete icon by its class or another appropriate selector
 const deleteIcons = document.querySelectorAll('.delete-appointment-button');
 const editIcons = document.querySelectorAll('.edit-appointment-button');
 
-// Add a click event listener to each delete icon
 deleteIcons.forEach(deleteIcon => {
   deleteIcon.addEventListener('click', function(event) {
     // Prevent the default action of the delete icon
     event.preventDefault();
 
     // Get the appointment ID and doctorName from data attributes
-    const appointmentId = this.getAttribute('data-id');
+    const scheduleID = this.getAttribute('data-id');
     const doctorName = this.getAttribute('data-doctorName');
-    console.log(appointmentId, doctorName);
+    console.log(scheduleID, doctorName);
 
     // Open the delete modal with the correct data
-    openDeleteModal(appointmentId, doctorName);
+    openDeleteModal(scheduleID, doctorName);
   });
 });
 
-// Update the openDeleteModal function to accept doctorName as a parameter
-function openDeleteModal(appointmentId, doctorName) {
+function openDeleteModal(scheduleID, doctorName) {
   // Set data attributes for appointment ID and doctorName
-  deleteModal.setAttribute('data-appointment-id', appointmentId);
+  deleteModal.setAttribute('data-schedule-id', scheduleID);
   deleteModal.setAttribute('data-doctor-name', doctorName);
 
   // Display the delete modal
@@ -225,30 +207,30 @@ function toggleOverlayBackground(show) {
 
 function deleteAppointment() {
   // Assuming deleteModal is your modal element
-  const appointmentId = deleteModal.getAttribute('data-appointment-id');
+  const scheduleID = deleteModal.getAttribute('data-schedule-id');
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
   // Make an AJAX request to delete the appointment
   $.ajax({
       type: 'POST',
-      url: '/doctor/delete-appointment/',
-      data: { reference_number: appointmentId, doctor_name: deleteModal.getAttribute('data-doctor-name') },
+      url: '/receptionist/delete-schedule/',
+      data: { scheduleID: scheduleID, doctor_name: deleteModal.getAttribute('data-doctor-name') },
       headers: {
         "X-CSRFToken": csrfToken,// Include the CSRF token in the headers
       },
       success: function(response) {
           // Check the response from the server
           if (response.success) {
-              const appointmentRow = document.getElementById('row-' + appointmentId);
+              const appointmentRow = document.getElementById('row-' + scheduleID);
               if (appointmentRow) {
                   appointmentRow.remove();
               }
 
               // Display a success message or handle as needed
-              alert('Appointment deleted successfully!');
+              alert('Schedule deleted successfully!');
               window.location.reload(); // Refresh the page after a successful delete
           } else {
               // Display an error message or handle as needed
-              alert('Failed to delete appointment.');
+              alert('Failed to delete schedule.');
           }
           
           // Close the delete modal
@@ -278,19 +260,19 @@ editIcons.forEach(editIcon => {
     event.preventDefault();
 
     // Get the appointment ID from the data-id attribute
-    const appointmentId = this.getAttribute('data-id');
+    const scheduleID = this.getAttribute('data-id');
     const doctorName = this.getAttribute('data-doctorName');
-    console.log(appointmentId, doctorName);
+    console.log(scheduleID, doctorName);
 
     // Open the delete modal
-    openEditModal(appointmentId);
+    openEditModal(scheduleID);
   });
 });
 
 // Edit functionality
-function openEditModal(referenceNumber) {
+function openEditModal(scheduleID) {
   // Fetch appointment data asynchronously
-  fetchAppointmentData(referenceNumber);
+  fetchAppointmentData(scheduleID);
 }
 
 async function fetchAppointmentData(referenceNumber) {
@@ -300,7 +282,7 @@ async function fetchAppointmentData(referenceNumber) {
       const response = await $.ajax({
           url: '/doctor/get-appointment-data/',
           method: 'GET',
-          data: { referenceNumber: referenceNumber },
+          data: { scheduleID: scheduleID },
           headers: {
               'X-CSRFToken': csrfToken,  // Include CSRF token in headers
           },
@@ -308,7 +290,7 @@ async function fetchAppointmentData(referenceNumber) {
 
       if (response.success) {
           // Assuming the server responds with the appointment data and time options
-          const appointmentData = response.appointmentData;
+          const scheduleData = response.scheduleData;
           const timeOptions = response.timeOptions;
 
           if (appointmentData) {
@@ -486,6 +468,16 @@ const backModalButton = document.getElementById('back-modal-button');
 backModalButton.addEventListener('click', closeCancelModal);
 
 // Add event listener to the search form
-$("#search-form").submit(searchAppointments);
+$("#search-form").submit(function (event) {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
+    // Call the performSearch function
+    performSearch();
+});
+
 // Add event listener to the filter select
-$("#filter-select").change(searchAppointments);
+$("#filter-select").change(function () {
+    // Call the performSearch function
+    performSearch();
+});
