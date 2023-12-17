@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 ) AUTO_INCREMENT = 1000;
 
+<<<<<<< HEAD
 -- -- LOGS
 CREATE TABLE IF NOT EXISTS user_logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -67,6 +68,60 @@ BEGIN
 END;
 //
 DELIMITER ;
+=======
+CREATE TABLE IF NOT EXISTS `appointment` (
+	`reference_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`receptionistID` INT(10) NOT NULL,
+	`doctorID` INT(10) NOT NULL,
+	`doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`date_appointment` DATE NULL DEFAULT NULL,
+	`time_appointment` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`status_` VARCHAR(20) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`book_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`first_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`middle_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`last_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`sex` VARCHAR(10) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`birth_date` DATE NULL DEFAULT NULL,
+	`contact_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`email` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`address` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`reference_number`) USING BTREE,
+	UNIQUE INDEX `ref_number_uniq` (`reference_number`) USING BTREE,
+	INDEX `receptionistID` (`receptionistID`) USING BTREE,
+	INDEX `doctorID` (`doctorID`) USING BTREE,
+	CONSTRAINT `fk_appointment_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE,
+	CONSTRAINT `fk_appointment_receptionist` FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE TABLE `schedule` (
+	`scheduleID` INT(10) NOT NULL AUTO_INCREMENT,
+	`date_appointment` DATE NULL DEFAULT NULL,
+	`time_appointment` VARCHAR(30) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`slots` INT(10) NOT NULL,
+	`doctorID` INT(10) NOT NULL,
+	`doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`receptionistID` INT(10) NOT NULL,
+	`date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	`date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (`scheduleID`) USING BTREE,
+	UNIQUE INDEX `schedule_id_UNIQUE` (`scheduleID`) USING BTREE,
+	INDEX `doctorID` (`doctorID`) USING BTREE,
+	INDEX `fk_schedule_receptionist` (`receptionistID`) USING BTREE,
+	CONSTRAINT `fk_schedule_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `fk_schedule_receptionist` FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+>>>>>>> 70a8d1275257f9720c2ea0b9e0f250e6aba0026e
 
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
@@ -91,19 +146,19 @@ CREATE TABLE IF NOT EXISTS `patientinfo` (
   `p_contactNum` varchar(20) NOT NULL,
   `userID` int NOT NULL,
   PRIMARY KEY (`patientID`),
-  UNIQUE KEY `patient_id_UNIQUE` (`patientID`)
+  UNIQUE KEY `patient_id_UNIQUE` (`patientID`),
   FOREIGN KEY (`userID`) REFERENCES users(`id`) ON DELETE CASCADE
 );
 
 -- DOCTOR-PATIENT RELATION
-CREATE TABLE docpatient_relation (
-    relationID int NOT NULL AUTO_INCREMENT,
-    doctorID int NOT NULL,
-    patientID int NOT NULL,
+CREATE TABLE IF NOT EXISTS `docpatient_relation` (
+    `relationID` INT NOT NULL AUTO_INCREMENT,
+    `doctorID` INT NOT NULL,
+    `patientID` INT NOT NULL,
     PRIMARY KEY (`relationID`),
     UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
-    FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+    FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`patientID`) REFERENCES `patientinfo` (`patientID`) ON DELETE CASCADE
 );
 
 -- MEDICAL HISTORY
@@ -194,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `assessment` (
   `patientID` int NOT NULL,
   `subjectComp` varchar(255) NOT NULL,
   `complaints` TEXT,
-  `illnessHistory` varchar(255),
+  `illnessHistory` TEXT,
   `bloodPressure` varchar(100),
   `pulseRate` varchar(100),
   `temperature` varchar(100),
@@ -259,6 +314,54 @@ CREATE TABLE IF NOT EXISTS `prescriptiondetails` (
   PRIMARY KEY (`detail_id`),
   UNIQUE KEY `detail_id_UNIQUE` (`detail_id`),
   FOREIGN KEY (`prescriptionID`) REFERENCES prescription(`prescriptionID`) ON DELETE CASCADE
+);
+
+-- MEDICAL CLEARANCE
+CREATE TABLE IF NOT EXISTS `clearance` (
+  `clearanceID` int NOT NULL AUTO_INCREMENT,
+  `patientID` int NOT NULL,
+  `subjectClearance` varchar(255) NOT NULL,
+  `reason` TEXT,
+  `recommendations` TEXT,
+  `bloodPressure` varchar(100),
+  `pulseRate` varchar(100),
+  `temperature` varchar(100),
+  `respRate` varchar(100),
+  `height` varchar(50),
+  `weight_p` varchar(50),
+  `bmi` varchar(50),
+  `oxygenSaturation` varchar(100),
+  `painSection` varchar(100),
+  `physicalExam` TEXT,
+  `clearance` TEXT,
+  `consultationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`clearanceID`),
+  UNIQUE KEY `clearance_id_UNIQUE` (`clearanceID`),
+  FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+);
+
+-- MEDICAL CERTIFICATE
+CREATE TABLE IF NOT EXISTS `certificate` (
+  `certificateID` int NOT NULL AUTO_INCREMENT,
+  `patientID` int NOT NULL,
+  `subjectCertificate` varchar(255) NOT NULL,
+  `reason` TEXT,
+  `recommendations` TEXT,
+  `bloodPressure` varchar(100),
+  `pulseRate` varchar(100),
+  `temperature` varchar(100),
+  `respRate` varchar(100),
+  `height` varchar(50),
+  `weight_p` varchar(50),
+  `bmi` varchar(50),
+  `oxygenSaturation` varchar(100),
+  `painSection` varchar(100),
+  `physicalExam` TEXT,
+  `certificate` TEXT,
+  `consultationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`certificateID`),
+  UNIQUE KEY `certificate_id_UNIQUE` (`certificateID`),
+  FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
 );
 
 -- LABORATORY JOB ORDER

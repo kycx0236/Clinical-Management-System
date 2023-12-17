@@ -11,6 +11,12 @@
     height: 69%;
 }
 
+.grid_container.medtech {
+    grid-template-columns: auto;
+    padding: 0px;
+    height: 100vh;
+}
+
 .grid_item {
     padding: 15px;
     border: 1px solid var(--grayC);

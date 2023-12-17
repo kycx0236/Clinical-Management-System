@@ -1,9 +1,7 @@
 {% extends "base.html" %}
-{% block title %}DocCare | Calendar{% endblock title %}
+{% block title %}DocCare | Profile{% endblock title %}
 {% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_style.css') }}"> {% endblock %}
-
 {% block content %}
-
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
@@ -18,10 +16,12 @@
                     <p>Dashboard</p>
                 </li>
             </a>    
-            <li class="selected-icon-bg">
-                <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
-                <p>Calendar</p>
-            </li>
+            <a href="{{ url_for('receptionist.calendar') }}">
+                <li class="icon-bg">
+                    <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                    <p>Calendar</p>
+                </li>
+            </a>
             <a href="{{ url_for('receptionist.appointment') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
@@ -40,12 +40,10 @@
                     <p>Patient</p>
                 </li>
             </a>
-            <a href="{{ url_for('receptionist.profile') }}">
-                <li class="icon-bg">
-                    <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
-                    <p>Profile</p>
-                </li>
-            </a>
+            <li class="selected-icon-bg">
+                <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                <p>Profile</p>
+            </li>
         </ul>
         <div class="foot-nav">
             <div class="sidenav-user-bg">
@@ -63,5 +61,4 @@
             </ul>
         </div>
     </div>
-    
 {% endblock %}

@@ -475,6 +475,10 @@
             const bmi = document.querySelector('#bmi');
             bmi.style.left = '0px';
 
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');

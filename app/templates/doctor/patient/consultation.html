@@ -88,7 +88,7 @@
                 </li>
             </ul>
 
-            <div class="add-icon" id="addAssessmentIcon" onclick="displayModal()">
+            <div class="add-icon patient" id="addAssessmentIcon" onclick="displayModal()">
                 <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
             </div>
         </div>
@@ -96,49 +96,142 @@
         <center>
             <!-- MEDICAL ASSESSMENT -->
             <div class="patient-bg">
-                <div class="assessment-table">
-                    <table id="example" class="table table-striped" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>ASSESSMENT</th>
-                                <th>DATE</th>
-                                <th>ACTION</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for consultation in consultations %}
-                            <tr>
-                                <td>{{ consultation[2] }}</td>
-                                <td>{{ consultation[42] }}</td>
-                                <td>
-                                    <div class="action-icon-container">
-                                        <!-- ASSESSMENT -->
-                                        <form method="GET" action="/doctor/assessment/">
-                                            <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                            <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                            <div class="delete-icon">
-                                                <button type="submit" style="background: none; border: none;">
-                                                    <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Assessment">
-                                                </button>
-                                            </div>
-                                        </form> 
+                <div class="grid_container consultation">
+                    <div class="grid_item">
 
-                                        <!-- PRESCRIPTION -->
-                                        <form method="GET" action="/doctor/prescription/">
-                                            <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
-                                            <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
-                                            <div class="delete-icon">
-                                                <button type="submit" style="background: none; border: none;">
-                                                    <img src="{{ url_for('static', filename='images/Prescription.png') }}" title="Prescription">
-                                                </button>
-                                            </div>
-                                        </form> 
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                        <div id="toggleContent1">
+                            <div class="assessment-table">
+                                <table id="example" class="table table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>HEALTH COMPLAINT</th>
+                                            <th>DATE</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for consultation in consultations %}
+                                        <tr>
+                                            <td>{{ consultation[2] }}</td>
+                                            <td>{{ consultation[42] }}</td>
+                                            <td>
+                                                <div class="action-icon-container">
+                                                    <!-- ASSESSMENT -->
+                                                    <form method="GET" action="/doctor/assessment/">
+                                                        <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                                        <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                                        <div class="delete-icon">
+                                                            <button type="submit" style="background: none; border: none;">
+                                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Assessment">
+                                                            </button>
+                                                        </div>
+                                                    </form> 
+            
+                                                    <!-- PRESCRIPTION -->
+                                                    <form method="GET" action="/doctor/prescription/">
+                                                        <input id="assessment_id" name="assessment_id" value="{{ consultation[0] }}" hidden>
+                                                        <input id="patient_id" name="patient_id" value="{{ consultation[1] }}" hidden>
+                                                        <div class="delete-icon">
+                                                            <button type="submit" style="background: none; border: none;">
+                                                                <img src="{{ url_for('static', filename='images/Prescription.png') }}" title="Prescription">
+                                                            </button>
+                                                        </div>
+                                                    </form> 
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="toggleContent2" style="display: none;">
+                            <div class="assessment-table">
+                                <table id="example" class="table table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>CERTIFICATE</th>
+                                            <th>DATE</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for certificate in certificates %}
+                                        <tr>
+                                            <td>{{ certificate[2] }}</td>
+                                            <td>{{ certificate[16] }}</td>
+                                            <td>
+                                                <div class="action-icon-container">
+                                                    <!-- CERTIFICATE -->
+                                                    <form method="GET" action="/doctor/certificate/">
+                                                        <input id="certificate_id" name="certificate_id" value="{{ certificate[0] }}" hidden>
+                                                        <input id="patient_id" name="patient_id" value="{{ certificate[1] }}" hidden>
+                                                        <div class="delete-icon">
+                                                            <button type="submit" style="background: none; border: none;">
+                                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Certificate">
+                                                            </button>
+                                                        </div>
+                                                    </form> 
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="toggleContent3" style="display: none;">
+                            <div class="assessment-table">
+                                <table id="example" class="table table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>CLEARANCE</th>
+                                            <th>DATE</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for clearance in clearances %}
+                                        <tr>
+                                            <td>{{ clearance[2] }}</td>
+                                            <td>{{ clearance[16] }}</td>
+                                            <td>
+                                                <div class="action-icon-container">
+                                                    <!-- CLEARANCE -->
+                                                    <form method="GET" action="/doctor/clearance/">
+                                                        <input id="clearance_id" name="clearance_id" value="{{ clearance[0] }}" hidden>
+                                                        <input id="patient_id" name="patient_id" value="{{ clearance[1] }}" hidden>
+                                                        <div class="delete-icon">
+                                                            <button type="submit" style="background: none; border: none;">
+                                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Clearance">
+                                                            </button>
+                                                        </div>
+                                                    </form> 
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="grid_item">
+                        <div class="segmented-controls">
+                            <input type="radio" id="option1Toggle" name="segment" checked>
+                            <label for="option1Toggle">HEALTH COMPLAINT</label>
+                        
+                            <input type="radio" id="option2Toggle" name="segment">
+                            <label for="option2Toggle">MEDICAL CERTIFICATE</label>
+        
+                            <input type="radio" id="option3Toggle" name="segment">
+                            <label for="option3Toggle">MEDICAL CLEARANCE</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </center>
@@ -153,9 +246,9 @@
                     <h1 class="modal-title fs-5">Select Medical Consultation</h1>
                 </div>
                 <div class="modal-body">
+                    <button id="healthComplaint" class="btn-done option">Health Complaint</button>
                     <button id="medicalCertificate" class="btn-done option">Medical Certificate</button>
                     <button id="medicalClearance" class="btn-done option">Medical Clearance</button>
-                    <button id="healthComplaint" class="btn-done option">Health Complaint</button>
                 </div>
                 <div class="modal-footer">
                     <button id="cancelSelection" class="btn-done cancel">CANCEL</button>
@@ -170,6 +263,10 @@
             modal.style.display = "block";
         }
 
+        document.getElementById("healthComplaint").onclick = function() {
+            window.location.href = "{{ url_for('doctor.add_assessment', patient_id=patient[0]) }}";
+        };
+
         document.getElementById("medicalClearance").onclick = function() {
             window.location.href = "{{ url_for('doctor.add_clearance', patient_id=patient[0]) }}";
         };
@@ -178,14 +275,26 @@
             window.location.href = "{{ url_for('doctor.add_certificate', patient_id=patient[0]) }}";
         };
         
-        document.getElementById("healthComplaint").onclick = function() {
-            window.location.href = "{{ url_for('doctor.add_assessment', patient_id=patient[0]) }}";
-        };
-        
         document.getElementById("cancelSelection").onclick = function() {
             var modal = document.getElementById("consultationModal");
             modal.style.display = "none";
         };
+
+        // VIEW ASSESSMENT TABLES
+        const optionToggles = document.querySelectorAll('[id^="option"]');
+        const toggleContents = document.querySelectorAll('[id^="toggleContent"]');
+
+        optionToggles.forEach((toggle, index) => {
+            toggle.addEventListener('click', function() {
+                toggleContents.forEach((content, contentIndex) => {
+                    if (index === contentIndex) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            });
+        });
     </script>
     
 

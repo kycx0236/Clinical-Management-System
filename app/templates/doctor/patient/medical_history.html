@@ -427,7 +427,7 @@
                                         <span>NO. OF SEXUAL PARTNERS</span>
                                     </div>
                                     <div class="inputBox historyC">
-                                        <input type="text" red" name="contraception" value="{{ patient[59] }}" disabled>
+                                        <input type="text" red name="contraception" value="{{ patient[59] }}" disabled>
                                         <span>CONTRACEPTIONS</span>
                                     </div>
                                 </div>
@@ -625,6 +625,10 @@
 
             const submitButton = document.querySelector('#updateButton');
             submitButton.style.display = 'none';
+
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
 
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";

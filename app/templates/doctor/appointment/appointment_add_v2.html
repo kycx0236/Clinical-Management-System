@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% block title %}DocCare | Reschedule Appointment{% endblock title %}
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_add_v2_style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{% endblock link %}
+
+{% block content %}
+</body>
+    <div class="doccare-edit-container">
+        <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
+        <header>NEW APPOINTMENT</header>
+        <form class="needs-validation" id="appointment-form" method="POST" action="/doctor/add-appointment/" novalidate>
+            {{ form.csrf_token }}
+            <div class="doccare-form-first">
+                <div class="doccare-appoinment-details">
+                    <span class="title"> Appointment Details </span>
+
+                    <div class="fields">
+                        <!-- Doctor Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom11" class="form-label"> Doctor Name </label>
+                            <select class="form-select" id="validationCustom11" name="doctorName" required aria-describedby="validationCustom11Feedback">
+                                <option value="" selected>Select your Doctor</option>
+                                {% if doctor_names %}
+                                    {% for doctor in doctor_names %}
+                                        <option value="{{ doctor.last_name }}" data-doctor-id="{{ doctor.id }}">{{ doctor.last_name }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No doctor available</option>
+                                {% endif %}
+                            </select>
+                            <div id="validationCustom11Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select <strong>your Doctor</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Doctor ID -->
+                        <div class="input-fields">
+                            <label for="validationCustom12" class="form-label"> Doctor ID </label>
+                            <select class="form-select" id="validationCustom12" name="doctorID" required aria-describedby="validationCustom12Feedback">
+                                <option value="" selected>Select the Doctor's ID</option>
+                                {% if doctor_id %}
+                                    {% for doctor_id in doctor_id %}
+                                        <option value="{{ doctor_id.id }}">{{ doctor_id.id }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No doctor available</option>
+                                {% endif %}
+                            </select>
+                            <div id="validationCustom12Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>Doctor ID</strong>.
+                            </div>
+                        </div>
+
+                        <div class="input-fields">
+                            <label for="validationCustom13" class="form-label"> Receptionist ID </label>
+                            <select class="form-select" id="validationCustom13" name="receptionistID" required aria-describedby="validationCustom11Feedback">
+                                <option value="" selected>Select your Receptionist</option>
+                                {% if receptionist_ids %}
+                                    {% if receptionist_ids.id %}
+                                        <option value="{{ receptionist_ids.id }}" data-doctor-id="{{ receptionist_ids.id }}">{{ receptionist_ids.id }}</option>
+                                    {% else %}
+                                        <option value="" disabled>No receptionist available</option>
+                                    {% endif %}
+                                {% else %}
+                                    <option value="" disabled>No receptionist available</option>
+                                {% endif %}
+                            </select>                                                                         
+                            <div id="validationCustom11Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select <strong>your Receptionist</strong>.
+                            </div>
+                        </div>
+                        
+                        <!-- Date Appointment -->
+                        <div class="input-fields">
+                            <label for="validationCustom01" class="form-label"> Date Appointment </label>
+                            <input type="date" class="form-control" id="validationCustom01" name="date_appointment" required aria-describedby="validationCustom01Feedback">
+                            <div id="validationCustom01Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>date of appointment</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Time Appointment -->
+                        <div class="input-fields">
+                            <label for="validationCustom02" class="form-label"> Time Appointment </label>
+                            <select class="form-select" id="validationCustom02" name="time_appointment" required aria-describedby="validationCustom02Feedback">
+                                <option value="" selected>Select your desired time</option>
+                                {% if time_schedules %}
+                                    {% for time_schedule in time_schedules %}
+                                        <option value="{{ time_schedule[0] }}">{{ time_schedule[0] }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No available time schedules</option>
+                                {% endif %}
+                            </select>
+                            <div id="validationCustom02Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>time of appointment</strong>.
+                            </div>
+                        </div>
+
+                         <!-- First Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom03" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="validationCustom03" name="first_name" required aria-describedby="validationCustom03Feedback">
+                            <div id="validationCustom03Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>first name</strong>.
+                            </div>
+                        </div>
+
+                         <!-- Middle Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom04" class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" id="validationCustom04" name="middle_name" required aria-describedby="validationCustom04Feedback">
+                            <div id="validationCustom04Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>middle name</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom05" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="validationCustom05" name="last_name" required aria-describedby="validationCustom05Feedback">
+                            <div id="validationCustom05Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>last name. </strong>
+                            </div>
+                        </div>
+
+                        <!-- Sex -->
+                        <div class="input-fields">
+                            <label for="validationCustom06" class="form-label">Sex</label>
+                            <select class="form-select" id="validationCustom06" name="sex" required aria-describedby="validationCustom06Feedback">
+                                <option selected disabled value="">Choose...</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                            <div id="validationCustom06Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select your <strong>sex</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="input-fields">
+                            <label for="validationCustom07" class="form-label">Birth Date</label>
+                            <input type="date" class="form-control" id="validationCustom07" name="birth_date" required aria-describedby="validationCustom07Feedback">
+                            <div id="validationCustom07Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select your <strong>date of birth</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Contact Number -->
+                        <div class="input-fields">
+                            <label for="validationCustom08" class="form-label">Contact Number</label>
+                            <input type="text" class="form-control" id="validationCustom08" name="contact_number" required aria-describedby="validationCustom08Feedback">
+                            <div id="validationCustom08Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>contact number</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="input-fields">
+                            <label for="validationCustom09" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="validationCustom09" name="email" required aria-describedby="validationCustom09Feedback">
+                            <div id="validationCustom09Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong> email </strong>.
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="input-fields">
+                            <label for="validationCustom10" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="validationCustom10" name="address" required aria-describedby="validationCustom10Feedback">
+                            <div id="validationCustom10Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your complete <strong>address</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" class="doccare-success-button" id="doccare-submit-button">Submit</button>
+                    </div>
+                </div>
+
+                <div class="overlay-container">
+                    <div class="overlay"><label class="doccare-circle"></label></div>
+                    <div class="doccare-other-things">
+                        <label class="doccare-rectangle"></label>
+                    </div>
+                </div>
+    
+                <!-- Modal for Success Confirmation -->
+                <div id="doccare-success-modal" class="doccare-success-modal">
+                    <div class="doccare-success-modal-content">
+                        <h1>Well Done!</h1>
+                        <p>The appointment is confirmed! Below are the appointment details.</p>
+                        <div class="doccare-success-modal-content-2" id="doccare-success-modal-content-2">
+                            {% if booking_details %}
+                                <p class="patient-lastname" id="patient-lastname">Last Name: {{ booking_details.last_name }}</p>
+                                <p class="patient-appoinment" id="patient-appoinment">Appointment Schedule: {{ booking_details.date_appointment }} {{ booking_details.time_appointment }}</p>
+                                <p class="patient-reference" id="patient-reference">Booking Reference No.: {{ booking_details.reference_number }}</p>
+                            {% else %}
+                                <p class="text-muted">Booking details are being processed. Please wait...</p>
+                            {% endif %}
+                        </div>
+                        <div class="doccare-success-modal-buttons">
+                            <button class="doccare-done-modal-button">DONE</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        <form>
+    </div>
+</body>
+<!-- Include these script tags -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename="doctor_add_v2_script.js") }}"></script>
+<script>
+    // Update the doctorID dropdown based on the selected doctorName
+    $('#validationCustom11').on('change', function() {
+        var selectedDoctor = $(this).val();
+
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
+
+        // Make an AJAX request to fetch the doctor ID for the selected doctorName
+        $.ajax({
+            url: '/doctor/get-doctor-id/',
+            type: 'POST',
+            data: { doctorName: selectedDoctor, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Server Response for Doctor ID:', response);
+
+                if (response.success) {
+                    // Update the options of the Doctor ID dropdown
+                    var doctorIdDropdown = $('#validationCustom12');
+                    doctorIdDropdown.empty();
+
+                    if (response.doctor_id) {
+                        doctorIdDropdown.append('<option value="' + response.doctor_id.id + '">' + response.doctor_id.id + '</option>');
+                    } else {
+                        doctorIdDropdown.append('<option value="" disabled>No doctor available</option>');
+                    }
+
+                    // Optional: Trigger the change event on Doctor ID dropdown to update its validation state
+                    doctorIdDropdown.trigger('change');
+                } else {
+                    console.error('Error fetching Doctor ID:', response.message);
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching Doctor ID:', error);
+            }
+        });
+    });
+
+    // Update the time_appointment dropdown based on the selected date
+    $('#validationCustom01').on('change', function() {
+        var selectedDate = $(this).val();
+        var selectedDoctor = $('#validationCustom11').val(); // Get the selected doctorName
+
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
+
+        // Make an AJAX request to fetch time schedules for the selected date and doctor
+        $.ajax({
+            url: '/doctor/get-time-schedules',
+            type: 'POST',
+            data: { selected_date: selectedDate, selected_doctor: selectedDoctor, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Server Response:', response);
+
+                // Update the options of the time_appointment dropdown
+                var timeDropdown = $('#validationCustom02');
+                timeDropdown.empty();
+                timeDropdown.append('<option value="" selected>Select your desired time</option>');
+
+                // Add options based on the received time schedules
+                for (var i = 0; i < response.time_schedules.length; i++) {
+                    var timeSlot = response.time_schedules[i];
+                    console.log('Time Slot:', timeSlot); // Log each time slot
+
+                    // Check if the time slot has available slots
+                    if (timeSlot[1] > 0) {
+                        // Use the data attribute to store the slots information
+                        timeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    }
+                }
+            },            
+            error: function(error) {
+                console.error('Error fetching time schedules:', error);
+            }
+        });
+    });
+
+
+    // Example: Retrieve the selected option's slots information
+    $('#validationCustom02').on('change', function() {
+        var selectedOption = $(this).find(':selected');
+        var slots = selectedOption.data('slots');
+        console.log('Available Slots:', slots);
+    });
+
+</script>
+{% endblock %}
