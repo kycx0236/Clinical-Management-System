@@ -1788,7 +1788,7 @@ def add_appointment():
                         email=form.email.data,
                         address=form.address.data
                     )
-                    new_appointment.add()
+                    new_appointment.add(current_user.username)
                     flash('New appointment added!', 'success')
                     
                     # Fetch booking details after adding the appointment
@@ -2081,7 +2081,7 @@ def add_schedule():
                     receptionistID=form.receptionistID.data
                 )
 
-                added_successfully = new_appointment.add_schedule()
+                added_successfully = new_appointment.add_schedule(current_user.username)
 
                 if added_successfully:
                     return jsonify(success=True, message="Appointment added successfully")
@@ -2129,11 +2129,12 @@ def view_schedule():
 @role_required('doctor')
 def delete_schedule():
     try:
-        schedule_id = request.form.get('reference_number')
+        schedule_id = request.form.get('scheduleID')
+        print('schedule id: ', schedule_id)
         doctor_name = request.form.get('doctor_name')
         print('Doctor Name: ', doctor_name)
 
-        if Appointment.delete(schedule_id):
+        if Schedule.delete_schedules(current_user.username, schedule_id):
             return jsonify(success=True, message="Successfully deleted")
         else:
             return jsonify(success=False, message="Failed to delete appointment")
@@ -2206,7 +2207,7 @@ def update_schedule():
         print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
         print('New Appointment Details: ', new_date_appointment, new_time_appointment)
         if Schedule.update_schedule(
-            scheduleID, new_date_appointment, new_time_appointment, new__slots):
+            current_user.username, scheduleID, new_date_appointment, new_time_appointment, new__slots):
             return jsonify(success=True, message="Appointment updated successfully")
         else:
             return jsonify(success=False, message="Failed to update appointment.")
