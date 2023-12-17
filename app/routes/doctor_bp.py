@@ -1823,7 +1823,7 @@ def delete_appointment():
         deleted_appointment = Appointment.get_appointment_by_reference(reference_number)
         deleted_time = deleted_appointment['time_appointment']
 
-        if Appointment.delete(reference_number):
+        if Appointment.delete(current_user.username, reference_number):
             # Increment the slots for the deleted time
             Appointment.update_slots(deleted_appointment['date_appointment'], deleted_time, doctor_name, increment=True)
             
@@ -1921,7 +1921,7 @@ def reschedule_version_two():
         print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
         print('New Appointment Details: ', new_date_appointment, new_time_appointment)
         if Appointment.update_second_version(
-            reference_number, new_date_appointment, new_time_appointment, new_status_,
+            current_user.username, reference_number, new_date_appointment, new_time_appointment, new_status_,
             new_last_name, new_email):
             # Update the slots for the old and new times
             Appointment.update_time_slots(old_date_appointment, new_date_appointment, old_time_appointment, new_time_appointment, doctor_name)
