@@ -215,7 +215,7 @@ class doctor():
              
         sql_record = """
         INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
-        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'REQUEST', CONCAT('Lab Report of: ', %s))
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'REQUEST', CONCAT('Lab Report of ', %s))
         """
         cursor.execute(sql_record, (doc_username, patientName))
 
