@@ -29,7 +29,7 @@ class doctor():
 
         sql_record = """
         INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
-        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Name: ', %s, ' ', %s))
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Patient Name: ', %s, ' ', %s))
         """
         cursor.execute(sql_record, (doc_username, self.firstName, self.lastName))
 
@@ -76,7 +76,7 @@ class doctor():
     
 # ADD PATIENT MEDICAL ASSESSMENT
     @classmethod
-    def add_medical_assessment(cls, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
+    def add_medical_assessment(cls,doc_username , patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
                                normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, 
                                normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, 
                                oxygenSaturation, painSection):
@@ -89,13 +89,26 @@ class doctor():
         cursor.execute(sql, (patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, normal_nose, 
                              abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, 
                              abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical Assessment of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
+
 
         return True
     
 # ADD PRESCRIPTION
     @classmethod
-    def add_prescription(cls, assessment_id, medication_name, dosage, p_quantity, duration, instructions):
+    def add_prescription(cls, doc_username, assessment_id, medication_name, dosage, p_quantity, duration, instructions, patientID):
         try:
             cursor = mysql.connection.cursor()
 
@@ -105,6 +118,17 @@ class doctor():
 
             add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
+
+            cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+            result = cursor.fetchone()
+            firstName = result[0]
+            lastName = result[1]
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Prescription of ', %s, ' ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, firstName, lastName))
             mysql.connection.commit()
 
             return True
@@ -345,7 +369,7 @@ class doctor():
 
         sql_record = """
         INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
-        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Name: ', %s, ' ', %s))
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Patient Name: ', %s, ' ', %s))
         """
         cursor.execute(sql_record, (doc_username, firstName, lastName))
 
@@ -395,7 +419,7 @@ class doctor():
     
 # UPDATE PATIENT MEDICAL ASSESSMENT
     @classmethod 
-    def update_medical_assessment(cls, assessmentID, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
+    def update_medical_assessment(cls, doc_username, assessmentID, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
                                   normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, 
                                   abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection):
         cursor = mysql.connection.cursor()
@@ -407,6 +431,16 @@ class doctor():
         cursor.execute(sql, (patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, 
                              normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, 
                              abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection, assessmentID))
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical Assessment of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
@@ -427,7 +461,7 @@ class doctor():
 
             sql_record = """
             INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
-            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'DELETE', CONCAT('Name: ', %s, ' ', %s))
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'DELETE', CONCAT('Patient Name: ', %s, ' ', %s))
             """
             cursor.execute(sql_record, (doc_username, patient_fname, patient_lname))
 

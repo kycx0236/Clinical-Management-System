@@ -399,7 +399,7 @@ def add_assessment():
     # DIAGNOSIS
         diagnosis = form.diagnosis.data.upper()
 
-        result = doctor.add_medical_assessment(patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
+        result = doctor.add_medical_assessment(current_user.username, patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
                                                abnormalities_head=abnormalities_head, normal_ears=normal_ears, abnormalities_ears=abnormalities_ears, normal_eyes=normal_eyes
                                                , abnormalities_eyes=abnormalities_eyes, normal_nose=normal_nose, abnormalities_nose=abnormalities_nose, normal_skin=normal_skin
@@ -583,7 +583,7 @@ def assessment():
     # DIAGNOSIS
         diagnosis = form.diagnosis.data.upper()
 
-        update = doctor.update_medical_assessment(assessmentID=new_assessment_id, patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
+        update = doctor.update_medical_assessment(current_user.username, assessmentID=new_assessment_id, patientID=new_patient_id, subjectComp=sub, complaints=complain, illnessHistory=p_illness, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, normal_head=normal_head,
                                                abnormalities_head=abnormalities_head, normal_ears=normal_ears, abnormalities_ears=abnormalities_ears, normal_eyes=normal_eyes
                                                , abnormalities_eyes=abnormalities_eyes, normal_nose=normal_nose, abnormalities_nose=abnormalities_nose, normal_skin=normal_skin
@@ -827,7 +827,7 @@ def prescription():
         duration = request.form.get('duration').capitalize()
         instructions = request.form.get('instructions').capitalize()
 
-        result = doctor.add_prescription(assessment_id=new_assessment_id, medication_name=medication_name, dosage=dosage, p_quantity=p_quantity, duration=duration, instructions=instructions)
+        result = doctor.add_prescription(current_user.username, new_assessment_id, medication_name, dosage, p_quantity, duration, instructions, new_patient_id)
         
         doctor_info = doctor.get_doctor_info(user_id)
         patient_info = doctor.get_patient_info(new_patient_id)
