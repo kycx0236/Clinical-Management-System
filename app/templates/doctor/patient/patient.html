@@ -107,6 +107,7 @@
                                 <div class="action-icon-container">
                                     <!-- VIEW RECORD -->
                                     <form method="GET" action="/doctor/patient_record/">
+                                        {{ PatientForm.csrf_token }}
                                         <div class="delete-icon">
                                             <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
                                             <button type="submit" style="background: none; border: none;">
@@ -117,6 +118,7 @@
         
                                     <!-- DELETE RECORD -->
                                     <form id="deleteForm_{{ patient[0] }}" method="POST" action="/doctor/delete_patient/">
+                                        {{ PatientForm.csrf_token }}
                                         <div class="delete-icon">
                                             <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
                                             <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">

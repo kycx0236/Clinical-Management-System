@@ -112,7 +112,7 @@ def add_patient():
         new_patient.eContactNum = e_number
         new_patient.userID = user_id
 
-        result = new_patient.add(user_id)
+        result = new_patient.add(user_id, current_user.username)
 
         if result:
             return render_template("doctor/patient/add_patient.html", success=True, PatientForm=form, info=doctor_info)
@@ -424,11 +424,12 @@ def add_assessment():
 @login_required
 @role_required('doctor')
 def patient():
+    form = PatientForm()
     user_id = current_user.id
     doctor_info = doctor.get_doctor_info(user_id)
     patients_data = doctor.get_patients(user_id)
 
-    return render_template("doctor/patient/patient.html", patients=patients_data, info=doctor_info)
+    return render_template("doctor/patient/patient.html", PatientForm=form, patients=patients_data, info=doctor_info)
 
 # CONSULTATION TABLE
 @doctor_bp.route('/consultation/')
@@ -492,10 +493,10 @@ def patient_record():
         new_relationship = form.relationship.data  
         new_e_number = form.e_number.data
 
-        updated = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        updated = doctor.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
-                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)  
+                                             nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number,)  
         
         print('New Patient ID:', new_patient_id)
 
@@ -855,7 +856,7 @@ def delete_patient():
         patient_id = request.form.get("patient_id")
         doctor_info = doctor.get_doctor_info(user_id)
 
-        result = doctor.delete_patient_record(patient_id)
+        result = doctor.delete_patient_record(patient_id, current_user.username)
 
         if result:
             return render_template("doctor/patient/patient.html", success=True, PatientForm=form, info=doctor_info)

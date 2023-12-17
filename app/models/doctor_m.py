@@ -3,7 +3,7 @@ from app import mysql
 
 class doctor():
 # ADD PATIENT INFORMATION
-    def add(self, current_user):
+    def add(self, current_user, doc_username):
         cursor = mysql.connection.cursor()
 
         check_duplicate_sql = "SELECT patientinfo.patientID FROM patientinfo INNER JOIN docpatient_relation ON patientinfo.patientID = docpatient_relation.patientID \
@@ -26,6 +26,13 @@ class doctor():
 
         sql_docpatient_relation = "INSERT INTO docpatient_relation(doctorID, patientID) VALUES (%s, %s)"
         cursor.execute(sql_docpatient_relation, (doctor_id, new_patient_id))
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Name: ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, self.firstName, self.lastName))
+
         mysql.connection.commit()
 
         return True
@@ -309,13 +316,20 @@ class doctor():
 
 # UPDATE PATIENT INFORMATION
     @classmethod
-    def update_patient_info(cls, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
+    def update_patient_info(cls, doc_username, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE patientinfo SET firstName = %s, midName = %s, lastName = %s, age = %s, civilStatus = %s, gender = %s, bloodType = %s, birthPlace = %s, birthDate = %s, p_address = %s, nationality = %s, religion = %s, eContactName = %s, \
             relationship = %s, eContactNum = %s, occupation = %s, p_email = %s, p_contactNum = %s WHERE patientID = %s"
         cursor.execute(sql, (firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum, patientID))
         print(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum, patientID)
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Name: ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
         
         return True
@@ -368,11 +382,24 @@ class doctor():
     
 # DELETE PATIENT RECORD
     @classmethod 
-    def delete_patient_record(cls, patientID):
+    def delete_patient_record(cls, patientID, doc_username):
         cursor = mysql.connection.cursor()
         try:
+            fetch_name_query = "SELECT firstName, lastName FROM patientinfo WHERE patientID = %s"
+            cursor.execute(fetch_name_query, (patientID,))
+            name_tuple = cursor.fetchone()
+            patient_fname = name_tuple[0]
+            patient_lname = name_tuple[1]
+
             query = "DELETE FROM patientinfo WHERE patientID = %s"
             cursor.execute(query, (patientID,))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'DELETE', CONCAT('Name: ', %s, ' ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, patient_fname, patient_lname))
+
             mysql.connection.commit()
             return True
         except:
