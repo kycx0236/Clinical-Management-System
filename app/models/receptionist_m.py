@@ -575,12 +575,17 @@ class Schedule():
 
         
     @classmethod
-    def delete_schedules(cls, doctorName):
+    def delete_schedules(cls, recept_username, scheduleID):
         try:
             cursor = mysql.connection.cursor()
+            sql = "DELETE FROM schedule WHERE scheduleID = %s"
+            cursor.execute(sql, (scheduleID,))
 
-            sql = "DELETE FROM schedule WHERE doctorName = %s"
-            cursor.execute(sql, (doctorName,))
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'DELETE', CONCAT('Schedule ID: ', %s))
+            """
+            cursor.execute(sql_record, (recept_username, scheduleID))
             mysql.connection.commit()
             return True
         except Exception as e:
@@ -606,7 +611,7 @@ class Schedule():
         return schedule_data
     
     @classmethod
-    def update_schedule(cls,recept_username, scheduleID, new_date_appointment, new_time_appointment, new_slots, doc_name):
+    def update_schedule(cls,recept_username, scheduleID, new_date_appointment, new_time_appointment, new_slots,):
         try:
             cursor = mysql.connection.cursor()
             sql = "UPDATE schedule SET date_appointment = %s, time_appointment = %s, slots = %s WHERE scheduleID = %s"
@@ -615,9 +620,9 @@ class Schedule():
             
             sql_record = """
             INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
-            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'EDIT', CONCAT('Schedule ID: ', %s, ' ','for Doctor: ', %s))
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'EDIT', CONCAT('Schedule ID: ', %s))
             """
-            cursor.execute(sql_record, (recept_username, scheduleID, doc_name))
+            cursor.execute(sql_record, (recept_username, scheduleID))
             mysql.connection.commit()
 
             return True

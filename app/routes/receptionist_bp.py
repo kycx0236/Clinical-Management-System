@@ -712,11 +712,12 @@ def view_schedule():
 @role_required('receptionist')
 def delete_schedule():
     try:
-        schedule_id = request.form.get('reference_number')
+        schedule_id = request.form.get('scheduleID')
         doctor_name = request.form.get('doctor_name')
         print('Doctor Name: ', doctor_name)
+        print('ScheduleID: ', schedule_id)
 
-        if Appointment.delete(schedule_id):
+        if Schedule.delete_schedules(current_user.username, schedule_id):
             return jsonify(success=True, message="Successfully deleted")
         else:
             return jsonify(success=False, message="Failed to delete appointment")
