@@ -35,47 +35,40 @@ async function handleFormSubmission() {
     const isReceptionistIDValid = receptionistIDInput.checkValidity();
     console.log('Status: ' + isReceptionistIDValid);
 
-    // Define data variable to store the response data
-    let data;
-
     // Check if all individual fields are valid
     if (isDateAppointmentValid && isTimeAppointmentValid && isSlotsValid && isDoctorIDValid && isDoctorNameValid && isReceptionistIDValid) {
         // Create a FormData object to handle the form data
         const formData = new FormData();
-
-        console.log(dateAppointmentInput); 
-        console.log(timeAppointmentInput);
-        console.log(formData);
 
         // Append each form field to the FormData object
         formData.append('date_appointment', dateAppointmentInput.value);
         formData.append('time_appointment', timeAppointmentInput.value);
         formData.append('slots', slotsInput.value);
         formData.append('doctorID', doctorIDInput.value);
-        formData.append('doctorName', doctorNameInput.value)
-        formData.append('receptionistID', receptionistIDInput.value)
-        formData.append('csrf_token', csrfTokenInput);  // Use the csrfTokenInput directly
+        formData.append('doctorName', doctorNameInput.value);
+        formData.append('receptionistID', receptionistIDInput.value);
+        formData.append('csrf_token', csrfTokenInput);
 
         try {
             // Perform AJAX request to submit form data
             const response = await fetch('/doctor/add-schedule/', {
                 method: 'POST',
-                body: formData,  // Use FormData instead of JSON.stringify
+                body: formData,
                 headers: {
-                    'X-CSRFToken': csrfTokenInput  // Include CSRF token in headers
+                    'X-CSRFToken': csrfTokenInput
                 }
             });
-    
+        
             // Check if the response is successful
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+        
             // Check the content type of the response
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 // Parse the JSON response
-                data = await response.json();
+                const data = await response.json();
                 // Handle the JSON data as needed
                 if (data.success) {
                     // Successful submission
@@ -85,8 +78,6 @@ async function handleFormSubmission() {
                 } else {
                     // Handle submission failure
                     console.error('Form submission failed:', data.message);
-                    alert('Form validation failed. Please check the highlighted fields.') ;
-                    // Display an error message or handle the failure appropriately
                 }
             } else {
                 // The response is not in JSON format
@@ -95,13 +86,20 @@ async function handleFormSubmission() {
             }
         } catch (error) {
             // Handle other errors, such as network errors
-            console.error('Error during form submission:', error);
+            console.error('Error during form submission:', error.message);
+            console.log('Form submission failed', formData);
+            alert('Form submission failed.');
         }
-    
-        // Return the data variable
-        return data;
+    } else {
+        // Alert if any of the form fields are not filled in completely
+        alert('Please fill in all the required fields.');
+        setTimeout(function () {
+            // Redirect to the /appointment/ route
+            window.location.href = '/doctor/add-schedule/';
+        }, 700);
     }
 }
+
 // Add an event listener to the SUBMIT button
 submitButton.addEventListener('click', async function() {
     // Remove the event listener to prevent multiple clicks

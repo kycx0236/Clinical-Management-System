@@ -605,7 +605,7 @@ class Appointment:
             f"Date: {date_appointment}<br>"
             f"Time: {time_appointment}<br>"
             f"Status: {status_}<br>"
-            "<p>Additional message or instructions can be added here.</p>"
+            "<p>Please take note of your schedule. Thank you! </p>"
         )
         mail.send(message)
         print("Email sent successfully.")
@@ -901,14 +901,14 @@ class Schedule():
         try:
             cursor = mysql.connection.cursor()
 
-            check_duplicate_sql = "SELECT date_appointment, time_appointment FROM schedule WHERE date_appointment = %s AND time_appointment = %s"
-            cursor.execute(check_duplicate_sql, (self.date_appointment, self.time_appointment))
+            check_duplicate_sql = "SELECT date_appointment, time_appointment FROM schedule WHERE date_appointment = %s AND time_appointment = %s AND doctorID = %s"
+            cursor.execute(check_duplicate_sql, (self.date_appointment, self.time_appointment, self.doctorID, ))
             existing_schedule = cursor.fetchone()
 
             if existing_schedule:
                 return False
             
-            sql = "INSERT INTO schedule(date_appointment, time_appointment, slots, doctorID, doctorName, receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO schedule (date_appointment, time_appointment, slots, doctorID, doctorName, receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.date_appointment, self.time_appointment, self.slots, self.doctorID, self.doctorName, self.receptionistID))
             mysql.connection.commit()
 
@@ -932,11 +932,11 @@ class Schedule():
 
         
     @classmethod
-    def delete_schedules(cls, doctorName):
+    def delete_schedules(cls, scheduleID):
         try:
             cursor = mysql.connection.cursor()
-            sql = "DELETE FROM schedule WHERE doctorName = %s"
-            cursor.execute(sql, (doctorName,))
+            sql = "DELETE FROM schedule WHERE scheduleID = %s"
+            cursor.execute(sql, (scheduleID,))
             mysql.connection.commit()
             return True
         except Exception as e:
