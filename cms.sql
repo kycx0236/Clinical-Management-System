@@ -17,6 +17,59 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 ) AUTO_INCREMENT = 1000;
 
+CREATE TABLE IF NOT EXISTS `appointment` (
+	`reference_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`receptionistID` INT(10) NOT NULL,
+	`doctorID` INT(10) NOT NULL,
+	`doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`date_appointment` DATE NULL DEFAULT NULL,
+	`time_appointment` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`status_` VARCHAR(20) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`book_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`first_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`middle_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`last_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`sex` VARCHAR(10) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`birth_date` DATE NULL DEFAULT NULL,
+	`contact_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`email` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`address` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`reference_number`) USING BTREE,
+	UNIQUE INDEX `ref_number_uniq` (`reference_number`) USING BTREE,
+	INDEX `receptionistID` (`receptionistID`) USING BTREE,
+	INDEX `doctorID` (`doctorID`) USING BTREE,
+	CONSTRAINT `fk_appointment_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE,
+	CONSTRAINT `fk_appointment_receptionist` FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+
+CREATE TABLE `schedule` (
+	`scheduleID` INT(10) NOT NULL AUTO_INCREMENT,
+	`date_appointment` DATE NULL DEFAULT NULL,
+	`time_appointment` VARCHAR(30) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`slots` INT(10) NOT NULL,
+	`doctorID` INT(10) NOT NULL,
+	`doctorName` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`receptionistID` INT(10) NOT NULL,
+	`date_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	`date_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (`scheduleID`) USING BTREE,
+	UNIQUE INDEX `schedule_id_UNIQUE` (`scheduleID`) USING BTREE,
+	INDEX `doctorID` (`doctorID`) USING BTREE,
+	INDEX `fk_schedule_receptionist` (`receptionistID`) USING BTREE,
+	CONSTRAINT `fk_schedule_doctor` FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `fk_schedule_receptionist` FOREIGN KEY (`receptionistID`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
   `patientID` int NOT NULL AUTO_INCREMENT,
@@ -40,19 +93,19 @@ CREATE TABLE IF NOT EXISTS `patientinfo` (
   `p_contactNum` varchar(20) NOT NULL,
   `userID` int NOT NULL,
   PRIMARY KEY (`patientID`),
-  UNIQUE KEY `patient_id_UNIQUE` (`patientID`)
+  UNIQUE KEY `patient_id_UNIQUE` (`patientID`),
   FOREIGN KEY (`userID`) REFERENCES users(`id`) ON DELETE CASCADE
 );
 
 -- DOCTOR-PATIENT RELATION
-CREATE TABLE docpatient_relation (
-    relationID int NOT NULL AUTO_INCREMENT,
-    doctorID int NOT NULL,
-    patientID int NOT NULL,
+CREATE TABLE IF NOT EXISTS `docpatient_relation` (
+    `relationID` INT NOT NULL AUTO_INCREMENT,
+    `doctorID` INT NOT NULL,
+    `patientID` INT NOT NULL,
     PRIMARY KEY (`relationID`),
     UNIQUE KEY `relation_id_UNIQUE` (`relationID`),
-    FOREIGN KEY (`doctorID`) REFERENCES users(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+    FOREIGN KEY (`doctorID`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`patientID`) REFERENCES `patientinfo` (`patientID`) ON DELETE CASCADE
 );
 
 -- MEDICAL HISTORY

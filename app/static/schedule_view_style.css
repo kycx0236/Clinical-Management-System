@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F7FCFF;
+}
+
+.doccare-view-container {
+    position: relative;
+    max-width: 720px;
+    width: 100%;
+    border-radius: 10px;
+    background: #FFF;
+    padding: 30px;
+    margin: 0 20px;
+    box-shadow: 0px 0px 20px 0px rgba(2, 119, 189, 0.50);
+}
+
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24 
+}
+
+.material-symbols-outlined.info {
+    font-size: 48px;
+    margin-bottom: 5px;
+}
+
+.material-symbols-outlined.arrow {
+    cursor: pointer;
+}
+.doccare-header {
+    color: #000;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.doccare-subheader {
+    color: #000;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    margin-top: 10px; /* Adjust margin as needed */
+    margin-bottom: 10px;
+}
+
+.doccare-view-content {
+    position: relative;
+    min-height: 550px;
+    background-color: #FFF;
+}
+
+.doccare-view-container .fields {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.doccare-first {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.doccare-header {
+    font-size: 18px; /* Adjust the size as needed */
+    margin-bottom: 5px;
+}
+
+.line {
+    max-width: 750px;
+    width: 100%;
+    height: 2px; /* Adjust the height of the line */
+    background-color: #0277BD; /* Adjust the color of the line */
+    margin-top: 5px; /* Adjust the spacing between elements */
+    border-radius: 100%;
+}
+
+.doccare-text {
+    color: #000;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    margin-right: 5px; /* Adjust margin as needed */
+}
+
+.doccare-fourth {
+    width: calc(100% - 20px); /* Adjust width and margin as needed */
+    margin: 10px; /* Adjust margin as needed */
+    display: flex;
+    flex-direction: column;
+}
+
+.doccare-detail-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+}
+
+.doccare-text,
+.doccare-detail {
+    text-align: left; /* Align text to the left */
+    margin-top: 15px; /* Adjust margin as needed */
+}
+
+.doccare-detail.reference {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.doccare-detail.status {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.doccare-done-button {
+    width: 150px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #0277BD !important;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-left: 70%;   
+    margin-top: 30%;
+    transition: transform 0.2s;
+    outline: none;
+    border: none;
+}
+
+.doccare-done-button:hover {
+    transform:scale(1.15);
+    background: #004f7a !important;
+}

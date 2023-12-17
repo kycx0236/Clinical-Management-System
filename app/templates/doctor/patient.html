@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% block title %}DocCare | Patient{% endblock title %}
+{% block link %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='doctor_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- NAVIGATION -->
+<div class="sidenav-bg">
+    <div class="cms-logo">
+        <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
+    </div>
+    <ul>
+        <a href="{{ url_for('doctor.dashboard') }}">
+            <li class="icon-bg">
+                <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
+                <p>Dashboard</p>
+            </li>
+        </a>
+        <a href="{{ url_for('doctor.calendar') }}">
+            <li class="icon-bg">
+                <img src="{{ url_for('static', filename='images/Calendar.png') }}"> 
+                <p>Calendar</p>
+            </li>
+        </a>
+        <a href="{{ url_for('doctor.appointment') }}">
+            <li class="icon-bg">
+                <img src="{{ url_for('static', filename='images/Appointment.png') }}"> 
+                <p>Appointment</p>
+            </li>
+        </a>
+        <li class="selected-icon-bg">
+            <img src="{{ url_for('static', filename='images/Patient Record.png') }}"> 
+            <p>Patient</p>
+        </li>
+        <a href="{{ url_for('doctor.profile') }}">
+            <li class="icon-bg">
+                <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
+                <p>Profile</p>
+            </li>
+        </a>
+    </ul>
+    <div class="sidenav-user-bg">
+        <img src="{{ url_for('static', filename='images/user.jpg') }}" class="user-img">
+        <div>
+            <h3>Eda Grace P.</h3>
+            <p>Family Medicine</p>
+        </div>
+    </div>
+    <ul>
+        <a href="{{ url_for('doctor.logout') }}">
+            <li class="logout">
+                <img src="{{ url_for('static', filename='images/Logout.png') }}">
+                <p>Logout</p>
+            </li>
+        </a>
+    </ul>
+</div>
+
+<!-- PATIENT RECORD -->
+<div class="patient-header">
+    <p>PATIENTS</p>
+</div>
+<div class="patient-table">
+    <table id="example" class="table table-striped" style="width:100%">
+      <thead>
+          <tr>
+              <th>FIRST NAME</th>
+              <th>LAST NAME</th>
+              <th>GENDER</th>
+              <th>AGE</th>
+              <th>CONTACT NUMBER</th>
+              <th>ACTION</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr>
+            <td>EDA GRACE</td>
+            <td>PARAGOSO</td>
+            <td>FEMALE</td>
+            <td>51</td>
+            <td>09854541214</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>NANCY</td>
+            <td>SAYSON</td>
+            <td>FEMALE</td>
+            <td>66</td>
+            <td>09365457895</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>XERXES LANCE LAURENZ</td>
+            <td>LOMPON</td>
+            <td>MALE</td>
+            <td>25</td>
+            <td>0987845456</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>KURT YURI</td>
+            <td>NOLLAN</td>
+            <td>MALE</td>
+            <td>45</td>
+            <td>09545874541</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>EDWARD JAMES</td>
+            <td>BONGO</td>
+            <td>MALE</td>
+            <td>16</td>
+            <td>09356845787</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>JOANNA</td>
+            <td>GIGA</td>
+            <td>FEMALE</td>
+            <td>40</td>
+            <td>09545478745</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>RHEA</td>
+            <td>GUINGAO</td>
+            <td>FEMALE</td>
+            <td>22</td>
+            <td>09654578745</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>MARK FRANCIS</td>
+            <td>VENUS</td>
+            <td>MALE</td>
+            <td>77</td>
+            <td>09351454787</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>ALICE</td>
+            <td>ROMANS</td>
+            <td>FEMALE</td>
+            <td>85</td>
+            <td>09565414541</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>MERRY</td>
+            <td>SMITH</td>
+            <td>FEMALE</td>
+            <td>20</td>
+            <td>09565487454</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+        <tr>
+            <td>JOSEPH</td>
+            <td>DREAMER</td>
+            <td>FEMALE</td>
+            <td>40</td>
+            <td>09587874541</td>
+            <td>
+                <button class="view-btn">VIEW</button>
+            </td>
+        </tr>
+      </tbody>
+  </table>
+</div>
+<div class="add-icon">
+    <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    new DataTable('#example');
+</script>
+
+{% endblock %}

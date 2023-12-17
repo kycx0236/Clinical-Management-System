@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% block title %}DocCare | Reschedule Appointment{% endblock title %}
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='receptionist_edit_style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{% endblock link %}
+
+{% block content %}
+<body>
+    <div class="doccare-edit-container">
+        <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
+        <header>RESCHEDULE</header>
+        <form class="needs-validation" method="POST" action="{{ url_for('receptionist.reschedule', reference_number=row.reference_number) }}" novalidate>
+            {{ form.csrf_token }}
+            <div class="doccare-form-first">
+                <div class="doccare-appoinment-details">
+                    <span class="title"> Appointment Details </span>
+
+                    <div class="fields">
+                        <!-- Booking Reference Number -->
+                        <div class="input-fields">
+                            <label for="validationCustom01" class="form-label"> Reference Number </label>
+                            <input type="text" class="form-control" id="validationCustom01" name="reference_number" required value="{{ row.reference_number }}" readonly aria-describedby="validationCustom01Feedback">
+                        </div>
+                        
+                        <!-- Date Appointment -->
+                        <div class="input-fields">
+                            <label for="validationCustom02" class="form-label"> Date Appointment </label>
+                            <input type="date" class="form-control" id="validationCustom02" name="date_appointment" required value="{{ row.date_appointment }}" aria-describedby="validationCustom02Feedback">
+                            <div id="validationCustom02Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>date of appointment</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Time Appointment -->
+                        <div class="input-fields">
+                            <label for="validationCustom03" class="form-label"> Time Appointment </label>
+                            <select class="form-select" id="validationCustom03" name="time_appointment" required value="{{ row.time_appointment }}" aria-describedby="validationCustom08Feedback">
+                                <option value="" selected>Select your desired time</option>
+                                {% for time_data in time_data %}
+                                    <option value="{{ time_data[0] }}" {% if row.time_appointment == time_data[0] %} selected {% endif %}>{{ time_data[0] }}</option>
+                                {% endfor %}
+                                {% if time_schedules %}
+                                    {% for time_schedule in time_schedules %}
+                                        <option value="{{ time_schedule[0] }}" {%if row.time_appointment == time_schedule[0] %} selected {% endif %}>{{ time_schedule[0] }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No available time schedules</option>
+                                {% endif %}
+                            </select>
+                            <div id="validationCustom03Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>time of appointment</strong>.
+                            </div>
+                        </div>
+
+
+                        <!-- Book Date -->
+                        <div class="input-fields">
+                            <label for="validationCustom13" class="form-label"> Book Date </label>
+                            <input type="text" class="form-control" id="validationCustom13" name="book_date" required value="{{ row.book_date }}" readonly aria-describedby="validationCustom13Feedback">
+                            <div id="validationCustom13Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>time of appoinment</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="input-fields">
+                            <label for="validationCustom04" class="form-label">Status</label>
+                            <select class="form-select" id="validationCustom04" name="status_" required value= "{{row.status_}}" aria-describedby="validationCustom04Feedback">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="DONE" {% if row.status_ == 'DONE' %} selected {% endif %}> DONE </option>
+                                <option value="CANCELLED" {% if row.status_ == 'CANCELLED' %} selected {% endif %}> CANCELLED </option>
+                                <option value="PENDING" {% if row.status_ == 'PENDING' %} selected {% endif %}> PENDING </option>
+                                <option value="SCHEDULED" {% if row.status_ == 'SCHEDULED' %} selected {% endif %}> SCHEDULED </option>
+                                <option value="RESCHEDULED" {% if row.status_ == 'RESCHEDULED' %} selected {% endif %}> RESCHEDULED </option>
+                            </select>
+                            <div id="validationCustom04Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select the <strong>status</strong>.
+                            </div>
+                        </div>
+
+                         <!-- First Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom05" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="validationCustom05" name="first_name" required value="{{ row.first_name }}" aria-describedby="validationCustom05Feedback">
+                            <div id="validationCustom05Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>first name</strong>.
+                            </div>
+                        </div>
+
+                         <!-- Middle Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom06" class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" id="validationCustom06" name="middle_name" required value="{{ row.middle_name }}" aria-describedby="validationCustom06Feedback">
+                            <div id="validationCustom06Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>middle name</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="input-fields">
+                            <label for="validationCustom07" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="validationCustom07" name="last_name" required value="{{ row.last_name }}" aria-describedby="validationCustom07Feedback">
+                            <div id="validationCustom03Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>last name. </strong>
+                            </div>
+                        </div>
+
+                        <!-- Sex -->
+                        <div class="input-fields">
+                            <label for="validationCustom08" class="form-label">Sex</label>
+                            <select class="form-select" id="validationCustom08" name="sex" required value= "{{ row.sex }}" aria-describedby="validationCustom08Feedback">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="Male" {% if row.sex == 'Male' %} selected {% endif %}> Male </option>
+                                <option value="Female" {% if row.sex == 'Female' %} selected {% endif %}> Female </option>
+                            </select>
+                            <div id="validationCustom08Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select your <strong>sex</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="input-fields">
+                            <label for="validationCustom09" class="form-label">Birth Date</label>
+                            <input type="date" class="form-control" id="validationCustom09" name="birth_date" required value="{{ row.birth_date }}" aria-describedby="validationCustom09Feedback">
+                            <div id="validationCustom04Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please select your <strong>date of birth</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Contact Number -->
+                        <div class="input-fields">
+                            <label for="validationCustom10" class="form-label">Contact Number</label>
+                            <input type="text" class="form-control" id="validationCustom10" name="contact_number" required value="{{ row.contact_number }}" aria-describedby="validationCustom10Feedback">
+                            <div id="validationCustom07Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong>contact number</strong>.
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="input-fields">
+                            <label for="validationCustom11" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="validationCustom11" name="email" required value="{{ row.email }}" aria-describedby="validationCustom11Feedback">
+                            <div id="validationCustom11Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your <strong> email </strong>.
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="input-fields">
+                            <label for="validationCustom12" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="validationCustom12" name="address" required value="{{ row.address }}" aria-describedby="validationCustom12Feedback">
+                            <div id="validationCustom12Feedback" class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter your complete <strong>address</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <!-- Include a hidden input for reference_number to update the correct appoinment -->
+                        <input type="hidden" name="reference_number" value="{{ row.reference_number }}">
+                        <button type="button" class="doccare-success-button" id="doccare-success-button">Submit</button>
+                    </div>
+                </div>
+
+                <!-- Modal for Success Confirmation -->
+                <div id="doccare-success-confirmation-modal" class="doccare-success-confirmation-modal">
+                    <div class="doccare-success-modal-content">
+                        <span class="material-symbols-outlined check">check_circle</span>
+                        <h1>Well Done!</h1>
+                        <p>The appointment is now updated! </p>
+                        <div class="doccare-success-modal-button">
+                            <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for Failed Confirmation -->
+                <div id="doccare-failed-confirmation-modal" class="doccare-failed-confirmation-modal">
+                    <div class="doccare-failed-modal-content">
+                        <span class="material-symbols-outlined error">error</span>
+                        <h1>Something went Wrong!</h1>
+                        <h6>Failed to update the appointment.</h6>
+                        <h6>Please try again. </h6>
+                        <div class="doccare-failed-modal-button">
+                            <button class="doccare-done-modal-button" id="doccare-done-modal-button">DONE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <form>
+    </div>
+</body>
+<!-- Include these script tags -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename="receptionist_edit_script.js") }}"></script>
+<script>
+    // Update the time_appointment dropdown based on the selected date
+    $('#validationCustom02').on('change', function() {
+        var selectedDate = $(this).val();
+
+        // Get the CSRF token from the form
+        var csrfToken = $('input[name="csrf_token"]').val();
+
+        // Make an AJAX request to fetch time schedules for the selected date
+        $.ajax({
+            url: '/receptionist/get-time-schedules',
+            type: 'POST',
+            data: { selected_date: selectedDate, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Server Response:', response);
+
+                // Update the options of the time_appointment dropdown
+                var timeDropdown = $('#validationCustom03');
+                timeDropdown.empty();
+                timeDropdown.append('<option value="" selected>Select your desired time</option>');
+
+                // Add options based on the received time schedules
+                for (var i = 0; i < response.time_schedules.length; i++) {
+                    var timeSlot = response.time_schedules[i];
+                    console.log('Time Slot:', timeSlot); // Log each time slot
+
+                    // Check if the time slot has available slots
+                    if (timeSlot[1] > 0) {
+                        // Use the data attribute to store the slots information
+                        timeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    }
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching time schedules:', error);
+            }
+        });
+
+        // Example: Retrieve the selected option's slots information
+        $('#validationCustom03').on('change', function() {
+            var selectedOption = $(this).find(':selected');
+            var slots = selectedOption.data('slots');
+            console.log('Available Slots:', slots);
+        });
+    });
+
+    // Additional code for the old time dropdown in the edit form
+    $('#validationCustom03').on('change', function() {
+        var oldSelectedDate = $(this).val();
+
+        // Make an AJAX request to fetch time schedules for the old selected date
+        $.ajax({
+            url: '/receptionist/get-time-schedules',
+            type: 'POST',
+            data: { selected_date: oldSelectedDate, csrf_token: csrfToken },
+            success: function(response) {
+                console.log('Old Time - Server Response:', response);
+
+                // Update the options of the old time_appointment dropdown
+                var oldTimeDropdown = $('#validationCustom03');
+                oldTimeDropdown.empty();
+                oldTimeDropdown.append('<option value="" selected>Select your desired time</option>');
+
+                // Add options based on the received time schedules
+                for (var i = 0; i < response.time_schedules.length; i++) {
+                    var timeSlot = response.time_schedules[i];
+                    console.log('Old Time - Time Slot:', timeSlot); // Log each time slot
+
+                    // Check if the time slot has available slots
+                    if (timeSlot[1] > 0) {
+                        // Use the data attribute to store the slots information
+                        oldTimeDropdown.append('<option value="' + timeSlot[0] + '" data-slots="' + timeSlot[1] + '">' + timeSlot[0] + '</option>');
+                    }
+                }
+            },
+            error: function(error) {
+                console.error('Old Time - Error fetching time schedules:', error);
+            }
+        });
+    });
+ 
+</script>
+{% endblock %}

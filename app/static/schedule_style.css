@@ -6,9 +6,24 @@
     display: grid;
     margin-top: 10px;
     grid-template-columns: auto 350px;
-    grid-template-rows: auto 5px;
-    padding: 0px;
+    grid-template-rows: 100% 5px;
+    padding: 10px;
     height: 69%;
+}
+
+.grid_container.certificate {
+    grid-template-columns: 50% 50%;
+}
+
+.grid_container.prescription {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    height: 1400px;
+}
+
+.grid_container.history {
+    grid-template-columns: 85% 15%;
+    grid-template-rows: auto auto;
 }
 
 .grid_item {
@@ -17,122 +32,14 @@
     text-align: center;
 }
 
-/* PATIENTS */
-.patients_short {
-    justify-content: center;
-    align-items: center;
+.grid_item.prescription {
+    padding: 15px;
+    border: 1px solid white;
     text-align: center;
-    display: flex;
-    gap: 130px;
 }
 
-.patient_buttons {
-    margin-top: 5px;
-    gap: 5px;
-    display: flex;
-}
-
-.add_patient_btn img {
-    width: 35px;
-    padding: 10px;
-    background-color: var(--darkBlue);
-    border-radius: 5px;
-}
-
-.see_more {
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    width: 85px;
-    height: 35px;
-    font-size: 13px;
-    cursor: pointer;
-    background-color: white;
-    color: var(--darkBlue);
-    border: 1px solid var(--grayA);
-    font-weight: 900;
-}
-
-.patient_short_table, .appointment_short_table {
-    position: relative;
-    font-size: 14px;
-    margin-top: 5px;
-    width: 100%;
-}
-
-.patient_short_table td {
-    padding: 11px;
-    width: 50px;
-    background-color: var(--blueC);
-}
-
-.patient_record img {
-    width: 30px;
-    cursor: pointer;
-}
-
-/* APPOINTMENT */
-.appointement_short_container {
-    position: relative;  
-    height: 310px; 
-    overflow: auto;
-}
-
-.appoint_list p {
-    margin-bottom: 10px;
-}
-
-.appointement_short_container::-webkit-scrollbar {
-    width: 10px; 
-}
-
-.appointement_short_container::-webkit-scrollbar-thumb {
-    background-color: var(--blueB); 
-    border-radius: 5px;
-}
-
-.appointement_short_container::-webkit-scrollbar-track {
-    background-color: none; 
-    margin-top: 35px;
-}
-
-.appointment_short_table thead {
-    position: sticky;
-    top: 0;
-    font-size: 14px;
-    height: 30px;
-}
-
-.appointment_short_table th {
-    border-bottom: 1px solid var(--blueC);
-}
-
-.appointment_short_table td {
-    padding: 10px;
-    border: 5px solid white;
-}
-
-.status_short {
-    border-radius: 70px;
-    width: 130px;
-    color: var(--darkBlue);
-}
-
-.status_short.cancelled {
-    background-color: #ffb3ba;
-    color: var(--darkBlue);
-}
-
-.status_short.done {
-    background-color: #baffc9;
-}
-
-.status_short.pending {
-    background-color: #ffffba;
-}
-
-.status_short.inprogress {
-    background-color: #bae1ff;
+.grid_item.prescription.grid1 {
+    height: 1110px;
 }
 
 /* APPOINTMENT */
@@ -208,8 +115,8 @@
 }
 
 .doccare-table-appointment-content{
-    width: 95%;
-    max-height: calc(95% - 1.6rem);
+    width: 90%;
+    max-height: calc(90% - 1.6rem);
     background-color: #fffb;
     margin: .8rem auto;
     border-radius: .6rem;
@@ -420,6 +327,7 @@ main.doccare-appointment-table {
     border-radius: 0.8rem;
     overflow: hidden;
     margin-left: 2%;
+    margin-bottom: 3%;
 }
 
 tbody tr:nth-child(even) {
@@ -852,3 +760,10 @@ form .fields .input-fields {
         width: calc(100%);
     }
 }
+
+/* CALENDAR */
+/* style here */
+
+
+/* PROFILE */
+/* style here */

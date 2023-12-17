@@ -10,6 +10,7 @@ import cloudinary.uploader
 import cloudinary.api
 
 mysql = MySQL()
+
 login_manager = LoginManager()
 mail = Mail()
 csrf = CSRFProtect()
@@ -68,7 +69,8 @@ def create_app():
             else:
                 flash("The username or password you've entered is incorrect", 'error')
 
-        return render_template('login.html')
+        return render_template("login.html")
+
 
     from app.routes.admin_bp import admin_bp
     from app.routes.doctor_bp import doctor_bp
