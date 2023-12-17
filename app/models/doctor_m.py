@@ -39,7 +39,7 @@ class doctor():
 
 # ADD PATIENT MEDICAL HISTORY
     @classmethod
-    def add_medical_history(cls, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, 
+    def add_medical_history(cls, doc_username, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, 
                             heartCheckbox, birthCheckbox, boneCheckbox, alzheimerCheckbox, cancerCheckbox, thyroidCheckbox, tuberculosisCheckbox, eyeCheckbox, clotsCheckbox, mentalCheckbox, 
                             kidneyCheckbox, anemiaCheckbox, muscleCheckbox, highbloodCheckbox, epilepsyCheckbox, skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, 
                             medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, 
@@ -59,6 +59,17 @@ class doctor():
                              h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, 
                              numSexPartner, contraception, useDrugs, specifyDrugs, frequencyDrugs, surgeryDate1, surgeryProcedure1, hospital1, surgeryDate2, surgeryProcedure2, hospital2, surgeryDate3, surgeryProcedure3, hospital3, 
                              medications, allergies, diet))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical History of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
@@ -102,7 +113,7 @@ class doctor():
             return False
 
     @classmethod 
-    def add_laboratory_request(cls, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
+    def add_laboratory_request(cls, doc_username, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
                                bloodtypingCheckbox, ESRCheckbox, plateCheckbox, hgbCheckbox, hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox, culsenCheckbox, cultureCheckbox, 
                                gramCheckbox, KOHCheckbox, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, 
                                ELISACheckbox, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, RFCheckbox, QuantiCheckbox, 
@@ -151,6 +162,14 @@ class doctor():
         cursor.execute(clinicalchem, (orderID, ALPCheckbox, AmylaseCheckbox, BUACheckbox, BUNCheckbox, CreatinineCheckbox, SGPTCheckbox, SGOTCheckbox, FBSCheckbox, RBSCheckbox, HPPCheckbox, OGCTCheckbox, 
                                       HGTCheckbox, OGTTCheckbox, NaCheckbox, MgCheckbox, LipidCheckbox, TriglyCheckbox, CholCheckbox, ClCheckbox, TPAGCheckbox, TotalCheckbox, GlobCheckbox, AlbCheckbox, 
                                       CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox))
+             
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'REQUEST', CONCAT('Lab Report of: ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, patientName))
+
+
         mysql.connection.commit()
         return True
     
@@ -336,7 +355,7 @@ class doctor():
 
 # UPDATE PATIENT MEDICAL HISTORY
     @classmethod
-    def update_medical_history(cls, historyID, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, heartCheckbox, birthCheckbox, 
+    def update_medical_history(cls,doc_username , historyID, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, heartCheckbox, birthCheckbox, 
                                boneCheckbox, alzheimerCheckbox, cancerCheckbox, thyroidCheckbox, tuberculosisCheckbox, eyeCheckbox, clotsCheckbox, mentalCheckbox, kidneyCheckbox, anemiaCheckbox, muscleCheckbox, highbloodCheckbox, 
                                epilepsyCheckbox, skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, 
                                h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, 
@@ -358,6 +377,18 @@ class doctor():
                              skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, h_date3, habitually, 
                              yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, numSexPartner, contraception, 
                              useDrugs, specifyDrugs, frequencyDrugs, surgeryDate1, surgeryProcedure1, hospital1, surgeryDate2, surgeryProcedure2, hospital2, surgeryDate3, surgeryProcedure3, hospital3, medications, allergies, diet, historyID))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical History of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
 
         return True
