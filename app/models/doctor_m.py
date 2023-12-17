@@ -768,9 +768,36 @@ class Appointment:
             result = cursor.fetchone()
             return result
         except Exception as e:
-            print(f"Error fetching doctor ID: {e}")
+            print(f"Error fetching receptionistID: {e}")
             return []
-    
+    @classmethod
+    def show_schedule_for_today(cls, doctorID):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            sql = """
+                SELECT 
+                    date_appointment, 
+                    time_appointment, 
+                    first_name, 
+                    middle_name, 
+                    last_name, 
+                    status_, 
+                    contact_number 
+                FROM 
+                    appointment 
+                WHERE 
+                    doctorID = %s 
+                    AND (status_ = 'PENDING' or status_ = 'SCHEDULED')
+                    AND DATE(date_appointment) = CURDATE()
+            """
+            cursor.execute(sql, (doctorID,))
+            result = cursor.fetchall()
+            return result
+
+        except Exception as e:
+            print(f"Error showing scheduled for today: {e}")
+            return []
+
 class Schedule():
     def __init__(self, date_appointment=None, time_appointment=None, slots=None, doctorID=None, doctorName=None, receptionistID=None):
         self.date_appointment = date_appointment

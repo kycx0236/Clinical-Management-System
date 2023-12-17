@@ -23,8 +23,30 @@ def dashboard():
     receptionist_info = receptionist.get_user(current_id)
     patients_data = receptionist.get_patients()
     limited_patient = patients_data[:5]
+    
+    sched_today = Appointment.show_schedule_for_today()
+    print(f'Schedule for today: {sched_today}')
+    
+    if sched_today:
+        sched_today_data_list = []
 
-    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient)
+        for appointment in sched_today:
+            sched_today_data_dict = {
+                "date_appointment": appointment['date_appointment'],
+                "time_appointment": appointment['time_appointment'],
+                "first_name": appointment['first_name'],
+                "middle_name": appointment['middle_name'],
+                "last_name": appointment['last_name'],
+                "status_": appointment['status_'],
+                "contact_number": appointment['contact_number']
+            }
+            sched_today_data_list.append(sched_today_data_dict)
+            print(f'List of appointment: {sched_today_data_list}')
+
+    else:
+        print('No sched for today')
+
+    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient, sched_data=sched_today_data_list)
 
 @receptionist_bp.route('/calendar/')
 @login_required

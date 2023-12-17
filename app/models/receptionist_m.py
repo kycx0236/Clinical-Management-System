@@ -355,6 +355,33 @@ class Appointment:
         except Exception as e:
             print(f"Error fetching all appointments: {e}")
             return []
+        
+    @classmethod
+    def show_schedule_for_today(cls):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            sql = """
+                SELECT 
+                    date_appointment, 
+                    time_appointment, 
+                    first_name, 
+                    middle_name, 
+                    last_name, 
+                    status_, 
+                    contact_number 
+                FROM 
+                    appointment 
+                WHERE 
+                    (status_ = 'PENDING' or status_ = 'SCHEDULED')
+                    AND DATE(date_appointment) = CURDATE()
+            """
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return result
+
+        except Exception as e:
+            print(f"Error showing scheduled for today: {e}")
+            return []
 
                 
     @classmethod
