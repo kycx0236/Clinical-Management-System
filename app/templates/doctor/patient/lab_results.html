@@ -91,46 +91,51 @@
             </ul>
 
             <a href="{{ url_for('doctor.labtest_request', patient_id=patient_id) }}">
-                <div class="add-icon">
+                <div class="add-icon patient">
                     <img src="{{ url_for('static', filename='images/Add Icon.png') }}">
                 </div>
             </a>
         </div>
 
         <center>
-            <!-- LABORATORY RESULTS -->
-            <div class="patient-bg">
-                <div class="assessment-table">
-                    <table id="example" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>SUBJECT</th>
-                                <th>DATE</th>
-                                <th>ACTION</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for labreport in labreports %}
-                            <tr>
-                                <td>{{ labreport[0] }}</td>
-                                <td>{{ labreport[1] }}</td>
-                                <td>
-                                    <!-- RESULTS -->
-                                    <form method="GET" action="/doctor/results/">
-                                        <div class="delete-icon">
-                                            <input id="order_id" name="order_id" value="{{ labreport[2] }}" hidden>
-                                            <input id="patient_id" name="patient_id" value="{{ labreport[3] }}" hidden>
-                                            <input id="report_id" name="report_id" value="{{ labreport[4] }}" hidden>
-                                            <button type="submit" style="background: none; border: none;">
-                                                <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
-                                            </button>
-                                        </div>
-                                    </form> 
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+
+            <div class="grid_container patient">
+                <div class="grid_item">
+                    <!-- LABORATORY RESULTS -->
+                    <div class="patient-bg">
+                        <div class="assessment-table">
+                            <table id="example" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>SUBJECT</th>
+                                        <th>DATE</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for labreport in labreports %}
+                                    <tr>
+                                        <td>{{ labreport[0] }}</td>
+                                        <td>{{ labreport[1] }}</td>
+                                        <td>
+                                            <!-- RESULTS -->
+                                            <form method="GET" action="/doctor/results/">
+                                                <div class="delete-icon">
+                                                    <input id="order_id" name="order_id" value="{{ labreport[2] }}" hidden>
+                                                    <input id="patient_id" name="patient_id" value="{{ labreport[3] }}" hidden>
+                                                    <input id="report_id" name="report_id" value="{{ labreport[4] }}" hidden>
+                                                    <button type="submit" style="background: none; border: none;">
+                                                        <img src="{{ url_for('static', filename='images/Folder.png') }}" title="Patient Record">
+                                                    </button>
+                                                </div>
+                                            </form> 
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </center>

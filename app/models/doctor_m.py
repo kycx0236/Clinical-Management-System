@@ -77,6 +77,30 @@ class doctor():
 
         return True
     
+# ADD MEDICAL CLEARANCE 
+    @classmethod
+    def add_medical_clearance(cls, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
+        cursor = mysql.connection.cursor()
+
+        sql = "INSERT INTO clearance (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance) \
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance))
+        mysql.connection.commit()
+
+        return True
+    
+# ADD MEDICAL CERTIFICATE 
+    @classmethod
+    def add_medical_certificate(cls, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
+        cursor = mysql.connection.cursor()
+
+        sql = "INSERT INTO certificate (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate) \
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate))
+        mysql.connection.commit()
+
+        return True
+    
 # ADD PRESCRIPTION
     @classmethod
     def add_prescription(cls, assessment_id, medication_name, dosage, p_quantity, duration, instructions):
@@ -188,6 +212,24 @@ class doctor():
         return consultations
     
     @staticmethod
+    def get_clearances(patientID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM clearance WHERE patientID = %s ORDER BY consultationDate DESC"
+        cursor.execute(query, (patientID,))
+        clearances = cursor.fetchall()
+        cursor.close()
+        return clearances
+    
+    @staticmethod
+    def get_certificates(patientID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM certificate WHERE patientID = %s ORDER BY consultationDate DESC"
+        cursor.execute(query, (patientID,))
+        certificates = cursor.fetchall()
+        cursor.close()
+        return certificates
+    
+    @staticmethod
     def get_patient_info(patientID):
         cursor = mysql.connection.cursor()
         query = "SELECT * FROM patientinfo WHERE patientID = %s"
@@ -204,12 +246,36 @@ class doctor():
         return patient
     
     @staticmethod
+    def get_patient_clearance(patientID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM clearance WHERE patientID = %s"
+        cursor.execute(query, (patientID,))
+        patient = cursor.fetchone()
+        return patient
+    
+    @staticmethod
     def get_consultation_info(assessmentID, patientID):
         cursor = mysql.connection.cursor()
         query = "SELECT * FROM assessment WHERE assessmentID = %s AND patientID = %s"
         cursor.execute(query, (assessmentID, patientID))
         assessment_info  = cursor.fetchone()
         return assessment_info 
+    
+    @staticmethod
+    def get_clearance_info(clearanceID, patientID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM clearance WHERE clearanceID = %s AND patientID = %s"
+        cursor.execute(query, (clearanceID, patientID))
+        clearance_info  = cursor.fetchone()
+        return clearance_info 
+    
+    @staticmethod
+    def get_certificate_info(certificateID, patientID):
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM certificate WHERE certificateID = %s AND patientID = %s"
+        cursor.execute(query, (certificateID, patientID))
+        certificate_info  = cursor.fetchone()
+        return certificate_info 
     
     @staticmethod
     def get_prescription_info(assessmentID):
@@ -364,6 +430,30 @@ class doctor():
         cursor.execute(sql, (patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, 
                              normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, 
                              abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection, assessmentID))
+        mysql.connection.commit()
+
+        return True
+    
+# UPDATE PATIENT MEDICAL CLEARANCE
+    @classmethod 
+    def update_medical_clearance(cls, clearanceID, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
+        cursor = mysql.connection.cursor()
+
+        sql = "UPDATE clearance SET patientID = %s, subjectClearance = %s, reason = %s, recommendations = %s, bloodPressure = %s, pulseRate = %s, temperature = %s, respRate = %s, height = %s, weight_p = %s, bmi = %s, \
+            oxygenSaturation = %s, painSection = %s, physicalExam = %s, clearance = %s WHERE clearanceID = %s"
+        cursor.execute(sql, (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance, clearanceID))
+        mysql.connection.commit()
+
+        return True
+    
+# UPDATE PATIENT MEDICAL CERTIFICATE
+    @classmethod 
+    def update_medical_certificate(cls, certificateID, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
+        cursor = mysql.connection.cursor()
+
+        sql = "UPDATE certificate SET patientID = %s, subjectCertificate = %s, reason = %s, recommendations = %s, bloodPressure = %s, pulseRate = %s, temperature = %s, respRate = %s, height = %s, weight_p = %s, bmi = %s, \
+            oxygenSaturation = %s, painSection = %s, physicalExam = %s, certificate = %s WHERE certificateID = %s"
+        cursor.execute(sql, (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate, certificateID))
         mysql.connection.commit()
 
         return True

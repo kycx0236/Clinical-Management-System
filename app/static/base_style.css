@@ -20,9 +20,9 @@
 
 main {
     margin-left: 80px;
-    justify-content: center;
+    /* justify-content: center;
     align-items: center;
-    text-align: center;
+    text-align: center; */
     height: 100vh;
 }
 
@@ -252,21 +252,20 @@ ul li p {
 
 /* -------------------------------------------- ADD ICONS -------------------------------------------- */
 .add-icon img {
-    position: fixed;
-    top: 10px;
+    position: relative;
+    top: -10px;
     left: 95%;
     width: 40px;
-    right: 50px;
     border-radius: 100%;
-    z-index: 99;
-    z-index: 99;
-    position: fixed;
-    z-index: 99;    
-    position: fixed;
 }
 
 .add-icon img:active {
     transform: translateY(1px);
+}
+
+.add-icon.patient img {
+    top: -49px;
+    left: 94%;
 }
 
 /* -------------------------------------------- PATIENT TABLE -------------------------------------------- */
@@ -386,11 +385,12 @@ ul li p {
     border-radius: 0.25rem; 
     margin-left: 15px;
     height: 35px;
-    width: 500px;  
+    width: 200px;  
 }
 
 .dataTables_wrapper .dataTables_filter {
     position: relative;
+    margin-left: 75%;
 }
   
 .dataTables_wrapper .dataTables_filter input:focus {
@@ -453,7 +453,6 @@ ul li p {
 }
 
 .btn-submit:active {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     transform: translateY(1px);
 }
 
@@ -467,6 +466,20 @@ ul li p {
     background-color: var(--blueA);
     width: 131px;
     font-size: 13px;
+}
+
+.btn-submit.clearance {
+    background-color: white;
+    outline: none;
+    border: none;
+    width: 35px;
+    height: 30px;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.btn-submit.clearance img {
+    width: 15px;
 }
 
 .btn-submit.file {
@@ -508,6 +521,13 @@ ul li p {
 .btn-submit.add-edit:hover {
     color: var(--blueD);
     transform: scale(101%);
+}
+
+.btn-submit.add-edit.clearance {
+    margin-right: -1800px;
+    height: 35px;
+    width: 80px;
+    display: none;
 }
 
 /* -------------------------------------------- ROW -------------------------------------------- */
@@ -557,16 +577,33 @@ textarea {
     width: 960px;
     height: 200px;
     border: 1px solid var(--blueB);
-    border-radius: 10px;
-    resize: none;
+    resize: vertical;
     padding: 10px;
     font-size: 16px;
+    margin-top: -15px;
+    text-align: justify;
+}
+
+.clearance_textarea {
+    margin-top: 30px;
+    height: 350px;
 }
 
 /* text area */
 textarea:focus {
-    box-shadow: 0 0 0.5rem 0 rgba(163, 213, 255, 1);
     outline: none;
+}
+
+textarea::-webkit-scrollbar {
+    width: 10px; 
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: var(--blueB); 
+}
+
+textarea::-webkit-scrollbar-track {
+    background-color: var(--blueC); 
 }
 
 /* -------------------------------------------- MODAL FOR SUCCESS AND ERROR MESSAGES -------------------------------------------- */
@@ -681,7 +718,7 @@ textarea:focus {
 
 /* -------------------------------------------- REPORT BACKGROUNDS -------------------------------------------- */
 .patient-bg.report {
-    height: 2500px; 
+    height: 100%; 
 }
 
 .patient-bg.test {
