@@ -2,7 +2,7 @@
 applyStatusStyles();
 
 function applyStatusStyles() {
-    const statusCells = document.querySelectorAll('.status-cell');
+    const statusCells = document.querySelectorAll('.status_short');
   
     statusCells.forEach(cell => {
         const statusText = cell.textContent.trim().toLowerCase();
