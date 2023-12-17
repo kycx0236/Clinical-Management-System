@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `assessment` (
   `patientID` int NOT NULL,
   `subjectComp` varchar(255) NOT NULL,
   `complaints` TEXT,
-  `illnessHistory` varchar(255),
+  `illnessHistory` TEXT,
   `bloodPressure` varchar(100),
   `pulseRate` varchar(100),
   `temperature` varchar(100),
@@ -260,6 +260,54 @@ CREATE TABLE IF NOT EXISTS `prescriptiondetails` (
   PRIMARY KEY (`detail_id`),
   UNIQUE KEY `detail_id_UNIQUE` (`detail_id`),
   FOREIGN KEY (`prescriptionID`) REFERENCES prescription(`prescriptionID`) ON DELETE CASCADE
+);
+
+-- MEDICAL CLEARANCE
+CREATE TABLE IF NOT EXISTS `clearance` (
+  `clearanceID` int NOT NULL AUTO_INCREMENT,
+  `patientID` int NOT NULL,
+  `subjectClearance` varchar(255) NOT NULL,
+  `reason` TEXT,
+  `recommendations` TEXT,
+  `bloodPressure` varchar(100),
+  `pulseRate` varchar(100),
+  `temperature` varchar(100),
+  `respRate` varchar(100),
+  `height` varchar(50),
+  `weight_p` varchar(50),
+  `bmi` varchar(50),
+  `oxygenSaturation` varchar(100),
+  `painSection` varchar(100),
+  `physicalExam` TEXT,
+  `clearance` TEXT,
+  `consultationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`clearanceID`),
+  UNIQUE KEY `clearance_id_UNIQUE` (`clearanceID`),
+  FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
+);
+
+-- MEDICAL CERTIFICATE
+CREATE TABLE IF NOT EXISTS `certificate` (
+  `certificateID` int NOT NULL AUTO_INCREMENT,
+  `patientID` int NOT NULL,
+  `subjectCertificate` varchar(255) NOT NULL,
+  `reason` TEXT,
+  `recommendations` TEXT,
+  `bloodPressure` varchar(100),
+  `pulseRate` varchar(100),
+  `temperature` varchar(100),
+  `respRate` varchar(100),
+  `height` varchar(50),
+  `weight_p` varchar(50),
+  `bmi` varchar(50),
+  `oxygenSaturation` varchar(100),
+  `painSection` varchar(100),
+  `physicalExam` TEXT,
+  `certificate` TEXT,
+  `consultationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`certificateID`),
+  UNIQUE KEY `certificate_id_UNIQUE` (`certificateID`),
+  FOREIGN KEY (`patientID`) REFERENCES patientinfo(`patientID`) ON DELETE CASCADE
 );
 
 -- LABORATORY JOB ORDER

@@ -7,8 +7,8 @@
     margin-top: 10px;
     grid-template-columns: auto 350px;
     grid-template-rows: auto 5px;
-    padding: 10px;
-    height: 80%;
+    padding: 0px;
+    height: 69%;
 }
 
 .grid_item {
