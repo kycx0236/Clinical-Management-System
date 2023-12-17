@@ -62,7 +62,7 @@ def laboratory_test():
             pdf_url = uploaded_result['url']
             print('pdf_url:', pdf_url)
 
-            report = medtech.add_laboratory_report(orderID=new_order_id, medtech=new_medtech_name, pdfFile=pdf_url)
+            report = medtech.add_laboratory_report(current_user.username,orderID=new_order_id, medtech=new_medtech_name, pdfFile=pdf_url)
 
             labreq_info = medtech.get_labrequest_data(new_order_id)
             hematology_info = medtech.get_hematology_data(new_order_id)
