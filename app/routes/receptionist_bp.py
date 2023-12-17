@@ -1,5 +1,6 @@
 from flask import render_template, redirect, request, url_for, jsonify, session
 import math
+from app.forms.doctor_f import *
 from app.forms.receptionist_f import *
 import app.models as models
 from app.models.receptionist_m import *
@@ -115,11 +116,12 @@ def schedule():
 @login_required
 @role_required('receptionist')
 def patient():
+    form = PatientForm()
     current_id = current_user.id 
     receptionist_info = receptionist.get_user(current_id)
     patients_data = receptionist.get_patients()
 
-    return render_template("receptionist/patient/patient.html", patients=patients_data, info=receptionist_info)
+    return render_template("receptionist/patient/patient.html", PatientForm=form, patients=patients_data, info=receptionist_info)
 
 @receptionist_bp.route('/add_patient/', methods=["GET", "POST"])
 @login_required
@@ -638,7 +640,7 @@ def add_schedule():
                         doctorName=form.doctorName.data,  # Use the 'data' attribute to access form data
                         receptionistID=form.receptionistID.data
                     )
-                added_successfully = new_appointment.add_schedule()
+                added_successfully = new_appointment.add_schedule(current_user.username)
 
                 if added_successfully:
                     return jsonify(success=True, message="Appointment added successfully")
@@ -787,7 +789,7 @@ def update_schedule():
         print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
         print('New Appointment Details: ', new_date_appointment, new_time_appointment)
         if Schedule.update_schedule(
-            scheduleID, new_date_appointment, new_time_appointment, new__slots):
+            current_user.username, scheduleID, new_date_appointment, new_time_appointment, new__slots):
             return jsonify(success=True, message="Appointment updated successfully")
         else:
             return jsonify(success=False, message="Failed to update appointment.")

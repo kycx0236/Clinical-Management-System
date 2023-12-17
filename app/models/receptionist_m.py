@@ -534,7 +534,7 @@ class Schedule():
         self.doctorName = doctorName
         self.receptionistID = receptionistID
         
-    def add_schedule(self):
+    def add_schedule(self,recept_username):
         try:
             cursor = mysql.connection.cursor()
 
@@ -547,6 +547,12 @@ class Schedule():
             
             sql = "INSERT INTO schedule(date_appointment, time_appointment, slots, doctorID, doctorName, receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.date_appointment, self.time_appointment, self.slots, self.doctorID, self.doctorName, self.receptionistID))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'ADD', CONCAT('Schedule: ', %s, ' ','for Doctor: ', %s))
+            """
+            cursor.execute(sql_record, (recept_username, self.time_appointment, self.doctorName))
             mysql.connection.commit()
 
             return True
@@ -572,6 +578,7 @@ class Schedule():
     def delete_schedules(cls, doctorName):
         try:
             cursor = mysql.connection.cursor()
+
             sql = "DELETE FROM schedule WHERE doctorName = %s"
             cursor.execute(sql, (doctorName,))
             mysql.connection.commit()
@@ -599,13 +606,20 @@ class Schedule():
         return schedule_data
     
     @classmethod
-    def update_schedule(cls, scheduleID, new_date_appointment, new_time_appointment, new_slots):
+    def update_schedule(cls,recept_username, scheduleID, new_date_appointment, new_time_appointment, new_slots, doc_name):
         try:
             cursor = mysql.connection.cursor()
             sql = "UPDATE schedule SET date_appointment = %s, time_appointment = %s, slots = %s WHERE scheduleID = %s"
             cursor.execute(sql, (new_date_appointment, new_time_appointment, new_slots, scheduleID))
             mysql.connection.commit()
             
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'EDIT', CONCAT('Schedule ID: ', %s, ' ','for Doctor: ', %s))
+            """
+            cursor.execute(sql_record, (recept_username, scheduleID, doc_name))
+            mysql.connection.commit()
+
             return True
         except Exception as e:
             print(f"Error updating appointment: {e}")
