@@ -171,7 +171,7 @@ def add_patient():
         new_patient.eContactNum = e_number
         new_patient.userID = current_id
 
-        result = new_patient.add()
+        result = new_patient.add(current_user.username)
 
         if result:
             return render_template("receptionist/patient/add_patient.html", success=True, PatientForm=form, info=receptionist_info)
@@ -217,7 +217,7 @@ def patient_record():
         new_relationship = form.relationship.data  
         new_e_number = form.e_number.data
         
-        updated = receptionist.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        updated = receptionist.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
                                              nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)  
@@ -247,7 +247,7 @@ def delete_patient():
         patient_id = request.form.get("patient_id")
         receptionist_info = receptionist.get_user(current_id)
 
-        result = receptionist.delete_patient_record(patient_id)
+        result = receptionist.delete_patient_record(current_user.username, patient_id)
 
         if result:
             return render_template("receptionist/patient/patient.html", success=True, PatientForm=form, info=receptionist_info)

@@ -4,7 +4,7 @@ from app import mail
 
 class receptionist():
 # ADD PATIENT INFORMATION
-    def add(self):
+    def add(self, recept_username):
         cursor = mysql.connection.cursor()
 
         check_duplicate_sql = "SELECT patientID FROM patientinfo WHERE firstName = %s AND lastName = %s"
@@ -19,6 +19,13 @@ class receptionist():
         cursor.execute(sql, (self.firstName, self.midName, self.lastName, self.age, self.civilStatus, self.gender, self.bloodType, self.birthPlace, self.birthDate, 
                              self.p_address, self.nationality, self.religion, self.eContactName, self.relationship, self.eContactNum, self.occupation, self.p_email, 
                              self.p_contactNum, self.userID))
+        
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'ADD', CONCAT('Patient Name: ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (recept_username, self.firstName, self.lastName))
+
         mysql.connection.commit()
 
         return True
@@ -56,24 +63,43 @@ class receptionist():
 
 # UPDATE PATIENT INFORMATION
     @classmethod
-    def update_patient_info(cls, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
+    def update_patient_info(cls,recept_username, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE patientinfo SET firstName = %s, midName = %s, lastName = %s, age = %s, civilStatus = %s, gender = %s, bloodType = %s, birthPlace = %s, birthDate = %s, p_address = %s, nationality = %s, religion = %s, eContactName = %s, \
             relationship = %s, eContactNum = %s, occupation = %s, p_email = %s, p_contactNum = %s WHERE patientID = %s"
         cursor.execute(sql, (firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum, patientID))
         print(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum, patientID)
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'EDIT', CONCAT('Patient Name: ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (recept_username, firstName, lastName))
         mysql.connection.commit()
         
         return True
 
 # DELETE PATIENT RECORD 
     @classmethod 
-    def delete_patient_record(cls, patientID):
+    def delete_patient_record(cls, recept_username, patientID):
         cursor = mysql.connection.cursor()
         try:
+            fetch_name_query = "SELECT firstName, lastName FROM patientinfo WHERE patientID = %s"
+            cursor.execute(fetch_name_query, (patientID,))
+            name_tuple = cursor.fetchone()
+            patient_fname = name_tuple[0]
+            patient_lname = name_tuple[1]
+
             query = "DELETE FROM patientinfo WHERE patientID = %s"
             cursor.execute(query, (patientID,))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'DELETE', CONCAT('Patient Name: ', %s, ' ', %s))
+            """
+            cursor.execute(sql_record, (recept_username, patient_fname, patient_lname))
+
             mysql.connection.commit()
             return True
         except:
