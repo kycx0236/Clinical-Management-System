@@ -144,20 +144,17 @@ class admin():
             sql = "UPDATE users SET username=%s, password=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
             cursor.execute(sql, (username, hashed_password, first_name, middle_name, last_name, gender, user_role, user_id))
 
-            sql_record = """
-            CALL rec_admin_edit(%s, %s);
-            """
-            cursor.execute(sql_record, (admin_username, username))
-
         else:
             # Update the database without changing the password
             sql = "UPDATE users SET username=%s, first_name=%s, middle_name=%s, last_name=%s, gender=%s, user_role=%s WHERE id=%s"
             cursor.execute(sql, (username, first_name, middle_name, last_name, gender, user_role, user_id))
-            sql_record = """
-            CALL rec_admin_edit(%s, %s);
-            """
-            cursor.execute(sql_record, (admin_username, username))
             
+
+        sql_record = """
+        CALL rec_admin_edit(%s, %s);
+        """
+        cursor.execute(sql_record, (admin_username, username))  
+          
         mysql.connection.commit()
         cursor.close()
 
