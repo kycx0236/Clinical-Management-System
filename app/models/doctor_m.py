@@ -506,30 +506,32 @@ class Appointment:
             cursor = mysql.connection.cursor()
             sql = "INSERT INTO appointment (reference_number, receptionistID, doctorID, doctorName, date_appointment, time_appointment, status_, first_name, middle_name, last_name, sex, birth_date, contact_number, email, address) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
+            self.send_add_message(self.email, self.reference_number, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name)
             mysql.connection.commit()
             return True
         except Exception as e:
             print(f"Error adding appointment: {e}")
             return False
    
-    def add_notify(email, reference_number, date_appointment, time_appointment, status_, last_name):
+    @classmethod
+    def send_add_message(cls, email, reference_number, date_appointment, time_appointment, status_, first_name, middle_name, last_name):
         print("Sending email to:", email)
         message = Message(
-            subject='Appointment Information',
+            subject='Appointment Confirmation',
             recipients=[email],
             sender=('Receptionist', 'cms_receptionist@gmail.com')
         )
-        
+
         message.html = (
-            f"Dear {last_name},<br>"
-            f"Your appointment details have been updated:<br>"
+            f"Dear {first_name} {middle_name} {last_name},<br>"
+            f"You have an appointment! Here are your details:<br>"
             f"Reference Number: {reference_number}<br>"
             f"Date: {date_appointment}<br>"
             f"Time: {time_appointment}<br>"
             f"Status: {status_}<br>"
-            "<p>Additional message or instructions can be added here.</p>"
+            "<p>Thank you for choosing DocCare!</p>"
         )
-        mail.send(message)
+        mail.send(message)  
         print("Email sent successfully.")
 
     @classmethod
@@ -819,11 +821,51 @@ class Appointment:
             sql = "UPDATE appointment SET status_ = %s WHERE reference_number = %s"
             cursor.execute(sql, (new_status, reference_number))
             mysql.connection.commit()
+            # Fetch the existing appointment details
+            existing_appointment = cls.get_appointment_by_reference_version_two(reference_number)
+            print('Existing appointment details:', existing_appointment)
+            email = existing_appointment['email']
+            date = existing_appointment['date_appointment']
+            time = existing_appointment['time_appointment']
+            status = existing_appointment['status_']
+            last_name = existing_appointment['last_name']
+                # Send message if any of the conditions are true
+            cls.send_cancel_message(
+                    email,
+                    reference_number,
+                    date,
+                    time,
+                    status,
+                    last_name
+                )
+            
+            print("Time Appointment:", time)
             print("Appointment updated to cancelled!")
             return True
         except Exception as e:
             print(f"Error deleting appointment: {e}")
             return False
+        
+    @staticmethod
+    def send_cancel_message(email, reference_number, date_appointment, time_appointment, status_, last_name):
+        print("Sending email to:", email)
+        message = Message(
+            subject='Appointment Cancellation',
+            recipients=[email],
+            sender=('Receptionist', 'cms_receptionist@gmail.com')
+        )
+        
+        message.html = (
+            f"Dear {last_name},<br>"
+            f"Your appointment has been cancelled. Here are your details:<br>"
+            f"Reference Number: {reference_number}<br>"
+            f"Date: {date_appointment}<br>"
+            f"Time: {time_appointment}<br>"
+            f"Status: {status_}<br>"
+            "<p>Please call if you have concerns with your appointment.</p>"
+        )
+        mail.send(message)
+        print("Email sent successfully.")   
         
     @classmethod
     def get_all_doctor_name(cls, id):
