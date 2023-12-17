@@ -787,11 +787,12 @@ def add_assessment():
 @login_required
 @role_required('doctor')
 def patient():
+    form = PatientForm()
     user_id = current_user.id
     doctor_info = doctor.get_doctor_info(user_id)
     patients_data = doctor.get_patients(user_id)
 
-    return render_template("doctor/patient/patient.html", patients=patients_data, info=doctor_info)
+    return render_template("doctor/patient/patient.html", patients=patients_data, info=doctor_info, PatientForm=form)
 
 # CONSULTATION TABLE
 @doctor_bp.route('/consultation/')
