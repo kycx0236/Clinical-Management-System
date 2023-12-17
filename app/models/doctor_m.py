@@ -110,19 +110,31 @@ class doctor():
     
 # ADD MEDICAL CLEARANCE 
     @classmethod
-    def add_medical_clearance(cls, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
+    def add_medical_clearance(cls,doc_username, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
         cursor = mysql.connection.cursor()
 
         sql = "INSERT INTO clearance (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance) \
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance))
+
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical Clearance of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
 
         return True
     
 # ADD MEDICAL CERTIFICATE 
     @classmethod
-    def add_medical_certificate(cls, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
+    def add_medical_certificate(cls, doc_username, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
         cursor = mysql.connection.cursor()
 
         sql = "INSERT INTO certificate (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate) \
@@ -130,6 +142,18 @@ class doctor():
         cursor.execute(sql, (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate))
         mysql.connection.commit()
 
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical Certificate of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+        mysql.connection.commit()
+        
         return True
     
 # ADD PRESCRIPTION
@@ -499,6 +523,7 @@ class doctor():
         cursor.execute(sql, (patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, 
                              normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, 
                              abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection, assessmentID))
+        
         cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
         result = cursor.fetchone()
         firstName = result[0]
@@ -515,24 +540,46 @@ class doctor():
     
 # UPDATE PATIENT MEDICAL CLEARANCE
     @classmethod 
-    def update_medical_clearance(cls, clearanceID, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
+    def update_medical_clearance(cls, doc_username, clearanceID, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE clearance SET patientID = %s, subjectClearance = %s, reason = %s, recommendations = %s, bloodPressure = %s, pulseRate = %s, temperature = %s, respRate = %s, height = %s, weight_p = %s, bmi = %s, \
             oxygenSaturation = %s, painSection = %s, physicalExam = %s, clearance = %s WHERE clearanceID = %s"
         cursor.execute(sql, (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance, clearanceID))
+
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical Clearance of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
     
 # UPDATE PATIENT MEDICAL CERTIFICATE
     @classmethod 
-    def update_medical_certificate(cls, certificateID, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
+    def update_medical_certificate(cls, doc_username, certificateID, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE certificate SET patientID = %s, subjectCertificate = %s, reason = %s, recommendations = %s, bloodPressure = %s, pulseRate = %s, temperature = %s, respRate = %s, height = %s, weight_p = %s, bmi = %s, \
             oxygenSaturation = %s, painSection = %s, physicalExam = %s, certificate = %s WHERE certificateID = %s"
         cursor.execute(sql, (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate, certificateID))
+
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical Certificate of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True

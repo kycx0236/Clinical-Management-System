@@ -519,7 +519,7 @@ def add_clearance():
         recommendations = request.form.get('recommendations').capitalize()
         clearance = request.form.get('clearance_textarea').capitalize()
 
-        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        info_update = doctor.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
                                              nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
@@ -529,7 +529,7 @@ def add_clearance():
         existing_history = doctor.get_patient_history(new_patient_id)
 
         if existing_history:
-            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+            history_update = doctor.update_medical_history(current_user.username, historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
                                                 dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
                                                 hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
                                                 hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
@@ -553,7 +553,7 @@ def add_clearance():
             updated_history = doctor.get_patient_history(new_patient_id)
         
         
-        clearance_result = doctor.add_medical_clearance(patientID=new_patient_id, subjectClearance=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+        clearance_result = doctor.add_medical_clearance(current_user.username, patientID=new_patient_id, subjectClearance=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
                                                painSection=painSection, physicalExam=examinations, clearance=clearance)
 
@@ -716,7 +716,7 @@ def add_certificate():
         recommendations = request.form.get('recommendations').capitalize()
         certificate = request.form.get('certificate_textarea').capitalize()
 
-        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        info_update = doctor.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
                                              nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
@@ -726,7 +726,7 @@ def add_certificate():
         existing_history = doctor.get_patient_history(new_patient_id)
 
         if existing_history:
-            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+            history_update = doctor.update_medical_history(current_user.username, historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
                                                 dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
                                                 hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
                                                 hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
@@ -750,7 +750,7 @@ def add_certificate():
             updated_history = doctor.get_patient_history(new_patient_id)
         
         
-        clearance_result = doctor.add_medical_certificate(patientID=new_patient_id, subjectCertificate=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+        clearance_result = doctor.add_medical_certificate(current_user.username, patientID=new_patient_id, subjectCertificate=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
                                                painSection=painSection, physicalExam=examinations, certificate=certificate)
 
@@ -1196,7 +1196,7 @@ def clearance():
         recommendations = request.form.get('recommendations').capitalize()
         clearance = request.form.get('clearance_textarea').capitalize()
 
-        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        info_update = doctor.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
                                              nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
@@ -1206,7 +1206,7 @@ def clearance():
         existing_history = doctor.get_patient_history(new_patient_id)
 
         if existing_history:
-            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+            history_update = doctor.update_medical_history(current_user.username, historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
                                                 dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
                                                 hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
                                                 hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
@@ -1229,7 +1229,7 @@ def clearance():
 
             updated_history = doctor.get_patient_history(new_patient_id)
 
-            clearance_update = doctor.update_medical_clearance(clearanceID=new_clearance_id, patientID=new_patient_id, subjectClearance=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+            clearance_update = doctor.update_medical_clearance(current_user.username, clearanceID=new_clearance_id, patientID=new_patient_id, subjectClearance=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
                                                painSection=painSection, physicalExam=examinations, clearance=clearance)
             updated_clearance = doctor.get_clearance_info(new_clearance_id, new_patient_id)
@@ -1398,7 +1398,7 @@ def certificate():
         recommendations = request.form.get('recommendations').capitalize()
         certificate = request.form.get('certificate_textarea').capitalize()
 
-        info_update = doctor.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        info_update = doctor.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
                                              nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)
@@ -1408,7 +1408,7 @@ def certificate():
         existing_history = doctor.get_patient_history(new_patient_id)
 
         if existing_history:
-            history_update = doctor.update_medical_history(historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
+            history_update = doctor.update_medical_history(current_user.username, historyID = new_history_id, patientID = new_patient_id, bcgCheckbox = bcg_checkbox_value,
                                                 dtpCheckbox = dtp_checkbox_value, pcvCheckbox = pcv_checkbox_value, influenzaCheckbox = influenza_checkbox_value,
                                                 hepaCheckbox = hepa_checkbox_value, ipvCheckbox = ipv_checkbox_value, mmrCheckbox = mmr_checkbox_value,
                                                 hpvCheckbox = hpv_checkbox_value, asthmaCheckbox = asthma_checkbox_value,diabetesCheckbox = diabetes_checkbox_value,
@@ -1431,7 +1431,7 @@ def certificate():
 
             updated_history = doctor.get_patient_history(new_patient_id)
 
-            certificate_update = doctor.update_medical_certificate(certificateID=new_certificate_id, patientID=new_patient_id, subjectCertificate=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
+            certificate_update = doctor.update_medical_certificate(current_user.username, certificateID=new_certificate_id, patientID=new_patient_id, subjectCertificate=subject, reason=reason, recommendations=recommendations, bloodPressure=blood_p,
                                                pulseRate=pulse_r, temperature=temp, respRate=respiratory_r, height=height, weight_p=weight, bmi=body_mass, oxygenSaturation=oxygenSaturation, 
                                                painSection=painSection, physicalExam=examinations, certificate=certificate)
             updated_certificate = doctor.get_certificate_info(new_certificate_id, new_patient_id)
