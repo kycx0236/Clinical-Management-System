@@ -6,6 +6,7 @@
 
 {% block content %}
 
+
     <!-- SIDE NAVIGATION -->
     <div class="sidenav-bg">
         <div class="cms-logo">
@@ -79,7 +80,7 @@
                         <a class="nav-link active" aria-current="page">MEDICAL CLEARANCE</a>
                     </li>
 
-                    <button class="print-icon" onclick="window.print()" id="printButton">
+                    <button class="print-icon" type="button" onclick="printSection()" id="printButton">
                         <img src="{{ url_for('static', filename='images/Print.png') }}">
                     </button>
                     <img class="update-icon" onclick="enableEdit()" id="editIcon" src="{{ url_for('static', filename='images/Edit-icon.png') }}">
@@ -758,15 +759,15 @@
                                 <textarea class="complaints" name="reasons" rows="2" placeholder="Specify any procedures, activities, or events for which the clearance is needed">{{ clearance[3] }}</textarea>
                             </div>
     
-                            <div class="med-header clearance">ASSESSMENT & RECOMMENDATIONS</div>
+                            <div class="med-header clearance">RECOMMENDATIONS</div>
                             <div class="p_row vitalRowF">
-                                <textarea class="complaints" name="recommendations" rows="2" placeholder="Provide an assessment of the patient's fitness for the requested activity">{{ clearance[4] }}</textarea>
+                                <textarea class="complaints" name="recommendations" rows="2" placeholder="Provide recommendations to the patient based on your assessments">{{ clearance[4] }}</textarea>
                             </div>
                         </div>
     
                         <div id="toggleContent7" style="display: none;">
                             <div class="med-header history">MEDICAL CLEARANCE</div>
-                            <textarea class="clearance_textarea" name="clearance_textarea" rows="2" placeholder="Enter medical clearance">{{ clearance[15] }}</textarea>  
+                            <textarea id="sectionToPrint" class="clearance_textarea" name="clearance_textarea" rows="2" placeholder="Enter the results from the examination for the clearance">{{ clearance[15] }}</textarea>  
                         </div>
     
                     </div>
@@ -973,6 +974,93 @@
             inputs.forEach((input) => {
                 input.disabled = true;
             });
+        }
+
+        // TO PRINT CERTIFICATION
+        function printSection() {
+            var section = document.getElementById('sectionToPrint');
+        
+            if (section) {
+                var currentDate = new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                var printWindow = window.open('about:blank', '_blank', 'width=800,height=600,toolbar=0,menubar=0'); 
+                
+                var printableContent = `
+                    <html>
+                    <head>
+                        <title>MEDICAL CLEARANCE</title>
+                        <style>
+                            body {
+                                font-family: 'Times New Roman', Times, serif;
+                                text-align: justify;
+                                margin-top: 25px
+                                font-size: 14px;
+                            }
+                            
+                            .clearance_textarea {
+                                width: 100%;
+                            }
+
+                            h3 {
+                                text-align: center;
+                                margin-bottom: 40px;
+                            }
+
+                            .cms_logo {
+                                display: flex;
+                                text-align: center;
+                                justify-content: center;
+                            }
+
+                            .care {
+                                color: #0277BD;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <center>
+                            <div class="cms_logo">
+                                <h4 class="doc">Doc</h4>
+                                <h4 class="care">Care</h4>
+                            </div>
+                        </center>
+                       
+                        <p style="text-align: right; margin-bottom: 40px;">Date: ${currentDate}</p>
+                        <h3> MEDICAL CLEARANCE </h3>
+                        <p style="text-align: left; margin-bottom: 20px;">
+                            Patient Information: <br>
+                            Name: <strong>{{ profile[1] }} {{ profile[2] }} {{ profile[3] }}</strong> <br>
+                            Date of Birth: {{ profile[9] }} <br>
+                            Medical Record Number: {{ profile[0] }}
+                        </p>
+                        <p style="text-align: left; margin-bottom: 20px;">To whom it may concern,</p>
+                        <p>
+                            I, the undersigned healthcare provider, have evaluated the patient named above for medical clearance for the intended {{ clearance[3] }}.
+                            <br><br> The following assessments and findings have been made: <br> ${section.innerHTML}
+
+                            <br><br><br>
+                            Recommendations:
+                            {{ clearance[4] }}
+
+                            <br><br><br>This certification is being issued upon request by the interested party for: {{ clearance[3] }}
+                        </p>
+
+                        <p style="margin-top:80px; text-align: right;"><strong>DR. {{ info[0] }} {{ info[1] }}</strong><br>PHYSICIAN</p>
+                    </body>
+                    </html>
+                `;
+
+                printWindow.document.write(printableContent);
+                printWindow.print();
+                printWindow.close(); 
+
+            } else {
+                console.error('Section not found.');
+            }
         }
     </script>
 
