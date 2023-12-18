@@ -342,5 +342,38 @@
         console.log('Available Slots:', slots);
     });
 
+    // NOTIFICATION
+    var box  = document.getElementById('box');
+        var down = false;
+
+        function toggleNotifi(){
+            if (down) {
+                box.style.height  = '0px';
+                box.style.opacity = 0;
+                down = false;
+            } else {
+                box.style.height  = '360px';
+                box.style.opacity = 1;
+                down = true;
+            }
+        }
+
+        function setupSocketIO() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('connect', function() {
+                console.log('SocketIO connected!');
+            });
+
+            socket.on('new_lab_report_notification', function(data) {
+                console.log('Notification data');
+            
+                alert('Laboratory report has been sent!');
+                window.location.reload(); 
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupSocketIO();
+        });
 </script>
 {% endblock %}
