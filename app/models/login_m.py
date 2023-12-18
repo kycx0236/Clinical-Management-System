@@ -43,3 +43,14 @@ class User(UserMixin):
             user = User(user_data[0], user_data[1], user_data[2])
             return user
         return None
+    
+    @staticmethod
+    def record_login(user_role, username):
+        cursor = mysql.connection.cursor()
+        sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), %s , %s, 'LOGIN', ' ')
+            """
+        cursor.execute(sql_record, (user_role, username))
+        mysql.connection.commit()
+        cursor.close()

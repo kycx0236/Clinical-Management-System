@@ -2,6 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from app.forms.admin_f import *
 import app.models as models
 from app.models.admin_m import *
+from app.models.login_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
@@ -14,6 +15,7 @@ admin_bp = Blueprint('admin', __name__)
 @role_required('admin')
 def dashboard():
     current_id = current_user.id 
+    current_user.username
     admin_info = admin.get_user(current_id)
     users_data = admin.get_users()
     limited_users = users_data[:4]
@@ -45,6 +47,7 @@ def profile():
 def logout():
     print("Logout route accessed")  
     logout_user()
+    User.record_logout_admin(current_user.username)
     return redirect(url_for('login'))
 
 # -------------------------------------------- USER -------------------------------------------- #
