@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysql_connector import MySQL
 from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL, cloud_name, api_key, api_secret
 from flask_wtf.csrf import CSRFProtect
+# from app.routes.socket_events import handle_connect, handle_disconnect, handle_message
 from flask_login import LoginManager, login_user
 from flask_mail import Mail
-# from flask_socketio import SocketIO
+from flask_socketio import SocketIO
+# from app.filters import time_ago, get_notification_text
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -14,10 +16,11 @@ mysql = MySQL()
 login_manager = LoginManager()
 mail = Mail()
 csrf = CSRFProtect()
-# socketio = SocketIO()
+socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__)
+    # socketio = SocketIO(app, logger=True, engineio_logger=True)
 
     app.config['SECRET_KEY'] = SECRET_KEY
     app.config['MYSQL_HOST'] = DB_HOST
@@ -41,6 +44,14 @@ def create_app():
     mysql.init_app(app)
     csrf.init_app(app)
     mail.init_app(app)
+    socketio.init_app(app)
+
+    # socketio.on_event('connect', handle_connect)
+    # socketio.on_event('disconnect', handle_disconnect)
+    # socketio.on_event('send_message', handle_message)
+
+    # app.jinja_env.filters['time_ago'] = time_ago
+    # app.jinja_env.filters['notif_type'] = get_notification_text
     
     login_manager = LoginManager(app)
  
@@ -70,6 +81,14 @@ def create_app():
                 flash("The username or password you've entered is incorrect", 'error')
 
         return render_template("login.html")
+    
+    @socketio.on('connect')
+    def handle_connect():
+        print('Client connected')
+
+    @socketio.on('disconnect')
+    def handle_disconnect():
+        print('Client disconnected')
 
 
     from app.routes.admin_bp import admin_bp

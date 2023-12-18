@@ -12,8 +12,14 @@ from app.routes.utils import role_required
 from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.uploader import destroy
+from flask_socketio import send, emit
+from app import socketio 
 
 doctor_bp = Blueprint('doctor', __name__)
+
+@socketio.on('new_lab_request')
+def handle_new_lab_request():
+    socketio.emit('new_lab_request_notification', {'data': 'New laboratory request added'}, broadcast=True)
 
 @doctor_bp.route('/')
 @login_required
@@ -1632,6 +1638,7 @@ def labtest_request():
         print('result', result)
 
         if result:
+            socketio.emit('new_lab_request_notification', namespace='/')
             return render_template("doctor/patient/labtest_request.html", success=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
         else:
             return render_template("doctor/patient/labtest_request.html", error=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)

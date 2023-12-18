@@ -8,8 +8,13 @@ from app.routes.utils import role_required
 from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.uploader import destroy
+from app import socketio 
 
 medtech_bp = Blueprint('medtech', __name__)
+
+@socketio.on('new_lab_report')
+def handle_new_lab_report():
+    socketio.emit('new_lab_report_notification', {'data': 'New laboratory report added'}, broadcast=True)
 
 # LAB REQUEST TABLE
 @medtech_bp.route('/')
@@ -49,7 +54,7 @@ def laboratory_test():
         return render_template('medtech/laboratory_test.html', labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info, socketio=socketio)
     
     elif request.method == 'POST':
         new_order_id = request.form.get('order_id')
@@ -75,6 +80,7 @@ def laboratory_test():
             user_info = medtech.get_user_info(user_id)
 
             if report:
+                socketio.emit('new_lab_report_notification', namespace='/')
                 return render_template("medtech/laboratory_test.html", success=True, labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
@@ -85,7 +91,7 @@ def laboratory_test():
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
                                immunochem=immunochem_info, clinicalchem=clinicalchem_info, medtech=user_info)
         
-    return render_template("medtech/laboratory_test.html", patient_id=patient_id, medtech=user_info)
+    return render_template("medtech/laboratory_test.html", patient_id=patient_id, medtech=user_info, socketio=socketio)
 
 @medtech_bp.route('/patient/')
 @login_required
@@ -95,7 +101,7 @@ def patient():
     labrequest_data = medtech.get_lab_reports()
     medtech_info = medtech.get_user_info(user_id)
     
-    return render_template("medtech/patient.html", labrequests=labrequest_data, info=medtech_info)
+    return render_template("medtech/patient.html", labrequests=labrequest_data, info=medtech_info, socketio=socketio)
 
 @medtech_bp.route('/laboratory_report/')
 @login_required
@@ -122,7 +128,7 @@ def laboratory_report():
     return render_template("medtech/laboratory_report.html", labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,
-                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, report=labrep_info, info=medtech_info)
+                               immunochem=immunochem_info, clinicalchem=clinicalchem_info, report=labrep_info, info=medtech_info, socketio=socketio)
 
 @medtech_bp.route('/profile/')
 @login_required
@@ -130,7 +136,7 @@ def laboratory_report():
 def profile():
     user_id = current_user.id
     medtech_info = medtech.get_user_info(user_id)
-    return render_template("medtech/profile.html", info=medtech_info)
+    return render_template("medtech/profile.html", info=medtech_info, socketio=socketio)
 
 @medtech_bp.route('/logout/')
 @login_required
