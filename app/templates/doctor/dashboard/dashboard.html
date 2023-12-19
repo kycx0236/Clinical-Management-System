@@ -11,11 +11,16 @@
         <ul>
             <li>
                 <div class="icon" onclick="toggleNotifi()">
-                    <span></span>
+                    <span id="notification-count"></span>
                     <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
                 </div>
                 <div class="notifi-box" id="box">
-                    <h2>Notifications <span></span></h2>
+                    <h2>Notifications</h2>
+                    <table id="notification-table">
+                        <tbody id="notification-body" style="text-align: justify; font-size: 16px; font-weight: 100;">
+                            <!-- Table body for notifications -->
+                        </tbody>
+                    </table>
                 </div>
             </li>
             <li class="selected-icon-bg">
@@ -173,6 +178,8 @@
         </center>
    </main>
 
+   <div id="userId" data-userid="{{ info[3] }}" style="display: none;"></div>
+
    <script>
     // TO DISPLAY THE DATE
     function displayDateAndTime() {
@@ -189,40 +196,74 @@
         setInterval(updateDateAndTime);
     }
     displayDateAndTime();   
-
+    
     // NOTIFICATION
-    var box  = document.getElementById('box');
+    var box = document.getElementById('box');
     var down = false;
 
-    function toggleNotifi(){
+    function populateNotificationTable(notifications) {
+        const notificationBody = document.getElementById('notification-body');
+        notificationBody.innerHTML = ''; // Clear existing rows before populating
+    
+        notifications.forEach(notification => {
+            const row = document.createElement('tr');
+    
+            const messageColumn = document.createElement('td');
+            const patientName = notification.patientName;
+            messageColumn.textContent = `The lab report for ${patientName} has been successfully sent`;
+            row.appendChild(messageColumn);
+     
+            notificationBody.appendChild(row);
+        });
+        updateNotificationCount(notifications.length);
+    }
+
+    function updateNotificationCount(count) {
+        const notificationCountSpan = document.getElementById('notification-count');
+        notificationCountSpan.style.display = 'block';
+        notificationCountSpan.textContent = count.toString();
+    }
+    
+    function toggleNotifi() {
         if (down) {
-            box.style.height  = '0px';
+            box.style.height = '0px';
             box.style.opacity = 0;
             down = false;
         } else {
-            box.style.height  = '360px';
+            box.style.height = '400px';
             box.style.opacity = 1;
             down = true;
+    
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            var userIdDiv = document.getElementById('userId');
+            var userId = userIdDiv.getAttribute('data-userid');
+            var user_type = 'Report'; 
+            socket.emit('get_notifications', userId, user_type);
+    
+            socket.on('notifications_data', function(data) {
+                console.log('Received notifications:', data.notifications);
+                populateNotificationTable(data.notifications);
+            });
         }
     }
-
-    function setupSocketIO() {
+    
+    document.addEventListener('DOMContentLoaded', function() {
         var socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on('connect', function() {
             console.log('SocketIO connected!');
         });
-
-        socket.on('new_lab_report_notification', function(data) {
-            console.log('Notification data');
-        
-            alert('Laboratory report has been sent!');
-            window.location.reload(); 
+    
+        socket.on('lab_report_notification', function(message) {
+            console.log('Received lab report notification:', message);
+    
+            var notificationCountSpan = document.getElementById('notification-count');
+            notificationCountSpan.style.display = 'block';
+            notificationCountSpan.textContent = '';
+    
+            toggleNotifi();
         });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        setupSocketIO();
     });
+
 </script>
     
 {% endblock %}

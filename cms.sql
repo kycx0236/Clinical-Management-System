@@ -17,6 +17,22 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 ) AUTO_INCREMENT = 1000;
 
+-- NOTIFICATION 
+CREATE TABLE IF NOT EXISTS `notification` (
+    `notifID` INT NOT NULL AUTO_INCREMENT,
+    `notifier` INT NOT NULL,
+    `notifying` INT NOT NULL,
+    `patientName` VARCHAR(255),
+    `notif_type` VARCHAR(50),
+    `status` VARCHAR(20),
+    `is_read` VARCHAR(20),
+    -- `created_at` BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (`notifID`),
+    UNIQUE KEY `notif_id_UNIQUE` (`notifID`),
+    FOREIGN KEY (`notifier`) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`notifying`) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS `appointment` (
 	`reference_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`receptionistID` INT(10) NOT NULL,
@@ -47,7 +63,6 @@ COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB
 ;
 
-
 CREATE TABLE `schedule` (
 	`scheduleID` INT(10) NOT NULL AUTO_INCREMENT,
 	`date_appointment` DATE NULL DEFAULT NULL,
@@ -68,7 +83,6 @@ CREATE TABLE `schedule` (
 COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB
 ;
-
 
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
@@ -315,6 +329,7 @@ CREATE TABLE IF NOT EXISTS `certificate` (
 CREATE TABLE IF NOT EXISTS `labrequest` (
   `orderID` int NOT NULL AUTO_INCREMENT,
   `patientID` int NOT NULL,
+  `doctorID` int NOT NULL,
   `patientName` varchar(255) NOT NULL,
   `labSubject` varchar(255) NOT NULL,
   `gender` varchar(10) NOT NULL,

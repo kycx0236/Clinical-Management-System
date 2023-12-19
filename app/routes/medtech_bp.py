@@ -1,10 +1,11 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from app.forms.medtech_f import *
-import app.models as models
-from app.models.medtech_m import *
-from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
+from app.forms.medtech_f import *
+from app.models.medtech_m import *
+from app.routes.notif_bp import *
+import app.models as models
+from flask import Blueprint
 from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.uploader import destroy
@@ -12,9 +13,9 @@ from app import socketio
 
 medtech_bp = Blueprint('medtech', __name__)
 
-@socketio.on('new_lab_report')
-def handle_new_lab_report():
-    socketio.emit('new_lab_report_notification', {'data': 'New laboratory report added'}, broadcast=True)
+# @socketio.on('new_lab_report')
+# def handle_new_lab_report():
+#     socketio.emit('new_lab_report_notification', {'data': 'New laboratory report added'}, broadcast=True)
 
 # LAB REQUEST TABLE
 @medtech_bp.route('/')
@@ -58,7 +59,9 @@ def laboratory_test():
     
     elif request.method == 'POST':
         new_order_id = request.form.get('order_id')
+        new_doctor_id = request.form.get('doctor_id')
         new_medtech_name = request.form.get('medtech_name')
+        patientName = request.form.get('fullName')
         uploaded_file = request.files['pdfFile']
 
         if uploaded_file.filename != '' and uploaded_file.filename.endswith('.pdf'):
@@ -80,7 +83,16 @@ def laboratory_test():
             user_info = medtech.get_user_info(user_id)
 
             if report:
-                socketio.emit('new_lab_report_notification', namespace='/')
+                # socketio.emit('new_lab_report_notification', namespace='/')
+                notifier_id = current_user.id 
+                notifying_id = new_doctor_id
+                patient_name = request.form.get('fullName')
+                # print('NOTIFIER ID::', patient_data)
+                # print('DOCTOR ID:', notifying_id)
+                print('PATIENT:', patient_name)
+                
+                lab_report_notification_to_doctor(notifier_id, notifying_id, patient_name)
+                
                 return render_template("medtech/laboratory_test.html", success=True, labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,

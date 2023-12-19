@@ -18,6 +18,9 @@
                 </div>
                 <div class="notifi-box" id="box">
                     <h2>Notifications <span></span></h2>
+                    <ul id="notification-list">
+                        <!-- Notifications will be displayed here -->
+                    </ul>
                 </div>
             </li>
             <li class="selected-icon-bg">
@@ -194,23 +197,6 @@
             }
         }
 
-        function setupSocketIO() {
-            var socket = io.connect('http://' + document.domain + ':' + location.port);
-            socket.on('connect', function() {
-                console.log('SocketIO connected!');
-            });
-
-            socket.on('new_lab_request_notification', function(data) {
-                console.log('Notification data');
-            
-                alert('New laboratory request has been made!');
-                window.location.reload(); 
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setupSocketIO();
-        });
     </script>
 
 {% endblock %}

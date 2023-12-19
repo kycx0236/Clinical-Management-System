@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for notif in notifications %}
+        {% if notif.notif_type == 'Report' %}
+            <a href="#" style="color: black; text-decoration: none;">
+                <div>Dear Doctor, the lab report for the patient has been successfully sent. Please review at your earliest convenience.</div>
+            </a>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+<!-- {% for notif in notifications %}
+    {% if notif.type == 'Appointment Done' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Appointment Done</div>
+        </a>
+    {% elif notif.type == 'Appointment Cancelled' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Appointment Cancelled</div>
+        </a>
+    {% elif notif.type == 'Appointment Pending' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Appointment Pending</div>
+        </a>
+    {% elif notif.type == 'Appointment Scheduled' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Appointment Scheduled</div>
+        </a>
+    {% elif notif.type == 'Appointment Rescheduled' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Appointment Rescheduled</div>
+        </a>
+    {% elif notif.type == 'New Patient Added' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for New Patient Added</div>
+        </a>
+    {% elif notif.type == 'Lab Request Notification' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Lab Request Notification</div>
+        </a>
+    {% elif notif.type == 'Lab Report Notification' %}
+        <a href="#" style="color: black; text-decoration: none;">
+            <div>Structure for Lab Report Notification</div>
+        </a>
+    {% endif %}
+{% endfor %} -->

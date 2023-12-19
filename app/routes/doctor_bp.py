@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify, redirect, url_for, flash
 from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
+from app.models.notif_m import *
 import math
 import secrets
 import string
@@ -20,6 +21,11 @@ doctor_bp = Blueprint('doctor', __name__)
 @socketio.on('new_lab_request')
 def handle_new_lab_request():
     socketio.emit('new_lab_request_notification', {'data': 'New laboratory request added'}, broadcast=True)
+
+@socketio.on('get_notifications')  
+def get_notifications(user_id, user_type):
+    notifications = notification.fetch_notifications(user_id, user_type)
+    socketio.emit('notifications_data', {'notifications': notifications})
 
 @doctor_bp.route('/')
 @login_required
@@ -1498,6 +1504,7 @@ def labtest_request():
     elif request.method == 'POST':
         doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
+        new_doctor_id = request.form.get('doctor_id')
 
     # PATIENT INFORMATION
         patient_fullName = form.fullName.data
@@ -1615,7 +1622,7 @@ def labtest_request():
         IonizedCheckbox = form.IonizedCheckbox.data
         PhosCheckbox = form.PhosCheckbox.data
 
-        result = doctor.add_laboratory_request(patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
+        result = doctor.add_laboratory_request(patientID=new_patient_id, doctorID=new_doctor_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
                                                otherTest=otherTest, cbcplateCheckbox=cbcplateCheckbox_value, hgbhctCheckbox=hgbhctCheckbox, protimeCheckbox=protimeCheckbox, 
                                                APTTCheckbox=APTTCheckbox, bloodtypingCheckbox=bloodtypingCheckbox, ESRCheckbox=ESRCheckbox, plateCheckbox=plateCheckbox, 
                                                hgbCheckbox=hgbCheckbox, hctCheckbox=hctCheckbox, cbcCheckbox=cbcCheckbox, reticsCheckbox=reticsCheckbox, CTBTCheckbox=CTBTCheckbox, 

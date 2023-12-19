@@ -1,7 +1,6 @@
 from app import mysql
 from flask_mail import Message
 from app import mail
-# from app.models.login_m import *
 
 class doctor():
 # ADD PATIENT INFORMATION
@@ -121,7 +120,7 @@ class doctor():
             return False
 
     @classmethod 
-    def add_laboratory_request(cls, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
+    def add_laboratory_request(cls, patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
                                bloodtypingCheckbox, ESRCheckbox, plateCheckbox, hgbCheckbox, hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox, culsenCheckbox, cultureCheckbox, 
                                gramCheckbox, KOHCheckbox, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, 
                                ELISACheckbox, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, RFCheckbox, QuantiCheckbox, 
@@ -132,8 +131,8 @@ class doctor():
                                CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox):
         cursor = mysql.connection.cursor()
 
-        labrequest = "INSERT INTO labrequest (patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(labrequest, (patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest))
+        labrequest = "INSERT INTO labrequest (patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(labrequest, (patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest))
 
         cursor.execute("SELECT LAST_INSERT_ID()")
         orderID = cursor.fetchone()[0]
@@ -172,16 +171,27 @@ class doctor():
                                       CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox))
         mysql.connection.commit()
         return True
-    
+
 # GET INFORMATION
     @staticmethod
     def get_doctor_info(doctor_id):
         cursor = mysql.connection.cursor()
-        query = "SELECT first_name, last_name, user_role FROM users WHERE id = %s"
+        query = "SELECT first_name, last_name, user_role, id FROM users WHERE id = %s"
         cursor.execute(query, (doctor_id,))
         doctor = cursor.fetchone()
         cursor.close()
         return doctor
+
+    # @classmethod
+    # def send_notification(cls, notification_type, message_data):
+    #     from app import mysql, socketio
+    #     cursor = mysql.connection.cursor()
+    #     cursor.execute(''' INSERT INTO notification (notifier, notifying, notif_type, status, is_read) 
+    #                 VALUES (%s, %s, %s, %s, %s)''', message_data)
+    #     mysql.connection.commit()
+    #     cursor.close()
+
+    #     socketio.emit('notification', {'type': notification_type, 'message': message_data})
 
     @staticmethod
     def get_patients(doctorID):

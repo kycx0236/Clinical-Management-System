@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user
 from flask_mail import Mail
 from flask_socketio import SocketIO
+from app.routes import notif_bp
 # from app.filters import time_ago, get_notification_text
 import cloudinary
 import cloudinary.uploader
@@ -90,16 +91,17 @@ def create_app():
     def handle_disconnect():
         print('Client disconnected')
 
-
     from app.routes.admin_bp import admin_bp
     from app.routes.doctor_bp import doctor_bp
     from app.routes.medtech_bp import medtech_bp
     from app.routes.receptionist_bp import receptionist_bp
+    from app.routes.notif_bp import notification_bp
     from app.models.login_m import User
     
     app.register_blueprint(admin_bp, url_prefix='/admin/')
     app.register_blueprint(doctor_bp, url_prefix='/doctor/')
     app.register_blueprint(medtech_bp, url_prefix='/medtech/')
     app.register_blueprint(receptionist_bp, url_prefix='/receptionist/')
+    app.register_blueprint(notification_bp, url_prefix='/notification/')
 
     return app
