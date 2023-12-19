@@ -96,30 +96,29 @@
                                     <th>CONTACT NUMBER</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>2023-12-08 12:31:16</td>
-                                        <td>NANCY SAYSON</td>
-                                        <td class="status_short done">DONE</td>
-                                        <td>09351454490</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-12-08 12:31:16</td>
-                                        <td>KURT YURI NOLLAN</td>
-                                        <td class="status_short pending">PENDING</td>
-                                        <td>09351454490</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-12-08 12:31:16</td>
-                                        <td>EDWARD JAMES BONGO</td>
-                                        <td class="status_short inprogress">IN PROGRESS</td>
-                                        <td>09351454490</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-12-08 12:31:16</td>
-                                        <td>XERXES LANCE LAURENZ LOMPON</td>
-                                        <td class="status_short cancelled">CANCELLED</td>
-                                        <td>09351454490</td>
-                                    </tr>
+                                    {% if sched_data %}
+                                        {% for sched_today in sched_data %}
+                                            <tr>
+                                                <td> {{ sched_today.date_appointment }} {{sched_today.time_appointment}}</td>
+                                                <td>{{ sched_today.first_name }} {{ sched_today.middle_name }} {{ sched_today.last_name }}</td>
+                                                <td> 
+                                                    <div class="status_short">
+                                                        <p class="status">
+                                                            <strong> {{ sched_today.status_ }} </strong>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td>{{ sched_today.contact_number }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td> No data </td>
+                                            <td>No data</td>
+                                            <td> No data </td>
+                                            <td> No data </td>
+                                        </tr>
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -171,6 +170,7 @@
         </center>
     </main>
     
+    <script src="{{ url_for('static', filename='receptionist_dashboard_script.js') }}"></script>
     <script>
         // TO DISPLAY THE DATE
         function displayDateAndTime() {

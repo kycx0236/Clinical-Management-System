@@ -24,8 +24,29 @@ def dashboard():
     receptionist_info = receptionist.get_user(current_id)
     patients_data = receptionist.get_patients()
     limited_patient = patients_data[:5]
+    
+    sched_today = Appointment.show_schedule_for_today()
+    print(f'Schedule for today: {sched_today}')
+    
+    sched_today_data_list = []  # Initialize the list here
+    if sched_today:
+        for appointment in sched_today:
+            sched_today_data_dict = {
+                "date_appointment": appointment['date_appointment'],
+                "time_appointment": appointment['time_appointment'],
+                "first_name": appointment['first_name'],
+                "middle_name": appointment['middle_name'],
+                "last_name": appointment['last_name'],
+                "status_": appointment['status_'],
+                "contact_number": appointment['contact_number']
+            }
+            sched_today_data_list.append(sched_today_data_dict)
+            print(f'List of appointment: {sched_today_data_list}')
 
-    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient)
+    else:
+        print('No sched for today')
+
+    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient, sched_data=sched_today_data_list)
 
 @receptionist_bp.route('/calendar/')
 @login_required
@@ -715,6 +736,7 @@ def delete_schedule():
         schedule_id = request.form.get('scheduleID')
         doctor_name = request.form.get('doctor_name')
         print('Doctor Name: ', doctor_name)
+        print('ScheduleID: ', schedule_id)
         print('ScheduleID: ', schedule_id)
 
         if Schedule.delete_schedules(current_user.username, schedule_id):
