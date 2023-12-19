@@ -2,7 +2,6 @@ from flask import render_template, request, jsonify, redirect, url_for, flash
 from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
-from app.models.notif_m import *
 import math
 import secrets
 import string
@@ -13,19 +12,16 @@ from app.routes.utils import role_required
 from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.uploader import destroy
-from flask_socketio import send, emit
 from app import socketio 
+from flask_socketio import send, emit
 
 doctor_bp = Blueprint('doctor', __name__)
 
-@socketio.on('new_lab_request')
-def handle_new_lab_request():
-    socketio.emit('new_lab_request_notification', {'data': 'New laboratory request added'}, broadcast=True)
-
-@socketio.on('get_notifications')  
-def get_notifications(user_id, user_type):
-    notifications = notification.fetch_notifications(user_id, user_type)
-    socketio.emit('notifications_data', {'notifications': notifications})
+@socketio.on('send_notification_medtech')
+def handle_notification_medtech(data):
+    message = data['message']
+    print('message:', message)
+    socketio.emit('receive_notification_medtech', {'message': message}, broadcast=True)
 
 @doctor_bp.route('/')
 @login_required
@@ -1645,7 +1641,9 @@ def labtest_request():
         print('result', result)
 
         if result:
-            socketio.emit('new_lab_request_notification', namespace='/')
+            notification_message = f"New laboratory request created for patient {patient_fullName}"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_medtech', {'message': notification_message}, namespace='/') 
             return render_template("doctor/patient/labtest_request.html", success=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
         else:
             return render_template("doctor/patient/labtest_request.html", error=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
@@ -2005,7 +2003,9 @@ def cancel_appointment():
         if Appointment.update_to_cancel(reference_number, cancel_status):
             # Increment the slots for the deleted time
             Appointment.update_slots(cancel_appointment['date_appointment'], cancelled_time, doctor_name, increment=True)
-
+            notification_message = "An appointment has been cancelled"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_medtech', {'message': notification_message}, namespace='/') 
             return jsonify(success=True, message="Successfully cancelled the appointment")
         else:
             return jsonify(success=False, message="Failed to cancel appointment")

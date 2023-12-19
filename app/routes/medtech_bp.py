@@ -3,19 +3,21 @@ from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 from app.forms.medtech_f import *
 from app.models.medtech_m import *
-from app.routes.notif_bp import *
 import app.models as models
 from flask import Blueprint
 from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.uploader import destroy
 from app import socketio 
+from flask_socketio import send, emit
 
 medtech_bp = Blueprint('medtech', __name__)
 
-# @socketio.on('new_lab_report')
-# def handle_new_lab_report():
-#     socketio.emit('new_lab_report_notification', {'data': 'New laboratory report added'}, broadcast=True)
+@socketio.on('send_notification_doctor')
+def handle_notification_doctor(data):
+    message = data['message']
+    print('message:', message)
+    socketio.emit('receive_notification_doctor', {'message': message}, broadcast=True)
 
 # LAB REQUEST TABLE
 @medtech_bp.route('/')
@@ -26,9 +28,9 @@ def dashboard():
     medtech_info = medtech.get_user_info(current_id)
     labrequest_data = medtech.get_lab_requests()
     labreport_data = medtech.get_lab_reports()
-    limited_patient = labreport_data[:5]
+    limited_patient = labreport_data[:4]
 
-    return render_template("medtech/dashboard.html", labrequests=labrequest_data, info=medtech_info, patients=limited_patient)
+    return render_template("medtech/dashboard.html", labrequests=labrequest_data, info=medtech_info, patients=limited_patient, socketio=socketio)
 
 @medtech_bp.route('/laboratory_test/', methods=['GET', 'POST'])
 @login_required
@@ -59,7 +61,7 @@ def laboratory_test():
     
     elif request.method == 'POST':
         new_order_id = request.form.get('order_id')
-        new_doctor_id = request.form.get('doctor_id')
+        # new_doctor_id = request.form.get('doctor_id')
         new_medtech_name = request.form.get('medtech_name')
         patientName = request.form.get('fullName')
         uploaded_file = request.files['pdfFile']
@@ -83,16 +85,9 @@ def laboratory_test():
             user_info = medtech.get_user_info(user_id)
 
             if report:
-                # socketio.emit('new_lab_report_notification', namespace='/')
-                notifier_id = current_user.id 
-                notifying_id = new_doctor_id
-                patient_name = request.form.get('fullName')
-                # print('NOTIFIER ID::', patient_data)
-                # print('DOCTOR ID:', notifying_id)
-                print('PATIENT:', patient_name)
-                
-                lab_report_notification_to_doctor(notifier_id, notifying_id, patient_name)
-                
+                notification_message = f"Laboratory report has been sent for {patientName}"
+                print('NOTIFICATION:', notification_message)
+                socketio.emit('send_notification_doctor', {'message': notification_message}, namespace='/') 
                 return render_template("medtech/laboratory_test.html", success=True, labreq=labreq_info, PatientForm=form, 
                                patient_id=patient_id, hematology=hematology_info, bacteriology=bacteriology_info,
                                histopathology=histopathology_info, microscopy=microscopy_info, serology=serology_info,

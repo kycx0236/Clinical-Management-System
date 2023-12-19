@@ -181,17 +181,19 @@ class doctor():
         doctor = cursor.fetchone()
         cursor.close()
         return doctor
-
-    # @classmethod
-    # def send_notification(cls, notification_type, message_data):
-    #     from app import mysql, socketio
+    
+    # @staticmethod
+    # def send_lab_notification_to_medtech(mysql, socketio, patient_fullName):
     #     cursor = mysql.connection.cursor()
-    #     cursor.execute(''' INSERT INTO notification (notifier, notifying, notif_type, status, is_read) 
-    #                 VALUES (%s, %s, %s, %s, %s)''', message_data)
-    #     mysql.connection.commit()
+    #     query = "SELECT id FROM users WHERE user_role = 'medtech'"
+    #     cursor.execute(query)
+    #     medtech_user_ids = cursor.fetchall()
     #     cursor.close()
 
-    #     socketio.emit('notification', {'type': notification_type, 'message': message_data})
+    #     for user_id in medtech_user_ids:
+    #         # Sending notification to each 'medtech' user individually
+    #         socketio.emit('send_notification', {'message': f"New laboratory request created for patient {patient_fullName}"}, room=user_id[0], namespace='/')
+    #         print(f'Notification sent to Medtech with ID: {user_id[0]}')
 
     @staticmethod
     def get_patients(doctorID):

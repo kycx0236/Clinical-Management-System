@@ -1,13 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_mysql_connector import MySQL
 from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL, cloud_name, api_key, api_secret
 from flask_wtf.csrf import CSRFProtect
-# from app.routes.socket_events import handle_connect, handle_disconnect, handle_message
 from flask_login import LoginManager, login_user
 from flask_mail import Mail
 from flask_socketio import SocketIO
-from app.routes import notif_bp
-# from app.filters import time_ago, get_notification_text
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -21,7 +18,6 @@ socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__)
-    # socketio = SocketIO(app, logger=True, engineio_logger=True)
 
     app.config['SECRET_KEY'] = SECRET_KEY
     app.config['MYSQL_HOST'] = DB_HOST
@@ -46,13 +42,6 @@ def create_app():
     csrf.init_app(app)
     mail.init_app(app)
     socketio.init_app(app)
-
-    # socketio.on_event('connect', handle_connect)
-    # socketio.on_event('disconnect', handle_disconnect)
-    # socketio.on_event('send_message', handle_message)
-
-    # app.jinja_env.filters['time_ago'] = time_ago
-    # app.jinja_env.filters['notif_type'] = get_notification_text
     
     login_manager = LoginManager(app)
  
@@ -95,13 +84,11 @@ def create_app():
     from app.routes.doctor_bp import doctor_bp
     from app.routes.medtech_bp import medtech_bp
     from app.routes.receptionist_bp import receptionist_bp
-    from app.routes.notif_bp import notification_bp
     from app.models.login_m import User
     
     app.register_blueprint(admin_bp, url_prefix='/admin/')
     app.register_blueprint(doctor_bp, url_prefix='/doctor/')
     app.register_blueprint(medtech_bp, url_prefix='/medtech/')
     app.register_blueprint(receptionist_bp, url_prefix='/receptionist/')
-    app.register_blueprint(notification_bp, url_prefix='/notification/')
 
     return app
