@@ -224,6 +224,7 @@
                     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
                     <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
                     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                     <script src="{{ url_for('static', filename='doctor_schedule_script.js') }}"> </script>
                     <script src="{{ url_for('static', filename='logout.js') }}"></script>  
@@ -232,7 +233,7 @@
                             $('#scheduleTable').DataTable();
                         } );
                         // Update the time_appointment dropdown based on the selected date
-                        $('#validationCustom01').on('change', function () {
+                        $('#validationCustom02').on('change', function () {
                             var selectedDate = $(this).val();
                             var selectedDoctor = $('#validationCustom11').val(); // Get the selected doctorName
 
@@ -240,7 +241,7 @@
                             var timeSchedules = generateTimeSchedules();
 
                             // Update the options of the time_appointment dropdown
-                            var timeDropdown = $('#validationCustom02');
+                            var timeDropdown = $('#validationCustom03');
                             timeDropdown.empty();
                             timeDropdown.append('<option value="" selected>Select your desired time</option>');
 

@@ -219,7 +219,7 @@ class Appointment:
             f"Date: {date_appointment}<br>"
             f"Time: {time_appointment}<br>"
             f"Status: {status_}<br>"
-            "<p>Please take note of your schedule.</p>"
+            "<p>Please take note of your schedule. Thank you!</p>"
         )
         mail.send(message)
         print("Email sent successfully.")
@@ -354,6 +354,33 @@ class Appointment:
             return result
         except Exception as e:
             print(f"Error fetching all appointments: {e}")
+            return []
+        
+    @classmethod
+    def show_schedule_for_today(cls):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            sql = """
+                SELECT 
+                    date_appointment, 
+                    time_appointment, 
+                    first_name, 
+                    middle_name, 
+                    last_name, 
+                    status_, 
+                    contact_number 
+                FROM 
+                    appointment 
+                WHERE 
+                    (status_ = 'PENDING' or status_ = 'SCHEDULED')
+                    AND DATE(date_appointment) = CURDATE()
+            """
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return result
+
+        except Exception as e:
+            print(f"Error showing scheduled for today: {e}")
             return []
 
                 
@@ -543,11 +570,11 @@ class Schedule():
 
         
     @classmethod
-    def delete_schedules(cls, doctorName):
+    def delete_schedules(cls, scheduleID):
         try:
             cursor = mysql.connection.cursor()
-            sql = "DELETE FROM schedule WHERE doctorName = %s"
-            cursor.execute(sql, (doctorName,))
+            sql = "DELETE FROM schedule WHERE scheduleID = %s"
+            cursor.execute(sql, (scheduleID,))
             mysql.connection.commit()
             return True
         except Exception as e:

@@ -47,8 +47,7 @@ COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB
 ;
 
-
-CREATE TABLE `schedule` (
+CREATE TABLE IF NOT EXISTS `schedule` (
 	`scheduleID` INT(10) NOT NULL AUTO_INCREMENT,
 	`date_appointment` DATE NULL DEFAULT NULL,
 	`time_appointment` VARCHAR(30) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',

@@ -23,8 +23,29 @@ def dashboard():
     doctor_info = doctor.get_doctor_info(current_id)
     patients_data = doctor.get_patients(current_id)
     limited_patient = patients_data[:5]
+    sched_today = Appointment.show_schedule_for_today(current_id)
+    print(f'Schedule for today: {sched_today}')
 
-    return render_template("doctor/dashboard/dashboard.html", info=doctor_info, patients=limited_patient)
+    sched_today_data_list = []  # Initialize the list here
+
+    if sched_today:
+        for appointment in sched_today:
+            sched_today_data_dict = {
+                "date_appointment": appointment['date_appointment'],
+                "time_appointment": appointment['time_appointment'],
+                "first_name": appointment['first_name'],
+                "middle_name": appointment['middle_name'],
+                "last_name": appointment['last_name'],
+                "status_": appointment['status_'],
+                "contact_number": appointment['contact_number']
+            }
+            sched_today_data_list.append(sched_today_data_dict)
+            print(f'List of appointment: {sched_today_data_list}')
+    else:
+        print('No sched for today')
+
+    return render_template("doctor/dashboard/dashboard.html", info=doctor_info, patients=limited_patient, sched_data=sched_today_data_list)
+
 
 @doctor_bp.route('/calendar/')
 @login_required
@@ -2072,6 +2093,7 @@ def add_schedule():
             print('Data added: ', form.date_appointment.data, form.time_appointment.data, form.slots.data, form.doctorID.data, form.doctorName.data, form.receptionistID.data)
             
             if form.validate_on_submit():
+                print(form.errors)
                 new_appointment = Schedule(
                     date_appointment=form.date_appointment.data,
                     time_appointment=form.time_appointment.data,
@@ -2082,14 +2104,16 @@ def add_schedule():
                 )
 
                 added_successfully = new_appointment.add_schedule()
-
+                print('Added successfully: ', added_successfully)
                 if added_successfully:
-                    return jsonify(success=True, message="Appointment added successfully")
+                    return jsonify(success=True, message="Schedule added successfully")
                 else:
-                    return jsonify(success=False, message="Appointment already exists"), 400
+                    print('Form validation errors:', form.errors)
+                    return jsonify(success=False, message="Schedule already exists"), 400
             else:
                 print(form.errors)
-                return jsonify(success=False, message="Form validation failed"), 400
+                error_message = "Form validation failed. Please check the highlighted fields."
+                return jsonify(success=False, message=error_message), 400
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             print('An error occurred while processing the schedule.')
@@ -2129,11 +2153,12 @@ def view_schedule():
 @role_required('doctor')
 def delete_schedule():
     try:
-        schedule_id = request.form.get('reference_number')
+        schedule_id = request.form.get('scheduleID')
+        print('schedule id: ', schedule_id)
         doctor_name = request.form.get('doctor_name')
         print('Doctor Name: ', doctor_name)
 
-        if Appointment.delete(schedule_id):
+        if Schedule.delete_schedules(schedule_id):
             return jsonify(success=True, message="Successfully deleted")
         else:
             return jsonify(success=False, message="Failed to delete appointment")
