@@ -9,20 +9,6 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <li>
-                <div class="icon" onclick="toggleNotifi()">
-                    <span id="notification-count"></span>
-                    <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
-                </div>
-                <div class="notifi-box" id="box">
-                    <h2>Notifications</h2>
-                    <table id="notification-table">
-                        <tbody id="notification-body" style="text-align: justify; font-size: 16px; font-weight: 100;">
-                            <!-- Table body for notifications -->
-                        </tbody>
-                    </table>
-                </div>
-            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -178,7 +164,11 @@
         </center>
    </main>
 
-   <div id="userId" data-userid="{{ info[3] }}" style="display: none;"></div>
+   <!-- <div id="userId" data-userid="{{ info[3] }}" style="display: none;"></div> -->
+
+   <div id="toast-container">
+        
+   </div>
 
    <script>
     // TO DISPLAY THE DATE
@@ -198,72 +188,47 @@
     displayDateAndTime();   
     
     // NOTIFICATION
-    var box = document.getElementById('box');
-    var down = false;
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    function populateNotificationTable(notifications) {
-        const notificationBody = document.getElementById('notification-body');
-        notificationBody.innerHTML = ''; // Clear existing rows before populating
-    
-        notifications.forEach(notification => {
-            const row = document.createElement('tr');
-    
-            const messageColumn = document.createElement('td');
-            const patientName = notification.patientName;
-            messageColumn.textContent = `The lab report for ${patientName} has been successfully sent`;
-            row.appendChild(messageColumn);
-     
-            notificationBody.appendChild(row);
-        });
-        updateNotificationCount(notifications.length);
-    }
-
-    function updateNotificationCount(count) {
-        const notificationCountSpan = document.getElementById('notification-count');
-        notificationCountSpan.style.display = 'block';
-        notificationCountSpan.textContent = count.toString();
-    }
-    
-    function toggleNotifi() {
-        if (down) {
-            box.style.height = '0px';
-            box.style.opacity = 0;
-            down = false;
-        } else {
-            box.style.height = '400px';
-            box.style.opacity = 1;
-            down = true;
-    
-            var socket = io.connect('http://' + document.domain + ':' + location.port);
-            var userIdDiv = document.getElementById('userId');
-            var userId = userIdDiv.getAttribute('data-userid');
-            var user_type = 'Report'; 
-            socket.emit('get_notifications', userId, user_type);
-    
-            socket.on('notifications_data', function(data) {
-                console.log('Received notifications:', data.notifications);
-                populateNotificationTable(data.notifications);
-            });
-        }
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function() {
-            console.log('SocketIO connected!');
-        });
-    
-        socket.on('lab_report_notification', function(message) {
-            console.log('Received lab report notification:', message);
-    
-            var notificationCountSpan = document.getElementById('notification-count');
-            notificationCountSpan.style.display = 'block';
-            notificationCountSpan.textContent = '';
-    
-            toggleNotifi();
-        });
+    socket.on('connect', function () {
+        console.log('Connected to Socket.IO');
     });
 
+    socket.on('send_notification_doctor', function (data) {
+        const notificationMessage = data.message;
+        console.log('Received notification:', notificationMessage);
+        displayToast(notificationMessage);
+    });
+
+    function displayToast(message) {
+       
+        var toastContainer = document.getElementById('toast-container');
+        var newToast = document.createElement('div');
+        newToast.className = 'toast hide';
+        newToast.innerHTML = `
+            <div class="toast-header">
+                <strong class="mr-auto">NOTIFICATION</strong>
+                <button type="button" class="close-btn" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="notification-body toast-body">
+                ${message}
+            </div>
+        `;
+
+        toastContainer.appendChild(newToast);
+
+        newToast.classList.add('show');
+
+        var closeButton = newToast.querySelector('.close-btn');
+        closeButton.addEventListener('click', function () {
+            newToast.classList.remove('show');
+            setTimeout(function () {
+                newToast.remove(); 
+            }, 500); 
+        });
+    }
 </script>
     
 {% endblock %}
