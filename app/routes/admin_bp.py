@@ -47,7 +47,6 @@ def profile():
 def logout():
     print("Logout route accessed")  
     logout_user()
-    User.record_logout_admin(current_user.username)
     return redirect(url_for('login'))
 
 # -------------------------------------------- USER -------------------------------------------- #
