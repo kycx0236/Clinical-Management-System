@@ -1139,7 +1139,6 @@ class Schedule():
 
         
     @classmethod
-    def delete_schedules(cls, scheduleID):
     def delete_schedules(cls, doc_username, scheduleID):
         try:
             cursor = mysql.connection.cursor()
