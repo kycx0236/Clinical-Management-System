@@ -2,6 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from app.forms.admin_f import *
 import app.models as models
 from app.models.admin_m import *
+from app.models.login_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
@@ -14,11 +15,13 @@ admin_bp = Blueprint('admin', __name__)
 @role_required('admin')
 def dashboard():
     current_id = current_user.id 
+    current_user.username
     admin_info = admin.get_user(current_id)
     users_data = admin.get_users()
     limited_users = users_data[:4]
+    logs = admin.get_all_logs()
 
-    return render_template("admin/dashboard.html", info=admin_info, users=limited_users)
+    return render_template("admin/dashboard.html", info=admin_info, users=limited_users, logs=logs)
 
 @admin_bp.route('/user_management/')
 @login_required
@@ -42,7 +45,8 @@ def profile():
 @admin_bp.route("/logout/")
 @login_required
 def logout():
-    print("Logout route accessed")  
+    print("Logout route accessed")
+    User.record_logout(current_user.role.upper(), current_user.username)
     logout_user()
     return redirect(url_for('login'))
 
@@ -82,7 +86,7 @@ def add_user():
             return render_template("admin/user_management/add_user.html", error=True, UserForm=form, info=admin_info, password=hashed_password)
         
         else: 
-            result = new_user.add_user()
+            result = new_user.add_user(current_user.username)
             admin.send_message(email,password)
        
         if result:
@@ -106,7 +110,7 @@ def delete_user():
     if request.method == "POST":    
         user_id = request.form.get("user_id")
 
-        result = admin.delete_user_record(user_id)
+        result = admin.delete_user_record(user_id, current_user.username)
 
         if result:
             return render_template("admin/user_management/user_management.html", success=True, UserForm=form, info=admin_info)
@@ -138,9 +142,9 @@ def user_info():
         gender = request.form.get('gender')
         user_role = request.form.get('user_role')
 
-        new_password = request.form.get('new_password')  # Add this line
+        new_password = request.form.get('new_password') 
 
-        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role, new_password)
+        updated = admin.update_user(user_id, username, password, first_name, middle_name, last_name, gender, user_role,current_user.username, new_password)
         user_info = admin.get_user_info(user_id)
         admin_info = admin.get_user(user_id)
 

@@ -120,6 +120,7 @@
                                     <td>
                                         <!-- DELETE RECORD -->
                                         <form id="deleteForm_{{ patient[0] }}" method="POST" action="/receptionist/delete_patient/">
+                                            {{ PatientForm.csrf_token }}
                                             <div class="delete-icon">
                                                 <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
                                                 <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">

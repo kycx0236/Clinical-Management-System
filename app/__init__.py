@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysql_connector import MySQL
 from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_USE_TLS, MAIL_USE_SSL, cloud_name, api_key, api_secret
 from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, current_user
 from flask_mail import Mail
 # from flask_socketio import SocketIO
 import cloudinary
@@ -55,9 +55,9 @@ def create_app():
             password = request.form['password']
 
             user = User.authenticate(username, password)
-
             if user:
                 login_user(user)
+                User.record_login(user.role.upper(), current_user.username)
                 if user.role == 'admin':
                     return redirect(url_for('admin.dashboard'))
                 elif user.role == 'doctor':
