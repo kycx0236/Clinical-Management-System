@@ -49,7 +49,7 @@ class User(UserMixin):
         cursor = mysql.connection.cursor()
         sql_record = """
             INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
-            (CURDATE(), CURTIME(), %s , %s, 'LOGIN', ' ')
+            (CURDATE(), CURTIME(), %s , %s, 'LOGIN', '~~~~~~~~~~~~~~~')
             """
         cursor.execute(sql_record, (user_role, username))
         mysql.connection.commit()
