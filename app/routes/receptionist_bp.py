@@ -4,6 +4,7 @@ from app.forms.doctor_f import *
 from app.forms.receptionist_f import *
 import app.models as models
 from app.models.receptionist_m import *
+from app.models.login_m import *
 from flask import Blueprint
 import secrets
 import string
@@ -290,7 +291,8 @@ def profile():
 @receptionist_bp.route('/logout/')
 @login_required
 def logout():
-    print("Logout route accessed")  
+    print("Logout route accessed")
+    User.record_logout(current_user.role.upper(), current_user.username)  
     logout_user()
     return redirect(url_for('login'))
 

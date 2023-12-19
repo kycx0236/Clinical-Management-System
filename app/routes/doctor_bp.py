@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify, redirect, url_for, flash
 from app.forms.doctor_f import *
 import app.models as models
 from app.models.doctor_m import *
+from app.models.login_m import *
 import math
 import secrets
 import string
@@ -148,6 +149,7 @@ def profile():
 @doctor_bp.route('/logout/')
 @login_required
 def logout():
+    User.record_logout(current_user.role.upper(), current_user.username)
     logout_user()
     return redirect(url_for('login'))
 

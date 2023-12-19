@@ -57,8 +57,8 @@ def create_app():
             user = User.authenticate(username, password)
             if user:
                 login_user(user)
+                User.record_login(user.role.upper(), current_user.username)
                 if user.role == 'admin':
-                    User.record_login(user.role.upper(), current_user.username)
                     return redirect(url_for('admin.dashboard'))
                 elif user.role == 'doctor':
                     return redirect(url_for('doctor.dashboard'))

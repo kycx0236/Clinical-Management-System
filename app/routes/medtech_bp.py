@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify, redirect, url_for
 from app.forms.medtech_f import *
 import app.models as models
 from app.models.medtech_m import *
+from app.models.login_m import *
 from flask import Blueprint
 from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
@@ -135,6 +136,7 @@ def profile():
 @medtech_bp.route('/logout/')
 @login_required
 def logout():
-    print("Logout route accessed")  
+    print("Logout route accessed")
+    User.record_logout(current_user.role.upper(), current_user.username)  
     logout_user()
     return redirect(url_for('login'))

@@ -54,3 +54,14 @@ class User(UserMixin):
         cursor.execute(sql_record, (user_role, username))
         mysql.connection.commit()
         cursor.close()
+
+    @staticmethod
+    def record_logout(user_role, username):
+        cursor = mysql.connection.cursor()
+        sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), %s , %s, 'LOGOUT', '~~~~~~~~~~~~~~~')
+            """
+        cursor.execute(sql_record, (user_role, username))
+        mysql.connection.commit()
+        cursor.close()
