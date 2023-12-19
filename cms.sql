@@ -17,22 +17,6 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY username (username)
 ) AUTO_INCREMENT = 1000;
 
--- NOTIFICATION 
-CREATE TABLE IF NOT EXISTS `notification` (
-    `notifID` INT NOT NULL AUTO_INCREMENT,
-    `notifier` INT NOT NULL,
-    `notifying` INT NOT NULL,
-    `patientName` VARCHAR(255),
-    `notif_type` VARCHAR(50),
-    `status` VARCHAR(20),
-    `is_read` VARCHAR(20),
-    -- `created_at` BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (`notifID`),
-    UNIQUE KEY `notif_id_UNIQUE` (`notifID`),
-    FOREIGN KEY (`notifier`) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (`notifying`) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS `appointment` (
 	`reference_number` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`receptionistID` INT(10) NOT NULL,
