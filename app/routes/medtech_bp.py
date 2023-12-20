@@ -3,6 +3,7 @@ from flask_login import login_required, logout_user, current_user
 from app.routes.utils import role_required
 from app.forms.medtech_f import *
 from app.models.medtech_m import *
+from app.models.login_m import *
 import app.models as models
 from flask import Blueprint
 from cloudinary import uploader
@@ -72,7 +73,7 @@ def laboratory_test():
             pdf_url = uploaded_result['url']
             print('pdf_url:', pdf_url)
 
-            report = medtech.add_laboratory_report(orderID=new_order_id, medtech=new_medtech_name, pdfFile=pdf_url)
+            report = medtech.add_laboratory_report(current_user.username,orderID=new_order_id, medtech=new_medtech_name, pdfFile=pdf_url)
 
             labreq_info = medtech.get_labrequest_data(new_order_id)
             hematology_info = medtech.get_hematology_data(new_order_id)
@@ -148,6 +149,7 @@ def profile():
 @medtech_bp.route('/logout/')
 @login_required
 def logout():
-    print("Logout route accessed")  
+    print("Logout route accessed")
+    User.record_logout(current_user.role.upper(), current_user.username)  
     logout_user()
     return redirect(url_for('login'))

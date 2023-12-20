@@ -1,8 +1,10 @@
 from flask import render_template, redirect, request, url_for, jsonify, session
 import math
+from app.forms.doctor_f import *
 from app.forms.receptionist_f import *
 import app.models as models
 from app.models.receptionist_m import *
+from app.models.login_m import *
 from flask import Blueprint
 import secrets
 import string
@@ -31,8 +33,29 @@ def dashboard():
     receptionist_info = receptionist.get_user(current_id)
     patients_data = receptionist.get_patients()
     limited_patient = patients_data[:5]
+    
+    sched_today = Appointment.show_schedule_for_today()
+    print(f'Schedule for today: {sched_today}')
+    
+    sched_today_data_list = []  # Initialize the list here
+    if sched_today:
+        for appointment in sched_today:
+            sched_today_data_dict = {
+                "date_appointment": appointment['date_appointment'],
+                "time_appointment": appointment['time_appointment'],
+                "first_name": appointment['first_name'],
+                "middle_name": appointment['middle_name'],
+                "last_name": appointment['last_name'],
+                "status_": appointment['status_'],
+                "contact_number": appointment['contact_number']
+            }
+            sched_today_data_list.append(sched_today_data_dict)
+            print(f'List of appointment: {sched_today_data_list}')
 
-    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient)
+    else:
+        print('No sched for today')
+
+    return render_template("receptionist/dashboard/dashboard.html", info=receptionist_info, patients=limited_patient, sched_data=sched_today_data_list)
 
 @receptionist_bp.route('/calendar/')
 @login_required
@@ -123,11 +146,12 @@ def schedule():
 @login_required
 @role_required('receptionist')
 def patient():
+    form = PatientForm()
     current_id = current_user.id 
     receptionist_info = receptionist.get_user(current_id)
     patients_data = receptionist.get_patients()
 
-    return render_template("receptionist/patient/patient.html", patients=patients_data, info=receptionist_info)
+    return render_template("receptionist/patient/patient.html", PatientForm=form, patients=patients_data, info=receptionist_info)
 
 @receptionist_bp.route('/add_patient/', methods=["GET", "POST"])
 @login_required
@@ -179,7 +203,7 @@ def add_patient():
         new_patient.eContactNum = e_number
         new_patient.userID = current_id
 
-        result = new_patient.add()
+        result = new_patient.add(current_user.username)
 
         if result:
             return render_template("receptionist/patient/add_patient.html", success=True, PatientForm=form, info=receptionist_info)
@@ -225,7 +249,7 @@ def patient_record():
         new_relationship = form.relationship.data  
         new_e_number = form.e_number.data
         
-        updated = receptionist.update_patient_info(patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
+        updated = receptionist.update_patient_info(current_user.username, patientID=new_patient_id, firstName=new_first_name, midName=new_middle_name, lastName=new_last_name, age=new_age, 
                                              civilStatus=new_civil_status, gender=new_gender, bloodType=new_bloodType, religion=new_religion, birthPlace=new_birth_place, 
                                              occupation=new_occupation, p_email=new_email, p_contactNum=new_contact_num, birthDate=new_birth_date, p_address=new_p_address, 
                                              nationality=new_nationality, eContactName=new_e_person, relationship=new_relationship, eContactNum=new_e_number)  
@@ -258,7 +282,7 @@ def delete_patient():
         patient_id = request.form.get("patient_id")
         receptionist_info = receptionist.get_user(current_id)
 
-        result = receptionist.delete_patient_record(patient_id)
+        result = receptionist.delete_patient_record(current_user.username, patient_id)
 
         if result:
             return render_template("receptionist/patient/patient.html", success=True, PatientForm=form, info=receptionist_info)
@@ -278,7 +302,8 @@ def profile():
 @receptionist_bp.route('/logout/')
 @login_required
 def logout():
-    print("Logout route accessed")  
+    print("Logout route accessed")
+    User.record_logout(current_user.role.upper(), current_user.username)  
     logout_user()
     return redirect(url_for('login'))
 
@@ -364,7 +389,7 @@ def add_appointment():
                         email=form.email.data,
                         address=form.address.data
                     )
-                    new_appointment.add()
+                    new_appointment.add(current_user.username)
                     print('New appointment added!', 'success')
 
                     notification_message = f"An appointment has been scheduled for {chosen_date} at {selected_time}"
@@ -404,7 +429,7 @@ def delete_appointment():
         deleted_appointment = Appointment.get_appointment_by_reference(reference_number)
         deleted_time = deleted_appointment['time_appointment']
 
-        if Appointment.delete(reference_number):
+        if Appointment.delete(current_user.username, reference_number):
             # Increment the slots for the deleted time
             notification_message = f"The appointment scheduled for {deleted_time} was deleted"
             print('NOTIFICATION:', notification_message)
@@ -500,7 +525,7 @@ def reschedule_version_two():
         print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
         print('New Appointment Details: ', new_date_appointment, new_time_appointment)
         if Appointment.update_second_version(
-            reference_number, new_date_appointment, new_time_appointment, new_status_,
+            current_user.username, reference_number, new_date_appointment, new_time_appointment, new_status_,
             new_last_name, new_email):
             notification_message = f"The appointment for patient {new_last_name} has been rescheduled to {new_date_appointment} at {new_time_appointment}"
             print('NOTIFICATION:', notification_message)
@@ -569,7 +594,7 @@ def cancel_appointment():
         cancel_appointment = Appointment.get_appointment_by_reference(reference_number)
         cancelled_time = cancel_appointment['time_appointment']
 
-        if Appointment.update_to_cancel(reference_number, cancel_status):
+        if Appointment.update_to_cancel(current_user.username, reference_number, cancel_status):
             # Increment the slots for the deleted time
             notification_message = f"The appointment scheduled for {cancelled_time} was cancelled"
             print('NOTIFICATION:', notification_message)
@@ -660,7 +685,7 @@ def add_schedule():
                         doctorName=form.doctorName.data,  # Use the 'data' attribute to access form data
                         receptionistID=form.receptionistID.data
                     )
-                added_successfully = new_appointment.add_schedule()
+                added_successfully = new_appointment.add_schedule(current_user.username)
 
                 if added_successfully:
                     return jsonify(success=True, message="Appointment added successfully")
@@ -732,11 +757,13 @@ def view_schedule():
 @role_required('receptionist')
 def delete_schedule():
     try:
-        schedule_id = request.form.get('reference_number')
+        schedule_id = request.form.get('scheduleID')
         doctor_name = request.form.get('doctor_name')
         print('Doctor Name: ', doctor_name)
+        print('ScheduleID: ', schedule_id)
+        print('ScheduleID: ', schedule_id)
 
-        if Appointment.delete(schedule_id):
+        if Schedule.delete_schedules(current_user.username, schedule_id):
             return jsonify(success=True, message="Successfully deleted")
         else:
             return jsonify(success=False, message="Failed to delete appointment")
@@ -809,7 +836,7 @@ def update_schedule():
         print('Old Appointment Details: ', old_date_appointment, old_time_appointment)
         print('New Appointment Details: ', new_date_appointment, new_time_appointment)
         if Schedule.update_schedule(
-            scheduleID, new_date_appointment, new_time_appointment, new__slots):
+            current_user.username, scheduleID, new_date_appointment, new_time_appointment, new__slots):
             return jsonify(success=True, message="Appointment updated successfully")
         else:
             return jsonify(success=False, message="Failed to update appointment.")

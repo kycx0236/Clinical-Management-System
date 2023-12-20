@@ -4,7 +4,7 @@ from app import mail
 
 class doctor():
 # ADD PATIENT INFORMATION
-    def add(self, current_user):
+    def add(self, current_user, doc_username):
         cursor = mysql.connection.cursor()
 
         check_duplicate_sql = "SELECT patientinfo.patientID FROM patientinfo INNER JOIN docpatient_relation ON patientinfo.patientID = docpatient_relation.patientID \
@@ -27,13 +27,20 @@ class doctor():
 
         sql_docpatient_relation = "INSERT INTO docpatient_relation(doctorID, patientID) VALUES (%s, %s)"
         cursor.execute(sql_docpatient_relation, (doctor_id, new_patient_id))
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Patient Name: ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, self.firstName, self.lastName))
+
         mysql.connection.commit()
 
         return True
 
 # ADD PATIENT MEDICAL HISTORY
     @classmethod
-    def add_medical_history(cls, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, 
+    def add_medical_history(cls, doc_username, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, 
                             heartCheckbox, birthCheckbox, boneCheckbox, alzheimerCheckbox, cancerCheckbox, thyroidCheckbox, tuberculosisCheckbox, eyeCheckbox, clotsCheckbox, mentalCheckbox, 
                             kidneyCheckbox, anemiaCheckbox, muscleCheckbox, highbloodCheckbox, epilepsyCheckbox, skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, 
                             medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, 
@@ -53,13 +60,24 @@ class doctor():
                              h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, 
                              numSexPartner, contraception, useDrugs, specifyDrugs, frequencyDrugs, surgeryDate1, surgeryProcedure1, hospital1, surgeryDate2, surgeryProcedure2, hospital2, surgeryDate3, surgeryProcedure3, hospital3, 
                              medications, allergies, diet))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical History of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
     
 # ADD PATIENT MEDICAL ASSESSMENT
     @classmethod
-    def add_medical_assessment(cls, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
+    def add_medical_assessment(cls,doc_username , patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
                                normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, 
                                normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, 
                                oxygenSaturation, painSection):
@@ -72,25 +90,50 @@ class doctor():
         cursor.execute(sql, (patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, normal_nose, 
                              abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, 
                              abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical Assessment of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
+
 
         return True
     
 # ADD MEDICAL CLEARANCE 
     @classmethod
-    def add_medical_clearance(cls, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
+    def add_medical_clearance(cls,doc_username, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
         cursor = mysql.connection.cursor()
 
         sql = "INSERT INTO clearance (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance) \
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance))
+
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical Clearance of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
 
         return True
     
 # ADD MEDICAL CERTIFICATE 
     @classmethod
-    def add_medical_certificate(cls, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
+    def add_medical_certificate(cls, doc_username, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
         cursor = mysql.connection.cursor()
 
         sql = "INSERT INTO certificate (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate) \
@@ -98,11 +141,23 @@ class doctor():
         cursor.execute(sql, (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate))
         mysql.connection.commit()
 
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Medical Certificate of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+        mysql.connection.commit()
+
         return True
     
 # ADD PRESCRIPTION
     @classmethod
-    def add_prescription(cls, assessment_id, medication_name, dosage, p_quantity, duration, instructions):
+    def add_prescription(cls, doc_username, assessment_id, medication_name, dosage, p_quantity, duration, instructions, patientID):
         try:
             cursor = mysql.connection.cursor()
 
@@ -112,6 +167,17 @@ class doctor():
 
             add_prescription_details = "INSERT INTO prescriptiondetails (prescriptionID, medication_name, dosage, p_quantity, duration, instructions) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(add_prescription_details, (prescriptionID, medication_name, dosage, p_quantity, duration, instructions))
+
+            cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+            result = cursor.fetchone()
+            firstName = result[0]
+            lastName = result[1]
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Prescription of ', %s, ' ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, firstName, lastName))
             mysql.connection.commit()
 
             return True
@@ -120,7 +186,7 @@ class doctor():
             return False
 
     @classmethod 
-    def add_laboratory_request(cls, patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
+    def add_laboratory_request(cls, doc_username, patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
                                bloodtypingCheckbox, ESRCheckbox, plateCheckbox, hgbCheckbox, hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox, culsenCheckbox, cultureCheckbox, 
                                gramCheckbox, KOHCheckbox, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, 
                                ELISACheckbox, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, RFCheckbox, QuantiCheckbox, 
@@ -169,6 +235,14 @@ class doctor():
         cursor.execute(clinicalchem, (orderID, ALPCheckbox, AmylaseCheckbox, BUACheckbox, BUNCheckbox, CreatinineCheckbox, SGPTCheckbox, SGOTCheckbox, FBSCheckbox, RBSCheckbox, HPPCheckbox, OGCTCheckbox, 
                                       HGTCheckbox, OGTTCheckbox, NaCheckbox, MgCheckbox, LipidCheckbox, TriglyCheckbox, CholCheckbox, ClCheckbox, TPAGCheckbox, TotalCheckbox, GlobCheckbox, AlbCheckbox, 
                                       CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox))
+             
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'REQUEST', CONCAT('Lab Report of ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, patientName))
+
+
         mysql.connection.commit()
         return True
 
@@ -389,20 +463,27 @@ class doctor():
 
 # UPDATE PATIENT INFORMATION
     @classmethod
-    def update_patient_info(cls, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
+    def update_patient_info(cls, doc_username, patientID, firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE patientinfo SET firstName = %s, midName = %s, lastName = %s, age = %s, civilStatus = %s, gender = %s, bloodType = %s, birthPlace = %s, birthDate = %s, p_address = %s, nationality = %s, religion = %s, eContactName = %s, \
             relationship = %s, eContactNum = %s, occupation = %s, p_email = %s, p_contactNum = %s WHERE patientID = %s"
         cursor.execute(sql, (firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum, patientID))
         print(firstName, midName, lastName, age, civilStatus, gender, bloodType, birthPlace, birthDate, p_address, nationality, religion, eContactName, relationship, eContactNum, occupation, p_email, p_contactNum, patientID)
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Patient Name: ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
         
         return True
 
 # UPDATE PATIENT MEDICAL HISTORY
     @classmethod
-    def update_medical_history(cls, historyID, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, heartCheckbox, birthCheckbox, 
+    def update_medical_history(cls,doc_username , historyID, patientID, bcgCheckbox, dtpCheckbox, pcvCheckbox, influenzaCheckbox, hepaCheckbox, ipvCheckbox, mmrCheckbox, hpvCheckbox, asthmaCheckbox, diabetesCheckbox, heartCheckbox, birthCheckbox, 
                                boneCheckbox, alzheimerCheckbox, cancerCheckbox, thyroidCheckbox, tuberculosisCheckbox, eyeCheckbox, clotsCheckbox, mentalCheckbox, kidneyCheckbox, anemiaCheckbox, muscleCheckbox, highbloodCheckbox, 
                                epilepsyCheckbox, skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, 
                                h_date3, habitually, yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, 
@@ -424,13 +505,25 @@ class doctor():
                              skinCheckbox, hivCheckbox, pulmonaryCheckbox, specifications, others, past_c1, medication1, dosage1, h_date1, past_c2, medication2, dosage2, h_date2, past_c3, medication3, dosage3, h_date3, habitually, 
                              yearsDrunk, frequencyDrink, quitDrinking, frequently, yearsSmoked, frequencySmoke, quitSmoking, often, exerciseType, frequencyExercise, durationActivity, sexActive, sexPartner, numSexPartner, contraception, 
                              useDrugs, specifyDrugs, frequencyDrugs, surgeryDate1, surgeryProcedure1, hospital1, surgeryDate2, surgeryProcedure2, hospital2, surgeryDate3, surgeryProcedure3, hospital3, medications, allergies, diet, historyID))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical History of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
+
         mysql.connection.commit()
 
         return True
     
 # UPDATE PATIENT MEDICAL ASSESSMENT
     @classmethod 
-    def update_medical_assessment(cls, assessmentID, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
+    def update_medical_assessment(cls, doc_username, assessmentID, patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, 
                                   normal_eyes, abnormalities_eyes, normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, 
                                   abnormalities_chest, normal_abdomen, abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection):
         cursor = mysql.connection.cursor()
@@ -442,41 +535,87 @@ class doctor():
         cursor.execute(sql, (patientID, subjectComp, complaints, illnessHistory, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, normal_head, abnormalities_head, normal_ears, abnormalities_ears, normal_eyes, abnormalities_eyes, 
                              normal_nose, abnormalities_nose, normal_skin, abnormalities_skin, normal_back, abnormalities_back, normal_neck, abnormalities_neck, normal_throat, abnormalities_throat, normal_chest, abnormalities_chest, normal_abdomen, 
                              abnormalities_abdomen, normal_upper, abnormalities_upper, normal_lower, abnormalities_lower, normal_tract, abnormalities_tract, comments, diagnosis, oxygenSaturation, painSection, assessmentID))
+        
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical Assessment of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
     
 # UPDATE PATIENT MEDICAL CLEARANCE
     @classmethod 
-    def update_medical_clearance(cls, clearanceID, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
+    def update_medical_clearance(cls, doc_username, clearanceID, patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE clearance SET patientID = %s, subjectClearance = %s, reason = %s, recommendations = %s, bloodPressure = %s, pulseRate = %s, temperature = %s, respRate = %s, height = %s, weight_p = %s, bmi = %s, \
             oxygenSaturation = %s, painSection = %s, physicalExam = %s, clearance = %s WHERE clearanceID = %s"
         cursor.execute(sql, (patientID, subjectClearance, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, clearance, clearanceID))
+
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical Clearance of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
     
 # UPDATE PATIENT MEDICAL CERTIFICATE
     @classmethod 
-    def update_medical_certificate(cls, certificateID, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
+    def update_medical_certificate(cls, doc_username, certificateID, patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate):
         cursor = mysql.connection.cursor()
 
         sql = "UPDATE certificate SET patientID = %s, subjectCertificate = %s, reason = %s, recommendations = %s, bloodPressure = %s, pulseRate = %s, temperature = %s, respRate = %s, height = %s, weight_p = %s, bmi = %s, \
             oxygenSaturation = %s, painSection = %s, physicalExam = %s, certificate = %s WHERE certificateID = %s"
         cursor.execute(sql, (patientID, subjectCertificate, reason, recommendations, bloodPressure, pulseRate, temperature, respRate, height, weight_p, bmi, oxygenSaturation, painSection, physicalExam, certificate, certificateID))
+
+        cursor.execute("SELECT firstName, lastName FROM patientinfo WHERE patientID = %s", (patientID,))
+        result = cursor.fetchone()
+        firstName = result[0]
+        lastName = result[1]
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Medical Certificate of ', %s, ' ', %s))
+        """
+        cursor.execute(sql_record, (doc_username, firstName, lastName))
         mysql.connection.commit()
 
         return True
     
 # DELETE PATIENT RECORD
     @classmethod 
-    def delete_patient_record(cls, patientID):
+    def delete_patient_record(cls, patientID, doc_username):
         cursor = mysql.connection.cursor()
         try:
+            fetch_name_query = "SELECT firstName, lastName FROM patientinfo WHERE patientID = %s"
+            cursor.execute(fetch_name_query, (patientID,))
+            name_tuple = cursor.fetchone()
+            patient_fname = name_tuple[0]
+            patient_lname = name_tuple[1]
+
             query = "DELETE FROM patientinfo WHERE patientID = %s"
             cursor.execute(query, (patientID,))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'DELETE', CONCAT('Patient Name: ', %s, ' ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, patient_fname, patient_lname))
+
             mysql.connection.commit()
             return True
         except:
@@ -493,6 +632,9 @@ class doctor():
             return True
         except:
             return False
+
+
+
 
 # APPOINTMENT CLASS AND METHODS
 class Appointment:
@@ -513,35 +655,43 @@ class Appointment:
         self.email = email
         self.address = address
     
-    def add(self):
+    def add(self, doc_username):
         try:
             cursor = mysql.connection.cursor()
             sql = "INSERT INTO appointment (reference_number, receptionistID, doctorID, doctorName, date_appointment, time_appointment, status_, first_name, middle_name, last_name, sex, birth_date, contact_number, email, address) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.reference_number, self.receptionistID, self.doctorID, self.doctorName, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name, self.sex, self.birth_date, self.contact_number, self.email, self.address))
+            self.send_add_message(self.email, self.reference_number, self.date_appointment, self.time_appointment, self.status_, self.first_name, self.middle_name, self.last_name)
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Appointment: ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, self.reference_number))
             mysql.connection.commit()
             return True
         except Exception as e:
             print(f"Error adding appointment: {e}")
             return False
    
-    def add_notify(email, reference_number, date_appointment, time_appointment, status_, last_name):
+    @classmethod
+    def send_add_message(cls, email, reference_number, date_appointment, time_appointment, status_, first_name, middle_name, last_name):
         print("Sending email to:", email)
         message = Message(
-            subject='Appointment Information',
+            subject='Appointment Confirmation',
             recipients=[email],
             sender=('Receptionist', 'cms_receptionist@gmail.com')
         )
-        
+
         message.html = (
-            f"Dear {last_name},<br>"
-            f"Your appointment details have been updated:<br>"
+            f"Dear {first_name} {middle_name} {last_name},<br>"
+            f"You have an appointment! Here are your details:<br>"
             f"Reference Number: {reference_number}<br>"
             f"Date: {date_appointment}<br>"
             f"Time: {time_appointment}<br>"
             f"Status: {status_}<br>"
-            "<p>Additional message or instructions can be added here.</p>"
+            "<p>Thank you for choosing DocCare!</p>"
         )
-        mail.send(message)
+        mail.send(message)  
         print("Email sent successfully.")
 
     @classmethod
@@ -558,11 +708,17 @@ class Appointment:
 
 
     @classmethod
-    def delete(cls, reference_number):
+    def delete(cls,doc_username, reference_number):
         try:
             cursor = mysql.connection.cursor()
             sql = "DELETE FROM appointment WHERE reference_number = %s"
             cursor.execute(sql, (reference_number,))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'DELETE', CONCAT('Appointment: ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, reference_number))
             mysql.connection.commit()
             return True
         except Exception as e:
@@ -570,11 +726,17 @@ class Appointment:
             return False
     
     @classmethod
-    def update_second_version(cls, reference_number, new_date_appointment, new_time_appointment, new_status_, new_last_name, new_email):
+    def update_second_version(cls, doc_username, reference_number, new_date_appointment, new_time_appointment, new_status_, new_last_name, new_email):
         try:
             cursor = mysql.connection.cursor()
             sql = "UPDATE appointment SET date_appointment = %s, time_appointment = %s, status_ = %s, last_name = %s, email = %s WHERE reference_number = %s"
             cursor.execute(sql, (new_date_appointment, new_time_appointment, new_status_, new_last_name, new_email, reference_number))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'RECEPTIONIST', %s, 'EDIT', CONCAT('Appointment: ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, reference_number))
             mysql.connection.commit()
 
             # Fetch the existing appointment details
@@ -617,7 +779,7 @@ class Appointment:
             f"Date: {date_appointment}<br>"
             f"Time: {time_appointment}<br>"
             f"Status: {status_}<br>"
-            "<p>Additional message or instructions can be added here.</p>"
+            "<p>Please take note of your schedule. Thank you! </p>"
         )
         mail.send(message)
         print("Email sent successfully.")
@@ -831,11 +993,51 @@ class Appointment:
             sql = "UPDATE appointment SET status_ = %s WHERE reference_number = %s"
             cursor.execute(sql, (new_status, reference_number))
             mysql.connection.commit()
+            # Fetch the existing appointment details
+            existing_appointment = cls.get_appointment_by_reference_version_two(reference_number)
+            print('Existing appointment details:', existing_appointment)
+            email = existing_appointment['email']
+            date = existing_appointment['date_appointment']
+            time = existing_appointment['time_appointment']
+            status = existing_appointment['status_']
+            last_name = existing_appointment['last_name']
+                # Send message if any of the conditions are true
+            cls.send_cancel_message(
+                    email,
+                    reference_number,
+                    date,
+                    time,
+                    status,
+                    last_name
+                )
+            
+            print("Time Appointment:", time)
             print("Appointment updated to cancelled!")
             return True
         except Exception as e:
             print(f"Error deleting appointment: {e}")
             return False
+        
+    @staticmethod
+    def send_cancel_message(email, reference_number, date_appointment, time_appointment, status_, last_name):
+        print("Sending email to:", email)
+        message = Message(
+            subject='Appointment Cancellation',
+            recipients=[email],
+            sender=('Receptionist', 'cms_receptionist@gmail.com')
+        )
+        
+        message.html = (
+            f"Dear {last_name},<br>"
+            f"Your appointment has been cancelled. Here are your details:<br>"
+            f"Reference Number: {reference_number}<br>"
+            f"Date: {date_appointment}<br>"
+            f"Time: {time_appointment}<br>"
+            f"Status: {status_}<br>"
+            "<p>Please call if you have concerns with your appointment.</p>"
+        )
+        mail.send(message)
+        print("Email sent successfully.")   
         
     @classmethod
     def get_all_doctor_name(cls, id):
@@ -870,9 +1072,36 @@ class Appointment:
             result = cursor.fetchone()
             return result
         except Exception as e:
-            print(f"Error fetching doctor ID: {e}")
+            print(f"Error fetching receptionistID: {e}")
             return []
-    
+    @classmethod
+    def show_schedule_for_today(cls, doctorID):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            sql = """
+                SELECT 
+                    date_appointment, 
+                    time_appointment, 
+                    first_name, 
+                    middle_name, 
+                    last_name, 
+                    status_, 
+                    contact_number 
+                FROM 
+                    appointment 
+                WHERE 
+                    doctorID = %s 
+                    AND (status_ = 'PENDING' or status_ = 'SCHEDULED')
+                    AND DATE(date_appointment) = CURDATE()
+            """
+            cursor.execute(sql, (doctorID,))
+            result = cursor.fetchall()
+            return result
+
+        except Exception as e:
+            print(f"Error showing scheduled for today: {e}")
+            return []
+
 class Schedule():
     def __init__(self, date_appointment=None, time_appointment=None, slots=None, doctorID=None, doctorName=None, receptionistID=None):
         self.date_appointment = date_appointment
@@ -882,19 +1111,24 @@ class Schedule():
         self.doctorName = doctorName
         self.receptionistID = receptionistID
         
-    def add_schedule(self):
+    def add_schedule(self,doc_username):
         try:
             cursor = mysql.connection.cursor()
 
-            check_duplicate_sql = "SELECT date_appointment, time_appointment FROM schedule WHERE date_appointment = %s AND time_appointment = %s"
-            cursor.execute(check_duplicate_sql, (self.date_appointment, self.time_appointment))
+            check_duplicate_sql = "SELECT date_appointment, time_appointment FROM schedule WHERE date_appointment = %s AND time_appointment = %s AND doctorID = %s"
+            cursor.execute(check_duplicate_sql, (self.date_appointment, self.time_appointment, self.doctorID, ))
             existing_schedule = cursor.fetchone()
 
             if existing_schedule:
                 return False
             
-            sql = "INSERT INTO schedule(date_appointment, time_appointment, slots, doctorID, doctorName, receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO schedule (date_appointment, time_appointment, slots, doctorID, doctorName, receptionistID) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.date_appointment, self.time_appointment, self.slots, self.doctorID, self.doctorName, self.receptionistID))
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'ADD', CONCAT('Schedule: ', %s, ' ','for Doctor: ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, self.time_appointment, self.doctorName))
             mysql.connection.commit()
 
             return True
@@ -917,11 +1151,19 @@ class Schedule():
 
         
     @classmethod
-    def delete_schedules(cls, doctorName):
+    def delete_schedules(cls, doc_username, scheduleID):
         try:
             cursor = mysql.connection.cursor()
-            sql = "DELETE FROM schedule WHERE doctorName = %s"
-            cursor.execute(sql, (doctorName,))
+            sql = "DELETE FROM schedule WHERE scheduleID = %s"
+            cursor.execute(sql, (scheduleID,))
+            sql = "DELETE FROM schedule WHERE scheduleID = %s"
+            cursor.execute(sql, (scheduleID,))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'DELETE', CONCAT('Schedule ID: ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, scheduleID))
             mysql.connection.commit()
             return True
         except Exception as e:
@@ -947,11 +1189,17 @@ class Schedule():
         return schedule_data
     
     @classmethod
-    def update_schedule(cls, scheduleID, new_date_appointment, new_time_appointment, new_slots):
+    def update_schedule(cls, doc_username, scheduleID, new_date_appointment, new_time_appointment, new_slots):
         try:
             cursor = mysql.connection.cursor()
             sql = "UPDATE schedule SET date_appointment = %s, time_appointment = %s, slots = %s WHERE scheduleID = %s"
             cursor.execute(sql, (new_date_appointment, new_time_appointment, new_slots, scheduleID))
+
+            sql_record = """
+            INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+            (CURDATE(), CURTIME(), 'DOCTOR', %s, 'EDIT', CONCAT('Schedule ID: ', %s))
+            """
+            cursor.execute(sql_record, (doc_username, scheduleID))
             mysql.connection.commit()
             
             return True

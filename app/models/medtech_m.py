@@ -3,12 +3,22 @@ from app import mysql
 class medtech():
 # ADD LABORATORY REPORT
     @classmethod 
-    def add_laboratory_report(cls, orderID, medtech, pdfFile):
+    def add_laboratory_report(cls,medtech_username, orderID, medtech, pdfFile):
         cursor = mysql.connection.cursor()
 
         add_report = "INSERT INTO labreport (orderID, medtech, pdfFile) VALUES (%s, %s, %s)"
         cursor.execute(add_report, (orderID, medtech, pdfFile))
-        
+
+        cursor.execute("SELECT patientName FROM labrequest WHERE orderID = %s", (orderID,))
+        result = cursor.fetchone()
+        patientName = result[0] if result else None
+
+        sql_record = """
+        INSERT INTO user_logs (log_date, log_time, role, username, action, details) VALUES  
+        (CURDATE(), CURTIME(), 'MEDTECH', %s, 'UPLOAD', CONCAT('Lab Report of ', %s))
+        """
+        cursor.execute(sql_record, (medtech_username, patientName))
+
         mysql.connection.commit()
         return True
     

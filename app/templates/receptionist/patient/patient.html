@@ -117,6 +117,7 @@
                                     <td>
                                         <!-- DELETE RECORD -->
                                         <form id="deleteForm_{{ patient[0] }}" method="POST" action="/receptionist/delete_patient/">
+                                            {{ PatientForm.csrf_token }}
                                             <div class="delete-icon">
                                                 <input id="patient_id" name="patient_id" value="{{ patient[0] }}" type="hidden">
                                                 <button type="button" onclick="confirmation('{{ patient[0] }}')" style="background: none; border: none;">
@@ -195,6 +196,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ url_for('static', filename='logout.js') }}"></script>
     <script>
         new DataTable('#patientTable');
 

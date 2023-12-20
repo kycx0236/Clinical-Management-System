@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}DocCare | Reschedule Appointment{% endblock title %}
+{% block title %}DocCare | Reschedule Schedule{% endblock title %}
 {% block link %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='schedule_add_style.css') }}">
@@ -11,7 +11,7 @@
     <div class="doccare-edit-container">
         <span class="material-symbols-outlined arrow" id="arrow">arrow_back</span>
         <header>NEW SCHEDULE</header>
-        <form class="needs-validation" id="appointment-form" method="POST" action="/receptionist/add-appointment/" novalidate>
+        <form class="needs-validation" id="appointment-form" method="POST" action="/doctor/add-schedule/" novalidate>
             {{ form.csrf_token }}
             <div class="doccare-form-first">
                 <div class="doccare-appoinment-details">
@@ -51,7 +51,7 @@
                         <!-- Receptionist ID -->
                         <div class="input-fields">
                             <label for="validationCustom13" class="form-label"> Receptionist ID </label>
-                            <select class="form-select" id="validationCustom13" name="receptionistID" required aria-describedby="validationCustom11Feedback">
+                            <select class="form-select" id="validationCustom13" name="receptionistID" required aria-describedby="validationCustom13Feedback">
                                 <option value="" selected>Select your Receptionist</option>
                                 {% if receptionist_ids %}
                                     {% for ids in receptionist_ids %}

@@ -70,89 +70,21 @@
                         <table class="logs_table">
                             <thead>
                                 <th>DATE & TIME</th>
-                                <th>PATIENT</th>
+                                <th>ROLE</th>
+                                <th>USER</th>
                                 <th>ACTION/EVENT</th>
                                 <th>DETAILS</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
-                                <tr>
-                                    <td>2023-12-08 12:31:16</td>
-                                    <td>@doctor</td>
-                                    <td>Added a new patient</td>
-                                    <td>Patient added successfully</td>
-                                </tr>
+                                {% for log in logs %}
+                                    <tr>
+                                        <td>{{ log.log_date }} {{ log.log_time }}</td>
+                                        <td>{{ log.role }}</td>
+                                        <td>{{ log.username }}</td>
+                                        <td>{{ log.action }}</td>
+                                        <td>{{ log.details }}</td>
+                                    </tr>
+                                {% endfor %} 
                             </tbody>
                         </table>
                     </div>
