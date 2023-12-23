@@ -12,9 +12,6 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <li class="notifications">
-                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
-            </li>
             <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -323,6 +320,10 @@
         </div>
     {% endif %}
 
+    <div id="toast-container">
+        
+    </div>
+
     <script>
         // EDIT BUTTON
         function enableEdit() {
@@ -353,6 +354,49 @@
             const editIcon = document.getElementById('editIcon');
             editIcon.src = "{{ url_for('static', filename='images/Edit-icon.png') }}";
             editIcon.setAttribute('onclick', 'enableEdit()');
+        }
+
+        // NOTIFICATION
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function () {
+            console.log('Connected to Socket.IO');
+        });
+    
+        socket.on('send_notification_doctor', function (data) {
+            const notificationMessage = data.message;
+            console.log('Received notification:', notificationMessage);
+            displayToast(notificationMessage);
+        });
+    
+        function displayToast(message) {
+           
+            var toastContainer = document.getElementById('toast-container');
+            var newToast = document.createElement('div');
+            newToast.className = 'toast hide';
+            newToast.innerHTML = `
+                <div class="toast-header">
+                    <strong class="mr-auto">NOTIFICATION</strong>
+                    <button type="button" class="close-btn" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="notification-body toast-body">
+                    ${message}
+                </div>
+            `;
+
+            toastContainer.appendChild(newToast);
+    
+            newToast.classList.add('show');
+    
+            var closeButton = newToast.querySelector('.close-btn');
+            closeButton.addEventListener('click', function () {
+                newToast.classList.remove('show');
+                setTimeout(function () {
+                    newToast.remove(); 
+                }, 500); 
+            });
         }
     </script>
 

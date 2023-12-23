@@ -13,8 +13,16 @@ from app.routes.utils import role_required
 from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.uploader import destroy
+from app import socketio 
+from flask_socketio import send, emit
 
 doctor_bp = Blueprint('doctor', __name__)
+
+@socketio.on('send_notification_medtech')
+def handle_notification_medtech(data):
+    message = data['message']
+    print('message:', message)
+    socketio.emit('receive_notification_medtech', {'message': message}, broadcast=True)
 
 @doctor_bp.route('/')
 @login_required
@@ -1515,6 +1523,7 @@ def labtest_request():
     elif request.method == 'POST':
         doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
+        new_doctor_id = request.form.get('doctor_id')
 
     # PATIENT INFORMATION
         patient_fullName = form.fullName.data
@@ -1632,7 +1641,7 @@ def labtest_request():
         IonizedCheckbox = form.IonizedCheckbox.data
         PhosCheckbox = form.PhosCheckbox.data
 
-        result = doctor.add_laboratory_request(current_user.username, patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
+        result = doctor.add_laboratory_request(current_user.username, patientID=new_patient_id, doctorID=new_doctor_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
                                                otherTest=otherTest, cbcplateCheckbox=cbcplateCheckbox_value, hgbhctCheckbox=hgbhctCheckbox, protimeCheckbox=protimeCheckbox, 
                                                APTTCheckbox=APTTCheckbox, bloodtypingCheckbox=bloodtypingCheckbox, ESRCheckbox=ESRCheckbox, plateCheckbox=plateCheckbox, 
                                                hgbCheckbox=hgbCheckbox, hctCheckbox=hctCheckbox, cbcCheckbox=cbcCheckbox, reticsCheckbox=reticsCheckbox, CTBTCheckbox=CTBTCheckbox, 
@@ -1655,6 +1664,9 @@ def labtest_request():
         print('result', result)
 
         if result:
+            notification_message = f"New laboratory request created for patient {patient_fullName}"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_medtech', {'message': notification_message}, namespace='/') 
             return render_template("doctor/patient/labtest_request.html", success=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
         else:
             return render_template("doctor/patient/labtest_request.html", error=True, doctor=doctor_info, PatientForm=form, patient_id=patient_id, patient=new_lab_results)
@@ -2014,7 +2026,9 @@ def cancel_appointment():
         if Appointment.update_to_cancel(reference_number, cancel_status):
             # Increment the slots for the deleted time
             Appointment.update_slots(cancel_appointment['date_appointment'], cancelled_time, doctor_name, increment=True)
-
+            notification_message = "An appointment has been cancelled"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_medtech', {'message': notification_message}, namespace='/') 
             return jsonify(success=True, message="Successfully cancelled the appointment")
         else:
             return jsonify(success=False, message="Failed to cancel appointment")

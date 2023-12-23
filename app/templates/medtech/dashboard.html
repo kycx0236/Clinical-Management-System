@@ -6,16 +6,11 @@
 
 {% block content %}
 
-    <meta http-equiv="refresh" content="10">
-
     <div class="sidenav-bg">
         <div class="cms-logo">
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <li class="notifications">
-                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
-            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -51,7 +46,6 @@
     </div>
 
     <main>
-
         <center>
             <!-- DASHBOARD -->
             <div class="doctor-bg">
@@ -139,6 +133,10 @@
         
     </main>
 
+    <div id="toast-container">
+        
+    </div>
+
     <script>
         // LAB REQUEST NOTIFICATION
         const unreadMessages = document.querySelectorAll(".unread");
@@ -175,6 +173,49 @@
             });
             updateUnreadCount();
         });
+        
+        // NOTIFICATION
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function () {
+            console.log('Connected to Socket.IO');
+        });
+    
+        socket.on('send_notification_medtech', function (data) {
+            const notificationMessage = data.message;
+            console.log('Received notification:', notificationMessage);
+            displayToast(notificationMessage);
+        });
+    
+        function displayToast(message) {
+           
+            var toastContainer = document.getElementById('toast-container');
+            var newToast = document.createElement('div');
+            newToast.className = 'toast hide';
+            newToast.innerHTML = `
+                <div class="toast-header">
+                    <strong class="mr-auto">NOTIFICATION</strong>
+                    <button type="button" class="close-btn" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="notification-body toast-body">
+                    ${message}
+                </div>
+            `;
+
+            toastContainer.appendChild(newToast);
+    
+            newToast.classList.add('show');
+    
+            var closeButton = newToast.querySelector('.close-btn');
+            closeButton.addEventListener('click', function () {
+                newToast.classList.remove('show');
+                setTimeout(function () {
+                    newToast.remove(); 
+                }, 500); 
+            });
+        }
     </script>
 
 {% endblock %}

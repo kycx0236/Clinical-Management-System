@@ -909,15 +909,7 @@ input, select {
     text-align: justify;
 }
 
-
 /* APPOINTMENT */
-* {
-    margin: 0;
-    padding: 0;
-
-    box-sizing: border-box;
-    font-family:  'Montserrat';
-}
 .appointment_body {
     min-height: 100vh;
     background-color:rgb(255, 255, 255);
@@ -926,6 +918,7 @@ input, select {
     align-items: center;
 
 }
+
 .table__header__appointment{
     width: 100%;
     height: 10%;
@@ -933,7 +926,6 @@ input, select {
     padding: .8rem 1rem;
     border-radius: .6rem;
     text-align: center;
-    font-family: 'Inter';
     font-weight: bolder;
     display: flex;
     justify-content: space-between;
@@ -974,7 +966,6 @@ input, select {
     height: 5%;
     background-color: #fff4;
     text-align: center;
-    font-family: 'Inter';
     font-weight: bolder;
     display: flex;
     justify-content: left;
@@ -1010,16 +1001,14 @@ input, select {
 
 table, th, td {
     padding: 0.5rem;
-    border-collapse: collapse;
-    text-align: left;
 }
 
 table {
     width:100%;
 }
+
 .doccare-reference-number{
     color: #000;
-    font-family: 'Montserrat';
     font-size: 20px !important;
     font-style: normal;
     font-weight: 700 !important;
@@ -1238,141 +1227,10 @@ tbody tr.hide {
     padding: 0.4rem 0;
     border-radius: 2rem;
     font-weight: 1000;
-    font-family: Poppins;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-}
-
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    position: fixed; 
-    bottom: 0; 
-    left: 0;
-    right: 0; 
-    padding: 10px 0; /* Add padding for better spacing */
-    z-index: 1;
-    /*box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.1); Optional shadow for separation */
-}
-
-.pagination a, .pagination span {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    margin: 0 5px;
-    text-decoration: none;
-    color: #333;
-    background-color: #fff;
-    border-radius: 15%;
-    outline: none;
-    transition: transform 0.2s;
-}
-
-.pagination a:hover {
-    background-color: #ddd;
-    transform: scale(1.2);
-}
-
-.pagination .current {
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 15%;
-    outline: none;
-}
-
-.modal {
-    display: none;
-    z-index: 3;  /* Ensure the overlay is on top of other content */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    position: fixed;
-}
-.modal-content{
-    width: 620px;
-    height: 293px;
-    flex-shrink: 0;
-    border-radius: 30px;
-    background: #FFF;
-    box-shadow: 0px 5px 20px 0px rgba(2, 119, 189, 0.60);
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    padding: 30px, 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.modal-content p{
-    color: black;
-    font-family: Inter;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    margin-top: 15%;
-}
-
-.modal-content button {
-    width: 150px;
-    height: 48px;
-    border-radius: 10px;
-    margin: 0 10px;
-    cursor: pointer;
-    outline: none;
-}
-
-.delete-modal-button, .cancellation-modal-button {
-    background: #0277BD;
-    color: #FFF;
-    border: 1px solid #0277BD;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 550;
-    line-height: normal;
-}
-
-.cancel-modal-button, .back-modal-button {
-    background: #DFF1FF;
-    color: #000;
-    border: 1px solid #DFF1FF;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 550;
-    line-height: normal;
-}
-
-.modal-content .modal-buttons {
-    margin-top: 50px;
-}
-
-.overlay-background-container {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2; /* Ensure the overlay is on top of other content */
-}
-
-.overlay-background {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    opacity: 0.5; /* You can adjust the opacity as needed */
-    pointer-events: none;
-    border: 2px solid rgba(110, 110, 110, 0.5);
-    background: rgba(110, 110, 110, 0.5);
-    backdrop-filter: blur(2.5px);
 }
 
 .filter-select {
@@ -1399,13 +1257,6 @@ tbody tr.hide {
 }
 
 /*--- EDIT MODAL ---*/
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat';
-}
-
 .doccare-edit-container {
     display: none; /* Change to block in scripts */
     position: fixed;

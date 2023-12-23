@@ -10,8 +10,16 @@ import secrets
 import string
 from flask_login import login_required, logout_user, current_user, current_user
 from app.routes.utils import role_required
+from app import socketio 
+from flask_socketio import send, emit
 
 receptionist_bp = Blueprint('receptionist', __name__)
+
+@socketio.on('send_notification_doctor')
+def handle_notification_doctor(data):
+    message = data['message']
+    print('message:', message)
+    socketio.emit('receive_notification_doctor', {'message': message}, broadcast=True)
 
 headings = ("Reference Number", "Date", "Time", "Last Name", "Status", "Doctor", "Actions")
 headings_schedule = ("Schedule ID", "Date", "Time", "Slots", "Doctor", "Actions")
@@ -252,6 +260,9 @@ def patient_record():
         print('Updated information:', updated_info)
 
         if updated:
+            notification_message = f"Receptionist updated the patient information for {new_first_name} {new_last_name}"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_doctor', {'message': notification_message}, namespace='/') 
             return render_template("receptionist/patient/patient_record.html", new_patient_id=new_patient_id, success=True, patient=updated_info, PatientForm=form, info=receptionist_info)
         else:
             return render_template("receptionist/patient/patient_record.html", new_patient_id=new_patient_id, error=True, patient=updated_info, PatientForm=form, info=receptionist_info)
@@ -380,6 +391,10 @@ def add_appointment():
                     )
                     new_appointment.add(current_user.username)
                     print('New appointment added!', 'success')
+
+                    notification_message = f"An appointment has been scheduled for {chosen_date} at {selected_time}"
+                    print('NOTIFICATION:', notification_message)
+                    socketio.emit('send_notification_doctor', {'message': notification_message}, namespace='/') 
                     
                     # Fetch booking details after adding the appointment
                     booking_details = Appointment.get_booking_reference_details(form.reference_number.data)
@@ -416,6 +431,9 @@ def delete_appointment():
 
         if Appointment.delete(current_user.username, reference_number):
             # Increment the slots for the deleted time
+            notification_message = f"The appointment scheduled for {deleted_time} was deleted"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_doctor', {'message': notification_message}, namespace='/') 
             Appointment.update_slots(deleted_appointment['date_appointment'], deleted_time, doctor_name, increment=True)
             
             return jsonify(success=True, message="Successfully deleted")
@@ -460,7 +478,6 @@ def view_appointment():
     
     return render_template("receptionist/appointment/appointment_view.html", row=appointment_data_dict)
 
-
 @receptionist_bp.route('/get-booking-details/<reference_number>', methods=['GET'])
 @login_required
 @role_required('receptionist')
@@ -471,7 +488,6 @@ def get_booking_details(reference_number):
         return jsonify(booking_details)
     else:
         return jsonify({'error': 'Booking details not available'}), 404
-
 
 @receptionist_bp.route('/edit-appointment-version-two/', methods=["GET", "POST"])
 @login_required
@@ -511,6 +527,9 @@ def reschedule_version_two():
         if Appointment.update_second_version(
             current_user.username, reference_number, new_date_appointment, new_time_appointment, new_status_,
             new_last_name, new_email):
+            notification_message = f"The appointment for patient {new_last_name} has been rescheduled to {new_date_appointment} at {new_time_appointment}"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_doctor', {'message': notification_message}, namespace='/') 
             # Update the slots for the old and new times
             Appointment.update_time_slots(old_date_appointment, new_date_appointment, old_time_appointment, new_time_appointment, doctor_name)
 
@@ -577,6 +596,9 @@ def cancel_appointment():
 
         if Appointment.update_to_cancel(current_user.username, reference_number, cancel_status):
             # Increment the slots for the deleted time
+            notification_message = f"The appointment scheduled for {cancelled_time} was cancelled"
+            print('NOTIFICATION:', notification_message)
+            socketio.emit('send_notification_doctor', {'message': notification_message}, namespace='/') 
             Appointment.update_slots(cancel_appointment['date_appointment'], cancelled_time, doctor_name, increment=True)
 
             return jsonify(success=True, message="Successfully cancelled the appointment")

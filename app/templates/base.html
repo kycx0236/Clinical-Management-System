@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{% block title %}DocCare{% endblock title %}</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='/images/DocCare favicon.ico') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
@@ -48,6 +51,6 @@
     
     <script> var logoutUrl = "{{ url_for('admin.logout') }}";</script>
     <script src="{{ url_for('static', filename='logout.js') }}"></script>
-
+    
 </body>
 </html>

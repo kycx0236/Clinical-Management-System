@@ -9,9 +9,6 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <li class="notifications">
-                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
-            </li>
             <li class="selected-icon-bg">
                 <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
                 <p>Dashboard</p>
@@ -165,7 +162,14 @@
             </div>
         </center>
    </main>
+   
    <script src="{{ url_for('static', filename='doctor_dashboard_script.js') }}"></script>
+   <!-- <div id="userId" data-userid="{{ info[3] }}" style="display: none;"></div> -->
+
+   <div id="toast-container">
+        
+   </div>
+
    <script>
         // TO DISPLAY THE DATE
         function displayDateAndTime() {
@@ -176,12 +180,55 @@
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const formattedDateAndTime = currentDateAndTime.toLocaleDateString(undefined, options);
 
-                demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}`;
-            }
-            updateDateAndTime();
-            setInterval(updateDateAndTime);
+            demoElement.innerHTML = `TODAY IS ${formattedDateAndTime.toUpperCase()}`;
         }
-        displayDateAndTime();   
-    </script>
+        updateDateAndTime();
+        setInterval(updateDateAndTime);
+    }
+    displayDateAndTime(); 
+    
+    // NOTIFICATION
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    socket.on('connect', function () {
+        console.log('Connected to Socket.IO');
+    });
+
+    socket.on('send_notification_doctor', function (data) {
+        const notificationMessage = data.message;
+        console.log('Received notification:', notificationMessage);
+        displayToast(notificationMessage);
+    });
+
+    function displayToast(message) {
+       
+        var toastContainer = document.getElementById('toast-container');
+        var newToast = document.createElement('div');
+        newToast.className = 'toast hide';
+        newToast.innerHTML = `
+            <div class="toast-header">
+                <strong class="mr-auto">NOTIFICATION</strong>
+                <button type="button" class="close-btn" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="notification-body toast-body">
+                ${message}
+            </div>
+        `;
+
+        toastContainer.appendChild(newToast);
+
+        newToast.classList.add('show');
+
+        var closeButton = newToast.querySelector('.close-btn');
+        closeButton.addEventListener('click', function () {
+            newToast.classList.remove('show');
+            setTimeout(function () {
+                newToast.remove(); 
+            }, 500); 
+        });
+    }
+</script>
     
 {% endblock %}

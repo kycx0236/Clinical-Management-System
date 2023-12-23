@@ -12,9 +12,6 @@
             <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
         </div>
         <ul>
-            <li class="notifications">
-                <img src="{{ url_for('static', filename='images/Notification.png') }}"> 
-            </li>
             <a href="{{ url_for('doctor.dashboard') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Dashboard.png') }}"> 
@@ -102,14 +99,14 @@
 
                             <div class="p_row rowOne">
                                 <div class="inputBox labsubject">
-                                    <input type="text" name="labsubject" value="{{ labreq[3] }}" disabled>
+                                    <input type="text" name="labsubject" value="{{ labreq[4] }}" disabled>
                                     <span>TESTING PURPOSE</span>
                                 </div>
                             </div>
 
                             <div class="p_row rowTwo">
                                 <div class="inputBox fullName">
-                                    <input type="text" name="fullName" value="{{ labreq[2] }}" disabled>
+                                    <input type="text" name="fullName" value="{{ labreq[3] }}" disabled>
                                     <span>PATIENT NAME</span>
                                 </div>
                             </div>
@@ -118,21 +115,21 @@
                                 <div class="inputBox gender">
                                     <select class="gender" name="gender" disabled>
                                         <option value="" disabled selected></option>
-                                        <option value="FEMALE" {% if labreq[4] == "FEMALE" %} selected {% endif %}>FEMALE</option>
-                                        <option value="MALE" {% if labreq[4] == "MALE" %} selected {% endif %}>MALE</option>
+                                        <option value="FEMALE" {% if labreq[5] == "FEMALE" %} selected {% endif %}>FEMALE</option>
+                                        <option value="MALE" {% if labreq[5] == "MALE" %} selected {% endif %}>MALE</option>
                                     </select>
                                     <span>GENDER</span>
                                 </div>
                                 <div class="inputBox age">
-                                    <input type="text" name="age" value="{{ labreq[5] }}" disabled>
+                                    <input type="text" name="age" value="{{ labreq[6] }}" disabled>
                                     <span>AGE</span>
                                 </div>
                                 <div class="inputBox doctorName">
-                                    <input type="text" name="doctorName"  value="{{ labreq[6] }}" disabled>
+                                    <input type="text" name="doctorName"  value="{{ labreq[7] }}" disabled>
                                     <span>DOCTOR</span>
                                 </div>
                                 <div class="inputBox dateofRequest">
-                                    <input type="text" name="dateofRequest" id="dateofRequest" value="{{ labreq[7] }}" disabled> 
+                                    <input type="text" name="dateofRequest" id="dateofRequest" value="{{ labreq[8] }}" disabled> 
                                     <span>DATE OF REQUEST</span>
                                 </div>
                             </div>
@@ -600,7 +597,7 @@
 
                                 <center>
                                     <div class="inputBox longtext">
-                                        <input type="text" name="others" value="{{ labreq[8] }}" disabled>
+                                        <input type="text" name="others" value="{{ labreq[9] }}" disabled>
                                         <span>OTHERS <em>(specify)</em></span>
                                     </div>
                                 </center>
@@ -644,6 +641,10 @@
         </form>
     </main>
 
+    <div id="toast-container">
+        
+    </div>
+
     <script>
         // VIEW LABORATORY JOB ORDER
         const toggleButton = document.getElementById('toggleButton');
@@ -656,6 +657,49 @@
                 contentToToggle.style.display = 'none'; 
             }
         });
+
+        // NOTIFICATION
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function () {
+            console.log('Connected to Socket.IO');
+        });
+    
+        socket.on('send_notification_doctor', function (data) {
+            const notificationMessage = data.message;
+            console.log('Received notification:', notificationMessage);
+            displayToast(notificationMessage);
+        });
+    
+        function displayToast(message) {
+           
+            var toastContainer = document.getElementById('toast-container');
+            var newToast = document.createElement('div');
+            newToast.className = 'toast hide';
+            newToast.innerHTML = `
+                <div class="toast-header">
+                    <strong class="mr-auto">NOTIFICATION</strong>
+                    <button type="button" class="close-btn" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="notification-body toast-body">
+                    ${message}
+                </div>
+            `;
+
+            toastContainer.appendChild(newToast);
+    
+            newToast.classList.add('show');
+    
+            var closeButton = newToast.querySelector('.close-btn');
+            closeButton.addEventListener('click', function () {
+                newToast.classList.remove('show');
+                setTimeout(function () {
+                    newToast.remove(); 
+                }, 500); 
+            });
+        }
     </script>
     
 {% endblock %}

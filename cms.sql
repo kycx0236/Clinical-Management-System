@@ -514,7 +514,6 @@ COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB
 ;
 
-
 -- PATIENT INFORMATION
 CREATE TABLE IF NOT EXISTS `patientinfo` (
   `patientID` int NOT NULL AUTO_INCREMENT,
@@ -760,6 +759,7 @@ CREATE TABLE IF NOT EXISTS `certificate` (
 CREATE TABLE IF NOT EXISTS `labrequest` (
   `orderID` int NOT NULL AUTO_INCREMENT,
   `patientID` int NOT NULL,
+  `doctorID` int NOT NULL,
   `patientName` varchar(255) NOT NULL,
   `labSubject` varchar(255) NOT NULL,
   `gender` varchar(10) NOT NULL,
