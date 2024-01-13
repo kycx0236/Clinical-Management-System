@@ -12,6 +12,7 @@ python-dotenv = "*"
 flask-login = "*"
 flask-mail = "*"
 cloudinary = "*"
+flask-socketio = "*"
 
 [dev-packages]
 
