@@ -35,12 +35,34 @@ Follow these steps to set up and run the project on your local machine:
     ```bash
     pipenv install 
     ```
+4) Create a .env file containing the keys/values of the required variables: 
+    ```
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=web_cms_database
+    DB_USERNAME=
+    DB_PASSWORD=
+    SECRET_KEY=
 
-4) Create database for the website
+    PIPENV_VENV_IN_PROJECT=1
+    FLASK_APP=app
+    FLASK_DEBUG=true
+    FLASK_RUN_PORT=5000
+
+    MAIL_SERVER=
+    MAIL_PORT=
+    MAIL_USERNAME=
+    MAIL_PASSWORD=
+
+    cloud_name=
+    api_key=
+    api_secret=
+    ```
+5) Create database for the website
 
     * Run all the queries in the `cms.sql` this will create default accounts for each user, and default schedules for the appointments of the doctor 
 
-5) Run the flask application
+6) Run the flask application
     ```bash
     flask run
     ```
@@ -48,9 +70,9 @@ Follow these steps to set up and run the project on your local machine:
 ## Contributing
 If you would like to contribute to this project, please fork the repository and submit a pull request.
 
-For major changes, please open an issue first to discuss what you would like to change.
+> For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+> Please make sure to update tests as appropriate.
 
 ---
 ## License
