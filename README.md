@@ -76,12 +76,12 @@ Follow these steps to set up and run the project on your local machine:
 
     > After seeding the database, these will be the accounts available on the database. 
 
-    | Default Username  | Default Password   |
-    | ----------------- | ------------- | 
-    | admin1            | password      |     
-    | doctor1           | password      |  
-    | medtech1          | password      |  
-    | receptionist1     | password      |  
+    | Default Username  | Default Password |
+    | ----------------- | ---------------- | 
+    | admin1            | admin1           |     
+    | doctor1           | doctor1          |  
+    | medtech1          | medtech1         |  
+    | receptionist1     | receptionist1    |  
 
     > Use the following accounts to access the different type of users and features available on the website 
 
