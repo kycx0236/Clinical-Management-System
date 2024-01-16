@@ -74,14 +74,16 @@ Follow these steps to set up and run the project on your local machine:
     python seed_data.py 
     ```
 
-    > After seeding the database, the password will be sent to the emails in which by using mailtrap you will receive the passwords   
+    > After seeding the database, these will be the accounts available on the database. 
 
-    | Default Username  |
-    | ----------------- |
-    | admin1            | 
-    | doctor1           | 
-    | medtech1          |
-    | receptionist1     |
+    | Default Username  | Default Password   |
+    | ----------------- | ------------- | 
+    | admin1            | password      |     
+    | doctor1           | password      |  
+    | medtech1          | password      |  
+    | receptionist1     | password      |  
+
+    > Use the following accounts to access the different type of users and features available on the website 
 
 7) Run the flask application
     ```bash
