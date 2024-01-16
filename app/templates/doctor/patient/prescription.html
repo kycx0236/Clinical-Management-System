@@ -79,7 +79,7 @@
                     </li>
                 </ul>
 
-                <button class="print-icon" onclick="window.print()" id="printButton">
+                <button class="print-icon" type="button" onclick="printSection()" id="printButton">
                     <img src="{{ url_for('static', filename='images/Print.png') }}">
                 </button>
                 
@@ -98,122 +98,64 @@
                 <input hidden name="patient_id" value="{{ consultation[1] }}" >
             </div>
 
-            <!-- PRESCRIPTION -->
-            <div class="patient-bg prescription">
-                <div class="cms-logo prescription">
-                    <div class="prescription_logo">
-                        <img src="{{ url_for('static', filename='/images/DocCare Logo.png') }}">
-                    </div>
-                    <div style="display: flex;">
-                        <p class="doc">Doc</p>
-                        <h4 class="care">Care</h4>
-                    </div>
-                </div>
-
-                <div class="head_prescription">
-                    <div class="rx">
-                        <img src="{{ url_for('static', filename='/images/Rx.png') }}">
-                    </div>
-    
-                    <div class="line-border"></div>
-                </div>
-
-                <div class="body_prescription">
-                    <div style="display: block">
-                        <div class="name">
-                            <h4>NAME:</h4>
-                            <p>{{ patient[1] }} {{ patient[3] }}</p>
+            <center>
+                <div class="med-header" id="p_header" style="display: none;">PRESCRIPTION</div>
+            
+                <!-- PRESCRIPTION -->
+                <div class="prescription-container" id="prescriptionContainer" style="display: none;">
+                    <div class="p_row prescriptionA">
+                        <div class="inputBox prescription">
+                            <input type="text" name="medication_name" required>
+                            <span>MEDICINE</span>
                         </div>
-                        <div class="address">
-                            <h4>ADDRESS:</h4>
-                            <p>{{ patient[10] }}</p>
+                        <div class="inputBox dosage">
+                            <input type="text" name="dosage" required>
+                            <span>DOSAGE</span>
                         </div>
                     </div>
-                    
-                    <div style="display: block;">
-                        <div class="date">
-                            <h4>DATE:</h4>
-                            <p id="prescriptionDate"></p>
+                    <div class="p_row prescription">
+                        <div class="inputBox quantity">
+                            <input type="text" name="quantity" required>
+                            <span>QUANTITY</span>
                         </div>
-        
-                        <div class="gender_pres">
-                            <h4>GENDER:</h4>
-                        <p>{{ patient[6] }}</p>
+                        <div class="inputBox prescription">
+                            <input type="text" name="duration" required>
+                            <span>DURATION</span>
+                        </div>
+                    </div>
+                    <div class="p_row prescription">
+                        <div class="inputBox p_instructions">
+                            <input type="text" name="instructions" required>
+                            <span>INSTRUCTIONS</span>
                         </div>
                     </div>
                 </div>
 
-                <center>
-                    <div class="med-header" id="p_header"  style="display: none;">PRESCRIPTION</div>
-                
-                    <!-- PRESCRIPTION -->
-                    <div class="prescription-container" id="prescriptionContainer" style="display: none;">
-                        <div class="p_row prescriptionA">
-                            <div class="inputBox prescription">
-                                <input type="text" name="medication_name" required>
-                                <span>MEDICINE</span>
-                            </div>
-                            <div class="inputBox dosage">
-                                <input type="text" name="dosage" required>
-                                <span>DOSAGE</span>
-                            </div>
-                        </div>
-                        <div class="p_row prescription">
-                            <div class="inputBox quantity">
-                                <input type="text" name="quantity" required>
-                                <span>QUANTITY</span>
-                            </div>
-                            <div class="inputBox prescription">
-                                <input type="text" name="duration" required>
-                                <span>DURATION</span>
-                            </div>
-                        </div>
-                        <div class="p_row prescription">
-                            <div class="inputBox p_instructions">
-                                <input type="text" name="instructions" required>
-                                <span>INSTRUCTIONS</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="btn-container">
+                    <button class="btn-submit" id="submitData" type="submit" style="display: none;">SUBMIT</button>
+                </div>
 
-                    <div class="btn-container">
-                        <button class="btn-submit" id="submitData" type="submit" style="display: none;">SUBMIT</button>
-                    </div>
-
-                    <!-- DISPLAY PRESCRIPTION DATA -->
-                    <div id="gridContainer" class="grid_container prescription">
+                <!-- DISPLAY PRESCRIPTION DATA -->
+                <div id="gridContainer" class="grid_container prescription">
+                    <div class="grid_item prescription grid1">
                         <center>
-                            <div class="grid_item prescription grid1">
-                                <center>
-                                    <table class="prescription_table" id="prescriptionTable">
-                                        <tbody>
-                                            {% for prescription in prescriptions %}
-                                                <tr>
-                                                    <td colspan="5" style="text-align: left;">{{ prescription[0] }} {{ prescription[1] }}<br>
-                                                        {{ prescription[2] }}<br>
-                                                        {{ prescription[3] }}<br>
-                                                        {{ prescription[4] }}
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </center>
-                            </div>
-    
-                            <div class="grid_item prescription">
-                                <center>
-                                    <div class="foot">
-                                        <div class="page_break"></div>
-                                        <h4 class="doctor">{{ doctor[0] }} {{ doctor[1] }}, MD, FPPS</h4>
-                                        <h4 class="license">License No. <p style="text-decoration:underline;"> 84303</p> </h4>
-                                    </div>
-                                </center>
-                            </div>
+                            <table class="prescription_table" id="prescriptionTable">
+                                <tbody>
+                                    {% for prescription in prescriptions %}
+                                        <tr>
+                                            <td colspan="5" style="text-align: left; padding-left:20px;">{{ prescription[0] }} {{ prescription[1] }}<br>
+                                                {{ prescription[2] }}<br>
+                                                {{ prescription[3] }}<br>
+                                                {{ prescription[4] }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </center>
                     </div>
-                </center>
-            </div>
+                </div>
+            </center>
         </form>
     </main>
 
@@ -260,22 +202,96 @@
     </div>
 
     <script>
-        // CURRENT DATE
-        function displayDate() {
-            const dateElement = document.getElementById('prescriptionDate');
+        // TO PRINT PRESCRIPTION
+        function printSection() {
+            var section = document.getElementById('gridContainer');
         
-            function updateDate() {
-                const currentDate = new Date();
-                const year = currentDate.getFullYear();
-                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                const day = String(currentDate.getDate()).padStart(2, '0');
-                const formattedDate = `${year}-${month}-${day}`;
-        
-                dateElement.textContent = `${formattedDate}`;
+            if (section) {
+                var currentDate = new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                var printWindow = window.open('about:blank', '_blank', 'width=800,height=600,toolbar=0,menubar=0'); 
+                
+                var printableContent = `
+                    <html>
+                    <head>
+                        <title>PRESCRIPTION</title>
+                        <style>
+                            body {
+                                font-family: 'Times New Roman', Times, serif;
+                                text-align: justify;
+                                margin-top: 25px
+                                font-size: 14px;
+                            }
+                            
+                            .clearance_textarea {
+                                width: 100%;
+                            }
+
+                            h3 {
+                                text-align: center;
+                                margin-bottom: 40px;
+                            }
+
+                            .cms_logo {
+                                display: flex;
+                                text-align: center;
+                                justify-content: center;
+                            }
+
+                            .care {
+                                color: #0277BD;
+                            }
+
+                            .footer {
+                                margin-top: auto;
+                                text-align: right;
+                                padding-top: 10px;
+                                border-top: 1px solid;
+                                position: fixed;
+                                bottom: 0;
+                                right: 0;
+                                left: 0;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <center>
+                            <div class="cms_logo">
+                                <h4 class="doc">Doc</h4>
+                                <h4 class="care">Care</h4>
+                            </div>
+                        </center>
+                       
+                        <p style="text-align: right; margin-bottom: 40px;">DATE: ${currentDate}</p>
+                        <p style="text-align: left; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid;">
+                            NAME: <strong>{{ patient[1] }} {{ patient[2] }} {{ patient[3] }}</strong> <br>
+                            ADDRESS: {{ patient[10] }} <br>
+                            GENDER: {{ patient[6] }} <br>
+                        </p>
+                        <p style="text-align: left; margin-top: 0px; margin-bottom: 0px; font-size: 60px;">Rx</p>
+                        <p style="text-align: left">
+                            ${section.innerHTML.replace(/<center>/g, '').replace(/<\/center>/g, '')}
+                        </p>
+
+                        <div class="footer">
+                            <strong>DR. {{ doctor[0] }} {{ doctor[1] }}</strong><br>PHYSICIAN
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                printWindow.document.write(printableContent);
+                printWindow.print();
+                printWindow.close(); 
+
+            } else {
+                console.error('Section not found.');
             }
-            updateDate();
         }
-        displayDate();
 
         // EDIT BUTTON
         function enableEdit() {
