@@ -186,7 +186,7 @@ class doctor():
             return False
 
     @classmethod 
-    def add_laboratory_request(cls, doc_username, patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
+    def add_laboratory_request(cls, doc_username, patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest, cbcplateCheckbox, hgbhctCheckbox, protimeCheckbox, APTTCheckbox, 
                                bloodtypingCheckbox, ESRCheckbox, plateCheckbox, hgbCheckbox, hctCheckbox, cbcCheckbox, reticsCheckbox, CTBTCheckbox, culsenCheckbox, cultureCheckbox, 
                                gramCheckbox, KOHCheckbox, biopsyCheckbox, papsCheckbox, FNABCheckbox, cellCheckbox, cytolCheckbox, urinCheckbox, stoolCheckbox, occultCheckbox, semenCheckbox, 
                                ELISACheckbox, ASOCheckbox, AntiHBSCheckbox, HCVCheckbox, C3Checkbox, HIVICheckbox, HIVIICheckbox, NS1Checkbox, VDRLCheckbox, PregCheckbox, RFCheckbox, QuantiCheckbox, 
@@ -197,8 +197,8 @@ class doctor():
                                CKMBCheckbox, CKTotalCheckbox, LDHCheckbox, KCheckbox, CaCheckbox, IonizedCheckbox, PhosCheckbox):
         cursor = mysql.connection.cursor()
 
-        labrequest = "INSERT INTO labrequest (patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(labrequest, (patientID, doctorID, patientName, labSubject, gender, age, physician, orderDate, otherTest))
+        labrequest = "INSERT INTO labrequest (patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(labrequest, (patientID, patientName, labSubject, gender, age, physician, orderDate, otherTest))
 
         cursor.execute("SELECT LAST_INSERT_ID()")
         orderID = cursor.fetchone()[0]

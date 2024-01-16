@@ -22,14 +22,14 @@
                     <p>Patient</p>
                 </li>
             </a>
-            <a href="{{ url_for('medtech.profile') }}">
+            <!-- <a href="{{ url_for('medtech.profile') }}">
                 <li class="icon-bg">
                     <img src="{{ url_for('static', filename='images/Profile.png') }}"> 
                     <p>Profile</p>
                 </li>
-            </a>
+            </a> -->
         </ul>
-        <!-- <div class="foot-nav">
+        <div class="foot-nav">
             <div class="sidenav-user-bg">
                 <img src="{{ url_for('static', filename='images/Edward.png') }}" class="user-img">
                 <div>
@@ -43,7 +43,7 @@
                     <p>Logout</p>
                 </li>
             </ul>
-        </div> -->
+        </div>
     </div>
 
     <main>
@@ -90,15 +90,15 @@
                             
                             <div class="p_row rowOne">
                                 <div class="inputBox labsubject">
-                                    <input type="text" name="labsubject" value="{{ labreq[4] }}" disabled>
+                                    <input type="text" name="labsubject" value="{{ labreq[3] }}" disabled>
                                     <span>TESTING PURPOSE</span>
                                 </div>
                             </div>
             
                             <div class="p_row rowTwo">
                                 <div class="inputBox fullName">
-                                    <input type="text" value="{{ labreq[3] }}" disabled>
-                                    <input hidden type="text" name="fullName" value="{{ labreq[3] }}">
+                                    <input type="text" value="{{ labreq[2] }}" disabled>
+                                    <input hidden type="text" name="fullName" value="{{ labreq[2] }}">
                                     <span>PATIENT NAME</span>
                                 </div>
                             </div>
@@ -107,21 +107,21 @@
                                 <div class="inputBox gender">
                                     <select class="gender" name="gender" disabled>
                                         <option value="" disabled selected></option>
-                                        <option value="FEMALE" {% if labreq[5] == "FEMALE" %} selected {% endif %}>FEMALE</option>
-                                        <option value="MALE" {% if labreq[5] == "MALE" %} selected {% endif %}>MALE</option>
+                                        <option value="FEMALE" {% if labreq[4] == "FEMALE" %} selected {% endif %}>FEMALE</option>
+                                        <option value="MALE" {% if labreq[4] == "MALE" %} selected {% endif %}>MALE</option>
                                     </select>
                                     <span>GENDER</span>
                                 </div>
                                 <div class="inputBox age">
-                                    <input type="text" name="age" value="{{ labreq[6] }}" disabled>
+                                    <input type="text" name="age" value="{{ labreq[5] }}" disabled>
                                     <span>AGE</span>
                                 </div>
                                 <div class="inputBox doctorName">
-                                    <input type="text" name="doctorName"  value="{{ labreq[7] }}" disabled>
+                                    <input type="text" name="doctorName"  value="{{ labreq[6] }}" disabled>
                                     <span>DOCTOR</span>
                                 </div>
                                 <div class="inputBox dateofRequest">
-                                    <input type="text" name="dateofRequest" id="dateofRequest" value="{{ labreq[8] }}" disabled> 
+                                    <input type="text" name="dateofRequest" id="dateofRequest" value="{{ labreq[7] }}" disabled> 
                                     <span>DATE OF REQUEST</span>
                                 </div>
                             </div>
