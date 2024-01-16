@@ -12,6 +12,7 @@ def seed_data():
 
         try:
             users_data = [
+<<<<<<< HEAD
                 {'username': 'admin1', 'first_name': 'admin', 'middle_name': 'admin', 'last_name': 'admin', 'email': 'user1@example.com', 'gender': 'male', 'user_role': 'admin'},
 
                 {'username': 'doctor1', 'first_name': 'doctor', 'middle_name': 'doctor', 'last_name': 'doctor', 'email': 'user2@example.com', 'gender': 'female', 'user_role': 'doctor'},
@@ -19,6 +20,12 @@ def seed_data():
                 {'username': 'medtech1', 'first_name': 'medtech', 'middle_name': 'medtech', 'last_name': 'medtech', 'email': 'user3@example.com', 'gender': 'male', 'user_role': 'medtech'},
 
                 {'username': 'receptionist1', 'first_name': 'receptionist', 'middle_name': 'receptionist', 'last_name': 'receptionist', 'email': 'user4@example.com', 'gender': 'female', 'user_role': 'receptionist'},
+=======
+                {'username': 'admin', 'first_name': 'admin', 'middle_name': 'admin', 'last_name': 'admin', 'email': 'admin@example.com', 'gender': 'male', 'user_role': 'admin'},
+                {'username': 'doctor', 'first_name': 'doctor', 'middle_name': 'doctor', 'last_name': 'doctor', 'email': 'doctor@example.com', 'gender': 'female', 'user_role': 'doctor'},
+                {'username': 'medtech', 'first_name': 'medtech', 'middle_name': 'medtech', 'last_name': 'medtech', 'email': 'medtech@example.com', 'gender': 'male', 'user_role': 'medtech'},
+                {'username': 'receptionist', 'first_name': 'receptionist', 'middle_name': 'receptionist', 'last_name': 'receptionist', 'email': 'receptionist@example.com', 'gender': 'female', 'user_role': 'receptionist'},
+>>>>>>> d94fb472cdc6350314816c5c74034896b95b9cc3
             ]
 
             for user_data in users_data:
