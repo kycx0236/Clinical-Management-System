@@ -316,7 +316,6 @@ input, select {
 
 .patient-bg.prescription {
     height: 100%;
-    background-color: #bae1ff;
 }
 
 .patient-bg.print {
@@ -581,88 +580,6 @@ input, select {
 }
 
 /* -------------------------------------------- PRESCRIPTION -------------------------------------------- */
-.cms-logo.prescription {
-    position: relative;
-    justify-content: center;
-    margin-top: 50px;
-    margin-bottom: -80px;
-    display: flex;
-    font-size: 30px;
-    border-bottom: 0;
-    display: flex;
-    gap: 20px;
-}
-
-.prescription_logo img {
-    width: 45px;
-    margin-top: 20px;
-}
-
-.care {
-    color: var(--blueA);
-}
-
-.head_prescription {
-    position: relative;
-    display: flex;
-    top: 100px;
-    justify-content: center;
-}
-
-.body_prescription {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 160px;
-}
-
-.name, .date, .address, .gender_pres {
-    position: relative;
-    display: flex;
-    gap: 10px;
-}
-
-.rx img {
-    position: relative;
-    width: 100px;
-    margin-bottom: 45px;
-}
-
-.line-border {
-    position: relative;
-    top: 50px;
-    border: 1px solid var(--darkBlue);
-    height: 1px;
-    width: 885px;
-}
-
-.foot {
-    position: relative;
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
-.page_break {
-    position: relative;
-    border: 1px solid var(--darkBlue);
-    width: 80%;
-    height: 1px;
-    margin-bottom: 20px;
-}
-
-.doctor {
-    position: relative;
-    text-decoration: underline;
-}
-
-.license {
-    position: relative;
-    justify-content: center;
-    display: flex;
-    gap: 10px;
-}
-
 .p_row.prescriptionA {
     gap: 20px;
     margin-top: 60px;
@@ -713,43 +630,6 @@ input, select {
 .btn-prescription:hover {
     transform: scale(101%);
     cursor: pointer;
-}
-
-.medicine {
-    position: absolute;
-    top: 450px;
-    left: 115px;
-}
-
-@media print {
-    @page {
-        size: 8.5in 11in;
-        margin: 0;
-    }
-
-    body {
-        width: 8.5in;
-        height: 11in;
-        margin: 0 auto; 
-        box-sizing: border-box; 
-    }
-
-    .sidenav-bg, .med-header.history, .segmented-controls, .update-icon, .print-icon, .navbar {
-        display: none;
-    }
-
-    .patient-bg.prescription {
-        display: block;
-        position: absolute; 
-        height: 610px; 
-        width: 1230px; 
-        top: 0px;
-        left: 0px;
-    }
-
-    .sidenav-bg, .back-icon, .nav.nav-underline, .btn-container, .med-header, .update-icon, .print-icon, .navbar {
-        display: none; 
-    }
 }
 
 .print-icon {

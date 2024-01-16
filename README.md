@@ -1,45 +1,103 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Clinical Management System
+## Project Description
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+This project is a comprehensive healthcare management system designed for small and medium-sized clinics. It aims to streamline the workflow of receptionists, doctors, and medical technicians, providing a seamless experience for patients.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+From scheduling appointments with doctors to receiving lab results from medical technicians, this system offers a unified platform that gives insights to doctors for effective prescription. It enhances efficiency, reduces manual errors, and improves patient care by providing real-time access to patient records and test results.
 
----
+### Key features include:
+- Appointment scheduling with doctors
+- Lab result retrieval
+- Real-time patient record access
+- Prescription assistance based on lab results and patient history
 
-## Edit a file
-
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
-
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
-
----
-
-## Create a file
-
-Next, you’ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+### Type of user account availabe:
+- Admin 
+- Receptionist
+- Doctor
+- Medtech
 
 ---
+## Getting Started
+Follow these steps to set up and run the project on your local machine:
 
-## Clone a repository
+1) Clone the repository
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+    ```bash
+    git clone git@bitbucket.org:clinical-ms/clinical-management-system.git
+    ```
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+2) Change the directory to the app
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+    ```bash
+    cd /clinical-management-system 
+    ```
+
+3) Install dependencies
+
+    ```bash
+    pipenv install 
+    ```
+4) Create a .env file containing the keys/values of the required variables: (Database, Mailtrap, Cloudinary)
+
+    ```
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=web_cms_database
+    DB_USERNAME=
+    DB_PASSWORD=
+    SECRET_KEY=
+
+    PIPENV_VENV_IN_PROJECT=1
+    FLASK_APP=app
+    FLASK_DEBUG=true
+    FLASK_RUN_PORT=5000
+
+    MAIL_SERVER=
+    MAIL_PORT=
+    MAIL_USERNAME=
+    MAIL_PASSWORD=
+
+    cloud_name=
+    api_key=
+    api_secret=
+    ```
+
+5) Create database for the website
+
+    * Run all the queries in the `cms.sql`
+    * This will create all database schema needed for the website to run  
+
+6) Seed the database with default accounts (which you can edit or remove using the admin account) 
+
+    ```bash
+    python seed_data.py 
+    ```
+
+    > After seeding the database, these will be the accounts available on the database. 
+
+    | Default Username  | Default Password |
+    | ----------------- | ---------------- | 
+    | admin1            | admin1           |     
+    | doctor1           | doctor1          |  
+    | medtech1          | medtech1         |  
+    | receptionist1     | receptionist1    |  
+
+    > Use the following accounts to access the different type of users and features available on the website 
+
+7) Run the flask application
+    ```bash
+    flask run
+    ```
+
+---
+## Contributing
+If you would like to contribute to this project, please fork the repository and submit a pull request.
+
+> For major changes, please open an issue first to discuss what you would like to change.
+
+> Please make sure to update tests as appropriate.
+
+---
+## License
+This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) License.

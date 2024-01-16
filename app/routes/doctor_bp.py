@@ -1523,7 +1523,6 @@ def labtest_request():
     elif request.method == 'POST':
         doctor_info = doctor.get_doctor_info(user_id)
         new_patient_id = request.form.get('patient_id')
-        new_doctor_id = request.form.get('doctor_id')
 
     # PATIENT INFORMATION
         patient_fullName = form.fullName.data
@@ -1641,7 +1640,7 @@ def labtest_request():
         IonizedCheckbox = form.IonizedCheckbox.data
         PhosCheckbox = form.PhosCheckbox.data
 
-        result = doctor.add_laboratory_request(current_user.username, patientID=new_patient_id, doctorID=new_doctor_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
+        result = doctor.add_laboratory_request(current_user.username, patientID=new_patient_id, patientName=patient_fullName, labSubject=lab_subject, gender=sex, age=age, physician=doctorName, orderDate=requestDate, 
                                                otherTest=otherTest, cbcplateCheckbox=cbcplateCheckbox_value, hgbhctCheckbox=hgbhctCheckbox, protimeCheckbox=protimeCheckbox, 
                                                APTTCheckbox=APTTCheckbox, bloodtypingCheckbox=bloodtypingCheckbox, ESRCheckbox=ESRCheckbox, plateCheckbox=plateCheckbox, 
                                                hgbCheckbox=hgbCheckbox, hctCheckbox=hctCheckbox, cbcCheckbox=cbcCheckbox, reticsCheckbox=reticsCheckbox, CTBTCheckbox=CTBTCheckbox, 
